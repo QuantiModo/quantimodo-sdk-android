@@ -1,0 +1,291 @@
+package com.quantimodo.tools.adapters;
+
+import android.content.Context;
+import android.support.annotation.IntDef;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.quantimodo.android.sdk.model.Correlation;
+import com.quantimodo.tools.R;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+
+/**
+ * Adapter class for positive/negative factor/correlations
+ * Can show both types of factors, both types should be passed in constructor.
+ * They would be sorted using weight of each correlation ( which basically is correlationCoefficient * userVote )
+ * Can be configured with resources:
+ * To hide shopping cart, add bool value <b>show_shopping_card</b>=false
+ * Target activity/fragment should implement button listener check {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationButtonOnClick CorrelationButtonOnClick} interface
+ */
+public class CorrelationAdapter extends BaseAdapter {
+
+    @IntDef({POSITIVE, NEGATIVE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface CorrelationType {
+    }
+
+    @IntDef({BUTTON_SHOP, BUTTON_THUMBS_UP, BUTTON_THUMBS_DOWN})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface CorrelationButton {
+    }
+
+    @IntDef({STATE_UP, STATE_DOWN})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface CorrelationState {
+    }
+
+    public static final int BUTTON_SHOP = 0;
+    public static final int BUTTON_THUMBS_UP = 1;
+    public static final int BUTTON_THUMBS_DOWN = 2;
+
+    /**
+     * Should be implemented by target activity/fragment
+     */
+    public interface CorrelationButtonOnClick {
+        /**
+         * Would be called when user click on one of buttons (thumbs up,thumbs down, shopping cart)
+         * @param view view object ofr button
+         * @param buttonType button {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationButton type}
+         * @param position position of item in adapter
+         * @param item correlation item, on which button clicked
+         */
+        void onClick(View view, @CorrelationButton int buttonType, int position, Correlation item);
+    }
+
+    public static final int POSITIVE = 0;
+    public static final int NEGATIVE = 1;
+
+    public static final int STATE_UP = 1 << 0;
+    public static final int STATE_DOWN = 1 << 1;
+
+    private static final int DIFF = Integer.MAX_VALUE / 2;
+
+    private Context mCtx;
+    private ArrayList<Correlation> mAllItems;
+    private ArrayList<Correlation> mPositiveItems = new ArrayList<>();
+    private ArrayList<Correlation> mNegativeItems = new ArrayList<>();
+    private ArrayList<Correlation> mCurrentItems;
+
+    private CorrelationButtonOnClick mButtonListener;
+    private int mType = POSITIVE;
+
+    private boolean mShowShoppingCart;
+
+    private boolean checkFlag(Double source, int flag) {
+        if (source == null) {
+            return false;
+        }
+
+        if (flag == STATE_UP) {
+            return source >= 1.0d;
+        } else {
+            return source == 0;
+        }
+    }
+
+    private int applyFlag(int source, int flag) {
+        return source | flag;
+    }
+
+    /**
+     * Update state of correlation
+     * @param correlation correlation, which should be updated
+     * @param state state
+     */
+    public void setState(Correlation correlation, @CorrelationState int state) {
+        Correlation target = mAllItems.get(mAllItems.indexOf(correlation));
+        if (state == STATE_UP) {
+            target.setUserVote(1.0);
+        } else {
+            target.setUserVote(0d);
+        }
+        notifyDataSetChanged();
+    }
+
+    public CorrelationAdapter(Context ctx, ArrayList<Correlation> correlations) {
+        this(ctx, correlations, POSITIVE);
+    }
+
+    public CorrelationAdapter(Context ctx, ArrayList<Correlation> correlations, @CorrelationType int type) {
+        mCtx = ctx;
+        mShowShoppingCart = ctx.getResources().getBoolean(R.bool.show_shopping_card);
+        //Sort correlations by correlation coefficient
+        ArrayList<Correlation> allItems = new ArrayList<>(correlations);
+        Collections.sort(allItems, new Comparator<Correlation>() {
+            @Override
+            public int compare(Correlation lhs, Correlation rhs) {
+                if (lhs.getWeight() > rhs.getWeight()) {
+                    return 1;
+                } else if (lhs.getWeight() < rhs.getWeight()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
+        //Split into positive and negative correlations
+        for (Correlation c : allItems) {
+            if (c.getCorrelationCoefficient() > 0) {
+                mPositiveItems.add(c);
+            } else if (c.getCorrelationCoefficient() < 0) {
+                mNegativeItems.add(c);
+            }
+        }
+        mAllItems = allItems;
+        Collections.reverse(mPositiveItems);
+        switchItems(type);
+    }
+
+    private void switchItems(@CorrelationType int type) {
+        if (type == POSITIVE) {
+            mCurrentItems = mPositiveItems;
+        } else {
+            mCurrentItems = mNegativeItems;
+        }
+    }
+
+
+    public CorrelationButtonOnClick getButtonListener() {
+        return mButtonListener;
+    }
+
+    public void setButtonListener(CorrelationButtonOnClick mButtonListener) {
+        this.mButtonListener = mButtonListener;
+    }
+
+    private void notifyButtonListener(View view, @CorrelationButton int buttonType, int position, Correlation item) {
+        if (mButtonListener != null) {
+            mButtonListener.onClick(view, buttonType, position, item);
+        }
+    }
+
+    public int getType() {
+        return mType;
+    }
+
+    /**
+     * Set type of displayed correlations
+     * @param mType Positive or Negative
+     */
+    public void setType(@CorrelationType int mType) {
+        this.mType = mType;
+        switchItems(mType);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        return mCurrentItems.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return mCurrentItems.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mType == POSITIVE ? position : position + DIFF;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        CorrelationViewHolder vh;
+        if (convertView == null) {
+            convertView = View.inflate(mCtx, R.layout.qmt_list_item_correlation, null);
+            vh = new CorrelationViewHolder(convertView);
+            vh.imShoppingCart.setOnClickListener(onShoppingCartClick);
+            vh.imThumbUp.setOnClickListener(onThumbUpClick);
+            vh.imThumbDown.setOnClickListener(onThumbDownClick);
+            convertView.setTag(vh);
+        } else {
+            vh = (CorrelationViewHolder) convertView.getTag();
+        }
+
+        Correlation correlation = mCurrentItems.get(position);
+        vh.mItemPosition = position;
+        vh.tvCorrelationTitle.setText(correlation.getCause());
+
+        Double value = correlation.getUserVote();
+
+        if (checkFlag(value, STATE_UP)) {
+            vh.imThumbUp.setImageResource(R.drawable.ic_thumb_up_filled);
+        } else {
+            vh.imThumbUp.setImageResource(R.drawable.ic_thumb_up);
+        }
+
+        if (checkFlag(value, STATE_DOWN)) {
+            vh.imThumbDown.setImageResource(R.drawable.ic_thumb_down_filled);
+        } else {
+            vh.imThumbDown.setImageResource(R.drawable.ic_thumb_down);
+        }
+
+        if (mShowShoppingCart) {
+            vh.imShoppingCart.setVisibility(View.VISIBLE);
+        } else {
+            vh.imShoppingCart.setVisibility(View.GONE);
+        }
+
+        return convertView;
+    }
+
+    private View.OnClickListener onShoppingCartClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            notifyButtonListener(v, BUTTON_SHOP, vh.mItemPosition, mCurrentItems.get(vh.mItemPosition));
+        }
+    };
+
+    private View.OnClickListener onThumbUpClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            Correlation correlation = mCurrentItems.get(vh.mItemPosition);
+            if (!checkFlag(correlation.getUserVote(), STATE_UP)) {
+                notifyButtonListener(v, BUTTON_THUMBS_UP, vh.mItemPosition, correlation);
+            }
+        }
+    };
+
+    private View.OnClickListener onThumbDownClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            Correlation correlation = mCurrentItems.get(vh.mItemPosition);
+            if (!checkFlag(correlation.getUserVote(), STATE_DOWN)) {
+                notifyButtonListener(v, BUTTON_THUMBS_DOWN, vh.mItemPosition, correlation);
+            }
+        }
+    };
+
+
+    static class CorrelationViewHolder {
+        TextView tvCorrelationTitle;
+        ImageView imThumbUp;
+        ImageView imThumbDown;
+        ImageView imShoppingCart;
+
+        int mItemPosition;
+
+        CorrelationViewHolder(View view) {
+            tvCorrelationTitle = (TextView) view.findViewById(R.id.tvCorrelationTitle);
+            imThumbUp = (ImageView) view.findViewById(R.id.imThumbUp);
+            imThumbDown = (ImageView) view.findViewById(R.id.imThumbDown);
+            imShoppingCart = (ImageView) view.findViewById(R.id.imShoppingCart);
+        }
+    }
+}
