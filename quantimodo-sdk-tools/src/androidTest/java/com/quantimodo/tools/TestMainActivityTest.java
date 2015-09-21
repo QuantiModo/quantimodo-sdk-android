@@ -1,5 +1,6 @@
 package com.quantimodo.tools;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingViewException;
@@ -14,9 +15,11 @@ import com.quantimodo.android.sdk.SdkResponse;
 import com.quantimodo.android.sdk.model.HistoryMeasurement;
 import com.quantimodo.android.sdk.model.Unit;
 import com.quantimodo.android.sdk.model.Variable;
+import com.quantimodo.sdk.testing.utils.Utils;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.testhelpers.TestHelper;
 import com.quantimodo.tools.testhelpers.TestMainActivity;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -169,13 +172,19 @@ public class TestMainActivityTest extends ActivityInstrumentationTestCase2<TestM
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        getActivity();
+        Activity mActivity = getActivity();
+        Utils.unlockScreen(mActivity, InstrumentationRegistry.getInstrumentation());
 
         if (!isLogged){
             Context ctx = InstrumentationRegistry.getContext();
             TestHelper.logIn(getActivity());
             isLogged = true;
         }
+    }
+
+    @After
+    public void tearDown() throws Exception{
+        Utils.closeAllActivities(InstrumentationRegistry.getInstrumentation());
     }
 
 

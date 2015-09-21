@@ -5,8 +5,10 @@ import android.database.DataSetObserver;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import com.quantimodo.android.sdk.model.Correlation;
+import com.quantimodo.sdk.testing.utils.Utils;
 import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.fixtures.CorrelationsFixture;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +25,11 @@ public class CorrelationAdapterTest{
     public void before(){
         Context ctx = InstrumentationRegistry.getContext();
         adapter = new CorrelationAdapter(ctx, CorrelationsFixture.CORRELATIONS,CorrelationAdapter.POSITIVE);
+    }
+
+    @After
+    public void tearDown() throws Exception{
+        Utils.closeAllActivities(InstrumentationRegistry.getInstrumentation());
     }
 
     @Test

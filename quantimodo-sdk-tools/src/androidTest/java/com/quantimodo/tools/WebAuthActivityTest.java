@@ -4,9 +4,11 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.web.sugar.Web;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
+import com.quantimodo.sdk.testing.utils.Utils;
 import com.quantimodo.tools.activities.QuantimodoWebAuthenticatorActivity;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.testhelpers.TestHelper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,10 +34,16 @@ public class WebAuthActivityTest extends ActivityInstrumentationTestCase2<Quanti
     public void before() throws Exception{
         this.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        getActivity();
+        Utils.unlockScreen(getActivity(), InstrumentationRegistry.getInstrumentation());
 
         mAuthHelper.logOut();
     }
+
+    @After
+    public void tearDown() throws Exception{
+        Utils.closeAllActivities(InstrumentationRegistry.getInstrumentation());
+    }
+
 
     @Test
     public void testAuthAndGrant() throws Exception{
