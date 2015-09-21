@@ -48,6 +48,8 @@ public class WebAuthActivityTest extends ActivityInstrumentationTestCase2<Quanti
     @Test
     public void testAuthAndGrant() throws Exception{
 
+        Thread.sleep(5000);
+
         Web.WebInteraction wi = Web.onWebView(withId(R.id.web));
 
         wi
