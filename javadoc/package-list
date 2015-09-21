@@ -1,0 +1,15 @@
+com.quantimodo.tools
+com.quantimodo.tools.activities
+com.quantimodo.tools.adapters
+com.quantimodo.tools.dialogs
+com.quantimodo.tools.events
+com.quantimodo.tools.fragments
+com.quantimodo.tools.models
+com.quantimodo.tools.modules
+com.quantimodo.tools.receivers
+com.quantimodo.tools.sdk
+com.quantimodo.tools.sdk.request
+com.quantimodo.tools.sync
+com.quantimodo.tools.utils
+com.quantimodo.tools.utils.tracking
+com.quantimodo.tools.views
