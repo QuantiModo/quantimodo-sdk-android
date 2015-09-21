@@ -1,5 +1,7 @@
 package com.quantimodo.tools;
 
+import android.app.Instrumentation;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.UiThreadTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -11,6 +13,7 @@ import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.testhelpers.TestMainActivity;
 import com.quantimodo.sdk.testing.utils.Utils;
 import espresso.QMatchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,11 +45,17 @@ public class FactorsFragmentTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp() throws Exception{
         mActivity = mActivityRule.getActivity();
+        Utils.unlockScreen(mActivity,InstrumentationRegistry.getInstrumentation());
         if (mAuthHelper == null){
             QTools.getInstance().inject(this);
         }
+    }
+
+    @After
+    public void tearDown() throws Exception{
+        Utils.closeAllActivities(InstrumentationRegistry.getInstrumentation());
     }
 
     @Test
