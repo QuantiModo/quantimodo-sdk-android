@@ -68,7 +68,7 @@ public class FactorsFragmentTest {
                 FactorsFragment factorsFragment = mActivity.getFactorsFragment();
                 return factorsFragment != null && factorsFragment.getListAdapter() != null && factorsFragment.getListAdapter().getCount() > 0;
             }
-        }, 30000);
+        }, Utils.DEFAULT_TIME_FOR_CI);
     }
 
 }

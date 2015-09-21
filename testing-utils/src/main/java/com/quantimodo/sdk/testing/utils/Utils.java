@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Utils {
 
+    public static final long DEFAULT_TIME_FOR_CI = 60000;
     public static final long SLEEP_STEP = 300;
 
     public static class ConditionNotMeetException extends Exception {
