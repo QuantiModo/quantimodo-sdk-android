@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$TRAVIS_REPO_SLUG" == "QuantiModo/QuantiModo-SDK-Android" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "QuantiModo/QuantiModo-SDK-Android" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
   echo -e "Publishing javadoc...\n"
 

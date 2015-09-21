@@ -40,6 +40,6 @@ before_script:
 script:
   - ./gradlew connectedAndroidTest -PdisablePreDex
 
-after_success:
+after_script:
   - ./gradlew :quantimodo-sdk-tools releaseJavadoc
   - .utility/push-javadocs.sh
