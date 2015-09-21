@@ -41,7 +41,6 @@ public class CorrelationAdapterTest{
         last = (Correlation) adapter.getItem(count - 1);
 
         assertTrue(Math.abs(first.getWeight()) > Math.abs(last.getWeight()));
-        assertTrue(Math.abs(first.getCorrelationCoefficient()) == Math.abs(last.getCorrelationCoefficient()));
     }
 
     @Test

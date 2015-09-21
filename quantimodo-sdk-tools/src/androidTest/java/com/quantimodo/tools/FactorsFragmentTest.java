@@ -62,24 +62,4 @@ public class FactorsFragmentTest {
         }, 30000);
     }
 
-    @Test
-    public void testUserVote() throws Throwable {
-        mActivity.openFactors(CorrelationAdapter.POSITIVE, "Overall Mood");
-
-        Thread.sleep(1000);
-        Utils.waitForCondition(new Utils.Condition() {
-            @Override
-            public boolean check() {
-                FactorsFragment factorsFragment = mActivity.getFactorsFragment();
-                return factorsFragment != null && factorsFragment.getListAdapter() != null && factorsFragment.getListAdapter().getCount() > 0;
-            }
-        }, 30000);
-
-        onData(allOf(is(instanceOf(Correlation.class)), QMatchers.correlationMatcher(CAUSE_NAME))).onChildView(withId(R.id.imThumbUp)).perform(click());
-
-        Thread.sleep(5000);
-
-//        onData(allOf(is(instanceOf(Correlation.class)), QMatchers.correlationMatcher(CAUSE_NAME))).onChildView(withId(R.id.imThumbUp)).check(matches(QMatchers.correlationMatcher()));
-    }
-
 }
