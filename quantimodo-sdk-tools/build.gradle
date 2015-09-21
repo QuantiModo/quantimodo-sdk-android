@@ -117,3 +117,11 @@ android.libraryVariants.all { variant ->
         exclude '**/R.java'
     }
 }
+
+task testReport(type: TestReport, group: 'Verification',
+        description: 'Merge the results from both `test` and `integrationTest` task in all subprojects.') {
+    destinationDir = file("$buildDir/reports/allTests")
+    reportOn subprojects*.test
+    reportOn subprojects*.integrationTest
+}
+check.dependsOn testReport
