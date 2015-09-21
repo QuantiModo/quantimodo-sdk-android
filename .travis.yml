@@ -4,7 +4,7 @@ env:
   global:
     - ADB_INSTALL_TIMEOUT = 20
   matrix:
-    - ANDROID_TARGET=android-22  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
 
 android:
   components:
@@ -23,7 +23,7 @@ android:
 
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
-    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-19
 
   licenses:
     - 'android-sdk-license-.+'
@@ -41,5 +41,6 @@ script:
   - ./gradlew connectedAndroidTest -PdisablePreDex
 
 after_script:
-  - ./gradlew :quantimodo-sdk-tools releaseJavadoc
+  - ./gradlew :quantimodo-sdk-tools:releaseJavadoc
+  - chmod +x .utility/push-javadocs.sh
   - .utility/push-javadocs.sh
