@@ -50,6 +50,12 @@ public class Variable {
     @Deprecated
     public Date latestMeasurementTime;
 
+    private Double mostCommonValue;
+    private String mostCommonUnit;
+
+    private String lastUnit;
+    private Double lastValue;
+
     public Variable(long id, String originalName, String parent, String category, String unit, String combinationOperation) {
         this.id = id;
         this.name = originalName;
@@ -120,5 +126,37 @@ public class Variable {
 
     public void setLatestMeasurementTime(Date latestMeasurementTime) {
         this.latestMeasurementTime = latestMeasurementTime;
+    }
+
+    public String getTargetUnit(){
+        if (lastUnit != null && !lastUnit.isEmpty()){
+            return lastUnit;
+        } else {
+            return mostCommonUnit;
+        }
+    }
+
+    public Double getDefaultValue(){
+        if (lastValue != null){
+            return lastValue;
+        } else {
+            return mostCommonValue;
+        }
+    }
+
+    public Double getMostCommonValue() {
+        return mostCommonValue;
+    }
+
+    public String getMostCommonUnit() {
+        return mostCommonUnit;
+    }
+
+    public String getLastUnit() {
+        return lastUnit;
+    }
+
+    public Double getLastValue() {
+        return lastValue;
     }
 }
