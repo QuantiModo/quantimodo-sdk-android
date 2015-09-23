@@ -1,2 +1,1 @@
-include ':sdk', ':quantimodo-sdk-tools', ':libs', ':testing-utils', ':greenGenerator', ':swagger'
-
+rootProject.name = "swagger-android-client"
