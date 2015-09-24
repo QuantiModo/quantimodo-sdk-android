@@ -39,9 +39,6 @@ Rooted users can also install [Quantimodo Sync for Android](https://play.google.
 - If you don't see it, debug.
 - If you do see your measurement, then you should be good to publish.
 
-##### QuantiModo Android Logo (512 pixels)
-![QuantiModo for Android](https://quantimo.do/wp-content/uploads/2014/03/QM-LOGO-CRAZY-ARROWS-Mike-Bigger-Q-512-512-200x200.png)
-
 ### Gradle SDK Distribution 
 The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. 
 
