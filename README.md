@@ -30,15 +30,13 @@ Rooted users can also install [Quantimodo Sync for Android](https://play.google.
 5. Run or Debug. (enjoy!!!)
 
 ### Testing
-- Uninstall all QM apps from your phone.
 - Install your new APK.
-- If QuantiModo for Android is not installed, your app should direct users to the [Play Store](https://play.google.com/store/apps/details?id=com.quantimodo.android&hl=en)
 - Create a new account in the QuantiModo app.
 - Log into QuantiModo.
 - Authorize your app to send measurements to QuantiMo.do.
 - Send a measurement from your application.
-- Check to see that it shows up here: https://quantimo.do/analyze/
-- If you don't see it, debug.
+- Check to see that it shows up here: https://quantipress.quantimo.do
+- If you don't see it, debug or contact android@quantimo.do.
 - If you do see your measurement, then you should be good to publish.
 
 ### Gradle SDK Distribution 
