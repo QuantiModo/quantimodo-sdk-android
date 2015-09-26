@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/lnAddVariableContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingLeft="12dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:background="@drawable/card_complete"
+                android:visibility="gone"
+    >
+
+    <ImageButton
+        android:id="@+id/btOverflow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/selector"
+        android:cropToPadding="true"
+        android:padding="12dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_action_overflow_dark"/>
+
+
+    <TextView
+        android:id="@+id/card_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="@string/tracking_variable"
+        android:textSize="24sp"
+        android:textColor="@color/card_title"
+        android:fontFamily="sans-serif-light"/>
+
+    <EditText
+        android:id="@+id/etVariableNameNew"
+        android:layout_below="@id/card_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/tracking_variablename"
+        android:textColorHint="#CCCCCC"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords"
+        android:layout_marginRight="12dp"
+        />
+
+    <Spinner
+        android:id="@+id/spVariableCategory"
+        android:layout_below="@id/etVariableNameNew"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textColorHint="#CCCCCC"
+        android:inputType="none"
+        android:layout_marginRight="12dp"
+        />
+
+    <RadioGroup
+        android:id="@+id/rgVariableCombinationOperation"
+        android:layout_below="@id/spVariableCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        >
+
+        <RadioButton
+            android:id="@+id/rbVariableCombinationOperationSum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tracking_combination_sum"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/rbVariableCombinationOperationAverage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tracking_combination_average"/>
+    </RadioGroup>
+</RelativeLayout>

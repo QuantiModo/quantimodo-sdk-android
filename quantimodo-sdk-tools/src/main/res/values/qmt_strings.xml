@@ -1,0 +1,74 @@
+<resources>
+
+    <!--<string name="quantimodo_client"/>-->
+    <!--<string name="quantimodo_secret"/>-->
+
+    <string name="sdk_unknown_error">Unknown error</string>
+    <string name="oauth_refresh_failed">You need to log in again</string>
+
+    <string name="tracking_measurement">Measurement</string>
+    <string name="tracking_value">Value</string>
+    <string name="tracking_date">Date (today)</string>
+    <string name="tracking_time">Time (now)</string>
+    <string name="tracking_variable">Variable</string>
+    <string name="tracking_variablename">Variable name</string>
+    <string name="tracking_variable_add">Add new variable</string>
+    <string name="tracking_measurement_add">Add new measurement</string>
+    <string name="tracking_done">Done</string>
+    <string name="tracking_combination_sum">Sum</string>
+    <string name="tracking_combination_average">Average</string>
+    <string name="tracking_settime">Set time&#8230;</string>
+    <string name="tracking_setdate">Set date&#8230;</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_settings">Settings</string>
+    <string name="header_factors_positive"><![CDATA[Most likely to <b>IMPROVE</b> %s]]></string>
+    <string name="header_factors_negative"><![CDATA[Most likely to <b>DEPRESS</b> %s]]></string>
+    <string name="toast_requesting">Requesting</string>
+    <string name="tracking_fragment_wait_data_load">Wait till data loaded</string>
+    <string name="menu_item_positive_factors">Positive factors</string>
+    <string name="menu_item_negative_factors">Negative factors</string>
+    <string name="tab_positive_factors">Positive Factors</string>
+    <string name="tab_negative_factors">Negative factors</string>
+    <string name="correlation_dialog_title">Vote for factor</string>
+    <string name="correlation_dialog_negative_down" formatted="false">Voting thumbs down indicates that you disagree that %s decreases
+        your %s.
+    </string>
+    <string name="correlation_dialog_negative_up" formatted="false">Voting thumbs up indicates that you agree that %s decreases your %s.
+    </string>
+    <string name="correlation_dialog_positive_down" formatted="false">Voting thumbs up indicates that it seems likely that %s increases
+        your %s.
+    </string>
+    <string name="correlation_dialog_positive_up" formatted="false">Voting thumbs down indicates that you disagree that %s increases your
+        %s.
+    </string>
+    <string name="correlation_dialog_button_positive_disagree">Disagree</string>
+    <string name="correlation_dialog_button_positive_agree">Agree</string>
+    <string name="correlation_dialog_button_negative">Cancel</string>
+    <string name="correlation_dialog_dont_show_again">Don\'t show this again</string>
+    <string name="qmt_dialog_sync_cancel_title">Sync Process</string>
+    <string name="qmt_dialog_sync_stop_message">Do you want to stop sync process?</string>
+    <string name="qmt_dialog_sync_negative_button">Cancel</string>
+    <string name="qmt_dialog_sync_positive_button">Stop</string>
+
+    <string name="tracking_item_no_category">What do you want to track?</string>
+    
+    <string name="tracking_item_diet_title">Diet</string>
+    <string name="tracking_item_diet_question">What did you eat?</string>
+
+    <string name="tracking_item_treatments_title">Treatments</string>
+    <string name="tracking_item_treatments_question">Enter a treatment</string>
+
+    <string name="tracking_item_symptoms_title">Symptoms</string>
+    <string name="tracking_item_symptoms_question">Enter a symptom</string>
+
+    <string name="tracking_item_mood_title">Mood</string>
+    <string name="tracking_item_mood_question">Enter a mood</string>
+
+    <string name="tracking_fragment_no_category_title">Track data</string>
+    <string name="tracking_fragment_diet_title">Track diet</string>
+    <string name="tracking_fragment_treatments_title">Track treatments</string>
+    <string name="tracking_fragment_symptoms_title">Track symptoms</string>
+    <string name="tracking_fragment_mood_title">Track mood</string>
+
+
+</resources>

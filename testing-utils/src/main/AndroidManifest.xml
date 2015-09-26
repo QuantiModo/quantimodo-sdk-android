@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:amazon=" http://schemas.amazon.com/apk/res/android"
+          package="com.quantimodo.android.sdk.testing.utils">
+
+
+    <application>
+    </application>
+
+
+</manifest>
