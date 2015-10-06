@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class VotesApi {
-  String basePath = "https://localhost/api";
+  String basePath = "https://app.quantimo.do/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {

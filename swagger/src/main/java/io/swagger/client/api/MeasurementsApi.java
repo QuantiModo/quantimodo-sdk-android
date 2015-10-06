@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class MeasurementsApi {
-  String basePath = "https://localhost/api";
+  String basePath = "https://app.quantimo.do/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -157,7 +157,10 @@ public class MeasurementsApi {
    * Get measurements for this user
    * Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. &lt;br&gt;Supported filter parameters:&lt;br&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;value&lt;/b&gt; - Value of measurement&lt;/li&gt;&lt;li&gt;&lt;b&gt;lastUpdated&lt;/b&gt; - The time that this measurement was created or last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;
    * @param variableName Name of the variable you want measurements for
-   * @param unit The unit your want the measurements in
+   * @param source Name of the source you want measurements for (supports exact name match only)
+   * @param value Value of measurement
+   * @param lastUpdated The time that this measurement was created or last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
+   * @param unit The unit you want the measurements in
    * @param startTime The lower limit of measurements returned (Epoch)
    * @param endTime The upper limit of measurements returned (Epoch)
    * @param groupingWidth The time (in seconds) over which measurements are grouped together
@@ -167,7 +170,7 @@ public class MeasurementsApi {
    * @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
    * @return Measurement
    */
-  public Measurement  v1MeasurementsGet (String variableName, String unit, String startTime, String endTime, Integer groupingWidth, String groupingTimezone, Integer limit, Integer offset, Integer sort) throws ApiException {
+  public Measurement  v1MeasurementsGet (String variableName, String source, String value, String lastUpdated, String unit, String startTime, String endTime, Integer groupingWidth, String groupingTimezone, Integer limit, Integer offset, Integer sort) throws ApiException {
     Object postBody = null;
     
 
@@ -183,6 +186,12 @@ public class MeasurementsApi {
 
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "variableName", variableName));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "source", source));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "value", value));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastUpdated", lastUpdated));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "unit", unit));
     
@@ -235,7 +244,7 @@ public class MeasurementsApi {
   
   /**
    * Post a new set or update existing measurements to the database
-   * You can submit or update multiple measurements in a \&quot;measurements\&quot; sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\&quot;measurements\&quot;:[{\&quot;timestamp\&quot;:1406419860,\&quot;value\&quot;:\&quot;1\&quot;,\&quot;note\&quot;:\&quot;I am a note about back pain.\&quot;},{\&quot;timestamp\&quot;:1406519865,\&quot;value\&quot;:\&quot;3\&quot;,\&quot;note\&quot;:\&quot;I am another note about back pain.\&quot;}],\&quot;name\&quot;:\&quot;Back Pain\&quot;,\&quot;source\&quot;:\&quot;QuantiModo\&quot;,\&quot;category\&quot;:\&quot;Symptoms\&quot;,\&quot;combinationOperation\&quot;:\&quot;MEAN\&quot;,\&quot;unit\&quot;:\&quot;/5\&quot;}]
+   * You can submit or update multiple measurements in a \&quot;measurements\&quot; sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\&quot;measurements\&quot;:[{\&quot;startTime\&quot;:1439389320,\&quot;value\&quot;:\&quot;3\&quot;}],\&quot;name\&quot;:\&quot;Acne (out of 5)\&quot;,\&quot;source\&quot;:\&quot;QuantiModo\&quot;,\&quot;category\&quot;:\&quot;Symptoms\&quot;,\&quot;combinationOperation\&quot;:\&quot;MEAN\&quot;,\&quot;unit\&quot;:\&quot;/5\&quot;}]
    * @param measurements An array of measurements you want to insert.
    * @return void
    */

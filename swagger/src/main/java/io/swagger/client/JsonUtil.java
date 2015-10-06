@@ -35,6 +35,10 @@ public class JsonUtil {
   public static Type getListTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
+    if ("OAuthResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<List<OAuthResponse>>(){}.getType();
+    }
+    
     if ("CommonResponse".equalsIgnoreCase(className)) {
       return new TypeToken<List<CommonResponse>>(){}.getType();
     }
@@ -160,6 +164,10 @@ public class JsonUtil {
 
   public static Type getTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
+    
+    if ("OAuthResponse".equalsIgnoreCase(className)) {
+      return new TypeToken<OAuthResponse>(){}.getType();
+    }
     
     if ("CommonResponse".equalsIgnoreCase(className)) {
       return new TypeToken<CommonResponse>(){}.getType();

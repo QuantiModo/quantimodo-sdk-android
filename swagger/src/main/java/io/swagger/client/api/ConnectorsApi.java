@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class ConnectorsApi {
-  String basePath = "https://localhost/api";
+  String basePath = "https://app.quantimo.do/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -42,12 +42,17 @@ public class ConnectorsApi {
   
   /**
    * Get embeddable connect javascript
-   * Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.
-   * @param t User token
+   * Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.\n\n    if using the MoodiModo Clones, Use `qmSetupOnIonic` function after connecting `connect.js`.
+   * @param accessToken token User&#39;s access token
    * @return void
    */
-  public void  v1ConnectJsGet (String t) throws ApiException {
+  public void  v1ConnectJsGet (String accessToken) throws ApiException {
     Object postBody = null;
+    
+    // verify the required parameter 'access token' is set
+    if (accessToken == null) {
+       throw new ApiException(400, "Missing the required parameter 'access token' when calling v1ConnectJsGet");
+    }
     
 
     // create path and map variables
@@ -61,7 +66,7 @@ public class ConnectorsApi {
     Map<String, String> formParams = new HashMap<String, String>();
 
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "t", t));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access token", accessToken));
     
 
     

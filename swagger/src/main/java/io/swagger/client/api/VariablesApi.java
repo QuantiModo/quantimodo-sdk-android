@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class VariablesApi {
-  String basePath = "https://localhost/api";
+  String basePath = "https://app.quantimo.do/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -98,13 +98,12 @@ public class VariablesApi {
    * Get top 5 PUBLIC variables with the most correlations
    * Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for &#39;mood&#39; as an effect. Since &#39;Overall Mood&#39; has a lot of correlations with other variables, it should be in the autocomplete list.&lt;br&gt;Supported filter parameters:&lt;br&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;category&lt;/b&gt; - Category of Variable&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;
    * @param search Search query can be some fraction of a variable name.
-   * @param effectOrCause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause.
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
    * @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
    * @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
    * @return Variable
    */
-  public Variable  v1PublicVariablesSearchSearchGet (String search, String effectOrCause, Integer limit, Integer offset, Integer sort) throws ApiException {
+  public Variable  v1PublicVariablesSearchSearchGet (String search, Integer limit, Integer offset, Integer sort) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'search' is set
@@ -123,8 +122,6 @@ public class VariablesApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "effectOrCause", effectOrCause));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
     
@@ -282,12 +279,18 @@ public class VariablesApi {
    * Get variables by the category name. &lt;br&gt;Supported filter parameters:&lt;br&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;name&lt;/b&gt; - Original name of the variable (supports exact name match only)&lt;/li&gt;&lt;li&gt;&lt;b&gt;lastUpdated&lt;/b&gt; - Filter by the last time any of the properties of the variable were changed. Uses UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;&lt;/li&gt;&lt;li&gt;&lt;b&gt;source&lt;/b&gt; - The name of the data source that created the variable (supports exact name match only). So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here&lt;/li&gt;&lt;li&gt;&lt;b&gt;latestMeasurementTime&lt;/b&gt; - Filter variables based on the last time a measurement for them was created or updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;&lt;/li&gt;&lt;li&gt;&lt;b&gt;numberOfMeasurements&lt;/b&gt; - Filter variables by the total number of measurements that they have. This could be used of you want to filter or sort by popularity.&lt;/li&gt;&lt;li&gt;&lt;b&gt;lastSource&lt;/b&gt; - Limit variables to those which measurements were last submitted by a specific source. So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here. (supports exact name match only)&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;
    * @param userId User id
    * @param category Filter data by category
+   * @param name Original name of the variable (supports exact name match only)
+   * @param lastUpdated Filter by the last time any of the properties of the variable were changed. Uses UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
+   * @param source The name of the data source that created the variable (supports exact name match only). So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here
+   * @param latestMeasurementTime Filter variables based on the last time a measurement for them was created or updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
+   * @param numberOfMeasurements Filter variables by the total number of measurements that they have. This could be used of you want to filter or sort by popularity.
+   * @param lastSource Limit variables to those which measurements were last submitted by a specific source. So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here. (supports exact name match only)
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
    * @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
    * @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
    * @return Variable
    */
-  public Variable  v1VariablesGet (Integer userId, String category, Integer limit, Integer offset, Integer sort) throws ApiException {
+  public Variable  v1VariablesGet (Integer userId, String category, String name, String lastUpdated, String source, String latestMeasurementTime, String numberOfMeasurements, String lastSource, Integer limit, Integer offset, Integer sort) throws ApiException {
     Object postBody = null;
     
 
@@ -305,6 +308,18 @@ public class VariablesApi {
     queryParams.addAll(ApiInvoker.parameterToPairs("", "userId", userId));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "category", category));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "name", name));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastUpdated", lastUpdated));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "source", source));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "latestMeasurementTime", latestMeasurementTime));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "numberOfMeasurements", numberOfMeasurements));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastSource", lastSource));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
     

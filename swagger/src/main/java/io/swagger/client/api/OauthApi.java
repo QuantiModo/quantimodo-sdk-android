@@ -8,6 +8,7 @@ import io.swagger.client.model.*;
 
 import java.util.*;
 
+import io.swagger.client.model.OAuthResponse;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class OauthApi {
-  String basePath = "https://localhost/api";
+  String basePath = "https://app.quantimo.do/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -138,9 +139,9 @@ public class OauthApi {
    * @param scope Scopes include basic, readmeasurements, and writemeasurements. The \&quot;basic\&quot; scope allows you to read user info (displayname, email, etc). The \&quot;readmeasurements\&quot; scope allows one to read a user&#39;s data. The \&quot;writemeasurements\&quot; scope allows you to write user data. Separate multiple scopes by a space.
    * @param redirectUri The redirect URI is the URL within your client application that will receive the OAuth2 credentials.
    * @param state An opaque string that is round-tripped in the protocol; that is to say, it is returned as a URI parameter in the Basic flow, and in the URI
-   * @return void
+   * @return OAuthResponse
    */
-  public void  v1Oauth2TokenGet (String clientId, String clientSecret, String grantType, String responseType, String scope, String redirectUri, String state) throws ApiException {
+  public OAuthResponse  v1Oauth2TokenGet (String clientId, String clientSecret, String grantType, String responseType, String scope, String redirectUri, String state) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'clientId' is set
@@ -207,10 +208,10 @@ public class OauthApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return ;
+        return (OAuthResponse) ApiInvoker.deserialize(response, "", OAuthResponse.class);
       }
       else {
-        return ;
+        return null;
       }
     } catch (ApiException ex) {
       throw ex;

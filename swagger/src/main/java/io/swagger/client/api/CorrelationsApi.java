@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class CorrelationsApi {
-  String basePath = "https://localhost/api";
+  String basePath = "https://app.quantimo.do/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -47,12 +47,16 @@ public class CorrelationsApi {
    * Get correlations.&lt;br&gt;Supported filter parameters:&lt;br&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;correlationCoefficient&lt;/b&gt; - Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action&lt;/li&gt;&lt;li&gt;&lt;b&gt;onsetDelay&lt;/b&gt; - The number of seconds which pass following a cause measurement before an effect would likely be observed.&lt;/li&gt;&lt;li&gt;&lt;b&gt;durationOfAction&lt;/b&gt; - The time in seconds over which the cause would be expected to exert a measurable effect. We have selected a default value for each variable. This default value may be replaced by a user specified by adjusting their variable user settings.&lt;/li&gt;&lt;li&gt;&lt;b&gt;lastUpdated&lt;/b&gt; - The time that this measurement was last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;
    * @param effect ORIGINAL variable name of the effect variable for which the user desires correlations
    * @param cause ORIGINAL variable name of the cause variable for which the user desires correlations
+   * @param correlationCoefficient Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action
+   * @param onsetDelay The number of seconds which pass following a cause measurement before an effect would likely be observed.
+   * @param durationOfAction The time in seconds over which the cause would be expected to exert a measurable effect. We have selected a default value for each variable. This default value may be replaced by a user specified by adjusting their variable user settings.
+   * @param lastUpdated The time that this measurement was last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
    * @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
    * @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
    * @return List<Correlation>
    */
-  public List<Correlation>  v1CorrelationsGet (String effect, String cause, Integer limit, Integer offset, Integer sort) throws ApiException {
+  public List<Correlation>  v1CorrelationsGet (String effect, String cause, String correlationCoefficient, String onsetDelay, String durationOfAction, String lastUpdated, Integer limit, Integer offset, Integer sort) throws ApiException {
     Object postBody = null;
     
 
@@ -70,6 +74,14 @@ public class CorrelationsApi {
     queryParams.addAll(ApiInvoker.parameterToPairs("", "effect", effect));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "cause", cause));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "correlationCoefficient", correlationCoefficient));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "onsetDelay", onsetDelay));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "durationOfAction", durationOfAction));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastUpdated", lastUpdated));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
     

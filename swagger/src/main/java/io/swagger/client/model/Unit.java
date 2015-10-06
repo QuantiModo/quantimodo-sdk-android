@@ -19,11 +19,8 @@ public class Unit  {
   };
   @SerializedName("category")
   private CategoryEnum category = null;
-  public enum MinimumEnum {
-     NInfinity,
-  };
   @SerializedName("minimum")
-  private MinimumEnum minimum = null;
+  private Double minimum = null;
   public enum MaximumEnum {
      Infinity, 
   };
@@ -73,10 +70,10 @@ public class Unit  {
    * Unit minimum value
    **/
   @ApiModelProperty(required = true, value = "Unit minimum value")
-  public MinimumEnum getMinimum() {
+  public Double getMinimum() {
     return minimum;
   }
-  public void setMinimum(MinimumEnum minimum) {
+  public void setMinimum(Double minimum) {
     this.minimum = minimum;
   }
 
