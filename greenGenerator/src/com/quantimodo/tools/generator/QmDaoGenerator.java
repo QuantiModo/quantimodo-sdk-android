@@ -39,6 +39,7 @@ public class QmDaoGenerator {
         variable.addShortProperty("combOperation").notNull();
         variable.addDateProperty("updated");
         variable.addDateProperty("latestMeasurementTime");
+        variable.addLongProperty("lastMeasurementSync");
 
         return variable;
     }
