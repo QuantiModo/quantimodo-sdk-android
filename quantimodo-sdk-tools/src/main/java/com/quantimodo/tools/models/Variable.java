@@ -1,6 +1,5 @@
 package com.quantimodo.tools.models;
 
-
 import com.quantimodo.tools.models.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -24,6 +23,7 @@ public class Variable {
     private short combOperation;
     private java.util.Date updated;
     private java.util.Date latestMeasurementTime;
+    private Long lastMeasurementSync;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -75,7 +75,7 @@ public class Variable {
         this.id = id;
     }
 
-    public Variable(Long id, String name, String originalName, Long parentVariable, Long unitId, Long categoryId, short combOperation, java.util.Date updated, java.util.Date latestMeasurementTime) {
+    public Variable(Long id, String name, String originalName, Long parentVariable, Long unitId, Long categoryId, short combOperation, java.util.Date updated, java.util.Date latestMeasurementTime, Long lastMeasurementSync) {
         this.id = id;
         this.name = name;
         this.originalName = originalName;
@@ -85,6 +85,7 @@ public class Variable {
         this.combOperation = combOperation;
         this.updated = updated;
         this.latestMeasurementTime = latestMeasurementTime;
+        this.lastMeasurementSync = lastMeasurementSync;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -165,6 +166,14 @@ public class Variable {
 
     public void setLatestMeasurementTime(java.util.Date latestMeasurementTime) {
         this.latestMeasurementTime = latestMeasurementTime;
+    }
+
+    public Long getLastMeasurementSync() {
+        return lastMeasurementSync;
+    }
+
+    public void setLastMeasurementSync(Long lastMeasurementSync) {
+        this.lastMeasurementSync = lastMeasurementSync;
     }
 
     /** To-one relationship, resolved on first access. */

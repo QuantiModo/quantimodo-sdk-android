@@ -103,7 +103,7 @@ android.libraryVariants.all { variant ->
     task("${variant.name}Javadoc", type: Javadoc, dependsOn: "assembleDebug") {
         source = variant.javaCompile.source
 
-        title = "My Awesome Library API"
+        title = "Quantimodo Tools"
 
         options.links("http://docs.oracle.com/javase/7/docs/api/");
         options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/docs/reference");
