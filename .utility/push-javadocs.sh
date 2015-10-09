@@ -4,6 +4,7 @@ if [ "$TRAVIS_REPO_SLUG" == "QuantiModo/QuantiModo-SDK-Android" ] && [ "$TRAVIS_
 
   echo -e "Publishing javadoc...\n"
 
+  mkdir $HOME/javadoc-latest
   cp -R quantimodo-sdk-tools/build/docs/javadoc $HOME/javadoc-latest/qm-tools
   cp -R sdk/build/docs/javadoc $HOME/javadoc-latest/sdk
   cp -R swagger/build/docs/javadoc $HOME/javadoc-latest/swagger
