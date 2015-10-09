@@ -7,7 +7,6 @@ if [ "$TRAVIS_REPO_SLUG" == "QuantiModo/QuantiModo-SDK-Android" ] && [ "$TRAVIS_
   mkdir $HOME/javadoc-latest
   cp -R quantimodo-sdk-tools/build/docs/javadoc $HOME/javadoc-latest/qm-tools
   cp -R sdk/build/docs/javadoc $HOME/javadoc-latest/sdk
-  cp -R swagger/build/docs/javadoc $HOME/javadoc-latest/swagger
 
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
