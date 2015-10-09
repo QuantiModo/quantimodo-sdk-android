@@ -79,6 +79,25 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.4.1'
 }
 
+android.libraryVariants.all { variant ->
+    task("${variant.name}Javadoc", type: Javadoc, dependsOn: "assembleDebug") {
+        source = variant.javaCompile.source
+
+        title = "Quantimodo SDK"
+
+        options.links("http://docs.oracle.com/javase/7/docs/api/");
+        options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/docs/reference");
+
+        // First add all of your dependencies to the classpath, then add the android jars
+        classpath += files(variant.javaCompile.classpath.files)
+        classpath += files(android.getBootClasspath())
+
+        // We're excluding these generated files
+        exclude '**/BuildConfig.java'
+        exclude '**/R.java'
+    }
+}
+
 afterEvaluate {
     android.libraryVariants.all { variant ->
         def task = project.tasks.create "jar${variant.name.capitalize()}", Jar
