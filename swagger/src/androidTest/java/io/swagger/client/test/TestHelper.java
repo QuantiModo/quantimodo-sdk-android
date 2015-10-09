@@ -2,7 +2,7 @@ package io.swagger.client.test;
 
 import android.content.Context;
 import com.google.gson.JsonObject;
-//import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Ion;
 
 import java.net.CookieStore;
 import java.net.HttpCookie;
@@ -18,29 +18,28 @@ public class TestHelper {
 
 
     public static String logIn(final Context context) throws ExecutionException, InterruptedException {
-//        JsonObject response = Ion.with(context, QUANTIMODO_ADDRESS + "signin/")
-//                .setBodyParameter("log", TEST_USERNAME)
-//                .setBodyParameter("pwd", TEST_PASSWORD)
-//                .setBodyParameter("lwa", "1")
-//                .setBodyParameter("login-with-ajax", "login")
-//                .asJsonObject().get();
-//
-//
-//        String cookieToken  = null;
-//        if (response.get("result").getAsBoolean()) {
-//            CookieStore cookieStore = Ion.getDefault(context).getCookieMiddleware().getCookieStore();
-//            List<HttpCookie> cookieList = cookieStore.get(URI.create(QUANTIMODO_ADDRESS));
-//
-//            for (HttpCookie cookie : cookieList) {
-//                if (cookie.getName().contains("wordpress_logged_in_")) {
-//                    cookieToken = cookie.getValue();
-//                    break;
-//                }
-//            }
-//        }
+        JsonObject response = Ion.with(context, QUANTIMODO_ADDRESS + "signin/")
+                .setBodyParameter("log", TEST_USERNAME)
+                .setBodyParameter("pwd", TEST_PASSWORD)
+                .setBodyParameter("lwa", "1")
+                .setBodyParameter("login-with-ajax", "login")
+                .asJsonObject().get();
 
-//        return cookieToken;
-        return null;
+
+        String cookieToken  = null;
+        if (response.get("result").getAsBoolean()) {
+            CookieStore cookieStore = Ion.getDefault(context).getCookieMiddleware().getCookieStore();
+            List<HttpCookie> cookieList = cookieStore.get(URI.create(QUANTIMODO_ADDRESS));
+
+            for (HttpCookie cookie : cookieList) {
+                if (cookie.getName().contains("wordpress_logged_in_")) {
+                    cookieToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        return cookieToken;
     }
 
 
