@@ -2,7 +2,7 @@ package io.swagger.client.test;
 
 import android.content.Context;
 import com.google.gson.JsonObject;
-import com.koushikdutta.ion.Ion;
+//import com.koushikdutta.ion.Ion;
 
 import java.net.CookieStore;
 import java.net.HttpCookie;
