@@ -32,7 +32,7 @@ import java.util.List;
 
 import static com.quantimodo.android.sdk.SdkDefs.QUANTIMODO_ADDRESS;
 
-/*
+/**
    API class to interact with QuantiModo web-service
    All method are synchronous
  */
@@ -114,10 +114,34 @@ public class QuantimodoApiV2 {
         }
     }
 
+    /**
+     * Get measurements in specified range
+     * @param context Context
+     * @param token OAuth Token
+     * @param startTime timestamp from ( instead of 0 use 1 )
+     * @param endTime timestamp  to
+     * @param variableName variable name
+     * @param source source name, which is name of application that submitted measurement
+     * @param toUnitName convert to unit
+     * @return SdkReponse with ArrayList of HistoryMeasurement
+     */
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
         return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
     }
 
+    /**
+     * Get measurements in specified range
+     * @param context Context
+     * @param token OAuth Token
+     * @param startTime timestamp from ( instead of 0 use 1 )
+     * @param endTime timestamp  to
+     * @param variableName variable name
+     * @param source source name, which is name of application that submitted measurement
+     * @param toUnitName convert to unit
+     * @param limit limit request by number of measurements
+     * @param offset used with limit, for paging results
+     * @return SdkReponse with ArrayList of HistoryMeasurement
+     */
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime,
                                                                            String variableName, String source, String toUnitName,Integer limit, Integer offset) {
         setupIon(context);
@@ -158,6 +182,13 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Send measurements
+     * @param context Context
+     * @param token OAuth token
+     * @param measurementSets List of MeasurementSets
+     * @return Sdk response, contains integer value, which equals "1" for successful request
+     */
     public SdkResponse<Integer> putMeasurements(Context context, String token, List<MeasurementSet> measurementSets) {
         setupIon(context);
 
@@ -196,6 +227,17 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Search for variables
+     * @param context Context
+     * @param token OAuth token
+     * @param search Search string
+     * @param limit size of response
+     * @param offset offset of response
+     * @param source source name, which is name of application that submitted measurement
+     * @param category variable category
+     * @return SdkResponse with ArrayList of Variable
+     */
     public SdkResponse<ArrayList<Variable>> searchVariables(Context context, String token, String search, int limit, int offset, String source, String category) {
         setupIon(context);
 
@@ -237,6 +279,12 @@ public class QuantimodoApiV2 {
     }
 
 
+    /**
+     * Get unit definitions
+     * @param context Context
+     * @param token OAuth token
+     * @return SdkResponse with ArrayList of Unit
+     */
     public SdkResponse<ArrayList<Unit>> getUnits(Context context, String token) {
         setupIon(context);
 
@@ -252,6 +300,14 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Search for correlation by cause or effect
+     * @param context Context
+     * @param token OAuth Token
+     * @param variableName variable name, which would be used as cause or effect
+     * @param causeOrEffect cause or effect
+     * @return SdkResponse with Array of Correlations
+     */
     public SdkResponse<ArrayList<Correlation>> searchCorrelations(Context context, String token,String variableName,@CauseOrEffect String causeOrEffect){
         setupIon(context);
 
@@ -275,6 +331,12 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Get variable categories
+     * @param context Context
+     * @param token OAuth token
+     * @return SdkResponse with ArrayList of VariableCategory
+     */
     public SdkResponse<ArrayList<VariableCategory>> getCategories(Context context, String token) {
         setupIon(context);
 
@@ -289,6 +351,12 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Get variables
+     * @param context Context
+     * @param token OAuth Token
+     * @return SdkResponse with
+     */
     public SdkResponse<ArrayList<Variable>> getVariables(Context context, String token) {
         setupIon(context);
 
@@ -331,6 +399,13 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Submit a vote for correlation
+     * @param context Context
+     * @param token OAuthToken
+     * @param correlationPost Entity with data about correlation
+     * @return Response without data
+     */
     public SdkResponse<Void> voteCorrelation(Context context,String token,CorrelationPost correlationPost){
         setupIon(context);
 
