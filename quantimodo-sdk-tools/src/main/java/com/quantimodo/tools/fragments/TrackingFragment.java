@@ -498,7 +498,7 @@ public class TrackingFragment extends QFragment {
             if (mCategoryDef.defaultUnit.equals(currentUnit.getAbbreviatedName())){
                 defaultUnit = i;
             }
-            if (variable != null && currentUnit.equals(variable.getTargetUnit())){
+            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
                 selectedUnit = i;
             }
         }
