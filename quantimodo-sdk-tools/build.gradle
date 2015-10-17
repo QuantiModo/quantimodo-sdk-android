@@ -125,3 +125,5 @@ task testReport(type: TestReport, group: 'Verification',
     reportOn subprojects*.integrationTest
 }
 check.dependsOn testReport
+
+apply from: '../maven.gradle'

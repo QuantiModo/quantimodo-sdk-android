@@ -1,4 +1,8 @@
 
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
+}
+
 buildscript {
     repositories {
         jcenter()

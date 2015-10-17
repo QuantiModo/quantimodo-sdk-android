@@ -62,4 +62,4 @@ android.libraryVariants.all { variant ->
     }
 }
 
-//apply from: '../maven.gradle'
+apply from: '../maven.gradle'
