@@ -146,6 +146,14 @@ Most useful components could be :
 - [ImportWebFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/ImportWebFragment.html), helps create connections with 3rd-party services
 - [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html), would help configure sync
 
+
+For example to add ImportWebFragment to your app, you need just create fragment instance and place it on screen
+```
+ImportWebFragment fragment = ImportWebFragment.newInstance();
+getFragmentManager().beginTransaction().replace(R.id.mainFragment, fragment).commit();
+```
+All other work would be done be tools, fragment would request injection of dependencies from QApplication, then if user is authenticated import fragment would show page with available connections.
+
 ## Running tests
 
 Connect device and run in project root
