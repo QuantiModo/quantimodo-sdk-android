@@ -608,11 +608,13 @@ public class TrackingFragment extends QFragment {
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
+                    lnCardsContainer.setAlpha(1.0f);
                     lvVariableSuggestions.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onAnimationCancel(Animator animator) {
+                    lvVariableSuggestions.setVisibility(View.GONE);
                 }
 
                 @Override
