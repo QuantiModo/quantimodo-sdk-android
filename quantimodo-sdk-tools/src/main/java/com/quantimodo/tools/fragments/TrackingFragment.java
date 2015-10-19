@@ -608,8 +608,10 @@ public class TrackingFragment extends QFragment {
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    lnCardsContainer.setAlpha(1.0f);
-                    lvVariableSuggestions.setVisibility(View.GONE);
+                    if (isVisible()) {
+                        lnCardsContainer.setAlpha(1.0f);
+                        lvVariableSuggestions.setVisibility(View.GONE);
+                    }
                 }
 
                 @Override
@@ -654,7 +656,9 @@ public class TrackingFragment extends QFragment {
                 autoCompleteListAdapter.addAll(getSuggestedVariablesResponse.variables);
                 refreshesRunning--;
                 if (refreshesRunning <= 0) {
-                    pbAutoCompleteLoading.setVisibility(View.GONE);
+                    if (isVisible()) {
+                        pbAutoCompleteLoading.setVisibility(View.GONE);
+                    }
                 }
             }
         });
