@@ -108,15 +108,15 @@ public class TrackingFragment extends QFragment {
         /**
          * @param filter Category name
          * @param defaultValue Default value
-         * @param defautlUnit Default unit
+         * @param defaultUnit Default unit
          * @param hintId hint resource
          * @param combineType combineType should be {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_SUM} or {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_MEAN}
          * @param titleId title for action bar
          */
-        public CategoryDef(String filter, Double defaultValue, String defautlUnit, int hintId, String combineType,int titleId) {
+        public CategoryDef(String filter, Double defaultValue, String defaultUnit, int hintId, String combineType,int titleId) {
             this.filter = filter;
             this.defaultValue = defaultValue;
-            this.defaultUnit = defautlUnit;
+            this.defaultUnit = defaultUnit;
             this.hintId = hintId;
             this.combineType = combineType;
             this.titleId = titleId;

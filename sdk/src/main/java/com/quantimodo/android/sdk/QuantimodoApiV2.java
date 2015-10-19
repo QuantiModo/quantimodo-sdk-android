@@ -93,8 +93,9 @@ public class QuantimodoApiV2 {
     }
 
     private <T> void executeRequest(Context context, SdkResponse<T> sdkResponse,TypeToken<T> type,FutureBuilder requestBuilder){
+        Response<String> stringResponse = null;
         try {
-            Response<String> stringResponse = requestBuilder.asString().withResponse().get();
+            stringResponse = requestBuilder.asString().withResponse().get();
             sdkResponse.setHeaders(stringResponse.getHeaders().toMultimap());
             sdkResponse.setHttpCode(stringResponse.getHeaders().getResponseCode());
             if (sdkResponse.getHttpCode() <= 300){
@@ -111,7 +112,20 @@ public class QuantimodoApiV2 {
             }
             sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
             sdkResponse.setCause(e);
+
+            if (stringResponse != null){
+                sdkResponse.setStringBody(stringResponse.getResult());
+            }
         }
+    }
+
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
+        return getMeasurementHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
+    }
+
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime,
+                                                                           String variableName, String source, String toUnitName,Integer limit, Integer offset) {
+        return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName, limit, offset);
     }
 
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
@@ -162,10 +176,11 @@ public class QuantimodoApiV2 {
         setupIon(context);
 
         SdkResponse<Integer> sdkResponse = new SdkResponse<>();
+        Response<String> response = null;
 
         try {
             Log.i("QMSDK", "Sending " + measurementSets.size() + " measurement sets");
-            Response<String> response = Ion.with(context)
+            response = Ion.with(context)
                     .load(mBaseUrl + "api/measurements/v2")
                     .setHeader("Authorization", "Bearer " + token)
                     .setJsonPojoBody(measurementSets)
@@ -191,6 +206,10 @@ public class QuantimodoApiV2 {
             }
             sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
             sdkResponse.setCause(e);
+
+            if(response != null) {
+                sdkResponse.setStringBody(response.getResult());
+            }
         }
 
         return sdkResponse;
