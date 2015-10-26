@@ -14,12 +14,19 @@ public class HistoryMeasurement {
     @Deprecated
     final String unit;
 
-    public HistoryMeasurement(String source, String variable, Date timestamp, double value, String unit) {
+    final String note;
+
+    public HistoryMeasurement(String source, String variable, Date timestamp, double value, String unit){
+        this(source, variable, timestamp, value, unit,null);
+    }
+
+    public HistoryMeasurement(String source, String variable, Date timestamp, double value, String unit,String note) {
         this.source = source;
         this.variable = variable;
         this.timestamp = timestamp;
         this.value = value;
         this.unit = unit;
+        this.note = note;
     }
 
     public String getSource() {
@@ -40,5 +47,9 @@ public class HistoryMeasurement {
 
     public String getUnit() {
         return unit;
+    }
+
+    public String getNote() {
+        return note;
     }
 }
