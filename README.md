@@ -68,6 +68,7 @@ The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.o
 See http://central.sonatype.org/pages/ossrh-guide.html
 
 ### Working on the SDK
+The QM SDK for Android is a Gradle project added as a Git submodule. 
 ```
 git clone git@github.com:Abolitionist-Project/MoodiModo-Android.git
 cd MoodiModo-Android
