@@ -97,6 +97,9 @@ dependencies {
 
     androidTestCompile project(":testing-utils")
 
+    compile 'com.google.android.gms:play-services-identity:8.1.0'
+    compile 'com.google.android.gms:play-services-basement:8.1.0'
+    compile 'com.google.android.gms:play-services-base:8.1.0'
 }
 
 android.libraryVariants.all { variant ->
