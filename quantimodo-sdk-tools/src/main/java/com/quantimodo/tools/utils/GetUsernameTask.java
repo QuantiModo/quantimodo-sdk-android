@@ -68,10 +68,7 @@ public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
     @Override
     protected void onPostExecute(JsonObject result) {
         if(result != null) {
-            final String accessToken = result.get("access_token").getAsString();
-            final String refreshToken = result.get("refresh_token").getAsString();
-            final int expiresIn = result.get("expires_in").getAsInt();
-            mActivity.setAuthToken(accessToken, refreshToken, expiresIn);
+            mActivity.setAuthTokenFromJson(result);
         }
         else{
             Log.e(TAG, "result from QM server was null!");
