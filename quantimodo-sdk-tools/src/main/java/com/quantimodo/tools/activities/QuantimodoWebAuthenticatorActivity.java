@@ -9,6 +9,8 @@ import android.view.View;
 import android.webkit.*;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.facebook.appevents.AppEventsLogger;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -40,7 +42,6 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         QTools.getInstance().inject(this);
         int min = 100000000;
         int max = 999999999;

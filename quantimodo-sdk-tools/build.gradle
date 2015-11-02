@@ -13,6 +13,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
@@ -97,6 +98,7 @@ dependencies {
 
     androidTestCompile project(":testing-utils")
 
+    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
 }
 
 android.libraryVariants.all { variant ->
