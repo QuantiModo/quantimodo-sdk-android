@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -19,6 +20,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
@@ -35,6 +37,8 @@ import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.utils.GetUsernameTask;
+
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -79,8 +83,14 @@ public class QuantimodoLoginActivity extends Activity
             }
         });
         callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.qmt_signin_facebook);
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        Button loginButton = (Button) findViewById(R.id.qmt_signin_facebook);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginManager.getInstance().logInWithReadPermissions(QuantimodoLoginActivity.this, Arrays.asList("public_profile"));
+            }
+        });
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -100,9 +110,10 @@ public class QuantimodoLoginActivity extends Activity
                 error.printStackTrace();
             }
         });
-//        if(!AccessToken.getCurrentAccessToken().isExpired()){
+        if(!AccessToken.getCurrentAccessToken().isExpired()){
+            Log.d("QuantimodoLoginActivity", "fb accesstoken: " + AccessToken.getCurrentAccessToken().getToken());
 //            sendFbToken(AccessToken.getCurrentAccessToken().getToken());
-//        }
+        }
     }
 
     @Override

@@ -7,21 +7,39 @@
     android:gravity="center"
     >
 
-    <com.google.android.gms.common.SignInButton
+    <Button
         android:id="@+id/qmt_signin_google"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_height="50dp"
+        android:minWidth="200dp"
+        android:gravity="center"
+        android:background="@color/common_signin_btn_default_background"
+        android:drawableLeft="@drawable/common_signin_btn_icon_normal_dark"
+        android:drawableStart="@drawable/common_signin_btn_icon_light"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:text="@string/signin_google_button"/>
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="20dp" />
 
-    <com.facebook.login.widget.LoginButton
+    <Button
         android:id="@+id/qmt_signin_facebook"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="50dp"
+        android:layout_margin="0dp"
+        android:padding="10dp"
+        android:minWidth="200dp"
+        android:layout_gravity="center_horizontal"
+        style="@style/com_facebook_button"
+        android:drawableLeft="@drawable/com_facebook_button_icon"
+        android:drawableStart="@drawable/com_facebook_button_icon"
+        android:drawablePadding="10dp"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:text="@string/signin_facebook_button"/>
 
     <Space
         android:layout_width="wrap_content"
@@ -30,8 +48,12 @@
     <Button
         android:id="@+id/qmt_signin_moodimodo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:padding="10dp"
+        android:minWidth="200dp"
         android:layout_gravity="center_horizontal"
-        android:textSize="18sp"
-        android:text="Sign in with MoodiModo"/>
+        android:background="@color/card_button"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:text="@string/signin_moodimodo_button"/>
 </LinearLayout>
