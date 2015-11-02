@@ -70,5 +70,6 @@
     <string name="tracking_fragment_symptoms_title">Track symptoms</string>
     <string name="tracking_fragment_mood_title">Track mood</string>
 
+    <string name="login_facebook_app_id">225078261031461</string>
 
 </resources>
