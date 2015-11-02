@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -25,9 +26,14 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.utils.GetUsernameTask;
 
 import javax.inject.Inject;
@@ -37,20 +43,19 @@ import javax.inject.Inject;
  */
 public class QuantimodoLoginActivity extends Activity
 {
+    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
     static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1001;
-    private static final String SERVER_CLIENT_ID = "1052648855194-22q1qpknak8iirjhob3nb8rnts44abnk.apps.googleusercontent.com";
 
     @Inject
     ToolsPrefs mPrefs;
 
-    CallbackManager callbackManager;
-    String mEmail;
-    String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
-//    String SCOPE = "oauth2:server:client_id:" + SERVER_CLIENT_ID + ":api_scope:" + "https://www.googleapis.com/auth/userinfo.profile";
-//    String SCOPE = "oauth2:server:client_id:" + SERVER_CLIENT_ID
-//            +":api_scope:" + Scopes.PLUS_LOGIN;//https://www.googleapis.com/auth/userinfo.profile";
+    @Inject
+    AuthHelper authHelper;
+
+    private CallbackManager callbackManager;
+    private String mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +84,9 @@ public class QuantimodoLoginActivity extends Activity
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("QUantimodoLoginActivity", "Token: " + loginResult.getAccessToken().getToken());
+                final String token = loginResult.getAccessToken().getToken();
+                Log.d("QUantimodoLoginActivity", "Token: " + token);
+                sendFbToken(token);
             }
 
             @Override
@@ -93,6 +100,9 @@ public class QuantimodoLoginActivity extends Activity
                 error.printStackTrace();
             }
         });
+//        if(!AccessToken.getCurrentAccessToken().isExpired()){
+//            sendFbToken(AccessToken.getCurrentAccessToken().getToken());
+//        }
     }
 
     @Override
@@ -106,10 +116,8 @@ public class QuantimodoLoginActivity extends Activity
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
-            // Receiving a result from the AccountPicker
             if (resultCode == RESULT_OK) {
                 mEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                // With the account name acquired, go get the auth token
                 getAuthToken();
             } else if (resultCode == RESULT_CANCELED) {
                 //Do nothing
@@ -117,7 +125,6 @@ public class QuantimodoLoginActivity extends Activity
         } else if ((requestCode == REQUEST_CODE_RECOVER_FROM_AUTH_ERROR ||
                 requestCode == REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR)
                 && resultCode == RESULT_OK) {
-            // Receiving a result that follows a GoogleAuthException, try auth again
             getAuthToken();
         }
     }
@@ -183,5 +190,37 @@ public class QuantimodoLoginActivity extends Activity
                 }
             }
         });
+    }
+
+    private void sendFbToken(final String token){
+        Log.d("QuantimodoLoginActivity", "Sending Fb token to QM server...");
+        Ion.with(QuantimodoLoginActivity.this)
+                .load(mPrefs.getApiSocialAuth())
+                .setBodyParameter("provider", "facebook")
+                .setBodyParameter("accessToken", token)
+                .asJsonObject()
+                .withResponse()
+                .setCallback(new FutureCallback<Response<JsonObject>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<JsonObject> response) {
+                        JsonObject result = response.getResult();
+                        if (result != null)
+                            setAuthTokenFromJson(result);
+                        else{
+                            Log.d("QuantimodoLoginActivity", "result is null!");
+                        }
+                    }
+                });
+    }
+    public void setAuthTokenFromJson(final JsonObject result){
+        try{
+            String accessToken = result.get("access_token").getAsString();
+            String refreshToken = result.get("refresh_token").getAsString();
+            int expiresIn = result.get("expires_in").getAsInt();
+            authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
+        } catch (NullPointerException ignored) {
+            Log.i(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()
+                    + ", " + result.get("error_description").getAsString());
+        }
     }
 }
