@@ -17,6 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp" />
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/qmt_signin_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" />
+
     <Button
         android:id="@+id/qmt_signin_moodimodo"
         android:layout_width="wrap_content"

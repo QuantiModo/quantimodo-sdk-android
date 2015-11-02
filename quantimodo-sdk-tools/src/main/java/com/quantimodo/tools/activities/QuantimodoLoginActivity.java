@@ -9,9 +9,17 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
@@ -37,6 +45,7 @@ public class QuantimodoLoginActivity extends Activity
     @Inject
     ToolsPrefs mPrefs;
 
+    CallbackManager callbackManager;
     String mEmail;
     String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
 //    String SCOPE = "oauth2:server:client_id:" + SERVER_CLIENT_ID + ":api_scope:" + "https://www.googleapis.com/auth/userinfo.profile";
@@ -46,6 +55,7 @@ public class QuantimodoLoginActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         QTools.getInstance().inject(this);
         setContentView(R.layout.qmt_login);
         View buttonGoogle = findViewById(R.id.qmt_signin_google);
@@ -63,7 +73,26 @@ public class QuantimodoLoginActivity extends Activity
                 startActivity(intent);
             }
         });
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.qmt_signin_facebook);
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d("QUantimodoLoginActivity", "Token: " + loginResult.getAccessToken().getToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("QUantimodoLoginActivity", "login fb cancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("QUantimodoLoginActivity", "login fb error");
+                error.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -73,6 +102,9 @@ public class QuantimodoLoginActivity extends Activity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
             // Receiving a result from the AccountPicker
             if (resultCode == RESULT_OK) {
