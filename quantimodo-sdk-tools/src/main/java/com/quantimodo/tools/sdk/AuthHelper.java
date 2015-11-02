@@ -128,7 +128,7 @@ public class AuthHelper {
         mPrefs.edit()
                 .putString(PREF_KEY,token.accessToken)
                 .putString(PREF_REFRESH,token.refreshToken)
-                .putLong(PREF_EXPIRE,token.expireDate).commit();
+                .putLong(PREF_EXPIRE,token.expireDate).apply();
     }
 
     /**
