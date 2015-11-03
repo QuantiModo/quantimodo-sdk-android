@@ -43,11 +43,10 @@ public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
             String token = fetchToken();
             if (token != null) {
                 Log.d(TAG, "correct token!!: " + token);
+                String url = mPrefs.getApiSocialAuth() + "?provider=google&accessToken=" + token;
                 try {
                     return Ion.with(mActivity)
-                            .load(mPrefs.getApiSocialAuth())
-                            .setBodyParameter("provider", "google")
-                            .setBodyParameter("accessToken", token)
+                            .load(url)
                             .asJsonObject()
                             .get();
                 } catch (InterruptedException | ExecutionException e) {

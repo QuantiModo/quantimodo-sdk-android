@@ -45,8 +45,8 @@ import javax.inject.Inject;
 /**
  * Activity used to log in the user using either the google account or facebook account
  */
-public class QuantimodoLoginActivity extends Activity
-{
+public class QuantimodoLoginActivity extends Activity {
+    private static final String TAG = QuantimodoLoginActivity.class.getSimpleName();
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
@@ -205,33 +205,28 @@ public class QuantimodoLoginActivity extends Activity
 
     private void sendFbToken(final String token){
         Log.d("QuantimodoLoginActivity", "Sending Fb token to QM server...");
+        String url = mPrefs.getApiSocialAuth() + "?provider=facebook&accessToken=" + token;
         Ion.with(QuantimodoLoginActivity.this)
-                .load(mPrefs.getApiSocialAuth())
-                .setBodyParameter("provider", "facebook")
-                .setBodyParameter("accessToken", token)
+                .load(url)
                 .asJsonObject()
-                .withResponse()
-                .setCallback(new FutureCallback<Response<JsonObject>>() {
+                .setCallback(new FutureCallback<JsonObject>() {
                     @Override
-                    public void onCompleted(Exception e, Response<JsonObject> response) {
-                        JsonObject result = response.getResult();
+                    public void onCompleted(Exception e, JsonObject response) {
+                        JsonObject result = response;
                         if (result != null)
                             setAuthTokenFromJson(result);
-                        else{
+                        else {
                             Log.d("QuantimodoLoginActivity", "result is null!");
                         }
                     }
                 });
     }
     public void setAuthTokenFromJson(final JsonObject result){
-        try{
-            String accessToken = result.get("access_token").getAsString();
-            String refreshToken = result.get("refresh_token").getAsString();
-            int expiresIn = result.get("expires_in").getAsInt();
-            authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
-        } catch (NullPointerException ignored) {
-            Log.i(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()
-                    + ", " + result.get("error_description").getAsString());
-        }
+        String accessToken = result.get("access_token").getAsString();
+        String refreshToken = result.get("refresh_token").getAsString();
+        int expiresIn = result.get("expires_in").getAsInt();
+        Log.d(TAG, "data from json, accessToken: " + accessToken + ", refreshToken: " + refreshToken + ", expiration: " + expiresIn);
+//        authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
+
     }
 }
