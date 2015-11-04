@@ -14,6 +14,7 @@ public class SdkResponse<T> {
     private int mHttpCode = 200;
     private Exception mCause;
     private String mMessage;
+    private String mStringBody;
     private T mData;
     private Map<String,List<String>> mHeaders;
 
@@ -75,6 +76,14 @@ public class SdkResponse<T> {
 
     public T getData() {
         return mData;
+    }
+
+    public String getStringBody() {
+        return mStringBody;
+    }
+
+    public void setStringBody(String mStringBody) {
+        this.mStringBody = mStringBody;
     }
 
     public Map<String, List<String>> getHeaders() {

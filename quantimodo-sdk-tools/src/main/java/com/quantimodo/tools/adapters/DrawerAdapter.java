@@ -175,6 +175,10 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
             return mTag;
         }
 
+        public String getName() {
+            return mName;
+        }
+
         /**
          * Add item child item
          * @param item DrawerItem that should be added

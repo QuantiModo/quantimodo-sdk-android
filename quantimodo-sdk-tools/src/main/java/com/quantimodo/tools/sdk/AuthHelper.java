@@ -143,6 +143,10 @@ public class AuthHelper {
         );
     }
 
+    protected ToolsPrefs getToolPrefs(){
+        return mToolsPrefs;
+    }
+
 
     public void onEvent(NoAuthEvent event){
         mPrefs.edit().clear().apply();
