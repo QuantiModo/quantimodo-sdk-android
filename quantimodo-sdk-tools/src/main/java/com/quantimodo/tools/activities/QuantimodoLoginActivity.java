@@ -110,7 +110,7 @@ public class QuantimodoLoginActivity extends Activity {
                 error.printStackTrace();
             }
         });
-        if(!AccessToken.getCurrentAccessToken().isExpired()){
+        if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()){
             Log.d("QuantimodoLoginActivity", "fb accesstoken: " + AccessToken.getCurrentAccessToken().getToken());
 //            sendFbToken(AccessToken.getCurrentAccessToken().getToken());
         }
@@ -222,6 +222,10 @@ public class QuantimodoLoginActivity extends Activity {
                 });
     }
     public void setAuthTokenFromJson(final JsonObject result){
+        if(result == null){
+            Log.d(TAG, "result json null!");
+            return;
+        }
         String accessToken = result.get("access_token").getAsString();
         String refreshToken = result.get("refresh_token").getAsString();
         int expiresIn = result.get("expires_in").getAsInt();
