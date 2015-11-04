@@ -42,7 +42,7 @@ public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
         try {
             String token = fetchToken();
             if (token != null) {
-                Log.d(TAG, "correct token!!: " + token);
+                Log.d(TAG, "Google correct token!!: " + token);
                 String url = mPrefs.getApiSocialAuth() + "?provider=google&accessToken=" + token;
                 try {
                     return Ion.with(mActivity)
@@ -55,7 +55,7 @@ public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
 
             }
             else
-                Log.d(TAG, "token null :( ");
+                Log.d(TAG, "Google token null :(");
         } catch (IOException e) {
             // The fetchToken() method handles Google-specific exceptions,
             // so this indicates something went wrong at a higher level.
@@ -66,12 +66,7 @@ public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
 
     @Override
     protected void onPostExecute(JsonObject result) {
-        if(result != null) {
-            mActivity.setAuthTokenFromJson(result);
-        }
-        else{
-            Log.e(TAG, "result from QM server was null!");
-        }
+        mActivity.setAuthTokenFromJson(result);
     }
 
 

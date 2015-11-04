@@ -47,7 +47,10 @@ import javax.inject.Inject;
  */
 public class QuantimodoLoginActivity extends Activity {
     private static final String TAG = QuantimodoLoginActivity.class.getSimpleName();
-    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
+//    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
+    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
+        "https://www.googleapis.com/auth/plus.login " +
+        "https://www.googleapis.com/auth/plus.profile.emails.read";
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
     static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1001;
@@ -223,14 +226,22 @@ public class QuantimodoLoginActivity extends Activity {
     }
     public void setAuthTokenFromJson(final JsonObject result){
         if(result == null){
-            Log.d(TAG, "result json null!");
+            Log.d(TAG, "Error when requesting token from QM Server: result json null!");
             return;
         }
-        String accessToken = result.get("access_token").getAsString();
-        String refreshToken = result.get("refresh_token").getAsString();
-        int expiresIn = result.get("expires_in").getAsInt();
-        Log.d(TAG, "data from json, accessToken: " + accessToken + ", refreshToken: " + refreshToken + ", expiration: " + expiresIn);
-//        authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
-
+        else if(!result.get("success").getAsBoolean()){
+            Log.d(TAG, "Error when requesting token from QM Server: " + result.get("error").getAsString());
+            return;
+        }
+        Log.d(TAG, "Result from QM Server as string: " + result.toString());
+        try {
+            String accessToken = result.get("access_token").getAsString();
+            String refreshToken = result.get("refresh_token").getAsString();
+            int expiresIn = result.get("expires_in").getAsInt();
+            Log.d(TAG, "data from json, accessToken: " + accessToken + ", refreshToken: " + refreshToken + ", expiration: " + expiresIn);
+            authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
+        } catch(NullPointerException e){
+            e.printStackTrace();
+        }
     }
 }
