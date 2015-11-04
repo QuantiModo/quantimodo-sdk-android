@@ -27,7 +27,7 @@ import java.util.HashMap;
  */
 public class CorrelationAdapter extends BaseAdapter {
 
-    @IntDef({POSITIVE, NEGATIVE})
+    @IntDef({POSITIVE, NEGATIVE, YOURS})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CorrelationType {
     }
@@ -62,6 +62,7 @@ public class CorrelationAdapter extends BaseAdapter {
 
     public static final int POSITIVE = 0;
     public static final int NEGATIVE = 1;
+    public static final int YOURS = 2;
 
     public static final int STATE_UP = 1 << 0;
     public static final int STATE_DOWN = 1 << 1;
@@ -217,7 +218,8 @@ public class CorrelationAdapter extends BaseAdapter {
 
         Correlation correlation = mCurrentItems.get(position);
         vh.mItemPosition = position;
-        vh.tvCorrelationTitle.setText(correlation.getCause());
+        //TODO: Adapt it to the public and private call (using cause and causeName)
+        vh.tvCorrelationTitle.setText(correlation.getCauseName());
 
         Double value = correlation.getUserVote();
 

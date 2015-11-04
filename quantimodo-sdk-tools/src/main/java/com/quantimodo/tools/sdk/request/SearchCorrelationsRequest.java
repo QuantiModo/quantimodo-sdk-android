@@ -40,7 +40,8 @@ public class SearchCorrelationsRequest extends SdkRequest<SearchCorrelationsRequ
 
     @Override
     public CorrelationsResponse loadDataFromNetwork() throws Exception {
-        SdkResponse<ArrayList<Correlation>> response = getClient().searchCorrelations(getCtx(), getToken(), variableName, causeOrEffect);
+//        SdkResponse<ArrayList<Correlation>> response = getClient().searchCorrelations(getCtx(), getToken(), variableName, causeOrEffect);
+        SdkResponse<ArrayList<Correlation>> response = getClient().searchCustomCorrelations(getCtx(), getToken());
         checkResponse(response);
         return new CorrelationsResponse(response.getData());
     }
