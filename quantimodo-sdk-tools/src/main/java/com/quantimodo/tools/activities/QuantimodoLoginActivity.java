@@ -48,9 +48,11 @@ import javax.inject.Inject;
 public class QuantimodoLoginActivity extends Activity {
     private static final String TAG = QuantimodoLoginActivity.class.getSimpleName();
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
-    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
-        "https://www.googleapis.com/auth/plus.login " +
-        "https://www.googleapis.com/auth/plus.profile.emails.read";
+//    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
+//        "https://www.googleapis.com/auth/plus.login " +
+//        "https://www.googleapis.com/auth/plus.profile.emails.read";
+    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.email " +
+        "https://www.googleapis.com/auth/userinfo.profile";
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
     static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1001;
