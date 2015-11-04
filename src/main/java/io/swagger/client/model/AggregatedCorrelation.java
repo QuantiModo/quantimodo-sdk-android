@@ -7,14 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class Correlation  {
+public class AggregatedCorrelation  {
   
   @SerializedName("id")
   private Integer id = null;
-  @SerializedName("timestamp")
-  private Integer timestamp = null;
-  @SerializedName("user_id")
-  private Integer userId = null;
   @SerializedName("correlation")
   private Float correlation = null;
   @SerializedName("cause_id")
@@ -35,6 +31,10 @@ public class Correlation  {
   private Float optimalPearsonProduct = null;
   @SerializedName("vote")
   private Float vote = null;
+  @SerializedName("number_of_users")
+  private Integer numberOfUsers = null;
+  @SerializedName("number_of_correlations")
+  private Integer numberOfCorrelations = null;
   @SerializedName("statistical_significance")
   private Float statisticalSignificance = null;
   @SerializedName("cause_unit")
@@ -45,14 +45,18 @@ public class Correlation  {
   private Integer causeChanges = null;
   @SerializedName("effect_changes")
   private Integer effectChanges = null;
-  @SerializedName("qm_score")
-  private Float qmScore = null;
-  @SerializedName("error")
-  private String error = null;
+  @SerializedName("aggregate_qm_score")
+  private Float aggregateQmScore = null;
   @SerializedName("created_at")
   private Date createdAt = null;
   @SerializedName("updated_at")
   private Date updatedAt = null;
+  @SerializedName("status")
+  private String status = null;
+  @SerializedName("error_message")
+  private String errorMessage = null;
+  @SerializedName("last_successful_update_time")
+  private Date lastSuccessfulUpdateTime = null;
   @SerializedName("reverse_pearson_correlation_coefficient")
   private Float reversePearsonCorrelationCoefficient = null;
   @SerializedName("predictive_pearson_correlation_coefficient")
@@ -72,33 +76,9 @@ public class Correlation  {
 
   
   /**
-   * Time at which correlation was calculated
+   * correlation
    **/
-  @ApiModelProperty(required = true, value = "Time at which correlation was calculated")
-  public Integer getTimestamp() {
-    return timestamp;
-  }
-  public void setTimestamp(Integer timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  
-  /**
-   * ID of user that owns this correlation
-   **/
-  @ApiModelProperty(required = true, value = "ID of user that owns this correlation")
-  public Integer getUserId() {
-    return userId;
-  }
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
-
-  
-  /**
-   * Pearson correlation coefficient between cause and effect measurements
-   **/
-  @ApiModelProperty(required = true, value = "Pearson correlation coefficient between cause and effect measurements")
+  @ApiModelProperty(required = true, value = "correlation")
   public Float getCorrelation() {
     return correlation;
   }
@@ -108,9 +88,9 @@ public class Correlation  {
 
   
   /**
-   * variable ID of the cause variable for which the user desires correlations
+   * cause_id
    **/
-  @ApiModelProperty(required = true, value = "variable ID of the cause variable for which the user desires correlations")
+  @ApiModelProperty(required = true, value = "cause_id")
   public Integer getCauseId() {
     return causeId;
   }
@@ -120,9 +100,9 @@ public class Correlation  {
 
   
   /**
-   * variable ID of the effect variable for which the user desires correlations
+   * effect_id
    **/
-  @ApiModelProperty(required = true, value = "variable ID of the effect variable for which the user desires correlations")
+  @ApiModelProperty(required = true, value = "effect_id")
   public Integer getEffectId() {
     return effectId;
   }
@@ -132,9 +112,9 @@ public class Correlation  {
 
   
   /**
-   * User estimated or default time after cause measurement before a perceivable effect is observed
+   * onset_delay
    **/
-  @ApiModelProperty(required = true, value = "User estimated or default time after cause measurement before a perceivable effect is observed")
+  @ApiModelProperty(required = true, value = "onset_delay")
   public Integer getOnsetDelay() {
     return onsetDelay;
   }
@@ -144,9 +124,9 @@ public class Correlation  {
 
   
   /**
-   * Time over which the cause is expected to produce a perceivable effect following the onset delay
+   * duration_of_action
    **/
-  @ApiModelProperty(required = true, value = "Time over which the cause is expected to produce a perceivable effect following the onset delay")
+  @ApiModelProperty(required = true, value = "duration_of_action")
   public Integer getDurationOfAction() {
     return durationOfAction;
   }
@@ -156,9 +136,9 @@ public class Correlation  {
 
   
   /**
-   * Number of points that went into the correlation calculation
+   * number_of_pairs
    **/
-  @ApiModelProperty(required = true, value = "Number of points that went into the correlation calculation")
+  @ApiModelProperty(required = true, value = "number_of_pairs")
   public Integer getNumberOfPairs() {
     return numberOfPairs;
   }
@@ -168,9 +148,9 @@ public class Correlation  {
 
   
   /**
-   * cause value that predicts an above average effect value (in default unit for cause variable)
+   * value_predicting_high_outcome
    **/
-  @ApiModelProperty(required = true, value = "cause value that predicts an above average effect value (in default unit for cause variable)")
+  @ApiModelProperty(required = true, value = "value_predicting_high_outcome")
   public Float getValuePredictingHighOutcome() {
     return valuePredictingHighOutcome;
   }
@@ -180,9 +160,9 @@ public class Correlation  {
 
   
   /**
-   * cause value that predicts a below average effect value (in default unit for cause variable)
+   * value_predicting_low_outcome
    **/
-  @ApiModelProperty(required = true, value = "cause value that predicts a below average effect value (in default unit for cause variable)")
+  @ApiModelProperty(required = true, value = "value_predicting_low_outcome")
   public Float getValuePredictingLowOutcome() {
     return valuePredictingLowOutcome;
   }
@@ -192,9 +172,9 @@ public class Correlation  {
 
   
   /**
-   * Optimal Pearson Product
+   * optimal_pearson_product
    **/
-  @ApiModelProperty(required = true, value = "Optimal Pearson Product")
+  @ApiModelProperty(required = true, value = "optimal_pearson_product")
   public Float getOptimalPearsonProduct() {
     return optimalPearsonProduct;
   }
@@ -204,9 +184,9 @@ public class Correlation  {
 
   
   /**
-   * Vote
+   * vote
    **/
-  @ApiModelProperty(required = true, value = "Vote")
+  @ApiModelProperty(required = true, value = "vote")
   public Float getVote() {
     return vote;
   }
@@ -216,9 +196,33 @@ public class Correlation  {
 
   
   /**
-   * A function of the effect size and sample size
+   * number_of_users
    **/
-  @ApiModelProperty(required = true, value = "A function of the effect size and sample size")
+  @ApiModelProperty(required = true, value = "number_of_users")
+  public Integer getNumberOfUsers() {
+    return numberOfUsers;
+  }
+  public void setNumberOfUsers(Integer numberOfUsers) {
+    this.numberOfUsers = numberOfUsers;
+  }
+
+  
+  /**
+   * number_of_correlations
+   **/
+  @ApiModelProperty(required = true, value = "number_of_correlations")
+  public Integer getNumberOfCorrelations() {
+    return numberOfCorrelations;
+  }
+  public void setNumberOfCorrelations(Integer numberOfCorrelations) {
+    this.numberOfCorrelations = numberOfCorrelations;
+  }
+
+  
+  /**
+   * statistical_significance
+   **/
+  @ApiModelProperty(required = true, value = "statistical_significance")
   public Float getStatisticalSignificance() {
     return statisticalSignificance;
   }
@@ -228,9 +232,9 @@ public class Correlation  {
 
   
   /**
-   * Unit of Cause
+   * cause_unit
    **/
-  @ApiModelProperty(required = true, value = "Unit of Cause")
+  @ApiModelProperty(required = true, value = "cause_unit")
   public String getCauseUnit() {
     return causeUnit;
   }
@@ -240,9 +244,9 @@ public class Correlation  {
 
   
   /**
-   * Unit ID of Cause
+   * cause_unit_id
    **/
-  @ApiModelProperty(required = true, value = "Unit ID of Cause")
+  @ApiModelProperty(required = true, value = "cause_unit_id")
   public Integer getCauseUnitId() {
     return causeUnitId;
   }
@@ -252,9 +256,9 @@ public class Correlation  {
 
   
   /**
-   * Cause changes
+   * cause_changes
    **/
-  @ApiModelProperty(required = true, value = "Cause changes")
+  @ApiModelProperty(required = true, value = "cause_changes")
   public Integer getCauseChanges() {
     return causeChanges;
   }
@@ -264,9 +268,9 @@ public class Correlation  {
 
   
   /**
-   * Effect changes
+   * effect_changes
    **/
-  @ApiModelProperty(required = true, value = "Effect changes")
+  @ApiModelProperty(required = true, value = "effect_changes")
   public Integer getEffectChanges() {
     return effectChanges;
   }
@@ -276,26 +280,14 @@ public class Correlation  {
 
   
   /**
-   * QM Score
+   * aggregate_qm_score
    **/
-  @ApiModelProperty(required = true, value = "QM Score")
-  public Float getQmScore() {
-    return qmScore;
+  @ApiModelProperty(required = true, value = "aggregate_qm_score")
+  public Float getAggregateQmScore() {
+    return aggregateQmScore;
   }
-  public void setQmScore(Float qmScore) {
-    this.qmScore = qmScore;
-  }
-
-  
-  /**
-   * error
-   **/
-  @ApiModelProperty(required = true, value = "error")
-  public String getError() {
-    return error;
-  }
-  public void setError(String error) {
-    this.error = error;
+  public void setAggregateQmScore(Float aggregateQmScore) {
+    this.aggregateQmScore = aggregateQmScore;
   }
 
   
@@ -324,9 +316,45 @@ public class Correlation  {
 
   
   /**
-   * Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation
+   * status
    **/
-  @ApiModelProperty(required = true, value = "Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation")
+  @ApiModelProperty(required = true, value = "status")
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  
+  /**
+   * error_message
+   **/
+  @ApiModelProperty(required = true, value = "error_message")
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
+
+  
+  /**
+   * last_successful_update_time
+   **/
+  @ApiModelProperty(required = true, value = "last_successful_update_time")
+  public Date getLastSuccessfulUpdateTime() {
+    return lastSuccessfulUpdateTime;
+  }
+  public void setLastSuccessfulUpdateTime(Date lastSuccessfulUpdateTime) {
+    this.lastSuccessfulUpdateTime = lastSuccessfulUpdateTime;
+  }
+
+  
+  /**
+   * reverse_pearson_correlation_coefficient
+   **/
+  @ApiModelProperty(required = true, value = "reverse_pearson_correlation_coefficient")
   public Float getReversePearsonCorrelationCoefficient() {
     return reversePearsonCorrelationCoefficient;
   }
@@ -336,9 +364,9 @@ public class Correlation  {
 
   
   /**
-   * Predictive Pearson Correlation Coefficient
+   * predictive_pearson_correlation_coefficient
    **/
-  @ApiModelProperty(required = true, value = "Predictive Pearson Correlation Coefficient")
+  @ApiModelProperty(required = true, value = "predictive_pearson_correlation_coefficient")
   public Float getPredictivePearsonCorrelationCoefficient() {
     return predictivePearsonCorrelationCoefficient;
   }
@@ -351,11 +379,9 @@ public class Correlation  {
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Correlation {\n");
+    sb.append("class AggregatedCorrelation {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  timestamp: ").append(timestamp).append("\n");
-    sb.append("  userId: ").append(userId).append("\n");
     sb.append("  correlation: ").append(correlation).append("\n");
     sb.append("  causeId: ").append(causeId).append("\n");
     sb.append("  effectId: ").append(effectId).append("\n");
@@ -366,15 +392,19 @@ public class Correlation  {
     sb.append("  valuePredictingLowOutcome: ").append(valuePredictingLowOutcome).append("\n");
     sb.append("  optimalPearsonProduct: ").append(optimalPearsonProduct).append("\n");
     sb.append("  vote: ").append(vote).append("\n");
+    sb.append("  numberOfUsers: ").append(numberOfUsers).append("\n");
+    sb.append("  numberOfCorrelations: ").append(numberOfCorrelations).append("\n");
     sb.append("  statisticalSignificance: ").append(statisticalSignificance).append("\n");
     sb.append("  causeUnit: ").append(causeUnit).append("\n");
     sb.append("  causeUnitId: ").append(causeUnitId).append("\n");
     sb.append("  causeChanges: ").append(causeChanges).append("\n");
     sb.append("  effectChanges: ").append(effectChanges).append("\n");
-    sb.append("  qmScore: ").append(qmScore).append("\n");
-    sb.append("  error: ").append(error).append("\n");
+    sb.append("  aggregateQmScore: ").append(aggregateQmScore).append("\n");
     sb.append("  createdAt: ").append(createdAt).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
+    sb.append("  status: ").append(status).append("\n");
+    sb.append("  errorMessage: ").append(errorMessage).append("\n");
+    sb.append("  lastSuccessfulUpdateTime: ").append(lastSuccessfulUpdateTime).append("\n");
     sb.append("  reversePearsonCorrelationCoefficient: ").append(reversePearsonCorrelationCoefficient).append("\n");
     sb.append("  predictivePearsonCorrelationCoefficient: ").append(predictivePearsonCorrelationCoefficient).append("\n");
     sb.append("}\n");

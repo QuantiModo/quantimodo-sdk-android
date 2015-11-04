@@ -12,28 +12,26 @@ public class Connector  {
   private Integer id = null;
   @SerializedName("name")
   private String name = null;
-  @SerializedName("displayName")
+  @SerializedName("display_name")
   private String displayName = null;
   @SerializedName("image")
   private String image = null;
-  @SerializedName("getItUrl")
+  @SerializedName("get_it_url")
   private String getItUrl = null;
-  @SerializedName("connected")
-  private String connected = null;
-  @SerializedName("connectInstructions")
-  private String connectInstructions = null;
-  @SerializedName("lastUpdate")
-  private Integer lastUpdate = null;
-  @SerializedName("totalMeasurementsInLastUpdate")
-  private Integer totalMeasurementsInLastUpdate = null;
-  @SerializedName("noDataYet")
-  private Boolean noDataYet = null;
+  @SerializedName("short_description")
+  private String shortDescription = null;
+  @SerializedName("long_description")
+  private String longDescription = null;
+  @SerializedName("enabled")
+  private Boolean enabled = null;
+  @SerializedName("oauth")
+  private Boolean oauth = null;
 
   
   /**
    * Connector ID number
    **/
-  @ApiModelProperty(required = true, value = "Connector ID number")
+  @ApiModelProperty(value = "Connector ID number")
   public Integer getId() {
     return id;
   }
@@ -91,62 +89,50 @@ public class Connector  {
 
   
   /**
-   * True if the authenticated user has this connector enabled
+   * Short description
    **/
-  @ApiModelProperty(required = true, value = "True if the authenticated user has this connector enabled")
-  public String getConnected() {
-    return connected;
+  @ApiModelProperty(required = true, value = "Short description")
+  public String getShortDescription() {
+    return shortDescription;
   }
-  public void setConnected(String connected) {
-    this.connected = connected;
+  public void setShortDescription(String shortDescription) {
+    this.shortDescription = shortDescription;
   }
 
   
   /**
-   * URL and parameters used when connecting to a service
+   * Long description
    **/
-  @ApiModelProperty(required = true, value = "URL and parameters used when connecting to a service")
-  public String getConnectInstructions() {
-    return connectInstructions;
+  @ApiModelProperty(required = true, value = "Long description")
+  public String getLongDescription() {
+    return longDescription;
   }
-  public void setConnectInstructions(String connectInstructions) {
-    this.connectInstructions = connectInstructions;
+  public void setLongDescription(String longDescription) {
+    this.longDescription = longDescription;
   }
 
   
   /**
-   * Epoch timestamp of last sync
+   * enabled
    **/
-  @ApiModelProperty(required = true, value = "Epoch timestamp of last sync")
-  public Integer getLastUpdate() {
-    return lastUpdate;
+  @ApiModelProperty(required = true, value = "enabled")
+  public Boolean getEnabled() {
+    return enabled;
   }
-  public void setLastUpdate(Integer lastUpdate) {
-    this.lastUpdate = lastUpdate;
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
   }
 
   
   /**
-   * Number of measurements obtained during latest update
+   * oauth
    **/
-  @ApiModelProperty(required = true, value = "Number of measurements obtained during latest update")
-  public Integer getTotalMeasurementsInLastUpdate() {
-    return totalMeasurementsInLastUpdate;
+  @ApiModelProperty(required = true, value = "oauth")
+  public Boolean getOauth() {
+    return oauth;
   }
-  public void setTotalMeasurementsInLastUpdate(Integer totalMeasurementsInLastUpdate) {
-    this.totalMeasurementsInLastUpdate = totalMeasurementsInLastUpdate;
-  }
-
-  
-  /**
-   * True if user has no measurements for this connector
-   **/
-  @ApiModelProperty(required = true, value = "True if user has no measurements for this connector")
-  public Boolean getNoDataYet() {
-    return noDataYet;
-  }
-  public void setNoDataYet(Boolean noDataYet) {
-    this.noDataYet = noDataYet;
+  public void setOauth(Boolean oauth) {
+    this.oauth = oauth;
   }
 
   
@@ -161,11 +147,10 @@ public class Connector  {
     sb.append("  displayName: ").append(displayName).append("\n");
     sb.append("  image: ").append(image).append("\n");
     sb.append("  getItUrl: ").append(getItUrl).append("\n");
-    sb.append("  connected: ").append(connected).append("\n");
-    sb.append("  connectInstructions: ").append(connectInstructions).append("\n");
-    sb.append("  lastUpdate: ").append(lastUpdate).append("\n");
-    sb.append("  totalMeasurementsInLastUpdate: ").append(totalMeasurementsInLastUpdate).append("\n");
-    sb.append("  noDataYet: ").append(noDataYet).append("\n");
+    sb.append("  shortDescription: ").append(shortDescription).append("\n");
+    sb.append("  longDescription: ").append(longDescription).append("\n");
+    sb.append("  enabled: ").append(enabled).append("\n");
+    sb.append("  oauth: ").append(oauth).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
