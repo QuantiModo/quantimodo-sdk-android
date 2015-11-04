@@ -9,6 +9,7 @@ public class Correlation implements Serializable {
     double correlationCoefficient;
     String causeCategory;
     String cause;
+    String causeName;    //same as cause, is used for the new model
     String originalCause;
     String effectCategory;
     String effect;
@@ -30,6 +31,10 @@ public class Correlation implements Serializable {
 
     public String getCause() {
         return cause;
+    }
+
+    public String getCauseName() {
+        return causeName;
     }
 
     public String getOriginalCause() {
@@ -92,6 +97,7 @@ public class Correlation implements Serializable {
         if (causeCategory != null ? !causeCategory.equals(that.causeCategory) : that.causeCategory != null)
             return false;
         if (!cause.equals(that.cause)) return false;
+        if(!causeName.equals(that.causeName)) return false;
         if (originalCause != null ? !originalCause.equals(that.originalCause) : that.originalCause != null)
             return false;
         if (effectCategory != null ? !effectCategory.equals(that.effectCategory) : that.effectCategory != null)
@@ -111,6 +117,7 @@ public class Correlation implements Serializable {
         result = (int) (temp ^ (temp >>> 32));
         result = 31 * result + (causeCategory != null ? causeCategory.hashCode() : 0);
         result = 31 * result + cause.hashCode();
+        result = 31 * result + causeName.hashCode();
         result = 31 * result + (originalCause != null ? originalCause.hashCode() : 0);
         result = 31 * result + (effectCategory != null ? effectCategory.hashCode() : 0);
         result = 31 * result + effect.hashCode();
