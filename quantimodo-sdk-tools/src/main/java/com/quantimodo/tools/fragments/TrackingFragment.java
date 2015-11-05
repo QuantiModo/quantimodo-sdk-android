@@ -227,39 +227,6 @@ public class TrackingFragment extends QFragment {
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.variable_item, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        super.onContextItemSelected(item);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Variable variable = (Variable) lvVariableSuggestions.getAdapter().getItem(info.position);
-        int type = CorrelationAdapter.POSITIVE;
-        if (item.getItemId() == R.id.action_positive_factors){
-            type = CorrelationAdapter.POSITIVE;
-        } else if (item.getItemId() == R.id.action_negative_factors){
-            type = CorrelationAdapter.NEGATIVE;
-        }
-        showFactorsFragment(variable, type);
-        return true;
-    }
-
-    private void showFactorsFragment(Variable variable,int type){
-        FactorsFragment factorsFragment = FactorsFragment.newInstance(type,variable.getName());
-        String title = type == CorrelationAdapter.POSITIVE ? getString(R.string.tab_positive_factors) : getString(R.string.tab_negative_factors);
-        if (mFragmentListener != null){
-            mFragmentListener.requestFragmentAdd(factorsFragment,title);
-        } else if (getActivity() instanceof FragmentAdderListener){
-            ((FragmentAdderListener) getActivity()).requestFragmentAdd(factorsFragment,title);
-        } else if (getTargetFragment() instanceof FragmentAdderListener){
-            ((FragmentAdderListener) getTargetFragment()).requestFragmentAdd(factorsFragment,title);
-        }
-    }
-
     // ButterKnife doesn't work on apklibs
     void initView(View view){
         etVariableName = (EditText) view.findViewById(R.id.etVariableName);
