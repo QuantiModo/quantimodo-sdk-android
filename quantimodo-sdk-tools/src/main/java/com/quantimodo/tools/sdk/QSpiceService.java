@@ -11,6 +11,7 @@ import com.octo.android.robospice.request.RequestRunner;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SearchCorrelationsRequest;
+import com.quantimodo.tools.sdk.request.SearchCustomCorrelationsRequest;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +33,7 @@ public abstract class QSpiceService extends SpiceService {
     //Default classes to cache
     private static final Class<?>[] DEFAULT_CLASSES_ENABLED_TO_CACHE = {
             SearchCorrelationsRequest.CorrelationsResponse.class,
+            SearchCustomCorrelationsRequest.CorrelationsResponse.class,
             GetUnitsRequest.GetUnitsResponse.class,
             GetCategoriesRequest.GetCategoriesResponse.class
     };

@@ -18,8 +18,11 @@ import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.dialogs.CorrelationConfirmDialog;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
+import com.quantimodo.tools.sdk.request.SearchCustomCorrelationsRequest;
 import com.quantimodo.tools.sdk.request.VoteCorrelationRequest;
 import com.quantimodo.tools.sdk.request.SearchCorrelationsRequest;
+
+import java.util.ArrayList;
 
 /**
  * Used to show positive/negative factors
@@ -33,21 +36,29 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
     private TextView mHeader;
     private int mType;
     private String mVariableName;
+    private boolean isPublic = true;
     public static final String ARG_TYPE = "type";
     public static final String ARG_VARIABLE = "variable";
+    public static final String ARG_PUBLIC = "is_public";
 
     /**
      * Creates and init new instance of Factors fragment
-     * @param type defines what type would have fragment POSITIVE or NEGATIVE, see {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationType CorrelationType}
+     * @param type defines what type would have fragment TYPE_POSITIVE or TYPE_NEGATIVE, see {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationType CorrelationType}
      * @param variableName variable name, which should be used as effect
      * @return instance of factors fragment
      */
     public static FactorsFragment newInstance(@CorrelationAdapter.CorrelationType int type,String variableName){
+        return newInstance(type,variableName, CorrelationAdapter.PREDICTOR_COMMON);
+    }
+
+    public static FactorsFragment newInstance(@CorrelationAdapter.CorrelationType int type,
+                                              String variableName, @CorrelationAdapter.PredictorType int predictorType){
         FactorsFragment factorsFragment = new FactorsFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_TYPE, type);
         args.putString(ARG_VARIABLE, variableName);
+        args.putBoolean(ARG_PUBLIC, predictorType == CorrelationAdapter.PREDICTOR_COMMON);
         factorsFragment.setArguments(args);
 
         return factorsFragment;
@@ -59,7 +70,7 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
 
     /**
      * Switch fragment type
-     * @param mType POSITIVE or NEGATIVE, see {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationType CorrelationType}
+     * @param mType TYPE_POSITIVE or TYPE_NEGATIVE, see {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationType CorrelationType}
      */
     public void setType(int mType) {
         if (mType == this.mType){
@@ -72,14 +83,11 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
         mHeader.setText(getHeaderText());
     }
 
-    private Spanned getHeaderText(){
-        Spanned text;
-        if (mType == CorrelationAdapter.POSITIVE){
-            text = Html.fromHtml(String.format(getString(R.string.header_factors_positive),mVariableName));
-        } else {
-            text = Html.fromHtml(String.format(getString(R.string.header_factors_negative),mVariableName));
-        }
-        return text;
+    private String getHeaderText(){
+        if(isPublic)
+            return getString(R.string.header_factors_common);
+        else
+            return getString(R.string.header_factors_yours);
     }
 
     @Override
@@ -87,22 +95,39 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
         super.onViewCreated(view, savedInstanceState);
         mType = getArguments().getInt(ARG_TYPE);
         mVariableName = getArguments().getString(ARG_VARIABLE);
-        getSpiceManager().execute(new SearchCorrelationsRequest(mVariableName, SdkDefs.CORRELATION_EFFECT).getCachedSpiceRequest(),
-                new DefaultSdkResponseListener<SearchCorrelationsRequest.CorrelationsResponse>() {
-                    @Override
-                    public void onRequestSuccess(SearchCorrelationsRequest.CorrelationsResponse correlationsResponse) {
-                        CorrelationAdapter adapter = new CorrelationAdapter(getActivity(),correlationsResponse.correlations,mType);
-                        adapter.setButtonListener(FactorsFragment.this);
-                        setListAdapter(adapter);
-
-                    }
-                });
+        isPublic = getArguments().getBoolean(ARG_PUBLIC, true);
+        if(getArguments().getBoolean(ARG_PUBLIC, true)){
+            getSpiceManager().execute(
+                    new SearchCorrelationsRequest(mVariableName, SdkDefs.CORRELATION_EFFECT).getCachedSpiceRequest(),
+                    new DefaultSdkResponseListener<SearchCorrelationsRequest.CorrelationsResponse>() {
+                        @Override
+                        public void onRequestSuccess(SearchCorrelationsRequest.CorrelationsResponse correlationsResponse) {
+                            updateData(correlationsResponse.correlations);
+                        }
+                    });
+        }
+        else{
+            getSpiceManager().execute(
+                    new SearchCustomCorrelationsRequest().getCachedSpiceRequest(),
+                    new DefaultSdkResponseListener<SearchCustomCorrelationsRequest.CorrelationsResponse>() {
+                        @Override
+                        public void onRequestSuccess(SearchCustomCorrelationsRequest.CorrelationsResponse correlationsResponse) {
+                            updateData(correlationsResponse.correlations);
+                        }
+                    });
+        }
 
 
         View v = View.inflate(getActivity(), R.layout.qmt_list_view_header, null);
         mHeader = (TextView) v.findViewById(R.id.text);
         mHeader.setText(getHeaderText());
         getListView().addHeaderView(v);
+    }
+
+    private void updateData(final ArrayList<Correlation> data){
+        CorrelationAdapter adapter = new CorrelationAdapter(getActivity(), data, mType);
+        adapter.setButtonListener(FactorsFragment.this);
+        setListAdapter(adapter);
     }
 
     @Override

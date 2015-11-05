@@ -1,5 +1,7 @@
 package com.quantimodo.android.sdk.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -30,11 +32,9 @@ public class Correlation implements Serializable {
     }
 
     public String getCause() {
+        if(TextUtils.isEmpty(cause))
+            return causeName;
         return cause;
-    }
-
-    public String getCauseName() {
-        return causeName;
     }
 
     public String getOriginalCause() {

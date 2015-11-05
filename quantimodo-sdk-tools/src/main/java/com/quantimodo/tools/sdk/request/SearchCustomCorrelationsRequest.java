@@ -1,6 +1,7 @@
 package com.quantimodo.tools.sdk.request;
 
 import android.support.annotation.StringDef;
+
 import com.quantimodo.android.sdk.SdkDefs;
 import com.quantimodo.android.sdk.SdkResponse;
 import com.quantimodo.android.sdk.model.Correlation;
@@ -19,13 +20,8 @@ public class SearchCustomCorrelationsRequest extends SdkRequest<SearchCustomCorr
     @Retention(RetentionPolicy.SOURCE)
     public @interface CauseOrEffect {}
 
-    private final String variableName;
-    private final String causeOrEffect;
-
-    public SearchCustomCorrelationsRequest(String variableName, @CauseOrEffect String causeOrEffect) {
+    public SearchCustomCorrelationsRequest() {
         super(CorrelationsResponse.class);
-        this.variableName = variableName;
-        this.causeOrEffect = causeOrEffect;
     }
 
     @Override
@@ -35,12 +31,11 @@ public class SearchCustomCorrelationsRequest extends SdkRequest<SearchCustomCorr
 
     @Override
     protected String getCacheKey() {
-        return "getCorrelation_"+variableName+"_"+causeOrEffect;
+        return "getCustomCorrelation";
     }
 
     @Override
     public CorrelationsResponse loadDataFromNetwork() throws Exception {
-//        SdkResponse<ArrayList<Correlation>> response = getClient().searchCorrelations(getCtx(), getToken(), variableName, causeOrEffect);
         SdkResponse<ArrayList<Correlation>> response = getClient().searchCustomCorrelations(getCtx(), getToken());
         checkResponse(response);
         return new CorrelationsResponse(response.getData());

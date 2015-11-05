@@ -15,7 +15,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 /**
  * Adapter class for positive/negative factor/correlations
@@ -27,9 +26,14 @@ import java.util.HashMap;
  */
 public class CorrelationAdapter extends BaseAdapter {
 
-    @IntDef({POSITIVE, NEGATIVE, YOURS})
+    @IntDef({TYPE_POSITIVE, TYPE_NEGATIVE, TYPE_ANY})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CorrelationType {
+    }
+
+    @IntDef({PREDICTOR_COMMON, PREDICTOR_PRIVATE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface PredictorType{
     }
 
     @IntDef({BUTTON_SHOP, BUTTON_THUMBS_UP, BUTTON_THUMBS_DOWN})
@@ -60,9 +64,12 @@ public class CorrelationAdapter extends BaseAdapter {
         void onClick(View view, @CorrelationButton int buttonType, int position, Correlation item);
     }
 
-    public static final int POSITIVE = 0;
-    public static final int NEGATIVE = 1;
-    public static final int YOURS = 2;
+    public static final int TYPE_POSITIVE = 0;
+    public static final int TYPE_NEGATIVE = 1;
+    public static final int TYPE_ANY = 2;
+
+    public static final int PREDICTOR_COMMON = 3;
+    public static final int PREDICTOR_PRIVATE = 4;
 
     public static final int STATE_UP = 1 << 0;
     public static final int STATE_DOWN = 1 << 1;
@@ -76,7 +83,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private ArrayList<Correlation> mCurrentItems;
 
     private CorrelationButtonOnClick mButtonListener;
-    private int mType = POSITIVE;
+    private int mType = TYPE_POSITIVE;
 
     private boolean mShowShoppingCart;
 
@@ -112,7 +119,7 @@ public class CorrelationAdapter extends BaseAdapter {
     }
 
     public CorrelationAdapter(Context ctx, ArrayList<Correlation> correlations) {
-        this(ctx, correlations, POSITIVE);
+        this(ctx, correlations, TYPE_POSITIVE);
     }
 
     public CorrelationAdapter(Context ctx, ArrayList<Correlation> correlations, @CorrelationType int type) {
@@ -146,10 +153,16 @@ public class CorrelationAdapter extends BaseAdapter {
     }
 
     private void switchItems(@CorrelationType int type) {
-        if (type == POSITIVE) {
-            mCurrentItems = mPositiveItems;
-        } else {
-            mCurrentItems = mNegativeItems;
+        switch (type){
+            case TYPE_POSITIVE:
+                mCurrentItems = mPositiveItems;
+                break;
+            case TYPE_NEGATIVE:
+                mCurrentItems = mNegativeItems;
+                break;
+            case TYPE_ANY:
+                mCurrentItems = mAllItems;
+                break;
         }
     }
 
@@ -194,7 +207,7 @@ public class CorrelationAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return mType == POSITIVE ? position : position + DIFF;
+        return mType == TYPE_POSITIVE ? position : position + DIFF;
     }
 
     @Override
@@ -218,8 +231,7 @@ public class CorrelationAdapter extends BaseAdapter {
 
         Correlation correlation = mCurrentItems.get(position);
         vh.mItemPosition = position;
-        //TODO: Adapt it to the public and private call (using cause and causeName)
-        vh.tvCorrelationTitle.setText(correlation.getCauseName());
+        vh.tvCorrelationTitle.setText(correlation.getCause());
 
         Double value = correlation.getUserVote();
 
