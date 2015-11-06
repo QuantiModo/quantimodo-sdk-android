@@ -72,7 +72,7 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
      * Switch fragment type
      * @param mType TYPE_POSITIVE or TYPE_NEGATIVE, see {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationType CorrelationType}
      */
-    public void setType(int mType) {
+    public void setType(@CorrelationAdapter.CorrelationType int mType) {
         if (mType == this.mType){
             return;
         }

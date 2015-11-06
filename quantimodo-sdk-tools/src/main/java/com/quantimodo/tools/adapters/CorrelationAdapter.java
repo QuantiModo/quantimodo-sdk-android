@@ -2,6 +2,8 @@ package com.quantimodo.tools.adapters;
 
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -77,7 +79,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private static final int DIFF = Integer.MAX_VALUE / 2;
 
     private Context mCtx;
-    private ArrayList<Correlation> mAllItems;
+    private ArrayList<Correlation> mAllItems = new ArrayList<>();
     private ArrayList<Correlation> mPositiveItems = new ArrayList<>();
     private ArrayList<Correlation> mNegativeItems = new ArrayList<>();
     private ArrayList<Correlation> mCurrentItems;
@@ -141,28 +143,30 @@ public class CorrelationAdapter extends BaseAdapter {
 
         //Split into positive and negative correlations
         for (Correlation c : allItems) {
+            mAllItems.add(c);
             if (c.getCorrelationCoefficient() > 0) {
                 mPositiveItems.add(c);
             } else if (c.getCorrelationCoefficient() < 0) {
                 mNegativeItems.add(c);
             }
         }
-        mAllItems = allItems;
+//        mAllItems = allItems;
         Collections.reverse(mPositiveItems);
         switchItems(type);
     }
 
     private void switchItems(@CorrelationType int type) {
+        Log.d("CorrelationAdapter", "switchItems: " + type);
+//        mCurrentItems = mAllItems;
         switch (type){
             case TYPE_POSITIVE:
                 mCurrentItems = mPositiveItems;
-                break;
+                return;
             case TYPE_NEGATIVE:
                 mCurrentItems = mNegativeItems;
-                break;
+                return;
             case TYPE_ANY:
                 mCurrentItems = mAllItems;
-                break;
         }
     }
 
@@ -232,6 +236,25 @@ public class CorrelationAdapter extends BaseAdapter {
         Correlation correlation = mCurrentItems.get(position);
         vh.mItemPosition = position;
         vh.tvCorrelationTitle.setText(correlation.getCause());
+        if(TextUtils.isEmpty(correlation.getPredictorExplanation()))
+            vh.tvCorrelationDesc.setVisibility(View.GONE);
+        else {
+            vh.tvCorrelationDesc.setVisibility(View.VISIBLE);
+            vh.tvCorrelationDesc.setText(correlation.getPredictorExplanation());
+        }
+        if(TextUtils.isEmpty(correlation.getValuePredictingHighOutcomeExplanation()))
+            vh.tvCorrelationHigh.setVisibility(View.GONE);
+        else {
+            vh.tvCorrelationHigh.setVisibility(View.VISIBLE);
+            vh.tvCorrelationHigh.setText(correlation.getValuePredictingHighOutcomeExplanation());
+        }
+        if(TextUtils.isEmpty(correlation.getValuePredictingLowOutcomeExplanation()))
+            vh.tvCorrelationLow.setVisibility(View.GONE);
+        else {
+            vh.tvCorrelationLow.setVisibility(View.VISIBLE);
+            vh.tvCorrelationLow.setText(correlation.getValuePredictingLowOutcomeExplanation());
+        }
+
 
         Double value = correlation.getUserVote();
 
@@ -289,6 +312,10 @@ public class CorrelationAdapter extends BaseAdapter {
 
     static class CorrelationViewHolder {
         TextView tvCorrelationTitle;
+        TextView tvCorrelationDesc;
+        TextView tvCorrelationHigh;
+        TextView tvCorrelationLow;
+
         ImageView imThumbUp;
         ImageView imThumbDown;
         ImageView imShoppingCart;
@@ -297,6 +324,9 @@ public class CorrelationAdapter extends BaseAdapter {
 
         CorrelationViewHolder(View view) {
             tvCorrelationTitle = (TextView) view.findViewById(R.id.tvCorrelationTitle);
+            tvCorrelationDesc = (TextView) view.findViewById(R.id.tvCorrelationDesc);
+            tvCorrelationHigh = (TextView) view.findViewById(R.id.tvCorrelationHigh);
+            tvCorrelationLow = (TextView) view.findViewById(R.id.tvCorrelationLow);
             imThumbUp = (ImageView) view.findViewById(R.id.imThumbUp);
             imThumbDown = (ImageView) view.findViewById(R.id.imThumbDown);
             imShoppingCart = (ImageView) view.findViewById(R.id.imShoppingCart);

@@ -22,6 +22,9 @@ public class Correlation implements Serializable {
     int numberOfPairs;
     long timestamp;
     Double userVote;
+    String predictorExplanation;
+    String valuePredictingHighOutcomeExplanation;
+    String valuePredictingLowOutcomeExplanation;
 
     public double getCorrelationCoefficient() {
         return correlationCoefficient;
@@ -80,6 +83,18 @@ public class Correlation implements Serializable {
 
     public void setUserVote(Double userVote) {
         this.userVote = userVote;
+    }
+
+    public String getPredictorExplanation() {
+        return predictorExplanation;
+    }
+
+    public String getValuePredictingHighOutcomeExplanation() {
+        return valuePredictingHighOutcomeExplanation;
+    }
+
+    public String getValuePredictingLowOutcomeExplanation() {
+        return valuePredictingLowOutcomeExplanation;
     }
 
     @Override
