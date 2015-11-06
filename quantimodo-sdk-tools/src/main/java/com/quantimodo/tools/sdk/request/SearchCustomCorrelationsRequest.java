@@ -26,7 +26,7 @@ public class SearchCustomCorrelationsRequest extends SdkRequest<SearchCustomCorr
 
     @Override
     protected long getCacheTime() {
-        return 2 * 60 * 1000; //2 min
+        return 100;//low value to fetch data every time the user open this
     }
 
     @Override
