@@ -1,26 +1,37 @@
 package com.quantimodo.tools.fragments;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.amazon.device.associates.AssociatesAPI;
 import com.amazon.device.associates.NotInitializedException;
 import com.amazon.device.associates.OpenSearchPageRequest;
 import com.quantimodo.android.sdk.SdkDefs;
 import com.quantimodo.android.sdk.model.Correlation;
 import com.quantimodo.android.sdk.model.CorrelationPost;
+import com.quantimodo.android.sdk.model.Unit;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.dialogs.CorrelationConfirmDialog;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
+import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SearchCustomCorrelationsRequest;
 import com.quantimodo.tools.sdk.request.VoteCorrelationRequest;
 import com.quantimodo.tools.sdk.request.SearchCorrelationsRequest;
+import com.quantimodo.tools.utils.ViewUtils;
+import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 
 import java.util.ArrayList;
 
@@ -37,6 +48,9 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
     private int mType;
     private String mVariableName;
     private boolean isPublic = true;
+    ArrayList<MeasurementCardHolder> measurementCards = new ArrayList<>();
+    private ArrayList<Unit> mUnits;                            // All units from QM
+//    FrameLayout lnCardsContainer;
     public static final String ARG_TYPE = "type";
     public static final String ARG_VARIABLE = "variable";
     public static final String ARG_PUBLIC = "is_public";
@@ -117,10 +131,18 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
                     });
         }
 
+//        getSpiceManager().execute(new GetUnitsRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetUnitsRequest.GetUnitsResponse>() {
+//            @Override
+//            public void onRequestSuccess(GetUnitsRequest.GetUnitsResponse getUnitsResponse) {
+//                mUnits = getUnitsResponse.units;
+//            }
+//        });
 
         View v = View.inflate(getActivity(), R.layout.qmt_list_view_header, null);
+//        lnCardsContainer = (FrameLayout) view.findViewById(R.id.listContainer);
         mHeader = (TextView) v.findViewById(R.id.text);
         mHeader.setText(getHeaderText());
+
         getListView().addHeaderView(v);
     }
 
@@ -148,6 +170,9 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
 
             case CorrelationAdapter.BUTTON_THUMBS_DOWN:
                 buttonVote(item,CorrelationAdapter.STATE_DOWN);
+                break;
+            case CorrelationAdapter.BUTTON_ADD:
+                addMeasurementCard(true, true, true, item);
                 break;
         }
     }
@@ -179,6 +204,46 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
     @Override
     public void onConfirm(Correlation correlation, @CorrelationAdapter.CorrelationState int state) {
         int vote = state == CorrelationAdapter.STATE_UP ? 1 : 0;
-        submitVote(correlation,vote);
+        submitVote(correlation, vote);
     }
+
+    private void addMeasurementCard(boolean removable, boolean animate, boolean focus, Correlation item) {
+//        if (mUnits == null) {
+//            Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+
+        TrackingFragment fragment = TrackingFragment.newInstance(TrackingFragment.TYPE_ALL);
+
+        getFragmentManager().beginTransaction().addToBackStack(null).add(fragment, null).commit();
+/*
+        getListView().setVisibility(View.GONE);
+
+        final MeasurementCardHolder measurementCardHolder = new MeasurementCardHolder(this.getActivity());
+        measurementCardHolder.setOnRemovedListener(new MeasurementCardHolder.OnMeasurementCardRemovedListener() {
+            @Override
+            public void onMeasurementCardRemoved(MeasurementCardHolder measurementCardHolder) {
+                measurementCards.remove(measurementCardHolder);
+                lnCardsContainer.removeView(measurementCardHolder.measurementCard);
+            }
+        });
+        measurementCards.add(measurementCardHolder);
+
+        // Set marginTop programatically, it's not picked up properly otherwise.
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin));
+        measurementCardHolder.measurementCard.setLayoutParams(layoutParams);
+
+        lnCardsContainer.addView(measurementCardHolder.measurementCard, 0);
+
+//        Double defaultValue = selectedVariable == null ? null : selectedVariable.getDefaultValue();
+
+        measurementCardHolder.init(removable, focus, mUnits, 0, mCategoryDef, 0);
+
+        if (animate) {
+            ViewUtils.expandView(measurementCardHolder.measurementCard, null);
+        }
+        */
+    }
+
 }

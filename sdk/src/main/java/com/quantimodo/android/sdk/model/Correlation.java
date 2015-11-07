@@ -12,6 +12,8 @@ public class Correlation implements Serializable {
     String causeCategory;
     String cause;
     String causeName;    //same as cause, is used for the new model
+    String causeUnit;
+    int causeUnitId;
     String originalCause;
     String effectCategory;
     String effect;
@@ -42,6 +44,14 @@ public class Correlation implements Serializable {
 
     public String getOriginalCause() {
         return originalCause;
+    }
+
+    public String getCauseUnit() {
+        return causeUnit;
+    }
+
+    public int getCauseUnitId() {
+        return causeUnitId;
     }
 
     public String getEffectCategory() {

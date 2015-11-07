@@ -73,6 +73,7 @@ public class TrackingFragment extends QFragment {
 
     private static final String KEY_TYPE = "type";
     private static final String KEY_CATEGORY = "category";
+    private static final String KEY_SEARCH = "search";
 
     @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS})
     @Retention(RetentionPolicy.SOURCE)
@@ -194,14 +195,18 @@ public class TrackingFragment extends QFragment {
      * @param categoryDef category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
      * @return new instance of TrackingFragment
      */
-    public static TrackingFragment newInstance(CategoryDef categoryDef){
+    public static TrackingFragment newInstance(CategoryDef categoryDef, String defaultSearch){
         TrackingFragment fragment = new TrackingFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(KEY_CATEGORY,categoryDef);
+        args.putSerializable(KEY_CATEGORY, categoryDef);
 
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static TrackingFragment newInstance(CategoryDef categoryDef){
+        return newInstance(categoryDef, null);
     }
 
     @Override

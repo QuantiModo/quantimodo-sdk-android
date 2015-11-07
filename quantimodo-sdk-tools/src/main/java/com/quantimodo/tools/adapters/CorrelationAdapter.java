@@ -38,7 +38,7 @@ public class CorrelationAdapter extends BaseAdapter {
     public @interface PredictorType{
     }
 
-    @IntDef({BUTTON_SHOP, BUTTON_THUMBS_UP, BUTTON_THUMBS_DOWN})
+    @IntDef({BUTTON_SHOP, BUTTON_THUMBS_UP, BUTTON_THUMBS_DOWN, BUTTON_ADD})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CorrelationButton {
     }
@@ -51,6 +51,7 @@ public class CorrelationAdapter extends BaseAdapter {
     public static final int BUTTON_SHOP = 0;
     public static final int BUTTON_THUMBS_UP = 1;
     public static final int BUTTON_THUMBS_DOWN = 2;
+    public static final int BUTTON_ADD = 3;
 
     /**
      * Should be implemented by target activity/fragment
@@ -228,6 +229,8 @@ public class CorrelationAdapter extends BaseAdapter {
             vh.imShoppingCart.setOnClickListener(onShoppingCartClick);
             vh.imThumbUp.setOnClickListener(onThumbUpClick);
             vh.imThumbDown.setOnClickListener(onThumbDownClick);
+            vh.imAdd.setOnClickListener(onAddClick);
+
             convertView.setTag(vh);
         } else {
             vh = (CorrelationViewHolder) convertView.getTag();
@@ -309,6 +312,16 @@ public class CorrelationAdapter extends BaseAdapter {
         }
     };
 
+    private View.OnClickListener onAddClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            Correlation correlation = mCurrentItems.get(vh.mItemPosition);
+            notifyButtonListener(v, BUTTON_ADD, vh.mItemPosition, correlation);
+
+        }
+    };
+
 
     static class CorrelationViewHolder {
         TextView tvCorrelationTitle;
@@ -319,6 +332,7 @@ public class CorrelationAdapter extends BaseAdapter {
         ImageView imThumbUp;
         ImageView imThumbDown;
         ImageView imShoppingCart;
+        ImageView imAdd;
 
         int mItemPosition;
 
@@ -330,6 +344,7 @@ public class CorrelationAdapter extends BaseAdapter {
             imThumbUp = (ImageView) view.findViewById(R.id.imThumbUp);
             imThumbDown = (ImageView) view.findViewById(R.id.imThumbDown);
             imShoppingCart = (ImageView) view.findViewById(R.id.imShoppingCart);
+            imAdd = (ImageView) view.findViewById(R.id.imAdd);
         }
     }
 }
