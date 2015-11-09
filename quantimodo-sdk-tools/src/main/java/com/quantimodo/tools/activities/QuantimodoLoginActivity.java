@@ -47,6 +47,7 @@ import javax.inject.Inject;
  */
 public class QuantimodoLoginActivity extends Activity {
     private static final String TAG = QuantimodoLoginActivity.class.getSimpleName();
+    public static final java.lang.String KEY_SHOW_LOGIN_AGAIN = "show_login_again";
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
 //        "https://www.googleapis.com/auth/plus.login " +
@@ -118,6 +119,10 @@ public class QuantimodoLoginActivity extends Activity {
         if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()){
             Log.d("QuantimodoLoginActivity", "fb accesstoken: " + AccessToken.getCurrentAccessToken().getToken());
 //            sendFbToken(AccessToken.getCurrentAccessToken().getToken());
+        }
+
+        if (getIntent().hasExtra(KEY_SHOW_LOGIN_AGAIN) && getIntent().getExtras().getBoolean(KEY_SHOW_LOGIN_AGAIN,false)) {
+            Toast.makeText(this, R.string.oauth_refresh_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
