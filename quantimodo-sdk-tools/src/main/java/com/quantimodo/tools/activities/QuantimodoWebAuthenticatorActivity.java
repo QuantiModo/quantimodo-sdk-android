@@ -92,7 +92,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
         Uri uri = Uri.parse(mPrefs.getApiUrl());
         CookieManager.getInstance().setAcceptCookie(true);
         CookieManager.getInstance().setCookie(mPrefs.getApiUrl(), "wordpress_test_cookie=WP+Cookie+check; domain=" + uri.getHost());
-        webView.loadUrl(mPrefs.getApiUrl() + "wp-login.php");
+        webView.loadUrl(mPrefs.getApiUrl() + "api/oauth2/authorize");
     }
 
     private void initOAuthWebView() {
