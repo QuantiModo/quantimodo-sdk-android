@@ -1,6 +1,7 @@
 package com.quantimodo.tools.sdk.request;
 
 import android.support.annotation.StringDef;
+
 import com.quantimodo.android.sdk.SdkDefs;
 import com.quantimodo.android.sdk.SdkResponse;
 import com.quantimodo.android.sdk.model.Correlation;
@@ -13,19 +14,14 @@ import java.util.ArrayList;
  * Search correlations by effect or by cause
  Can be cached see {@link #getCachedSpiceRequest() getCachedSpiceRequest} method, by default cached for 2 min
  */
-public class SearchCorrelationsRequest extends SdkRequest<SearchCorrelationsRequest.CorrelationsResponse> {
+public class SearchCustomCorrelationsRequest extends SdkRequest<SearchCustomCorrelationsRequest.CorrelationsResponse> {
 
     @StringDef({SdkDefs.CORRELATION_CAUSE, SdkDefs.CORRELATION_EFFECT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CauseOrEffect {}
 
-    private final String variableName;
-    private final String causeOrEffect;
-
-    public SearchCorrelationsRequest(String variableName,@CauseOrEffect String causeOrEffect) {
+    public SearchCustomCorrelationsRequest() {
         super(CorrelationsResponse.class);
-        this.variableName = variableName;
-        this.causeOrEffect = causeOrEffect;
     }
 
     @Override
@@ -35,12 +31,12 @@ public class SearchCorrelationsRequest extends SdkRequest<SearchCorrelationsRequ
 
     @Override
     protected String getCacheKey() {
-        return "getCorrelation_"+variableName+"_"+causeOrEffect;
+        return "getCustomCorrelation";
     }
 
     @Override
     public CorrelationsResponse loadDataFromNetwork() throws Exception {
-        SdkResponse<ArrayList<Correlation>> response = getClient().searchCorrelations(getCtx(), getToken(), variableName, causeOrEffect);
+        SdkResponse<ArrayList<Correlation>> response = getClient().searchCustomCorrelations(getCtx(), getToken());
         checkResponse(response);
         return new CorrelationsResponse(response.getData());
     }

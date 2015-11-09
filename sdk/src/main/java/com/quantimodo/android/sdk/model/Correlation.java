@@ -1,5 +1,7 @@
 package com.quantimodo.android.sdk.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -10,6 +12,8 @@ public class Correlation implements Serializable {
     String causeCategory;
     String cause;
     String causeName;    //same as cause, is used for the new model
+    String causeUnit;
+    int causeUnitId;
     String originalCause;
     String effectCategory;
     String effect;
@@ -20,6 +24,9 @@ public class Correlation implements Serializable {
     int numberOfPairs;
     long timestamp;
     Double userVote;
+    String predictorExplanation;
+    String valuePredictingHighOutcomeExplanation;
+    String valuePredictingLowOutcomeExplanation;
 
     public double getCorrelationCoefficient() {
         return correlationCoefficient;
@@ -30,15 +37,21 @@ public class Correlation implements Serializable {
     }
 
     public String getCause() {
+        if(TextUtils.isEmpty(cause))
+            return causeName;
         return cause;
-    }
-
-    public String getCauseName() {
-        return causeName;
     }
 
     public String getOriginalCause() {
         return originalCause;
+    }
+
+    public String getCauseUnit() {
+        return causeUnit;
+    }
+
+    public int getCauseUnitId() {
+        return causeUnitId;
     }
 
     public String getEffectCategory() {
@@ -80,6 +93,18 @@ public class Correlation implements Serializable {
 
     public void setUserVote(Double userVote) {
         this.userVote = userVote;
+    }
+
+    public String getPredictorExplanation() {
+        return predictorExplanation;
+    }
+
+    public String getValuePredictingHighOutcomeExplanation() {
+        return valuePredictingHighOutcomeExplanation;
+    }
+
+    public String getValuePredictingLowOutcomeExplanation() {
+        return valuePredictingLowOutcomeExplanation;
     }
 
     @Override
