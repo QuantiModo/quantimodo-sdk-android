@@ -294,6 +294,30 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /***
+     * Search for correlations for the current user
+     * @param context the current context
+     * @param token the private user token
+     * @return The list of @{Correlation} gotten from server
+     */
+    public SdkResponse<ArrayList<Correlation>> searchCustomCorrelations(Context context, String token){
+        setupIon(context);
+
+        SdkResponse<ArrayList<Correlation>> sdkResponse = new SdkResponse<>();
+
+        Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/v1/correlations").buildUpon();
+        uriBuilder.appendQueryParameter("effect", "Overall Mood");
+
+        FutureBuilder futureBuilder =  Ion.with(context)
+                .load(uriBuilder.build().toString().replace("\\+", "%20"))
+                .setHeader("Authorization", "Bearer " + token);
+
+        executeRequest(context, sdkResponse, new TypeToken<ArrayList<Correlation>>() {
+        }, futureBuilder);
+
+        return sdkResponse;
+    }
+
     public SdkResponse<ArrayList<VariableCategory>> getCategories(Context context, String token) {
         setupIon(context);
 

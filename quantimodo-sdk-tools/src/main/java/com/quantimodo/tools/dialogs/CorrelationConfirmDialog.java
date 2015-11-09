@@ -55,7 +55,7 @@ public class CorrelationConfirmDialog extends DialogFragment{
         String variable = correlation.getEffect();
 
         int format,positiveId;
-        if (type == CorrelationAdapter.NEGATIVE){
+        if (type == CorrelationAdapter.TYPE_NEGATIVE){
             if (state == CorrelationAdapter.STATE_DOWN){
                 format = R.string.correlation_dialog_negative_down;
                 positiveId = R.string.correlation_dialog_button_positive_disagree;
