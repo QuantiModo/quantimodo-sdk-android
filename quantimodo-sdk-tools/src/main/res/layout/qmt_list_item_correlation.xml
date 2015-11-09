@@ -51,11 +51,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <ImageView
-            android:id="@+id/imAdd"
-            android:src="@drawable/ic_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/imAdd"-->
+            <!--android:src="@drawable/ic_add"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
     </LinearLayout>
 
 </LinearLayout>

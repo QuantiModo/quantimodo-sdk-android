@@ -229,7 +229,7 @@ public class CorrelationAdapter extends BaseAdapter {
             vh.imShoppingCart.setOnClickListener(onShoppingCartClick);
             vh.imThumbUp.setOnClickListener(onThumbUpClick);
             vh.imThumbDown.setOnClickListener(onThumbDownClick);
-            vh.imAdd.setOnClickListener(onAddClick);
+//            vh.imAdd.setOnClickListener(onAddClick);
 
             convertView.setTag(vh);
         } else {
@@ -293,7 +293,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private View.OnClickListener onThumbUpClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent().getParent()).getTag();
             Correlation correlation = mCurrentItems.get(vh.mItemPosition);
             if (!checkFlag(correlation.getUserVote(), STATE_UP)) {
                 notifyButtonListener(v, BUTTON_THUMBS_UP, vh.mItemPosition, correlation);
@@ -304,7 +304,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private View.OnClickListener onThumbDownClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent().getParent()).getTag();
             Correlation correlation = mCurrentItems.get(vh.mItemPosition);
             if (!checkFlag(correlation.getUserVote(), STATE_DOWN)) {
                 notifyButtonListener(v, BUTTON_THUMBS_DOWN, vh.mItemPosition, correlation);
@@ -312,15 +312,15 @@ public class CorrelationAdapter extends BaseAdapter {
         }
     };
 
-    private View.OnClickListener onAddClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
-            Correlation correlation = mCurrentItems.get(vh.mItemPosition);
-            notifyButtonListener(v, BUTTON_ADD, vh.mItemPosition, correlation);
-
-        }
-    };
+//    private View.OnClickListener onAddClick = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+//            Correlation correlation = mCurrentItems.get(vh.mItemPosition);
+//            notifyButtonListener(v, BUTTON_ADD, vh.mItemPosition, correlation);
+//
+//        }
+//    };
 
 
     static class CorrelationViewHolder {
@@ -332,7 +332,7 @@ public class CorrelationAdapter extends BaseAdapter {
         ImageView imThumbUp;
         ImageView imThumbDown;
         ImageView imShoppingCart;
-        ImageView imAdd;
+//        ImageView imAdd;
 
         int mItemPosition;
 
@@ -344,7 +344,7 @@ public class CorrelationAdapter extends BaseAdapter {
             imThumbUp = (ImageView) view.findViewById(R.id.imThumbUp);
             imThumbDown = (ImageView) view.findViewById(R.id.imThumbDown);
             imShoppingCart = (ImageView) view.findViewById(R.id.imShoppingCart);
-            imAdd = (ImageView) view.findViewById(R.id.imAdd);
+//            imAdd = (ImageView) view.findViewById(R.id.imAdd);
         }
     }
 }
