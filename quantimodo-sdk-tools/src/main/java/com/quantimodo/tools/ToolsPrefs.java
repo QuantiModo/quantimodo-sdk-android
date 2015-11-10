@@ -16,16 +16,18 @@ public class ToolsPrefs {
     private final String mApiUrl;
     private final String mApiScopes;
     private final String mApplicationSource;
+    private final String mApiSocialAuth;
 
     /**
      * @param mApiUrl API url , for example ( https://app.quantimo.do/ )
      * @param mApiScopes OAuth2 scopes, that app would need
      * @param mApplicationSource Application name, used to submit and search data
      */
-    public ToolsPrefs(String mApiUrl, String mApiScopes, String mApplicationSource) {
+    public ToolsPrefs(String mApiUrl, String mApiScopes, String mApplicationSource, String mApiSocialAuth) {
         this.mApiUrl = mApiUrl;
         this.mApiScopes = mApiScopes;
         this.mApplicationSource = mApplicationSource;
+        this.mApiSocialAuth = mApiSocialAuth;
     }
 
     public String getApiScopes() {
@@ -34,6 +36,10 @@ public class ToolsPrefs {
 
     public String getApiUrl() {
         return mApiUrl;
+    }
+
+    public String getApiSocialAuth(){
+        return mApiSocialAuth;
     }
 
     public String getApplicationSource() {

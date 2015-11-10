@@ -72,5 +72,11 @@
     <string name="tracking_fragment_symptoms_title">Track symptoms</string>
     <string name="tracking_fragment_mood_title">Track mood</string>
 
+    <string name="login_facebook_app_id">225078261031461</string>
 
+    <string name="signin_google_button">Sign in with Google</string>
+    <string name="signin_facebook_button">Sign in with Facebook</string>
+    <string name="signin_moodimodo_button">Sign in with MoodiModo</string>
+    <string name="signin_error">An error occurred while signing in</string>
+    <string name="signin_success">Welcome!</string>
 </resources>
