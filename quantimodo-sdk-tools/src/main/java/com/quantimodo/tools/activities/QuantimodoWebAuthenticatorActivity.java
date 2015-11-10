@@ -9,8 +9,6 @@ import android.view.View;
 import android.webkit.*;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.facebook.appevents.AppEventsLogger;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -29,7 +27,7 @@ import java.util.Random;
  */
 public class QuantimodoWebAuthenticatorActivity extends Activity
 {
-    public static final String KEY_AUTH_TOKEN = "key_auth_token";
+    public static final java.lang.String KEY_SHOW_LOGIN_AGAIN = "show_login_again";
 
     @Inject
     AuthHelper authHelper;
@@ -37,26 +35,72 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
     @Inject
     ToolsPrefs mPrefs;
 
+    private String mNonce;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         QTools.getInstance().inject(this);
+        int min = 100000000;
+        int max = 999999999;
+        mNonce = String.valueOf(new Random().nextInt(max - min) + min) + String.valueOf(new Random().nextInt(max - min) + min);
 
         setContentView(R.layout.qmt_authenticator_quantimodoweb);
-        String QMToken = null;
-        if(getIntent().hasExtra(KEY_AUTH_TOKEN)){
-            QMToken = getIntent().getExtras().getString(KEY_AUTH_TOKEN);
-        }
+        initQMWebView(new QMAuthClient.OnAuthenticationCompleteListener() {
+            @Override
+            public void onSuccess(final String cookies) {
+                initOAuthWebView();
+            }
 
-        initOAuthWebView(QMToken);
+            @Override
+            public void onFailed() {
+                Log.i(ToolsPrefs.DEBUG_TAG, "Couldn't log in");
+            }
+        });
+
+        if (getIntent().hasExtra(KEY_SHOW_LOGIN_AGAIN) && getIntent().getExtras().getBoolean(KEY_SHOW_LOGIN_AGAIN,false)) {
+            Toast.makeText(this, R.string.oauth_refresh_failed, Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void initOAuthWebView(final String QMToken) {
+    private void initQMWebView(final QMAuthClient.OnAuthenticationCompleteListener listener) {
+        CookieManager.getInstance().removeAllCookie();
+        Ion.getDefault(this).getCookieMiddleware().getCookieStore().removeAll();
+
+        WebView webView = (WebView) findViewById(R.id.web);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        webView.setWebViewClient(new QMAuthClient(listener, mPrefs));
+
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {
+                    progressBar.setVisibility(View.GONE);
+                } else if (progressBar.getVisibility() == View.GONE) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+                progressBar.setProgress(newProgress);
+            }
+        });
+
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setSavePassword(false);       // Deprecated in 18, passwords won't be saved by default from then on
+        webView.getSettings().setJavaScriptEnabled(true);
+        Uri uri = Uri.parse(mPrefs.getApiUrl());
+        CookieManager.getInstance().setAcceptCookie(true);
+        CookieManager.getInstance().setCookie(mPrefs.getApiUrl(), "wordpress_test_cookie=WP+Cookie+check; domain=" + uri.getHost());
+        webView.loadUrl(mPrefs.getApiUrl() + "api/oauth2/authorize");
+    }
+
+    private void initOAuthWebView() {
         WebView webView = (WebView) findViewById(R.id.web);
         webView.setWebViewClient(new OAuthClient(new OAuthClient.OnReceivedAuthorizeResponse() {
             @Override
             public void onSuccess(String authorizationCode, String state) {
-                getAccessToken(authorizationCode, QMToken);
+                handleAuthorizationSuccess(authorizationCode, state);
             }
 
             @Override
@@ -65,13 +109,21 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
             }
         }, mPrefs));
 
-        webView.loadUrl(mPrefs.getApiUrl() + "api/v2/oauth/authorize?token=" + QMToken
-                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&client_id=" + authHelper.getClientId() +
-        "&client_secret=" + authHelper.getClientSecret());
+        webView.loadUrl(mPrefs.getApiUrl() + "api/oauth2/authorize?client_id=" + authHelper.getClientId()
+                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&state=" + mNonce);
     }
 
-    private void getAccessToken(String authorizationCode, final String QMToken) {
-        Ion.with(this, mPrefs.getApiUrl() + "api/v2/oauth/access_token?token=" + QMToken)
+    private void handleAuthorizationSuccess(String authorizationCode, String nonce) {
+        if (!mNonce.equals(nonce)) {
+            Toast.makeText(this, "Request was tampered with", Toast.LENGTH_SHORT).show();
+        } else {
+            getAccessToken(authorizationCode);
+        }
+    }
+
+
+    private void getAccessToken(String authorizationCode) {
+        Ion.with(this, mPrefs.getApiUrl() + "api/oauth2/token")
                 .setBodyParameter("client_id", authHelper.getClientId())
                 .setBodyParameter("client_secret", authHelper.getClientSecret())
                 .setBodyParameter("grant_type", "authorization_code")
@@ -89,8 +141,6 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
                         authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken,refreshToken, System.currentTimeMillis()/1000 + expiresIn));
 
-                        //TODO: remove/update the tests related with this Activity
-                        //TODO: also finish QuantimodoLoginActivity when login was succeed
                         finish();
                     } catch (NullPointerException ignored) {
                         Log.i(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()
@@ -110,6 +160,44 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    public static class QMAuthClient extends WebViewClient {
+        private final OnAuthenticationCompleteListener listener;
+        private final CookieManager cookieManager;
+        private final ToolsPrefs toolsPrefs;
+
+        protected interface OnAuthenticationCompleteListener {
+            void onSuccess(String cookies);
+            void onFailed();
+        }
+
+        public QMAuthClient(OnAuthenticationCompleteListener listener, ToolsPrefs toolsPrefs) {
+            this.listener = listener;
+            this.toolsPrefs = toolsPrefs;
+            this.cookieManager = CookieManager.getInstance();
+            this.cookieManager.removeAllCookie();
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (url.startsWith(toolsPrefs.getApiUrl())) {
+                String cookies = cookieManager.getCookie(toolsPrefs.getApiUrl());
+                if (cookies != null && cookies.contains("wordpress_logged_in")) {
+                    String[] splits = cookies.split("; ");
+                    for (String cookie : splits) {
+                        if (cookie.startsWith("wordpress_logged_in")) {
+                            listener.onSuccess(cookie);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            view.loadUrl(url);
+
+            return true;
+        }
     }
 
     private static class OAuthClient extends WebViewClient {
