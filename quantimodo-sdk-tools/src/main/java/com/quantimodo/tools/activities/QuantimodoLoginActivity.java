@@ -19,19 +19,15 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.Scopes;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.Response;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
@@ -54,6 +50,7 @@ public class QuantimodoLoginActivity extends Activity {
 //        "https://www.googleapis.com/auth/plus.profile.emails.read";
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.email " +
         "https://www.googleapis.com/auth/userinfo.profile";
+    public static final int REQUEST_CODE_WEB_AUTHENTICATE = 2;
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
     static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1001;
@@ -85,7 +82,7 @@ public class QuantimodoLoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(QuantimodoLoginActivity.this, QuantimodoWebAuthenticatorActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
             }
         });
         callbackManager = CallbackManager.Factory.create();
@@ -136,7 +133,22 @@ public class QuantimodoLoginActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
+        Log.d(TAG, "onActivityResult, request code: " + requestCode);
+        if(requestCode == REQUEST_CODE_WEB_AUTHENTICATE){
+
+            if (resultCode == RESULT_OK) {
+                //if the web auth went ok there is nothing to do here
+                //the user was correctly authenticated
+                Toast.makeText(getApplicationContext(), getString(R.string.signin_success), Toast.LENGTH_LONG).show();
+                finish();
+            }
+            else if(resultCode == RESULT_CANCELED){
+                //The user canceled or an error occurred
+                //TODO: Show toast to the user informing about an error
+                Toast.makeText(getApplicationContext(), getString(R.string.signin_error), Toast.LENGTH_LONG).show();
+            }
+        }
+        else if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
             if (resultCode == RESULT_OK) {
                 mEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 getAuthToken();
@@ -222,9 +234,8 @@ public class QuantimodoLoginActivity extends Activity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject response) {
-                        JsonObject result = response;
-                        if (result != null)
-                            setAuthTokenFromJson(result);
+                        if (response != null)
+                            setAuthTokenFromJson(response);
                         else {
                             Log.d("QuantimodoLoginActivity", "result is null!");
                         }
@@ -244,10 +255,9 @@ public class QuantimodoLoginActivity extends Activity {
         try {
             final String QMToken = result.get("data").getAsJsonObject().get("token").getAsString();
 
-            Intent intent = new Intent(this, QuantimodoWebAuthenticatorActivity.class);
-            intent.putExtra(QuantimodoWebAuthenticatorActivity.KEY_AUTH_TOKEN, QMToken);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            Intent intent = new Intent(this, QuantimodoWebValidatorActivity.class);
+            intent.putExtra(QuantimodoWebValidatorActivity.KEY_AUTH_TOKEN, QMToken);
+            startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
 
 
 //            String refreshToken = result.get("refresh_token").getAsString();
