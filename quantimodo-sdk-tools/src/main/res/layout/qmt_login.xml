@@ -7,19 +7,19 @@
     android:gravity="center"
     >
 
-    <Button
-        android:id="@+id/qmt_signin_google"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:minWidth="200dp"
-        android:gravity="center"
-        android:background="@color/common_signin_btn_default_background"
-        android:drawableLeft="@drawable/common_signin_btn_icon_normal_dark"
-        android:drawableStart="@drawable/common_signin_btn_icon_light"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:text="@string/signin_google_button"/>
+    <!--<Button-->
+        <!--android:id="@+id/qmt_signin_google"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:minWidth="200dp"-->
+        <!--android:gravity="center"-->
+        <!--android:background="@color/common_signin_btn_default_background"-->
+        <!--android:drawableLeft="@drawable/common_signin_btn_icon_normal_dark"-->
+        <!--android:drawableStart="@drawable/common_signin_btn_icon_light"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="16sp"-->
+        <!--android:text="@string/signin_google_button"/>-->
 
     <Space
         android:layout_width="wrap_content"
