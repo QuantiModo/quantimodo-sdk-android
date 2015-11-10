@@ -54,7 +54,7 @@
         android:padding="10dp"
         android:minWidth="200dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/card_button"
+        android:background="@color/button_color"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:text="@string/signin_button"/>
