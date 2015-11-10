@@ -73,6 +73,7 @@ public class TrackingFragment extends QFragment {
 
     private static final String KEY_TYPE = "type";
     private static final String KEY_CATEGORY = "category";
+    private static final String KEY_SEARCH = "search";
 
     @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS})
     @Retention(RetentionPolicy.SOURCE)
@@ -194,14 +195,18 @@ public class TrackingFragment extends QFragment {
      * @param categoryDef category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
      * @return new instance of TrackingFragment
      */
-    public static TrackingFragment newInstance(CategoryDef categoryDef){
+    public static TrackingFragment newInstance(CategoryDef categoryDef, String defaultSearch){
         TrackingFragment fragment = new TrackingFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(KEY_CATEGORY,categoryDef);
+        args.putSerializable(KEY_CATEGORY, categoryDef);
 
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static TrackingFragment newInstance(CategoryDef categoryDef){
+        return newInstance(categoryDef, null);
     }
 
     @Override
@@ -224,39 +229,6 @@ public class TrackingFragment extends QFragment {
         ActionBar bar = getActivity().getActionBar();
         if(bar != null){
             bar.setTitle(mCategoryDef.titleId);
-        }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.variable_item, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        super.onContextItemSelected(item);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Variable variable = (Variable) lvVariableSuggestions.getAdapter().getItem(info.position);
-        int type = CorrelationAdapter.POSITIVE;
-        if (item.getItemId() == R.id.action_positive_factors){
-            type = CorrelationAdapter.POSITIVE;
-        } else if (item.getItemId() == R.id.action_negative_factors){
-            type = CorrelationAdapter.NEGATIVE;
-        }
-        showFactorsFragment(variable, type);
-        return true;
-    }
-
-    private void showFactorsFragment(Variable variable,int type){
-        FactorsFragment factorsFragment = FactorsFragment.newInstance(type,variable.getName());
-        String title = type == CorrelationAdapter.POSITIVE ? getString(R.string.tab_positive_factors) : getString(R.string.tab_negative_factors);
-        if (mFragmentListener != null){
-            mFragmentListener.requestFragmentAdd(factorsFragment,title);
-        } else if (getActivity() instanceof FragmentAdderListener){
-            ((FragmentAdderListener) getActivity()).requestFragmentAdd(factorsFragment,title);
-        } else if (getTargetFragment() instanceof FragmentAdderListener){
-            ((FragmentAdderListener) getTargetFragment()).requestFragmentAdd(factorsFragment,title);
         }
     }
 

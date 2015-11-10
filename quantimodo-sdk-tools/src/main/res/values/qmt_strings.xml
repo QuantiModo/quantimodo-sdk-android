@@ -23,6 +23,8 @@
     <string name="action_settings">Settings</string>
     <string name="header_factors_positive"><![CDATA[Most likely to <b>IMPROVE</b> %s]]></string>
     <string name="header_factors_negative"><![CDATA[Most likely to <b>DEPRESS</b> %s]]></string>
+    <string name="header_factors_common">Top Predictors of Mood</string>
+    <string name="header_factors_yours">Your Top Predictors of Mood</string>
     <string name="toast_requesting">Requesting</string>
     <string name="tracking_fragment_wait_data_load">Wait till data loaded</string>
     <string name="menu_item_positive_factors">Positive predictors</string>
