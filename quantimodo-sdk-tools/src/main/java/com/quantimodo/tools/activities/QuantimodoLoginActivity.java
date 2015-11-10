@@ -242,11 +242,18 @@ public class QuantimodoLoginActivity extends Activity {
         }
         Log.d(TAG, "Result from QM Server as string: " + result.toString());
         try {
-            String accessToken = result.get("access_token").getAsString();
-            String refreshToken = result.get("refresh_token").getAsString();
-            int expiresIn = result.get("expires_in").getAsInt();
-            Log.d(TAG, "data from json, accessToken: " + accessToken + ", refreshToken: " + refreshToken + ", expiration: " + expiresIn);
-            authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
+            final String QMToken = result.get("data").getAsJsonObject().get("token").getAsString();
+
+            Intent intent = new Intent(this, QuantimodoWebAuthenticatorActivity.class);
+            intent.putExtra(QuantimodoWebAuthenticatorActivity.KEY_AUTH_TOKEN, QMToken);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+
+//            String refreshToken = result.get("refresh_token").getAsString();
+//            int expiresIn = result.get("expires_in").getAsInt();
+//            Log.d(TAG, "data from json, accessToken: " + accessToken + ", refreshToken: " + refreshToken + ", expiration: " + expiresIn);
+//            authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
         } catch(NullPointerException e){
             e.printStackTrace();
         }
