@@ -49,7 +49,8 @@ public class QuantimodoLoginActivity extends Activity {
 //        "https://www.googleapis.com/auth/plus.login " +
 //        "https://www.googleapis.com/auth/plus.profile.emails.read";
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.email " +
-        "https://www.googleapis.com/auth/userinfo.profile";
+        "https://www.googleapis.com/auth/userinfo.profile " +
+        "https://www.googleapis.com/auth/plus.login";
     public static final int REQUEST_CODE_WEB_AUTHENTICATE = 2;
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
@@ -227,7 +228,10 @@ public class QuantimodoLoginActivity extends Activity {
 
     private void sendFbToken(final String token){
         Log.d("QuantimodoLoginActivity", "Sending Fb token to QM server...");
-        String url = mPrefs.getApiSocialAuth() + "?provider=facebook&accessToken=" + token;
+        sendToken("facebook", token);
+    }
+    public void sendToken(final String provider, final String token){
+        String url = mPrefs.getApiSocialAuth() + "?provider=" + provider + "&accessToken=" + token;
         Ion.with(QuantimodoLoginActivity.this)
                 .load(url)
                 .asJsonObject()

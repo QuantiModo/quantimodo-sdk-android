@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * AsynkTask to fetch the google token and handling the result
  */
-public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
+public class GetUsernameTask extends AsyncTask<Void, Void, String> {
     private static final String TAG = GetUsernameTask.class.getSimpleName();
 
     ToolsPrefs mPrefs;
@@ -38,22 +38,11 @@ public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
      * on the AsyncTask instance.
      */
     @Override
-    protected JsonObject doInBackground(Void... params) {
+    protected String doInBackground(Void... params) {
         try {
             String token = fetchToken();
-            if (token != null) {
-                Log.d(TAG, "Google correct token!!: " + token);
-                String url = mPrefs.getApiSocialAuth() + "?provider=google&accessToken=" + token;
-                try {
-                    return Ion.with(mActivity)
-                            .load(url)
-                            .asJsonObject()
-                            .get();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-
-            }
+            if (token != null)
+                return token;
             else
                 Log.d(TAG, "Google token null :(");
         } catch (IOException e) {
@@ -65,8 +54,9 @@ public class GetUsernameTask extends AsyncTask<Void, Void, JsonObject> {
     }
 
     @Override
-    protected void onPostExecute(JsonObject result) {
-        mActivity.setAuthTokenFromJson(result);
+    protected void onPostExecute(String result) {
+        Log.d(TAG, "Sending Google token to QM Server: " + result);
+        mActivity.sendToken("google", result);
     }
 
 
