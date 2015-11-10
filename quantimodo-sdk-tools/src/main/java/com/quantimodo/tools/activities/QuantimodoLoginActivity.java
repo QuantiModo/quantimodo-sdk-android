@@ -70,13 +70,13 @@ public class QuantimodoLoginActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         QTools.getInstance().inject(this);
         setContentView(R.layout.qmt_login);
-//        View buttonGoogle = findViewById(R.id.qmt_signin_google);
-//        buttonGoogle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                pickUserAccount();
-//            }
-//        });
+        View buttonGoogle = findViewById(R.id.qmt_signin_google);
+        buttonGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickUserAccount();
+            }
+        });
         View buttonMoodi = findViewById(R.id.qmt_signin_moodimodo);
         buttonMoodi.setOnClickListener(new View.OnClickListener() {
             @Override
