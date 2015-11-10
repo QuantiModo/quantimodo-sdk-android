@@ -44,6 +44,7 @@ import javax.inject.Inject;
 public class QuantimodoLoginActivity extends Activity {
     private static final String TAG = QuantimodoLoginActivity.class.getSimpleName();
     public static final java.lang.String KEY_SHOW_LOGIN_AGAIN = "show_login_again";
+    public static final java.lang.String KEY_APP_NAME = "app_name";
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
 //        "https://www.googleapis.com/auth/plus.login " +
@@ -77,7 +78,14 @@ public class QuantimodoLoginActivity extends Activity {
 //                pickUserAccount();
 //            }
 //        });
-        View buttonMoodi = findViewById(R.id.qmt_signin_moodimodo);
+        Button buttonMoodi = (Button) findViewById(R.id.qmt_signin_moodimodo);
+        if(getIntent().hasExtra(KEY_APP_NAME)){
+            String appName = getIntent().getExtras().getString(KEY_APP_NAME);
+            buttonMoodi.setText(String.format(getString(R.string.signin_moodimodo_button), appName));
+        }
+        else{
+            buttonMoodi.setText(getString(R.string.signin_button));
+        }
         buttonMoodi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,7 +215,7 @@ public class QuantimodoLoginActivity extends Activity {
                     // The Google Play services APK is old, disabled, or not present.
                     // Show a dialog created by Google Play services that allows
                     // the user to update the APK
-                    int statusCode = ((GooglePlayServicesAvailabilityException)e)
+                    int statusCode = ((GooglePlayServicesAvailabilityException) e)
                             .getConnectionStatusCode();
                     Dialog dialog = GooglePlayServicesUtil.getErrorDialog(statusCode,
                             QuantimodoLoginActivity.this,
@@ -217,7 +225,7 @@ public class QuantimodoLoginActivity extends Activity {
                     // Unable to authenticate, such as when the user has not yet granted
                     // the app access to the account, but the user can fix this.
                     // Forward the user to an activity in Google Play services.
-                    Intent intent = ((UserRecoverableAuthException)e).getIntent();
+                    Intent intent = ((UserRecoverableAuthException) e).getIntent();
                     startActivityForResult(intent,
                             REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR);
                 }

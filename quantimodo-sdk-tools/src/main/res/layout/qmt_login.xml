@@ -48,12 +48,14 @@
     <Button
         android:id="@+id/qmt_signin_moodimodo"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:maxWidth="200dp"
         android:padding="10dp"
         android:minWidth="200dp"
         android:layout_gravity="center_horizontal"
         android:background="@color/card_button"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:text="@string/signin_moodimodo_button"/>
+        android:text="@string/signin_button"/>
 </LinearLayout>
