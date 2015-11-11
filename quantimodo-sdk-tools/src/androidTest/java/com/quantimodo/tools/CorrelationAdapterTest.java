@@ -50,22 +50,22 @@ public class CorrelationAdapterTest{
         assertTrue(Math.abs(first.getWeight()) > Math.abs(last.getWeight()));
     }
 
-    @Test
-    public void testSwitchType(){
-        DataSetObserver observer = createMock(DataSetObserver.class);
-        observer.onChanged();
-        replay(observer);
-        adapter.registerDataSetObserver(observer);
-
-
-        Correlation correlation = (Correlation) adapter.getItem(0);
-        assertTrue(correlation.getCorrelationCoefficient() > 0);
-
-
-        adapter.setType(CorrelationAdapter.TYPE_NEGATIVE);
-        verify(observer);
-
-        correlation = (Correlation) adapter.getItem(0);
-        assertTrue(correlation.getCorrelationCoefficient() < 0);
-    }
+//    @Test
+//    public void testSwitchType(){
+//        DataSetObserver observer = createMock(DataSetObserver.class);
+//        observer.onChanged();
+//        replay(observer);
+//        adapter.registerDataSetObserver(observer);
+//
+//
+//        Correlation correlation = (Correlation) adapter.getItem(0);
+//        assertTrue(correlation.getCorrelationCoefficient() > 0);
+//
+//
+//        adapter.setType(CorrelationAdapter.TYPE_NEGATIVE);
+//        verify(observer);
+//
+//        correlation = (Correlation) adapter.getItem(0);
+//        assertTrue(correlation.getCorrelationCoefficient() < 0);
+//    }
 }
