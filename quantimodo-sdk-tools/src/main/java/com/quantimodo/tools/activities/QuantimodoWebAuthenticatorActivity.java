@@ -140,7 +140,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
                         int expiresIn = result.get("expires_in").getAsInt();
 
                         authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken,refreshToken, System.currentTimeMillis()/1000 + expiresIn));
-
+                        setResult(RESULT_OK);
                         finish();
                     } catch (NullPointerException ignored) {
                         Log.i(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()

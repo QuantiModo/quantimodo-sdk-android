@@ -49,8 +49,14 @@ public class QuantimodoLoginActivity extends Activity {
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
 //        "https://www.googleapis.com/auth/plus.login " +
 //        "https://www.googleapis.com/auth/plus.profile.emails.read";
-    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.email " +
-        "https://www.googleapis.com/auth/userinfo.profile";
+    private static final String SCOPE = "oauth2:" +
+        "https://www.googleapis.com/auth/userinfo.profile " +
+        "https://www.googleapis.com/auth/plus.login " +
+        "https://www.googleapis.com/auth/plus.me " +
+//        "https://www.googleapis.com/auth/plus.profile.emails.read " +
+        "profile " +
+        "email " +
+        "openid";
     public static final int REQUEST_CODE_WEB_AUTHENTICATE = 2;
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
@@ -71,13 +77,13 @@ public class QuantimodoLoginActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         QTools.getInstance().inject(this);
         setContentView(R.layout.qmt_login);
-//        View buttonGoogle = findViewById(R.id.qmt_signin_google);
-//        buttonGoogle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                pickUserAccount();
-//            }
-//        });
+        View buttonGoogle = findViewById(R.id.qmt_signin_google);
+        buttonGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickUserAccount();
+            }
+        });
         Button buttonMoodi = (Button) findViewById(R.id.qmt_signin_moodimodo);
         if(getIntent().hasExtra(KEY_APP_NAME)){
             String appName = getIntent().getExtras().getString(KEY_APP_NAME);
@@ -235,7 +241,10 @@ public class QuantimodoLoginActivity extends Activity {
 
     private void sendFbToken(final String token){
         Log.d("QuantimodoLoginActivity", "Sending Fb token to QM server...");
-        String url = mPrefs.getApiSocialAuth() + "?provider=facebook&accessToken=" + token;
+        sendToken("facebook", token);
+    }
+    public void sendToken(final String provider, final String token){
+        String url = mPrefs.getApiSocialAuth() + "?provider=" + provider + "&accessToken=" + token;
         Ion.with(QuantimodoLoginActivity.this)
                 .load(url)
                 .asJsonObject()
