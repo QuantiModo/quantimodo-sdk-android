@@ -129,46 +129,47 @@ public class CorrelationAdapter extends BaseAdapter {
         mCtx = ctx;
         mShowShoppingCart = ctx.getResources().getBoolean(R.bool.show_shopping_card);
         //Sort correlations by correlation coefficient
-        ArrayList<Correlation> allItems = new ArrayList<>(correlations);
-        Collections.sort(allItems, new Comparator<Correlation>() {
-            @Override
-            public int compare(Correlation lhs, Correlation rhs) {
-                if (lhs.getWeight() > rhs.getWeight()) {
-                    return 1;
-                } else if (lhs.getWeight() < rhs.getWeight()) {
-                    return -1;
-                }
-                return 0;
-            }
-        });
+//        ArrayList<Correlation> allItems = new ArrayList<>(correlations);
+//        Collections.sort(allItems, new Comparator<Correlation>() {
+//            @Override
+//            public int compare(Correlation lhs, Correlation rhs) {
+//                if (lhs.getWeight() > rhs.getWeight()) {
+//                    return 1;
+//                } else if (lhs.getWeight() < rhs.getWeight()) {
+//                    return -1;
+//                }
+//                return 0;
+//            }
+//        });
 
+        mAllItems = correlations;
         //Split into positive and negative correlations
-        for (Correlation c : allItems) {
-            mAllItems.add(c);
-            if (c.getCorrelationCoefficient() > 0) {
-                mPositiveItems.add(c);
-            } else if (c.getCorrelationCoefficient() < 0) {
-                mNegativeItems.add(c);
-            }
-        }
+//        for (Correlation c : allItems) {
+//            mAllItems.add(c);
+//            if (c.getCorrelationCoefficient() > 0) {
+//                mPositiveItems.add(c);
+//            } else if (c.getCorrelationCoefficient() < 0) {
+//                mNegativeItems.add(c);
+//            }
+//        }
 //        mAllItems = allItems;
-        Collections.reverse(mPositiveItems);
+//        Collections.reverse(mPositiveItems);
         switchItems(type);
     }
 
     private void switchItems(@CorrelationType int type) {
         Log.d("CorrelationAdapter", "switchItems: " + type);
-//        mCurrentItems = mAllItems;
-        switch (type){
-            case TYPE_POSITIVE:
-                mCurrentItems = mPositiveItems;
-                return;
-            case TYPE_NEGATIVE:
-                mCurrentItems = mNegativeItems;
-                return;
-            case TYPE_ANY:
-                mCurrentItems = mAllItems;
-        }
+        mCurrentItems = mAllItems;
+//        switch (type){
+//            case TYPE_POSITIVE:
+//                mCurrentItems = mPositiveItems;
+//                return;
+//            case TYPE_NEGATIVE:
+//                mCurrentItems = mNegativeItems;
+//                return;
+//            case TYPE_ANY:
+//                mCurrentItems = mAllItems;
+//        }
     }
 
 
