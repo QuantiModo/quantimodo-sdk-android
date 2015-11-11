@@ -76,7 +76,8 @@
 
     <string name="signin_google_button">Sign in with Google</string>
     <string name="signin_facebook_button">Sign in with Facebook</string>
-    <string name="signin_moodimodo_button">Sign in with MoodiModo</string>
+    <string name="signin_moodimodo_button">Sign in with %s</string>
+    <string name="signin_button">Sign in</string>
     <string name="signin_error">An error occurred while signing in</string>
     <string name="signin_success">Welcome!</string>
 </resources>
