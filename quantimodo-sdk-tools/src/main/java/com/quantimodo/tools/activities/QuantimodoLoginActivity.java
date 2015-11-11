@@ -48,9 +48,14 @@ public class QuantimodoLoginActivity extends Activity {
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
 //        "https://www.googleapis.com/auth/plus.login " +
 //        "https://www.googleapis.com/auth/plus.profile.emails.read";
-    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.email " +
+    private static final String SCOPE = "oauth2:" +
         "https://www.googleapis.com/auth/userinfo.profile " +
-        "https://www.googleapis.com/auth/plus.login";
+        "https://www.googleapis.com/auth/plus.login " +
+        "https://www.googleapis.com/auth/plus.me " +
+//        "https://www.googleapis.com/auth/plus.profile.emails.read " +
+        "profile " +
+        "email " +
+        "openid";
     public static final int REQUEST_CODE_WEB_AUTHENTICATE = 2;
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
