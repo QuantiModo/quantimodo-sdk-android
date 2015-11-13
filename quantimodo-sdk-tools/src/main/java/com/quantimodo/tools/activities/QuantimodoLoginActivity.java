@@ -2,8 +2,10 @@ package com.quantimodo.tools.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -24,6 +26,7 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -81,7 +84,16 @@ public class QuantimodoLoginActivity extends Activity {
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickUserAccount();
+                if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(QuantimodoLoginActivity.this) == ConnectionResult.SUCCESS)
+                    pickUserAccount();
+                else {
+                    new AlertDialog.Builder(QuantimodoLoginActivity.this)
+                            .setMessage(R.string.signing_error_google_play)
+                            .setTitle(android.R.string.dialog_alert_title)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .create()
+                            .show();
+                }
             }
         });
         Button buttonMoodi = (Button) findViewById(R.id.qmt_signin_moodimodo);
