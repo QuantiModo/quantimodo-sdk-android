@@ -7,10 +7,12 @@ import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class UnitCategory  {
+public class Source  {
   
   @SerializedName("id")
   private Integer id = null;
+  @SerializedName("client_id")
+  private String clientId = null;
   @SerializedName("name")
   private String name = null;
   @SerializedName("created_at")
@@ -32,9 +34,21 @@ public class UnitCategory  {
 
   
   /**
-   * Unit category name
+   * client_id
    **/
-  @ApiModelProperty(required = true, value = "Unit category name")
+  @ApiModelProperty(value = "client_id")
+  public String getClientId() {
+    return clientId;
+  }
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
+
+  
+  /**
+   * Name of the application or device
+   **/
+  @ApiModelProperty(required = true, value = "Name of the application or device")
   public String getName() {
     return name;
   }
@@ -71,9 +85,10 @@ public class UnitCategory  {
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UnitCategory {\n");
+    sb.append("class Source {\n");
     
     sb.append("  id: ").append(id).append("\n");
+    sb.append("  clientId: ").append(clientId).append("\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  createdAt: ").append(createdAt).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
