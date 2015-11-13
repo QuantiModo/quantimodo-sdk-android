@@ -161,3 +161,23 @@ The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.o
 
 ## Instructions to Deploy and Release Updates to the QM-Android SDK
 See http://central.sonatype.org/pages/ossrh-guide.html
+
+## Working with the SDK itself
+To work with the SDK you can add it manually as a folder inside your project. You have to do the following:
+
+- Create libs/qm-sdk folder
+- Create a file callaed .gitmodules on the root of your project and write the following code:
+
+```
+[submodule "libs/qm-sdk"]
+	path = libs/qm-sdk
+	url = git@github.com:QuantiModo/QuantiModo-SDK-Android.git
+```
+
+- Then execute the following commands on the terminal (at the root of the project):
+
+```
+git submodule init
+git submodule sync
+git submodule update
+```
