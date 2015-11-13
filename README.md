@@ -139,12 +139,36 @@ Please refer to [test sources](https://github.com/QuantiModo/QuantiModo-SDK-Andr
 
 Most useful components could be :
 
-- [QuantimodoWebAuthenticatorActivity](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/activities/QuantimodoWebAuthenticatorActivity.html) , to handle auth. Just launch this activity and it would handle whole auth process, from auth till getting access token
 - [AuthHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sdk/AuthHelper.html), can provide and refresh access token
 - [TrackingFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/TrackingFragment.html), would help you to submit tokens, could be configurated to show/submit to one category or to any
 - [FactorsFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/FactorsFragment.html), shows positive or negative correlations for effect
 - [ImportWebFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/ImportWebFragment.html), helps create connections with 3rd-party services
 - [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html), would help configure sync
+
+**Using the SDK Authenticator:**
+To use the authenticator you just to start `QuantimodoLoginActivity`, which provides signing in with Facebook, Google, and Quantimodo directly.
+ 
+The Activity can take two optional parameters:
+
+- `KEY_SHOW_LOGIN_AGAIN` (boolean): if true a toast will pop up right after the Activity starts saying: "You need to log in again"
+- `KEY_APP_NAME` (string): is used to customize the Quantimodo log in button. 
+If you provide it, the button text will be "Sign in with KEY_APP_NAME", if not, the text will just be: "Sign in".
+
+Example:
+
+```
+Intent auth = new Intent(context, QuantimodoLoginActivity.class);
+auth.putExtra(QuantimodoLoginActivity.KEY_APP_NAME, getString(R.string.app_name));
+auth.putExtra(QuantimodoLoginActivity.KEY_SHOW_LOGIN_AGAIN, true);
+startActivity(auth)
+```
+
+Of course authentication uses internet connection, so make sure to include `android.permission.INTERNET` on your AndroidManifest.xml file:
+
+```
+<!-- Add it as a child of <manifest> tag -->
+<uses-permission android:name="android.permission.INTERNET" />
+```
 
 ## Running tests
 
