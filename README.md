@@ -166,7 +166,7 @@ See http://central.sonatype.org/pages/ossrh-guide.html
 To work with the SDK you can add it manually as a folder inside your project. You have to do the following:
 
 - Create libs/qm-sdk folder
-- Create a file callaed .gitmodules on the root of your project and write the following code:
+- Create a file called .gitmodules on the root of your project and write the following code:
 
 ```
 [submodule "libs/qm-sdk"]
