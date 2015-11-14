@@ -192,5 +192,5 @@ git submodule sync
 git submodule update
 ```
 
-## Instructions to Deploy and Release Updates to the QM-Android SDK
+### Deploy and Release Updates to the QM-Android-SDK
 See http://central.sonatype.org/pages/ossrh-guide.html
