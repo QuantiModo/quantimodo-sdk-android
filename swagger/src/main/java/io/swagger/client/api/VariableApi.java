@@ -72,8 +72,8 @@ public class VariableApi {
    * @param status status
    * @param errorMessage error_message
    * @param lastSuccessfulUpdateTime When this variable or its settings were last updated
-   * @param createdAt When the record was first created in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
+   * @param createdAt When the record was first created in ISO 8601 datetime format
+   * @param updatedAt When the record was last updated in ISO 8601 datetime format
    * @param productUrl Product URL
    * @param imageUrl Image URL
    * @param price Price

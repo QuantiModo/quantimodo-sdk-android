@@ -56,8 +56,8 @@ public class VariableCategoryApi {
    * @param causeOnly A value of 1 indicates that this category is generally a cause in a causal relationship.  An example of a causeOnly category would be a category such as Work which would generally not be influenced by the behaviour of the user
    * @param _public Is category public
    * @param outcome outcome
-   * @param createdAt When the record was first created in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
+   * @param createdAt When the record was first created in ISO 8601 datetime format
+   * @param updatedAt When the record was last updated in ISO 8601 datetime format
    * @param imageUrl Image URL
    * @param defaultUnitId ID of the default unit for the category
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.

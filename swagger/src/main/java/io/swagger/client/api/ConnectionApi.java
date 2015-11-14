@@ -52,8 +52,8 @@ public class ConnectionApi {
    * @param updateStatus Indicates whether a connector is currently updated.
    * @param updateError Indicates if there was an error during the update.
    * @param lastSuccessfulUpdatedAt The time at which the connector was last successfully updated.
-   * @param createdAt When the record was first created in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
+   * @param createdAt When the record was first created in ISO 8601 datetime format
+   * @param updatedAt When the record was last updated in ISO 8601 datetime format
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.

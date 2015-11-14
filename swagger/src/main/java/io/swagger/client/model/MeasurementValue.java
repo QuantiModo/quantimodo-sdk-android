@@ -15,7 +15,7 @@ public class MeasurementValue  {
 
   
   /**
-   * When the measurement event occurred in ISO 8601 datetime format \"yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\"
+   * When the measurement event occurred in ISO 8601 datetime format
    **/
   @ApiModelProperty(required = true, value = "When the measurement event occurred in ISO 8601 datetime format")
   public Long getStartTime() {

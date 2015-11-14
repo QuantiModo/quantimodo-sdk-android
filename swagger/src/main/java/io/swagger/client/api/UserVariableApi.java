@@ -89,8 +89,8 @@ public class UserVariableApi {
    * @param latitude Latitude
    * @param longitude Longitude
    * @param location Location
-   * @param createdAt When the record was first created in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format \&quot;yyyy-MM-ddTHH\:mm\:ss.fffffffzzz\&quot;
+   * @param createdAt When the record was first created in ISO 8601 datetime format
+   * @param updatedAt When the record was last updated in ISO 8601 datetime format
    * @param outcome Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables
    * @param sources Comma-separated list of source names to limit variables to those sources
    * @param earliestSourceTime Earliest source time
