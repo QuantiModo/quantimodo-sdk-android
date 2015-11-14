@@ -3,8 +3,17 @@ QuantiModo-SDK-Android
 
 This is the software development kit for implementing enabling Android Applications to store or access user Quantified Self data in the QuantiModo database.
 
-## Modules
+# Getting Started
+
+## Step 1: Create Your Developer Account
+Create your free developer account and app at [https://admin.quantimo.do/register](https://admin.quantimo.do/register).
+
+## Step 2: Create Your App
+Create your app and get your client_id and client_secret from [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps).
+
+## Step 3: Add QuantiModo Dependencies to Your App
 The QuantiModo SDK for Android consists of two modules.  
+
 ### 1. SDK Module
 The sdk module contains the model classes and API client for QuantiModo API web-service.
 ### 2. QuantiModo Tools
