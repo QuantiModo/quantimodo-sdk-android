@@ -133,7 +133,7 @@ Refer to [test sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blo
 - [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html) helps to configure data synchonization between the mobile device and the web service.
 
 #### Using the SDK Authenticator
-To use the authenticator you just to start `QuantimodoLoginActivity`, which provides signing in with Facebook, Google, and Quantimodo directly.
+To use the authenticator, start `QuantimodoLoginActivity`. This allows the user to sign in with Facebook, Google, and Quantimodo directly.
  
 The QuantimodoLoginActivity can take two optional parameters:
 
