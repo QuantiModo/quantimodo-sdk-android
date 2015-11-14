@@ -7,12 +7,16 @@ import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class UnitCategory  {
+public class MeasurementExport  {
   
   @SerializedName("id")
   private Integer id = null;
-  @SerializedName("name")
-  private String name = null;
+  @SerializedName("user_id")
+  private Integer userId = null;
+  @SerializedName("status")
+  private String status = null;
+  @SerializedName("error_message")
+  private String errorMessage = null;
   @SerializedName("created_at")
   private Date createdAt = null;
   @SerializedName("updated_at")
@@ -32,14 +36,38 @@ public class UnitCategory  {
 
   
   /**
-   * Unit category name
+   * ID of User
    **/
-  @ApiModelProperty(required = true, value = "Unit category name")
-  public String getName() {
-    return name;
+  @ApiModelProperty(value = "ID of User")
+  public Integer getUserId() {
+    return userId;
   }
-  public void setName(String name) {
-    this.name = name;
+  public void setUserId(Integer userId) {
+    this.userId = userId;
+  }
+
+  
+  /**
+   * Status of Measurement Export
+   **/
+  @ApiModelProperty(value = "Status of Measurement Export")
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  
+  /**
+   * Error message
+   **/
+  @ApiModelProperty(value = "Error message")
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
   }
 
   
@@ -71,10 +99,12 @@ public class UnitCategory  {
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UnitCategory {\n");
+    sb.append("class MeasurementExport {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  name: ").append(name).append("\n");
+    sb.append("  userId: ").append(userId).append("\n");
+    sb.append("  status: ").append(status).append("\n");
+    sb.append("  errorMessage: ").append(errorMessage).append("\n");
     sb.append("  createdAt: ").append(createdAt).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
     sb.append("}\n");

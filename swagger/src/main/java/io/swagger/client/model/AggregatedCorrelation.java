@@ -7,14 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class Correlation  {
+public class AggregatedCorrelation  {
   
   @SerializedName("id")
   private Integer id = null;
-  @SerializedName("timestamp")
-  private Integer timestamp = null;
-  @SerializedName("user_id")
-  private Integer userId = null;
   @SerializedName("correlation")
   private Float correlation = null;
   @SerializedName("cause_id")
@@ -35,6 +31,10 @@ public class Correlation  {
   private Float optimalPearsonProduct = null;
   @SerializedName("vote")
   private Float vote = null;
+  @SerializedName("number_of_users")
+  private Integer numberOfUsers = null;
+  @SerializedName("number_of_correlations")
+  private Integer numberOfCorrelations = null;
   @SerializedName("statistical_significance")
   private Float statisticalSignificance = null;
   @SerializedName("cause_unit")
@@ -45,18 +45,24 @@ public class Correlation  {
   private Integer causeChanges = null;
   @SerializedName("effect_changes")
   private Integer effectChanges = null;
-  @SerializedName("qm_score")
-  private Float qmScore = null;
-  @SerializedName("error")
-  private String error = null;
+  @SerializedName("aggregate_qm_score")
+  private Float aggregateQmScore = null;
   @SerializedName("created_at")
   private Date createdAt = null;
   @SerializedName("updated_at")
   private Date updatedAt = null;
+  @SerializedName("status")
+  private String status = null;
+  @SerializedName("error_message")
+  private String errorMessage = null;
+  @SerializedName("last_successful_update_time")
+  private Date lastSuccessfulUpdateTime = null;
   @SerializedName("reverse_pearson_correlation_coefficient")
   private Float reversePearsonCorrelationCoefficient = null;
   @SerializedName("predictive_pearson_correlation_coefficient")
   private Float predictivePearsonCorrelationCoefficient = null;
+  @SerializedName("data_source")
+  private String dataSource = null;
 
   
   /**
@@ -68,30 +74,6 @@ public class Correlation  {
   }
   public void setId(Integer id) {
     this.id = id;
-  }
-
-  
-  /**
-   * Time at which correlation was calculated
-   **/
-  @ApiModelProperty(required = true, value = "Time at which correlation was calculated")
-  public Integer getTimestamp() {
-    return timestamp;
-  }
-  public void setTimestamp(Integer timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  
-  /**
-   * ID of user that owns this correlation
-   **/
-  @ApiModelProperty(required = true, value = "ID of user that owns this correlation")
-  public Integer getUserId() {
-    return userId;
-  }
-  public void setUserId(Integer userId) {
-    this.userId = userId;
   }
 
   
@@ -216,6 +198,30 @@ public class Correlation  {
 
   
   /**
+   * Number of Users by which correlation is aggregated
+   **/
+  @ApiModelProperty(required = true, value = "Number of Users by which correlation is aggregated")
+  public Integer getNumberOfUsers() {
+    return numberOfUsers;
+  }
+  public void setNumberOfUsers(Integer numberOfUsers) {
+    this.numberOfUsers = numberOfUsers;
+  }
+
+  
+  /**
+   * Number of Correlations by which correlation is aggregated
+   **/
+  @ApiModelProperty(required = true, value = "Number of Correlations by which correlation is aggregated")
+  public Integer getNumberOfCorrelations() {
+    return numberOfCorrelations;
+  }
+  public void setNumberOfCorrelations(Integer numberOfCorrelations) {
+    this.numberOfCorrelations = numberOfCorrelations;
+  }
+
+  
+  /**
    * A function of the effect size and sample size
    **/
   @ApiModelProperty(required = true, value = "A function of the effect size and sample size")
@@ -276,26 +282,14 @@ public class Correlation  {
 
   
   /**
-   * QM Score
+   * Aggregated QM Score
    **/
-  @ApiModelProperty(required = true, value = "QM Score")
-  public Float getQmScore() {
-    return qmScore;
+  @ApiModelProperty(required = true, value = "Aggregated QM Score")
+  public Float getAggregateQmScore() {
+    return aggregateQmScore;
   }
-  public void setQmScore(Float qmScore) {
-    this.qmScore = qmScore;
-  }
-
-  
-  /**
-   * error
-   **/
-  @ApiModelProperty(required = true, value = "error")
-  public String getError() {
-    return error;
-  }
-  public void setError(String error) {
-    this.error = error;
+  public void setAggregateQmScore(Float aggregateQmScore) {
+    this.aggregateQmScore = aggregateQmScore;
   }
 
   
@@ -324,6 +318,42 @@ public class Correlation  {
 
   
   /**
+   * Status
+   **/
+  @ApiModelProperty(required = true, value = "Status")
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  
+  /**
+   * Error Message
+   **/
+  @ApiModelProperty(required = true, value = "Error Message")
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
+
+  
+  /**
+   * Last Successful update time
+   **/
+  @ApiModelProperty(required = true, value = "Last Successful update time")
+  public Date getLastSuccessfulUpdateTime() {
+    return lastSuccessfulUpdateTime;
+  }
+  public void setLastSuccessfulUpdateTime(Date lastSuccessfulUpdateTime) {
+    this.lastSuccessfulUpdateTime = lastSuccessfulUpdateTime;
+  }
+
+  
+  /**
    * Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation
    **/
   @ApiModelProperty(required = true, value = "Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation")
@@ -347,15 +377,25 @@ public class Correlation  {
   }
 
   
+  /**
+   * Source of data for this correlation
+   **/
+  @ApiModelProperty(value = "Source of data for this correlation")
+  public String getDataSource() {
+    return dataSource;
+  }
+  public void setDataSource(String dataSource) {
+    this.dataSource = dataSource;
+  }
+
+  
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Correlation {\n");
+    sb.append("class AggregatedCorrelation {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  timestamp: ").append(timestamp).append("\n");
-    sb.append("  userId: ").append(userId).append("\n");
     sb.append("  correlation: ").append(correlation).append("\n");
     sb.append("  causeId: ").append(causeId).append("\n");
     sb.append("  effectId: ").append(effectId).append("\n");
@@ -366,17 +406,22 @@ public class Correlation  {
     sb.append("  valuePredictingLowOutcome: ").append(valuePredictingLowOutcome).append("\n");
     sb.append("  optimalPearsonProduct: ").append(optimalPearsonProduct).append("\n");
     sb.append("  vote: ").append(vote).append("\n");
+    sb.append("  numberOfUsers: ").append(numberOfUsers).append("\n");
+    sb.append("  numberOfCorrelations: ").append(numberOfCorrelations).append("\n");
     sb.append("  statisticalSignificance: ").append(statisticalSignificance).append("\n");
     sb.append("  causeUnit: ").append(causeUnit).append("\n");
     sb.append("  causeUnitId: ").append(causeUnitId).append("\n");
     sb.append("  causeChanges: ").append(causeChanges).append("\n");
     sb.append("  effectChanges: ").append(effectChanges).append("\n");
-    sb.append("  qmScore: ").append(qmScore).append("\n");
-    sb.append("  error: ").append(error).append("\n");
+    sb.append("  aggregateQmScore: ").append(aggregateQmScore).append("\n");
     sb.append("  createdAt: ").append(createdAt).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
+    sb.append("  status: ").append(status).append("\n");
+    sb.append("  errorMessage: ").append(errorMessage).append("\n");
+    sb.append("  lastSuccessfulUpdateTime: ").append(lastSuccessfulUpdateTime).append("\n");
     sb.append("  reversePearsonCorrelationCoefficient: ").append(reversePearsonCorrelationCoefficient).append("\n");
     sb.append("  predictivePearsonCorrelationCoefficient: ").append(predictivePearsonCorrelationCoefficient).append("\n");
+    sb.append("  dataSource: ").append(dataSource).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

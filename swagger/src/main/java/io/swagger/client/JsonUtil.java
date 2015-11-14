@@ -35,68 +35,48 @@ public class JsonUtil {
   public static Type getListTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
-    if ("CommonResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<List<CommonResponse>>(){}.getType();
+    if ("MeasurementValue".equalsIgnoreCase(className)) {
+      return new TypeToken<List<MeasurementValue>>(){}.getType();
     }
     
-    if ("HumanTime".equalsIgnoreCase(className)) {
-      return new TypeToken<List<HumanTime>>(){}.getType();
+    if ("MeasurementPost".equalsIgnoreCase(className)) {
+      return new TypeToken<List<MeasurementPost>>(){}.getType();
     }
     
-    if ("ConnectorInstruction".equalsIgnoreCase(className)) {
-      return new TypeToken<List<ConnectorInstruction>>(){}.getType();
+    if ("AggregatedCorrelation".equalsIgnoreCase(className)) {
+      return new TypeToken<List<AggregatedCorrelation>>(){}.getType();
+    }
+    
+    if ("CommonVariableRelationship".equalsIgnoreCase(className)) {
+      return new TypeToken<List<CommonVariableRelationship>>(){}.getType();
+    }
+    
+    if ("Connection".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Connection>>(){}.getType();
     }
     
     if ("Connector".equalsIgnoreCase(className)) {
       return new TypeToken<List<Connector>>(){}.getType();
     }
     
-    if ("ConnectorInfo".equalsIgnoreCase(className)) {
-      return new TypeToken<List<ConnectorInfo>>(){}.getType();
-    }
-    
-    if ("ConnectorInfoHistoryItem".equalsIgnoreCase(className)) {
-      return new TypeToken<List<ConnectorInfoHistoryItem>>(){}.getType();
-    }
-    
-    if ("ConversionStep".equalsIgnoreCase(className)) {
-      return new TypeToken<List<ConversionStep>>(){}.getType();
-    }
-    
     if ("Correlation".equalsIgnoreCase(className)) {
       return new TypeToken<List<Correlation>>(){}.getType();
     }
     
-    if ("JsonErrorResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<List<JsonErrorResponse>>(){}.getType();
-    }
-    
-    if ("MeasurementSet".equalsIgnoreCase(className)) {
-      return new TypeToken<List<MeasurementSet>>(){}.getType();
+    if ("Credential".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Credential>>(){}.getType();
     }
     
     if ("Measurement".equalsIgnoreCase(className)) {
       return new TypeToken<List<Measurement>>(){}.getType();
     }
     
-    if ("MeasurementRange".equalsIgnoreCase(className)) {
-      return new TypeToken<List<MeasurementRange>>(){}.getType();
+    if ("MeasurementExport".equalsIgnoreCase(className)) {
+      return new TypeToken<List<MeasurementExport>>(){}.getType();
     }
     
-    if ("MeasurementSource".equalsIgnoreCase(className)) {
-      return new TypeToken<List<MeasurementSource>>(){}.getType();
-    }
-    
-    if ("Pairs".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Pairs>>(){}.getType();
-    }
-    
-    if ("Permission".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Permission>>(){}.getType();
-    }
-    
-    if ("PostCorrelation".equalsIgnoreCase(className)) {
-      return new TypeToken<List<PostCorrelation>>(){}.getType();
+    if ("Source".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Source>>(){}.getType();
     }
     
     if ("Unit".equalsIgnoreCase(className)) {
@@ -107,32 +87,20 @@ public class JsonUtil {
       return new TypeToken<List<UnitCategory>>(){}.getType();
     }
     
-    if ("User".equalsIgnoreCase(className)) {
-      return new TypeToken<List<User>>(){}.getType();
+    if ("UnitConversion".equalsIgnoreCase(className)) {
+      return new TypeToken<List<UnitConversion>>(){}.getType();
     }
     
-    if ("UserTokenRequest".equalsIgnoreCase(className)) {
-      return new TypeToken<List<UserTokenRequest>>(){}.getType();
+    if ("Update".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Update>>(){}.getType();
     }
     
-    if ("UserTokenSuccessfulResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<List<UserTokenSuccessfulResponse>>(){}.getType();
+    if ("UserVariable".equalsIgnoreCase(className)) {
+      return new TypeToken<List<UserVariable>>(){}.getType();
     }
     
-    if ("UserTokenFailedResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<List<UserTokenFailedResponse>>(){}.getType();
-    }
-    
-    if ("UserTokenRequestInnerUserField".equalsIgnoreCase(className)) {
-      return new TypeToken<List<UserTokenRequestInnerUserField>>(){}.getType();
-    }
-    
-    if ("UserTokenSuccessfulResponseInnerUserField".equalsIgnoreCase(className)) {
-      return new TypeToken<List<UserTokenSuccessfulResponseInnerUserField>>(){}.getType();
-    }
-    
-    if ("ValueObject".equalsIgnoreCase(className)) {
-      return new TypeToken<List<ValueObject>>(){}.getType();
+    if ("UserVariableRelationship".equalsIgnoreCase(className)) {
+      return new TypeToken<List<UserVariableRelationship>>(){}.getType();
     }
     
     if ("Variable".equalsIgnoreCase(className)) {
@@ -143,16 +111,152 @@ public class JsonUtil {
       return new TypeToken<List<VariableCategory>>(){}.getType();
     }
     
-    if ("UserVariables".equalsIgnoreCase(className)) {
-      return new TypeToken<List<UserVariables>>(){}.getType();
+    if ("VariableUserSource".equalsIgnoreCase(className)) {
+      return new TypeToken<List<VariableUserSource>>(){}.getType();
     }
     
-    if ("VariableNew".equalsIgnoreCase(className)) {
-      return new TypeToken<List<VariableNew>>(){}.getType();
+    if ("Vote".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Vote>>(){}.getType();
     }
     
-    if ("VariablesNew".equalsIgnoreCase(className)) {
-      return new TypeToken<List<VariablesNew>>(){}.getType();
+    if ("InlineResponse200".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse200>>(){}.getType();
+    }
+    
+    if ("InlineResponse2001".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2001>>(){}.getType();
+    }
+    
+    if ("InlineResponse2002".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2002>>(){}.getType();
+    }
+    
+    if ("InlineResponse2003".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2003>>(){}.getType();
+    }
+    
+    if ("InlineResponse2004".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2004>>(){}.getType();
+    }
+    
+    if ("InlineResponse2005".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2005>>(){}.getType();
+    }
+    
+    if ("InlineResponse2006".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2006>>(){}.getType();
+    }
+    
+    if ("InlineResponse2007".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2007>>(){}.getType();
+    }
+    
+    if ("InlineResponse2008".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2008>>(){}.getType();
+    }
+    
+    if ("InlineResponse2009".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2009>>(){}.getType();
+    }
+    
+    if ("InlineResponse20010".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20010>>(){}.getType();
+    }
+    
+    if ("InlineResponse20011".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20011>>(){}.getType();
+    }
+    
+    if ("InlineResponse20012".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20012>>(){}.getType();
+    }
+    
+    if ("InlineResponse20013".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20013>>(){}.getType();
+    }
+    
+    if ("InlineResponse20014".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20014>>(){}.getType();
+    }
+    
+    if ("InlineResponse20015".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20015>>(){}.getType();
+    }
+    
+    if ("InlineResponse20016".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20016>>(){}.getType();
+    }
+    
+    if ("InlineResponse20017".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20017>>(){}.getType();
+    }
+    
+    if ("InlineResponse20018".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20018>>(){}.getType();
+    }
+    
+    if ("InlineResponse20019".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20019>>(){}.getType();
+    }
+    
+    if ("InlineResponse20020".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20020>>(){}.getType();
+    }
+    
+    if ("InlineResponse20021".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20021>>(){}.getType();
+    }
+    
+    if ("InlineResponse20022".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20022>>(){}.getType();
+    }
+    
+    if ("InlineResponse20023".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20023>>(){}.getType();
+    }
+    
+    if ("InlineResponse20024".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20024>>(){}.getType();
+    }
+    
+    if ("InlineResponse20025".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20025>>(){}.getType();
+    }
+    
+    if ("InlineResponse20026".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20026>>(){}.getType();
+    }
+    
+    if ("InlineResponse20027".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20027>>(){}.getType();
+    }
+    
+    if ("InlineResponse20028".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20028>>(){}.getType();
+    }
+    
+    if ("InlineResponse20029".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20029>>(){}.getType();
+    }
+    
+    if ("InlineResponse20030".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20030>>(){}.getType();
+    }
+    
+    if ("InlineResponse20031".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20031>>(){}.getType();
+    }
+    
+    if ("InlineResponse20032".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20032>>(){}.getType();
+    }
+    
+    if ("InlineResponse20033".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20033>>(){}.getType();
+    }
+    
+    if ("InlineResponse20034".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse20034>>(){}.getType();
     }
     
     return new TypeToken<List<Object>>(){}.getType();
@@ -161,68 +265,48 @@ public class JsonUtil {
   public static Type getTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
-    if ("CommonResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<CommonResponse>(){}.getType();
+    if ("MeasurementValue".equalsIgnoreCase(className)) {
+      return new TypeToken<MeasurementValue>(){}.getType();
     }
     
-    if ("HumanTime".equalsIgnoreCase(className)) {
-      return new TypeToken<HumanTime>(){}.getType();
+    if ("MeasurementPost".equalsIgnoreCase(className)) {
+      return new TypeToken<MeasurementPost>(){}.getType();
     }
     
-    if ("ConnectorInstruction".equalsIgnoreCase(className)) {
-      return new TypeToken<ConnectorInstruction>(){}.getType();
+    if ("AggregatedCorrelation".equalsIgnoreCase(className)) {
+      return new TypeToken<AggregatedCorrelation>(){}.getType();
+    }
+    
+    if ("CommonVariableRelationship".equalsIgnoreCase(className)) {
+      return new TypeToken<CommonVariableRelationship>(){}.getType();
+    }
+    
+    if ("Connection".equalsIgnoreCase(className)) {
+      return new TypeToken<Connection>(){}.getType();
     }
     
     if ("Connector".equalsIgnoreCase(className)) {
       return new TypeToken<Connector>(){}.getType();
     }
     
-    if ("ConnectorInfo".equalsIgnoreCase(className)) {
-      return new TypeToken<ConnectorInfo>(){}.getType();
-    }
-    
-    if ("ConnectorInfoHistoryItem".equalsIgnoreCase(className)) {
-      return new TypeToken<ConnectorInfoHistoryItem>(){}.getType();
-    }
-    
-    if ("ConversionStep".equalsIgnoreCase(className)) {
-      return new TypeToken<ConversionStep>(){}.getType();
-    }
-    
     if ("Correlation".equalsIgnoreCase(className)) {
       return new TypeToken<Correlation>(){}.getType();
     }
     
-    if ("JsonErrorResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<JsonErrorResponse>(){}.getType();
-    }
-    
-    if ("MeasurementSet".equalsIgnoreCase(className)) {
-      return new TypeToken<MeasurementSet>(){}.getType();
+    if ("Credential".equalsIgnoreCase(className)) {
+      return new TypeToken<Credential>(){}.getType();
     }
     
     if ("Measurement".equalsIgnoreCase(className)) {
       return new TypeToken<Measurement>(){}.getType();
     }
     
-    if ("MeasurementRange".equalsIgnoreCase(className)) {
-      return new TypeToken<MeasurementRange>(){}.getType();
+    if ("MeasurementExport".equalsIgnoreCase(className)) {
+      return new TypeToken<MeasurementExport>(){}.getType();
     }
     
-    if ("MeasurementSource".equalsIgnoreCase(className)) {
-      return new TypeToken<MeasurementSource>(){}.getType();
-    }
-    
-    if ("Pairs".equalsIgnoreCase(className)) {
-      return new TypeToken<Pairs>(){}.getType();
-    }
-    
-    if ("Permission".equalsIgnoreCase(className)) {
-      return new TypeToken<Permission>(){}.getType();
-    }
-    
-    if ("PostCorrelation".equalsIgnoreCase(className)) {
-      return new TypeToken<PostCorrelation>(){}.getType();
+    if ("Source".equalsIgnoreCase(className)) {
+      return new TypeToken<Source>(){}.getType();
     }
     
     if ("Unit".equalsIgnoreCase(className)) {
@@ -233,32 +317,20 @@ public class JsonUtil {
       return new TypeToken<UnitCategory>(){}.getType();
     }
     
-    if ("User".equalsIgnoreCase(className)) {
-      return new TypeToken<User>(){}.getType();
+    if ("UnitConversion".equalsIgnoreCase(className)) {
+      return new TypeToken<UnitConversion>(){}.getType();
     }
     
-    if ("UserTokenRequest".equalsIgnoreCase(className)) {
-      return new TypeToken<UserTokenRequest>(){}.getType();
+    if ("Update".equalsIgnoreCase(className)) {
+      return new TypeToken<Update>(){}.getType();
     }
     
-    if ("UserTokenSuccessfulResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<UserTokenSuccessfulResponse>(){}.getType();
+    if ("UserVariable".equalsIgnoreCase(className)) {
+      return new TypeToken<UserVariable>(){}.getType();
     }
     
-    if ("UserTokenFailedResponse".equalsIgnoreCase(className)) {
-      return new TypeToken<UserTokenFailedResponse>(){}.getType();
-    }
-    
-    if ("UserTokenRequestInnerUserField".equalsIgnoreCase(className)) {
-      return new TypeToken<UserTokenRequestInnerUserField>(){}.getType();
-    }
-    
-    if ("UserTokenSuccessfulResponseInnerUserField".equalsIgnoreCase(className)) {
-      return new TypeToken<UserTokenSuccessfulResponseInnerUserField>(){}.getType();
-    }
-    
-    if ("ValueObject".equalsIgnoreCase(className)) {
-      return new TypeToken<ValueObject>(){}.getType();
+    if ("UserVariableRelationship".equalsIgnoreCase(className)) {
+      return new TypeToken<UserVariableRelationship>(){}.getType();
     }
     
     if ("Variable".equalsIgnoreCase(className)) {
@@ -269,16 +341,152 @@ public class JsonUtil {
       return new TypeToken<VariableCategory>(){}.getType();
     }
     
-    if ("UserVariables".equalsIgnoreCase(className)) {
-      return new TypeToken<UserVariables>(){}.getType();
+    if ("VariableUserSource".equalsIgnoreCase(className)) {
+      return new TypeToken<VariableUserSource>(){}.getType();
     }
     
-    if ("VariableNew".equalsIgnoreCase(className)) {
-      return new TypeToken<VariableNew>(){}.getType();
+    if ("Vote".equalsIgnoreCase(className)) {
+      return new TypeToken<Vote>(){}.getType();
     }
     
-    if ("VariablesNew".equalsIgnoreCase(className)) {
-      return new TypeToken<VariablesNew>(){}.getType();
+    if ("InlineResponse200".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse200>(){}.getType();
+    }
+    
+    if ("InlineResponse2001".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2001>(){}.getType();
+    }
+    
+    if ("InlineResponse2002".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2002>(){}.getType();
+    }
+    
+    if ("InlineResponse2003".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2003>(){}.getType();
+    }
+    
+    if ("InlineResponse2004".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2004>(){}.getType();
+    }
+    
+    if ("InlineResponse2005".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2005>(){}.getType();
+    }
+    
+    if ("InlineResponse2006".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2006>(){}.getType();
+    }
+    
+    if ("InlineResponse2007".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2007>(){}.getType();
+    }
+    
+    if ("InlineResponse2008".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2008>(){}.getType();
+    }
+    
+    if ("InlineResponse2009".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2009>(){}.getType();
+    }
+    
+    if ("InlineResponse20010".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20010>(){}.getType();
+    }
+    
+    if ("InlineResponse20011".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20011>(){}.getType();
+    }
+    
+    if ("InlineResponse20012".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20012>(){}.getType();
+    }
+    
+    if ("InlineResponse20013".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20013>(){}.getType();
+    }
+    
+    if ("InlineResponse20014".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20014>(){}.getType();
+    }
+    
+    if ("InlineResponse20015".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20015>(){}.getType();
+    }
+    
+    if ("InlineResponse20016".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20016>(){}.getType();
+    }
+    
+    if ("InlineResponse20017".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20017>(){}.getType();
+    }
+    
+    if ("InlineResponse20018".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20018>(){}.getType();
+    }
+    
+    if ("InlineResponse20019".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20019>(){}.getType();
+    }
+    
+    if ("InlineResponse20020".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20020>(){}.getType();
+    }
+    
+    if ("InlineResponse20021".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20021>(){}.getType();
+    }
+    
+    if ("InlineResponse20022".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20022>(){}.getType();
+    }
+    
+    if ("InlineResponse20023".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20023>(){}.getType();
+    }
+    
+    if ("InlineResponse20024".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20024>(){}.getType();
+    }
+    
+    if ("InlineResponse20025".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20025>(){}.getType();
+    }
+    
+    if ("InlineResponse20026".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20026>(){}.getType();
+    }
+    
+    if ("InlineResponse20027".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20027>(){}.getType();
+    }
+    
+    if ("InlineResponse20028".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20028>(){}.getType();
+    }
+    
+    if ("InlineResponse20029".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20029>(){}.getType();
+    }
+    
+    if ("InlineResponse20030".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20030>(){}.getType();
+    }
+    
+    if ("InlineResponse20031".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20031>(){}.getType();
+    }
+    
+    if ("InlineResponse20032".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20032>(){}.getType();
+    }
+    
+    if ("InlineResponse20033".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20033>(){}.getType();
+    }
+    
+    if ("InlineResponse20034".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse20034>(){}.getType();
     }
     
     return new TypeToken<Object>(){}.getType();
