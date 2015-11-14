@@ -4,8 +4,14 @@ QuantiModo-SDK-Android
 This is the software development kit for implementing enabling Android Applications to store or access user Quantified Self data in the QuantiModo database.
 
 ## Modules
-* [SDK](#about-sdk)
-* [Quantimodo-Tools](#about-quantimodo-tools)
+The QuantiModo SDK for Android consists of two modules.  
+### 1. SDK Module
+The sdk module contains the model classes and API client for QuantiModo API web-service.
+### 2. QuantiModo Tools
+The qtools module is a set of components that make it easy to create application that will take full advantage of the QuantiModo platform. qtools handles:
+- Auth and token management
+- Data synchonization with the QuantiModo we service
+- Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
 
 ## Install
 Library can be obtained from OSS Sonatype repository.
@@ -43,11 +49,6 @@ Gradle:
 ```
 compile 'com.quantimodo.android:sdk-tools:1.0'
 ```
-
-
-## About SDK
-
-This SDK contains model classes and API client for QuantiModo web-service.
 
 ### How to create a new Android project and build it using the QuantiModo SDK
 
@@ -97,13 +98,7 @@ Or you can find examples in [tests](https://github.com/QuantiModo/QuantiModo-SDK
 
 ## About Quantimodo-Tools
 
-Quantimodo Tools , set of components to create application that would work with QuantiModo.
 
-This tools handles:
-
-- Auth and token management
-- Sync helper ( to handle sync with QuantiModo )
-- Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
 
 ### How to create a new Android project and build it using the Quantimodo-Tools
 
