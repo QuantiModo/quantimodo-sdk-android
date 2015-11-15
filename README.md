@@ -109,12 +109,12 @@ compile 'com.quantimodo.android:sdk-tools:1.0'
 
 #### Configure QTools
 
-App uses direct injection (DI) to initialize components. Several components need to be initializedto use QTools:
+Dependency injection (DI) is used to initialize components. Several components need to be initialized to use QTools:
 
-1. [Module](http://square.github.io/dagger/#using) that would provide dependencies
-2. ToolsPrefs , that contain info about endpoint ( base URL, application source, permissions )
-3. SpiceService, in order to configure caching
-4. SyncService, if data should be synced
+1. [Dagger](http://square.github.io/dagger/#using) facilitates dependency injection
+2. ToolsPrefs contains info about the endpoint such as the base URL, application source, permissions
+3. SpiceService is used to configure caching
+4. SyncService is used to sync data between the app and QuantiModo
 5. [QApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html) interface, which provides dependencies to other components.
 
 First, you need to implement the [QApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html) interface,
