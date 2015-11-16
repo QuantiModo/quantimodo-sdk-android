@@ -22,10 +22,6 @@ The qtools module is a set of components that make it easy to create application
 - Data synchonization with the QuantiModo we service
 - Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
 
-## Install
-Library can be obtained from OSS Sonatype repository.
-
-
 ### Create a new Android project and build it using the QuantiModo SDK
 
 1. Create regular Android project.
@@ -201,4 +197,5 @@ git submodule update
 ### Deploy and Release Updates to the QM-Android-SDK
 
 #### Gradle SDK Distribution
+
 The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. See http://central.sonatype.org/pages/ossrh-guide.html
