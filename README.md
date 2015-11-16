@@ -9,7 +9,7 @@ This is the software development kit for implementing enabling Android Applicati
 Create your free developer account and app at [https://admin.quantimo.do/register](https://admin.quantimo.do/register).
 
 ### Step 2: Create Your App
-Create your app and get your client_id and client_secret from [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps), save them to set up your project.
+Create your app on [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps) and get your client_id and client_secret from it, save them to set up your project later.
 
 ### Step 3: Add QuantiModo Dependencies to Your App
 The QuantiModo SDK for Android consists of two modules. 
@@ -33,41 +33,21 @@ Or using Gradle:
 compile 'com.quantimodo.android:sdk:2.2.4'
 ```
 
-**2. QuantiModo Tools**
-
-The qtools module is a set of components that make it easy to create application that will take full advantage of the QuantiModo platform. qtools handles:
-- Auth and token management
-- Data synchonization with the QuantiModo we service
-- Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
-
-Using Maven:
-```
-<dependency>
-  <groupId>com.quantimodo.android</groupId>
-  <artifactId>sdk-tools</artifactId>
-  <version>1.0</version>
-  <type>aar</type>
-</dependency>
-```
-
-Or using Gradle:
-```
-compile 'com.quantimodo.android:sdk-tools:1.0'
-```
-
 **Use the SDK as a submodule**
-Create a folder where to place the SDK, let's say libs/, and on that folder execute:
+Create a folder, for example libs/, and on that folder execute:
 ```
 $ git submodule add git@github.com:QuantiModo/QuantiModo-SDK-Android.git
 ```
-After that the folder 'Quantimodo-SDK-Android' was created containing the SDK submodule.
+After that, the folder 'Quantimodo-SDK-Android' was created containing the SDK as a submodule.
 
 ### Step 4. Enable your user to connect to the QM API
 
-To start using the SDK you just have to instantiate QuantimodoApiV2, as follows:
+To use SDK you need to obtain [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication).
+After that you can get instance of QuantimodoApiV2.
 
 ```
-QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
+String token = "oauth_token";
+QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null, token);
 ```
 
 ### Step 5. Send user data to the QM API
@@ -99,54 +79,22 @@ For more info, please check the [JavaDocs](http://quantimodo.github.io/QuantiMod
 You can find examples of usage in our [tests](https://github.com/QuantiModo/QuantiModo-SDK-Android/tree/develop/sdk/src/androidTest/).
 
 ### Step 6. Get your user's data from the QM API
-how to use the SDk to get measurements and stuff.
+You can get a QuantimodoUser object like this:
+
+```
+QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
+
+SdkResponse<QuantimodoUser> response = api.getUser(context, token);
+```
 
 ### Step 7. Add QTools to your application
-dependencies and stuff
 
-### Step 8. Import user data from 3rd party sources
-how to use the quantimodo login
-
-### Create a new Android project and build it using the QuantiModo SDK
-
-1. Create regular Android project.
-2. Add the SDK as [dependency](#sdk):
+The Qtools module is a set of components that make it easy to create application that will take full advantage of the QuantiModo platform. Qtools handles:
+- Auth and token management
+- Data synchonization with the QuantiModo we service
+- Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
 
 Using Maven:
-```
-<dependency>
-  <groupId>com.quantimodo.android</groupId>
-  <artifactId>sdk</artifactId>
-  <version>2.2.4</version>
-  <type>aar</type>
-</dependency>
-```
-
-Or using Gradle:
-```
-compile 'com.quantimodo.android:sdk:2.2.4'
-```
-
-#### Configure the SDK Module
-
-To use SDK you need to obtain [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication).
-After that you can get instance of QuantimodoApiV2.
-
-```
-String token = "oauth_token";
-QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
-SdkResponse<User> response = api.getUser(ctx,token);
-```
-
-#### Using the SDK Module
-
-
-## Quantimodo-Tools
-
-1. Create a regular Android project. 
-2. Add QuantiModo tools as a dependency:
-
-#### Using Maven:
 ```
 <dependency>
   <groupId>com.quantimodo.android</groupId>
@@ -156,7 +104,7 @@ SdkResponse<User> response = api.getUser(ctx,token);
 </dependency>
 ```
 
-#### Or using Gradle:
+Or using Gradle:
 ```
 compile 'com.quantimodo.android:sdk-tools:1.0'
 ```
@@ -195,7 +143,10 @@ Refer to [test sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blo
 - [ImportWebFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/ImportWebFragment.html) creates a view where your users can import their data from 3rd-party services like Fitbit, Withings, etc.
 - [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html) helps to configure data synchonization between the mobile device and the web service.
 
-#### Using the SDK Authenticator
+
+### Step 8. Import user data from 3rd party sources
+Qtools provides an authenticator to easily manage your users.
+
 To use the authenticator, start `QuantimodoLoginActivity`. This allows the user to sign in with Facebook, Google, and Quantimodo directly.
  
 The QuantimodoLoginActivity can take two optional parameters:
