@@ -176,9 +176,6 @@ Connect your device and run in the project root:
 
 You can also run them in [Android Studio](http://developer.android.com/training/testing/unit-testing/local-unit-tests.html).
 
-## Gradle SDK Distribution
-The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. 
-
 [Guide To Publish An Aar To Maven Using Gradle](http://www.survivingwithandroid.com/2014/05/android-guide-to-publish-aar-to-maven-gradle.html)
 
 ## Developing the SDK itself
@@ -202,4 +199,6 @@ git submodule update
 ```
 
 ### Deploy and Release Updates to the QM-Android-SDK
-See http://central.sonatype.org/pages/ossrh-guide.html
+
+#### Gradle SDK Distribution
+The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. See http://central.sonatype.org/pages/ossrh-guide.html
