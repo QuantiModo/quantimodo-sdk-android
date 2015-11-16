@@ -34,7 +34,8 @@ compile 'com.quantimodo.android:sdk:2.2.4'
 ```
 
 **Use the SDK as a submodule**
-Create a folder, for example libs/, and on that folder execute:
+
+Create a folder, for example, libs/ and then execute:
 ```
 $ git submodule add git@github.com:QuantiModo/QuantiModo-SDK-Android.git
 ```
@@ -42,8 +43,8 @@ After that, the folder 'Quantimodo-SDK-Android' was created containing the SDK a
 
 ### Step 4. Enable your user to connect to the QM API
 
-To use SDK you need to obtain [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication).
-After that you can get instance of QuantimodoApiV2.
+To use SDK, you need to obtain an [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication).
+After that you can get an instance of QuantimodoApiV2.
 
 ```
 String token = "oauth_token";
@@ -51,7 +52,7 @@ QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null, token);
 ```
 
 ### Step 5. Send user data to the QM API
-Here is an example of how to to submit measurement to QuantiModo service for variable "Overall Mood"
+Here is an example of how to submit a measurement to QuantiModo service for variable "Overall Mood"
 
 ```
 //Variable Category : Mood
@@ -89,9 +90,9 @@ SdkResponse<QuantimodoUser> response = api.getUser(context, token);
 
 ### Step 7. Add QTools to your application
 
-The Qtools module is a set of components that make it easy to create application that will take full advantage of the QuantiModo platform. Qtools handles:
+The Qtools module is a set of components that make it easy to create an application that will take full advantage of the QuantiModo platform. Qtools handles:
 - Auth and token management
-- Data synchonization with the QuantiModo we service
+- Data synchronization with the QuantiModo we service
 - Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
 
 Using Maven:
@@ -141,7 +142,7 @@ Refer to [test sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blo
 - [TrackingFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/TrackingFragment.html), would help you to submit tokens, could be configurated to show/submit to one category or to any
 - [FactorsFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/FactorsFragment.html) lists the strongest predictors for a specified outcome such as Overall Mood or Back Pain.
 - [ImportWebFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/ImportWebFragment.html) creates a view where your users can import their data from 3rd-party services like Fitbit, Withings, etc.
-- [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html) helps to configure data synchonization between the mobile device and the web service.
+- [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html) helps to configure data synchronization between the mobile device and the web service.
 
 
 ### Step 8. Import user data from 3rd party sources
