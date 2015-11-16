@@ -35,15 +35,21 @@ compile 'com.quantimodo.android:sdk:2.2.4'
 
 **Use the SDK as a submodule**
 
-Create a folder, for example, libs/ and then execute:
+Create a folder, for example, libs/ and inside it execute:
 ```
 $ git submodule add git@github.com:QuantiModo/QuantiModo-SDK-Android.git
 ```
-After that, the folder 'Quantimodo-SDK-Android' was created containing the SDK as a submodule.
+After that, the folder 'Quantimodo-SDK-Android' will be created containing the SDK as a submodule.
 
 ### Step 4. Enable your user to connect to the QM API
 
-To use SDK, you need to obtain an [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication).
+To use SDK, you need to obtain an [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication), this is where you have to use your client_id and client_secret to connect with the API
+
+Basically, you have to follow these steps:
+- Request an authorization code
+- Request the access token
+- Refreshing the access token
+
 After that you can get an instance of QuantimodoApiV2.
 
 ```
