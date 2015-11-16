@@ -5,22 +5,107 @@ This is the software development kit for implementing enabling Android Applicati
 
 # Getting Started
 
-## Step 1: Create Your Developer Account
+### Step 1: Create Your Developer Account
 Create your free developer account and app at [https://admin.quantimo.do/register](https://admin.quantimo.do/register).
 
-## Step 2: Create Your App
-Create your app and get your client_id and client_secret from [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps).
+### Step 2: Create Your App
+Create your app and get your client_id and client_secret from [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps), save them to set up your project.
 
-## Step 3: Add QuantiModo Dependencies to Your App
-The QuantiModo SDK for Android consists of two modules.  
+### Step 3: Add QuantiModo Dependencies to Your App
+The QuantiModo SDK for Android consists of two modules. 
 
-### 1. SDK Module
-The sdk module contains the model classes and API client for QuantiModo API web-service.
-### 2. QuantiModo Tools
+**1. SDK Module**
+
+The SDK module contains the model classes and API client for QuantiModo API web-service.
+
+Using Maven:
+```
+<dependency>
+  <groupId>com.quantimodo.android</groupId>
+  <artifactId>sdk</artifactId>
+  <version>2.2.4</version>
+  <type>aar</type>
+</dependency>
+```
+
+Or using Gradle:
+```
+compile 'com.quantimodo.android:sdk:2.2.4'
+```
+
+**2. QuantiModo Tools**
+
 The qtools module is a set of components that make it easy to create application that will take full advantage of the QuantiModo platform. qtools handles:
 - Auth and token management
 - Data synchonization with the QuantiModo we service
 - Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
+
+Using Maven:
+```
+<dependency>
+  <groupId>com.quantimodo.android</groupId>
+  <artifactId>sdk-tools</artifactId>
+  <version>1.0</version>
+  <type>aar</type>
+</dependency>
+```
+
+Or using Gradle:
+```
+compile 'com.quantimodo.android:sdk-tools:1.0'
+```
+
+**Use the SDK as a submodule**
+Create a folder where to place the SDK, let's say libs/, and on that folder execute:
+```
+$ git submodule add git@github.com:QuantiModo/QuantiModo-SDK-Android.git
+```
+After that the folder 'Quantimodo-SDK-Android' was created containing the SDK submodule.
+
+### Step 4. Enable your user to connect to the QM API
+
+To start using the SDK you just have to instantiate QuantimodoApiV2, as follows:
+
+```
+QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
+```
+
+### Step 5. Send user data to the QM API
+Here is an example of how to to submit measurement to QuantiModo service for variable "Overall Mood"
+
+```
+//Variable Category : Mood
+//Variable : Overall Mood
+//Unit : /5 ( from 1 to 5 )
+//Source name : Sample application
+MeasurementSet sets = new MeasurementSet("Overall Mood", null, "Mood", "/5", MeasurementSet.COMBINE_MEAN, "Sample application");
+
+//Measurement with Overall Mood, with 5 out of 5 rating, that submitted right now
+Measurement measurement = new Measurement(System.currentTimeMillis() / 1000, 5.0d);
+
+//Adding measurement into set
+sets.getMeasurements().add(measurement);
+
+String token = "oauth_token";
+QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
+
+SdkResponse<Integer> result = api.putMeasurements(ctx,token,sets);
+if (result.isSuccessful() && ((Integer) 1).equals(result.getData())){
+  Log.i("sample","sent");
+}
+```
+
+For more info, please check the [JavaDocs](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/sdk/).
+You can find examples of usage in our [tests](https://github.com/QuantiModo/QuantiModo-SDK-Android/tree/develop/sdk/src/androidTest/).
+
+### Step 6. Get your user's data from the QM API
+how to use the SDk to get measurements and stuff.
+
+### Step 7. Add QTools to your application
+dependencies and stuff
+
+### Step 8. Import user data from 3rd party sources
+how to use the quantimodo login
 
 ### Create a new Android project and build it using the QuantiModo SDK
 
@@ -55,33 +140,6 @@ SdkResponse<User> response = api.getUser(ctx,token);
 
 #### Using the SDK Module
 
-All requests return an [SdkResponse<T>](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/sdk/index.html?com/quantimodo/android/sdk/SdkResponse.html) containing all info about response. 
-For example, to submit measurement to QuantiModo service for variable "Overall Mood"
-
-```
-//Variable Category : Mood
-//Variable : Overall Mood
-//Unit : /5 ( from 1 to 5 )
-//Source name : Sample application
-MeasurementSet sets = new MeasurementSet("Overall Mood", null, "Mood", "/5", MeasurementSet.COMBINE_MEAN, "Sample application");
-
-//Measurement with Overall Mood, with 5 out of 5 rating, that submitted right now
-Measurement measurement = new Measurement(System.currentTimeMillis() / 1000, 5.0d);
-
-//Adding measurement into set
-sets.getMeasurements().add(measurement);
-
-String token = "oauth_token";
-QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
-
-SdkResponse<Integer> result = api.putMeasurements(ctx,token,sets);
-if (result.isSuccessful() && ((Integer) 1).equals(result.getData())){
-  Log.i("sample","sent");
-}
-```
-
-For more info, please check the [JavaDocs](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/sdk/).
-You can find examples of usage in our [tests](https://github.com/QuantiModo/QuantiModo-SDK-Android/tree/develop/sdk/src/androidTest/).
 
 ## Quantimodo-Tools
 
