@@ -75,7 +75,7 @@ public class TrackingFragment extends QFragment {
     private static final String KEY_CATEGORY = "category";
     private static final String KEY_SEARCH = "search";
 
-    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS})
+    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS, TYPE_EMOTIONS})
     @Retention(RetentionPolicy.SOURCE)
     public @interface TrackingType{}
 
@@ -141,12 +141,14 @@ public class TrackingFragment extends QFragment {
         }
     }
 
+    //this category has to be in the same orther of the TYPE_ constants
    private static final CategoryDef[] mCategoryFilter = {
             new CategoryDef(null,Double.NaN,"", R.string.tracking_item_no_category, null,R.string.tracking_fragment_no_category_title),
-            new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
+           new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
             new CategoryDef("Treatments",0d,"serving", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
             new CategoryDef("Symptoms",0d,"serving", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
             new CategoryDef("Mood",0d,"serving", R.string.tracking_item_mood_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_mood_title),
+           new CategoryDef("Mood",1d,"serving", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
     };
 
     public static final int TYPE_ALL = 0;
@@ -154,6 +156,7 @@ public class TrackingFragment extends QFragment {
     public static final int TYPE_TREATMENTS = 2;
     public static final int TYPE_SYMPTOMS = 3;
     public static final int TYPE_MOOD = 4;
+    public static final int TYPE_EMOTIONS = 5;
 
     private CategoryDef mCategoryDef;
     private int mType;

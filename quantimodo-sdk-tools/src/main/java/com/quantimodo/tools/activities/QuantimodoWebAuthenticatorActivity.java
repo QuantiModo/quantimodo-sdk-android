@@ -105,7 +105,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
             @Override
             public void onError(String error, String errorDescription) {
-
+                Log.d("QMWebAuthActivity","Error: " + error + ", description: " + errorDescription);
             }
         }, mPrefs));
 
