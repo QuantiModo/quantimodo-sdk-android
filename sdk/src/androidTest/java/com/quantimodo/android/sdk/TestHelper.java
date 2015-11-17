@@ -12,10 +12,10 @@ import java.util.concurrent.ExecutionException;
 
 public class TestHelper {
 
-    public static final String TEST_USERNAME = "testuser";
-    public static final String TEST_PASSWORD = "testing123";
+    public static final String TEST_USERNAME = "Quantimodo";
+    public static final String TEST_PASSWORD = "B1ggerstaff!";
     public static final String ACCOUNT_TYPE =  "com.quantimodo";
-    public static final String QUANTIMODO_ADDRESS = "https://app.quantimo.do/";
+    public static final String QUANTIMODO_ADDRESS = "https://staging.quantimo.do/";
 
 
     public static String logIn(final Context context) throws ExecutionException, InterruptedException {
