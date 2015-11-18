@@ -228,9 +228,9 @@ public class Correlation  {
 
   
   /**
-   * Unit of Cause
+   * Unit of the predictor variable
    **/
-  @ApiModelProperty(required = true, value = "Unit of Cause")
+  @ApiModelProperty(required = true, value = "Unit of the predictor variable")
   public String getCauseUnit() {
     return causeUnit;
   }
@@ -240,9 +240,9 @@ public class Correlation  {
 
   
   /**
-   * Unit ID of Cause
+   * Unit ID of the predictor variable
    **/
-  @ApiModelProperty(required = true, value = "Unit ID of Cause")
+  @ApiModelProperty(required = true, value = "Unit ID of the predictor variable")
   public Integer getCauseUnitId() {
     return causeUnitId;
   }
