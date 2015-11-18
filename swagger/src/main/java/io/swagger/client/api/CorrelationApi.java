@@ -58,8 +58,8 @@ public class CorrelationApi {
    * @param optimalPearsonProduct Optimal Pearson Product
    * @param vote Vote
    * @param statisticalSignificance A function of the effect size and sample size
-   * @param causeUnit Unit of Cause
-   * @param causeUnitId Unit ID of Cause
+   * @param causeUnit Unit of the predictor variable
+   * @param causeUnitId Unit ID of the predictor variable
    * @param causeChanges Cause changes
    * @param effectChanges Effect changes
    * @param qmScore QM Score

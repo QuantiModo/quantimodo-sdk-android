@@ -64,9 +64,9 @@ public class Vote  {
 
   
   /**
-   * ID of cause variable
+   * ID of the predictor variable
    **/
-  @ApiModelProperty(required = true, value = "ID of cause variable")
+  @ApiModelProperty(required = true, value = "ID of the predictor variable")
   public Integer getCauseId() {
     return causeId;
   }

@@ -35,16 +35,20 @@ public class JsonUtil {
   public static Type getListTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
+    if ("AggregatedCorrelation".equalsIgnoreCase(className)) {
+      return new TypeToken<List<AggregatedCorrelation>>(){}.getType();
+    }
+    
+    if ("Correlation".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Correlation>>(){}.getType();
+    }
+    
     if ("MeasurementValue".equalsIgnoreCase(className)) {
       return new TypeToken<List<MeasurementValue>>(){}.getType();
     }
     
     if ("MeasurementPost".equalsIgnoreCase(className)) {
       return new TypeToken<List<MeasurementPost>>(){}.getType();
-    }
-    
-    if ("AggregatedCorrelation".equalsIgnoreCase(className)) {
-      return new TypeToken<List<AggregatedCorrelation>>(){}.getType();
     }
     
     if ("CommonVariableRelationship".equalsIgnoreCase(className)) {
@@ -57,10 +61,6 @@ public class JsonUtil {
     
     if ("Connector".equalsIgnoreCase(className)) {
       return new TypeToken<List<Connector>>(){}.getType();
-    }
-    
-    if ("Correlation".equalsIgnoreCase(className)) {
-      return new TypeToken<List<Correlation>>(){}.getType();
     }
     
     if ("Credential".equalsIgnoreCase(className)) {
@@ -265,16 +265,20 @@ public class JsonUtil {
   public static Type getTypeForDeserialization(Class cls) {
     String className = cls.getSimpleName();
     
+    if ("AggregatedCorrelation".equalsIgnoreCase(className)) {
+      return new TypeToken<AggregatedCorrelation>(){}.getType();
+    }
+    
+    if ("Correlation".equalsIgnoreCase(className)) {
+      return new TypeToken<Correlation>(){}.getType();
+    }
+    
     if ("MeasurementValue".equalsIgnoreCase(className)) {
       return new TypeToken<MeasurementValue>(){}.getType();
     }
     
     if ("MeasurementPost".equalsIgnoreCase(className)) {
       return new TypeToken<MeasurementPost>(){}.getType();
-    }
-    
-    if ("AggregatedCorrelation".equalsIgnoreCase(className)) {
-      return new TypeToken<AggregatedCorrelation>(){}.getType();
     }
     
     if ("CommonVariableRelationship".equalsIgnoreCase(className)) {
@@ -287,10 +291,6 @@ public class JsonUtil {
     
     if ("Connector".equalsIgnoreCase(className)) {
       return new TypeToken<Connector>(){}.getType();
-    }
-    
-    if ("Correlation".equalsIgnoreCase(className)) {
-      return new TypeToken<Correlation>(){}.getType();
     }
     
     if ("Credential".equalsIgnoreCase(className)) {
