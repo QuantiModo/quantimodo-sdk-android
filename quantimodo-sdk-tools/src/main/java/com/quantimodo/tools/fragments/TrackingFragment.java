@@ -66,6 +66,9 @@ public class TrackingFragment extends QFragment {
     Spinner spVariableCategory;
     RadioGroup rgVariableCombinationOperation;
 
+    /**
+     * Linear layout that contains the bottom buttons, when editing or creating a new measurement
+     */
     LinearLayout lnButtons;
 
     @Inject
@@ -142,13 +145,13 @@ public class TrackingFragment extends QFragment {
     }
 
     //this category has to be in the same orther of the TYPE_ constants
-   private static final CategoryDef[] mCategoryFilter = {
+    private static final CategoryDef[] mCategoryFilter = {
             new CategoryDef(null,Double.NaN,"", R.string.tracking_item_no_category, null,R.string.tracking_fragment_no_category_title),
-           new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
+            new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
             new CategoryDef("Treatments",0d,"serving", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
             new CategoryDef("Symptoms",0d,"serving", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
             new CategoryDef("Mood",0d,"serving", R.string.tracking_item_mood_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_mood_title),
-           new CategoryDef("Mood",1d,"serving", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
+            new CategoryDef("Mood",1d,"serving", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
     };
 
     public static final int TYPE_ALL = 0;
@@ -494,7 +497,7 @@ public class TrackingFragment extends QFragment {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
             return;
         }
-
+        //when pressed Add Variable
         if (suggestedVariables == null || position >= suggestedVariables.size()) {
             selectedVariable = null;
             // Delay showing the cards for a bit so that the animations all run smoothly
@@ -512,7 +515,9 @@ public class TrackingFragment extends QFragment {
                     showButtonsCard();
                 }
             }, 400);
-        } else {
+        }
+        //When selected a variable so opens the cards to edit it
+        else {
             selectedVariable = suggestedVariables.get(position);
             etVariableName.setText(selectedVariable.getName());
 
