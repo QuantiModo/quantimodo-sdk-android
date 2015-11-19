@@ -70,7 +70,7 @@ public class MeasurementApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20013
    */
-  public InlineResponse20013  measurementsGet (Integer userId, String clientId, Integer connectorId, Integer variableId, Integer sourceId, Integer startTime, BigDecimal value, Integer unitId, BigDecimal originalValue, Integer originalUnitId, Integer duration, String note, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, String error, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20013  measurementsGet (String token, Integer userId, String clientId, Integer connectorId, Integer variableId, Integer sourceId, Integer startTime, BigDecimal value, Integer unitId, BigDecimal originalValue, Integer originalUnitId, Integer duration, String note, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, String error, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -81,6 +81,7 @@ public class MeasurementApi {
     List<Pair> queryParams = new ArrayList<Pair>();
     // header params
     Map<String, String> headerParams = new HashMap<String, String>();
+    headerParams.put("Authorization", "Bearer " + token);
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
