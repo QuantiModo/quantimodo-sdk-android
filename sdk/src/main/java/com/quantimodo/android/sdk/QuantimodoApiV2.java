@@ -388,6 +388,27 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /***
+     * calls /measurements/request_csv service which schedule a CSV export
+     * containing all user measurements to be emailed to the user within 24 hours.
+     * @param context the current app context
+     * @param token a valid token
+     * @return the id of the task request on the server
+     */
+    public SdkResponse<Integer> requestCSV(Context context,String token){
+        setupIon(context);
+
+        SdkResponse<Integer> sdkResponse = new SdkResponse<>();
+        FutureBuilder futureBuilder = Ion.with(context)
+                .load(mBaseUrl + "api/v2/measurements/request_csv")
+                .setHeader("Authorization", "Bearer " + token)
+                .setBodyParameter("goop", "noop");
+
+        executeRequest(context,sdkResponse, new TypeToken<Integer>(){},futureBuilder);
+
+        return sdkResponse;
+    }
+
     private void setupIon(Context context) {
         Ion defaultIon = Ion.getDefault(context);
         defaultIon.getCookieMiddleware().getCookieStore().removeAll();
