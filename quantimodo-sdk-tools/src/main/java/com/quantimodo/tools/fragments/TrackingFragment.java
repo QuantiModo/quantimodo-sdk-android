@@ -481,7 +481,15 @@ public class TrackingFragment extends QFragment {
         return selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
     }
 
-    void onVariableClick(AdapterView<?> adapterView, View view, int position, long l) {
+    /**
+     * Method to call when an item on the list was clicked
+     * @param parent The AdapterView where the click happened.
+     * @param view The view within the AdapterView that was clicked (this
+     *            will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id The row id of the item that was clicked.
+     */
+    void onVariableClick(AdapterView<?> parent, View view, int position, long id) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
             return;
@@ -639,28 +647,27 @@ public class TrackingFragment extends QFragment {
         });
     }
 
-
-    /*
-    **  Shows the button row at the bottom of the screen
-    */
+    /**
+     * Shows the button row at the bottom of the screen
+     */
     private void showButtonsCard() {
         if (lnButtons.getVisibility() != View.VISIBLE) {
             ViewUtils.expandView(lnButtons, null);
         }
     }
 
-    /*
-    **  Shows the button row at the bottom of the screen
-    */
+    /**
+     * Shows the button row at the bottom of the screen
+     */
     private void hideButtonsCard() {
         if (lnButtons.getVisibility() == View.VISIBLE) {
             ViewUtils.collapseView(lnButtons, null);
         }
     }
 
-    /*
-    **  Shows the card the user uses to input a new variable
-    */
+    /**
+     * Shows the card the user uses to input a new variable
+     */
     private void showAddVariableCard() {
         if (lnAddVariableContainer.getVisibility() != View.VISIBLE) {
             ViewUtils.expandView(lnAddVariableContainer, null);
