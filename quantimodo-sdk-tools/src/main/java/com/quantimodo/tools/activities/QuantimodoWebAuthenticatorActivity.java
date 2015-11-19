@@ -112,12 +112,14 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
             @Override
             public void onError(String error, String errorDescription) {
-                Log.d("QMWebAuthActivity","Error: " + error + ", description: " + errorDescription);
+                Log.d("QMWebAuthActivity", "Error: " + error + ", description: " + errorDescription);
             }
         }, mPrefs));
 
-        webView.loadUrl(mPrefs.getApiUrl() + "api/oauth2/authorize?client_id=" + authHelper.getClientId()
-                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&state=" + mNonce);
+        final String url = mPrefs.getApiUrl() + "api/oauth2/authorize?client_id=" + authHelper.getClientId()
+                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&state=" + mNonce;
+        Log.d("QMWebAuthActivity", "Loading: " + url);
+        webView.loadUrl(url);
     }
 
     private void handleAuthorizationSuccess(String authorizationCode, String nonce) {
