@@ -14,7 +14,7 @@ public class TestBaseApplication extends QBaseApplication {
     @Override
     protected ObjectGraph createObjectGraph() {
         EventBus eventBus = EventBus.getDefault();
-        ToolsPrefs prefs = new ToolsPrefs(TestHelper.QUANTIMODO_ADDRESS,"readmeasurements writemeasurements","QuantimodoTest");
+        ToolsPrefs prefs = new ToolsPrefs(TestHelper.QUANTIMODO_ADDRESS,"readmeasurements writemeasurements","QuantimodoTest", TestHelper.QUANTIMODO_SOCIAL_AUTH);
         TestModule requestModule = null;
         try {
             requestModule = new TestModule(getApplicationContext(),prefs);

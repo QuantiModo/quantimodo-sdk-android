@@ -4,11 +4,13 @@ import android.content.Context;
 import com.quantimodo.android.sdk.QuantimodoApiV2;
 import com.quantimodo.tools.BuildConfig;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.activities.QuantimodoLoginActivity;
 import com.quantimodo.tools.activities.QuantimodoWebAuthenticatorActivity;
 import com.quantimodo.tools.models.DaoMaster;
 import com.quantimodo.tools.models.DaoSession;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sync.SyncService;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,7 +20,8 @@ import javax.inject.Named;
         injects = {
                 QuantimodoWebAuthenticatorActivity.class,
                 SyncService.class,
-                AuthHelper.class
+                AuthHelper.class,
+                QuantimodoLoginActivity.class
         },
         library = true
 )

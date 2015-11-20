@@ -13,6 +13,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
@@ -97,13 +98,17 @@ dependencies {
 
     androidTestCompile project(":testing-utils")
 
+    compile 'com.google.android.gms:play-services-identity:8.1.0'
+    compile 'com.google.android.gms:play-services-basement:8.1.0'
+    compile 'com.google.android.gms:play-services-base:8.1.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
 }
 
 android.libraryVariants.all { variant ->
     task("${variant.name}Javadoc", type: Javadoc, dependsOn: "assembleDebug") {
         source = variant.javaCompile.source
 
-        title = "Quantimodo Tools"
+        title = "QuantiModo API"
 
         options.links("http://docs.oracle.com/javase/7/docs/api/");
         options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/docs/reference");

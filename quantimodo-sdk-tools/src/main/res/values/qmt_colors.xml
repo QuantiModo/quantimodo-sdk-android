@@ -21,6 +21,7 @@
     <color name="card_blue_selected_background">#ff003e4d</color>
     <color name="card_blue_shadow">#326876</color>
     <color name="card_button">#4FA1AD</color>
+    <color name="button_color">#48BDD1</color>
     <color name="card_button_positive">#99CC00</color>
 
     <color name="text_welcome">#CC000000</color>

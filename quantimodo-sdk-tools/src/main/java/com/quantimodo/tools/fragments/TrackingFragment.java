@@ -5,7 +5,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntDef;
@@ -73,8 +76,9 @@ public class TrackingFragment extends QFragment {
 
     private static final String KEY_TYPE = "type";
     private static final String KEY_CATEGORY = "category";
+    private static final String KEY_SEARCH = "search";
 
-    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS})
+    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS, TYPE_EMOTIONS})
     @Retention(RetentionPolicy.SOURCE)
     public @interface TrackingType{}
 
@@ -108,15 +112,15 @@ public class TrackingFragment extends QFragment {
         /**
          * @param filter Category name
          * @param defaultValue Default value
-         * @param defautlUnit Default unit
+         * @param defaultUnit Default unit
          * @param hintId hint resource
          * @param combineType combineType should be {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_SUM} or {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_MEAN}
          * @param titleId title for action bar
          */
-        public CategoryDef(String filter, Double defaultValue, String defautlUnit, int hintId, String combineType,int titleId) {
+        public CategoryDef(String filter, Double defaultValue, String defaultUnit, int hintId, String combineType,int titleId) {
             this.filter = filter;
             this.defaultValue = defaultValue;
-            this.defaultUnit = defautlUnit;
+            this.defaultUnit = defaultUnit;
             this.hintId = hintId;
             this.combineType = combineType;
             this.titleId = titleId;
@@ -140,12 +144,14 @@ public class TrackingFragment extends QFragment {
         }
     }
 
+    //this category has to be in the same orther of the TYPE_ constants
    private static final CategoryDef[] mCategoryFilter = {
-            new CategoryDef(null,Double.NaN,"", R.string.tracking_item_no_category, null,R.string.tracking_fragment_no_category_title),
-            new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
-            new CategoryDef("Treatments",0d,"serving", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
-            new CategoryDef("Symptoms",0d,"serving", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
+            new CategoryDef(null,Double.NaN,"units", R.string.tracking_item_no_category, null,R.string.tracking_fragment_no_category_title),
+           new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
+            new CategoryDef("Treatments",1d,"units", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
+            new CategoryDef("Symptoms",1d,"%", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
             new CategoryDef("Mood",0d,"serving", R.string.tracking_item_mood_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_mood_title),
+           new CategoryDef("Mood",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
     };
 
     public static final int TYPE_ALL = 0;
@@ -153,6 +159,7 @@ public class TrackingFragment extends QFragment {
     public static final int TYPE_TREATMENTS = 2;
     public static final int TYPE_SYMPTOMS = 3;
     public static final int TYPE_MOOD = 4;
+    public static final int TYPE_EMOTIONS = 5;
 
     private CategoryDef mCategoryDef;
     private int mType;
@@ -194,14 +201,18 @@ public class TrackingFragment extends QFragment {
      * @param categoryDef category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
      * @return new instance of TrackingFragment
      */
-    public static TrackingFragment newInstance(CategoryDef categoryDef){
+    public static TrackingFragment newInstance(CategoryDef categoryDef, String defaultSearch){
         TrackingFragment fragment = new TrackingFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(KEY_CATEGORY,categoryDef);
+        args.putSerializable(KEY_CATEGORY, categoryDef);
 
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static TrackingFragment newInstance(CategoryDef categoryDef){
+        return newInstance(categoryDef, null);
     }
 
     @Override
@@ -224,39 +235,6 @@ public class TrackingFragment extends QFragment {
         ActionBar bar = getActivity().getActionBar();
         if(bar != null){
             bar.setTitle(mCategoryDef.titleId);
-        }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.variable_item, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        super.onContextItemSelected(item);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Variable variable = (Variable) lvVariableSuggestions.getAdapter().getItem(info.position);
-        int type = CorrelationAdapter.POSITIVE;
-        if (item.getItemId() == R.id.action_positive_factors){
-            type = CorrelationAdapter.POSITIVE;
-        } else if (item.getItemId() == R.id.action_negative_factors){
-            type = CorrelationAdapter.NEGATIVE;
-        }
-        showFactorsFragment(variable, type);
-        return true;
-    }
-
-    private void showFactorsFragment(Variable variable,int type){
-        FactorsFragment factorsFragment = FactorsFragment.newInstance(type,variable.getName());
-        String title = type == CorrelationAdapter.POSITIVE ? getString(R.string.tab_positive_factors) : getString(R.string.tab_negative_factors);
-        if (mFragmentListener != null){
-            mFragmentListener.requestFragmentAdd(factorsFragment,title);
-        } else if (getActivity() instanceof FragmentAdderListener){
-            ((FragmentAdderListener) getActivity()).requestFragmentAdd(factorsFragment,title);
-        } else if (getTargetFragment() instanceof FragmentAdderListener){
-            ((FragmentAdderListener) getTargetFragment()).requestFragmentAdd(factorsFragment,title);
         }
     }
 
@@ -396,6 +374,17 @@ public class TrackingFragment extends QFragment {
     }
 
     private void loadAndInitData() {
+        //checking network connection
+        ConnectivityManager cm =
+                (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(!isConnected){
+            Toast.makeText(getActivity(), R.string.network_connection_error_message, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         getSpiceManager().execute(new GetUnitsRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetUnitsRequest.GetUnitsResponse>() {
             @Override
@@ -491,6 +480,21 @@ public class TrackingFragment extends QFragment {
         }
     };
 
+    private int selectDefaultUnitIndex(Variable variable){
+        int selectedUnit = -1, defaultUnit = -1;
+        for (int i = 0; i< mUnits.size(); i++){
+            Unit currentUnit = mUnits.get(i);
+            if (mCategoryDef.defaultUnit.equals(currentUnit.getAbbreviatedName())){
+                defaultUnit = i;
+            }
+            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
+                selectedUnit = i;
+            }
+        }
+
+        return selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
+    }
+
     void onVariableClick(AdapterView<?> adapterView, View view, int position, long l) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
@@ -505,15 +509,7 @@ public class TrackingFragment extends QFragment {
                 public void run() {
                     showAddVariableCard();
 
-                    selectedDefaultUnitIndex = -1;
-                    for (int i = 0 ; i < mUnits.size(); i++) {
-                        Unit currentUnit = mUnits.get(i);
-                        if (mCategoryDef.defaultUnit.equals(currentUnit.getAbbreviatedName())){
-                            selectedDefaultUnitIndex = i;
-                        }
-                    }
-
-                    selectedDefaultUnitIndex = selectedDefaultUnitIndex == -1 ? 0 : selectedDefaultUnitIndex;
+                    selectedDefaultUnitIndex = selectDefaultUnitIndex(null);
 
                     etVariableNameNew.setText(etVariableName.getText().toString());
                     if (measurementCards.size() == 0) {
@@ -526,21 +522,7 @@ public class TrackingFragment extends QFragment {
             selectedVariable = suggestedVariables.get(position);
             etVariableName.setText(selectedVariable.getName());
 
-            // Find out what category the variable's unit belongs to. NOTE: Stuff below can be done much nicer, probably
-            int defUnitId = -1;
-            selectedDefaultUnitIndex = -1;
-            for (int i = 0 ; i < mUnits.size(); i++) {
-                Unit currentUnit = mUnits.get(i);
-                if (selectedVariable.getUnit() != null && selectedVariable.getUnit().equals(currentUnit.getAbbreviatedName())) {
-                    selectedDefaultUnitIndex = i;
-                }
-
-                if (mCategoryDef.defaultUnit.equals(currentUnit.getAbbreviatedName())){
-                    defUnitId = i;
-                }
-            }
-
-            selectedDefaultUnitIndex = selectedDefaultUnitIndex == -1 ? (defUnitId == -1 ? 0 : defUnitId) : selectedDefaultUnitIndex;
+            selectedDefaultUnitIndex = selectDefaultUnitIndex(selectedVariable);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -615,11 +597,15 @@ public class TrackingFragment extends QFragment {
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    lvVariableSuggestions.setVisibility(View.GONE);
+                    if (isVisible()) {
+                        lnCardsContainer.setAlpha(1.0f);
+                        lvVariableSuggestions.setVisibility(View.GONE);
+                    }
                 }
 
                 @Override
                 public void onAnimationCancel(Animator animator) {
+                    lvVariableSuggestions.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -659,7 +645,9 @@ public class TrackingFragment extends QFragment {
                 autoCompleteListAdapter.addAll(getSuggestedVariablesResponse.variables);
                 refreshesRunning--;
                 if (refreshesRunning <= 0) {
-                    pbAutoCompleteLoading.setVisibility(View.GONE);
+                    if (isVisible()) {
+                        pbAutoCompleteLoading.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -752,7 +740,8 @@ public class TrackingFragment extends QFragment {
 
         lnCardsContainer.addView(measurementCardHolder.measurementCard, lnCardsContainer.getChildCount() - 1);
 
-        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex,mCategoryDef);
+        Double defaultValue = selectedVariable == null ? null : selectedVariable.getDefaultValue();
+        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex,mCategoryDef,defaultValue);
 
         if (animate) {
             ViewUtils.expandView(measurementCardHolder.measurementCard, null);

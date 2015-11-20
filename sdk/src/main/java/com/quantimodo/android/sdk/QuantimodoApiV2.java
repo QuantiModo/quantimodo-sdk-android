@@ -93,8 +93,9 @@ public class QuantimodoApiV2 {
     }
 
     private <T> void executeRequest(Context context, SdkResponse<T> sdkResponse,TypeToken<T> type,FutureBuilder requestBuilder){
+        Response<String> stringResponse = null;
         try {
-            Response<String> stringResponse = requestBuilder.asString().withResponse().get();
+            stringResponse = requestBuilder.asString().withResponse().get();
             sdkResponse.setHeaders(stringResponse.getHeaders().toMultimap());
             sdkResponse.setHttpCode(stringResponse.getHeaders().getResponseCode());
             if (sdkResponse.getHttpCode() <= 300){
@@ -111,7 +112,20 @@ public class QuantimodoApiV2 {
             }
             sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
             sdkResponse.setCause(e);
+
+            if (stringResponse != null){
+                sdkResponse.setStringBody(stringResponse.getResult());
+            }
         }
+    }
+
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
+        return getMeasurementHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
+    }
+
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime,
+                                                                           String variableName, String source, String toUnitName,Integer limit, Integer offset) {
+        return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName, limit, offset);
     }
 
     /**
@@ -193,10 +207,11 @@ public class QuantimodoApiV2 {
         setupIon(context);
 
         SdkResponse<Integer> sdkResponse = new SdkResponse<>();
+        Response<String> response = null;
 
         try {
             Log.i("QMSDK", "Sending " + measurementSets.size() + " measurement sets");
-            Response<String> response = Ion.with(context)
+            response = Ion.with(context)
                     .load(mBaseUrl + "api/measurements/v2")
                     .setHeader("Authorization", "Bearer " + token)
                     .setJsonPojoBody(measurementSets)
@@ -222,6 +237,10 @@ public class QuantimodoApiV2 {
             }
             sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
             sdkResponse.setCause(e);
+
+            if(response != null) {
+                sdkResponse.setStringBody(response.getResult());
+            }
         }
 
         return sdkResponse;
@@ -337,6 +356,24 @@ public class QuantimodoApiV2 {
      * @param token OAuth token
      * @return SdkResponse with ArrayList of VariableCategory
      */
+    public SdkResponse<ArrayList<Correlation>> searchCustomCorrelations(Context context, String token){
+        setupIon(context);
+
+        SdkResponse<ArrayList<Correlation>> sdkResponse = new SdkResponse<>();
+
+        Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/v1/correlations").buildUpon();
+        uriBuilder.appendQueryParameter("effect", "Overall Mood");
+
+        FutureBuilder futureBuilder =  Ion.with(context)
+                .load(uriBuilder.build().toString().replace("\\+", "%20"))
+                .setHeader("Authorization", "Bearer " + token);
+
+        executeRequest(context, sdkResponse, new TypeToken<ArrayList<Correlation>>() {
+        }, futureBuilder);
+
+        return sdkResponse;
+    }
+
     public SdkResponse<ArrayList<VariableCategory>> getCategories(Context context, String token) {
         setupIon(context);
 
@@ -416,6 +453,27 @@ public class QuantimodoApiV2 {
                 .setJsonPojoBody(correlationPost);
 
         executeRequest(context,sdkResponse,new TypeToken<Void>(){},futureBuilder);
+
+        return sdkResponse;
+    }
+
+    /**
+     * calls /measurements/request_csv service which schedule a CSV export
+     * containing all user measurements to be emailed to the user within 24 hours.
+     * @param context the current app context
+     * @param token a valid token
+     * @return the id of the task request on the server
+     */
+    public SdkResponse<Integer> requestCSV(Context context,String token){
+        setupIon(context);
+
+        SdkResponse<Integer> sdkResponse = new SdkResponse<>();
+        FutureBuilder futureBuilder = Ion.with(context)
+                .load(mBaseUrl + "api/v2/measurements/request_csv")
+                .setHeader("Authorization", "Bearer " + token)
+                .setBodyParameter("goop", "noop");
+
+        executeRequest(context,sdkResponse, new TypeToken<Integer>(){},futureBuilder);
 
         return sdkResponse;
     }

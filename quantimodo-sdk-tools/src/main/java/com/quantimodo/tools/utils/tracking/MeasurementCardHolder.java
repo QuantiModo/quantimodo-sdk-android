@@ -63,12 +63,17 @@ public class MeasurementCardHolder {
         this.context = context;
     }
 
-    public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits, int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef) {
+    public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
+                     int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef,Double defaultValue) {
         this.allUnits = allUnits;
         this.defaultUnitIndex = defaultUnitIndex;
 
         selectedUnit = allUnits.get(defaultUnitIndex);
-        selectedValue = categoryDef.getDefaultValue();
+        if (defaultValue == null) {
+            selectedValue = categoryDef.getDefaultValue();
+        } else {
+            selectedValue = defaultValue;
+        }
         selectedDate = Calendar.getInstance();
 
         initOverflowButton(removable);
@@ -78,6 +83,11 @@ public class MeasurementCardHolder {
         initUnitPicker();
 
         initCategory(categoryDef);
+    }
+
+    public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
+                     int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef) {
+        init(removable, focus, allUnits, defaultUnitIndex, categoryDef,null);
     }
 
     private void initCategory(TrackingFragment.CategoryDef categoryDef) {
