@@ -213,7 +213,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
     private void getUserData(){
         QuantimodoUser user = quantimodoApiV2.getUser(this, authHelper.getAuthToken()).getData();
-        UserPreferences.setUserName(this, user.getDisplayName());
+        UserPreferences.setFullUserdata(this, user);
     }
 
     private static class OAuthClient extends WebViewClient {
