@@ -142,9 +142,9 @@ public class Connector  {
 
   
   /**
-   * created_at
+   * When the measurement record was first created in ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "created_at")
+  @ApiModelProperty(value = "When the measurement record was first created in ISO 8601 datetime format")
   public Date getCreatedAt() {
     return createdAt;
   }
@@ -154,9 +154,9 @@ public class Connector  {
 
   
   /**
-   * updated_at
+   * When the measurement record in the database was last updated. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "updated_at")
+  @ApiModelProperty(value = "When the measurement record in the database was last updated. Use ISO 8601 datetime format")
   public Date getUpdatedAt() {
     return updatedAt;
   }
