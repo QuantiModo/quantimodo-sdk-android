@@ -1,9 +1,11 @@
 package com.quantimodo.tools.activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.webkit.*;
@@ -13,6 +15,8 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
+import com.quantimodo.android.sdk.QuantimodoApiV2;
+import com.quantimodo.android.sdk.model.QuantimodoUser;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
@@ -34,6 +38,9 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
     @Inject
     ToolsPrefs mPrefs;
+
+    @Inject
+    QuantimodoApiV2 quantimodoApiV2;
 
     private String mNonce;
 
@@ -105,12 +112,14 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
             @Override
             public void onError(String error, String errorDescription) {
-
+                Log.d("QMWebAuthActivity", "Error: " + error + ", description: " + errorDescription);
             }
         }, mPrefs));
 
-        webView.loadUrl(mPrefs.getApiUrl() + "api/oauth2/authorize?client_id=" + authHelper.getClientId()
-                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&state=" + mNonce);
+        final String url = mPrefs.getApiUrl() + "api/oauth2/authorize?client_id=" + authHelper.getClientId()
+                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&state=" + mNonce;
+        Log.d("QMWebAuthActivity", "Loading: " + url);
+        webView.loadUrl(url);
     }
 
     private void handleAuthorizationSuccess(String authorizationCode, String nonce) {
@@ -140,6 +149,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
                         int expiresIn = result.get("expires_in").getAsInt();
 
                         authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken,refreshToken, System.currentTimeMillis()/1000 + expiresIn));
+                        getUserData();
                         setResult(RESULT_OK);
                         finish();
                     } catch (NullPointerException ignored) {
@@ -198,6 +208,12 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
             return true;
         }
+    }
+
+    private void getUserData(){
+        QuantimodoUser user = quantimodoApiV2.getUser(this, authHelper.getAuthToken()).getData();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(QuantimodoWebAuthenticatorActivity.this);
+        prefs.edit().putString("userDisplayName", user.getDisplayName()).apply();
     }
 
     private static class OAuthClient extends WebViewClient {

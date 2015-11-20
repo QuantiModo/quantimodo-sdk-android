@@ -3,16 +3,22 @@ QuantiModo-SDK-Android
 
 This is the software development kit for implementing enabling Android Applications to store or access user Quantified Self data in the QuantiModo database.
 
-## Modules
-* [SDK](#about-sdk)
-* [Quantimodo-Tools](#about-quantimodo-tools)
+# Getting Started
 
-## Install
-Library can be obtained from OSS Sonatype repository.
+### Step 1: Create Your Developer Account
+Create your free developer account and app at [https://admin.quantimo.do/register](https://admin.quantimo.do/register).
 
-### SDK
+### Step 2: Create Your App
+Create your app on [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps) and get your client_id and client_secret from it, save them to set up your project later.
 
-Maven:
+### Step 3: Add QuantiModo Dependencies to Your App
+The QuantiModo SDK for Android consists of two modules. 
+
+**1. SDK Module**
+
+The SDK module contains the model classes and API client for QuantiModo API web-service.
+
+Using Maven:
 ```
 <dependency>
   <groupId>com.quantimodo.android</groupId>
@@ -22,53 +28,37 @@ Maven:
 </dependency>
 ```
 
-Gradle:
+Or using Gradle:
 ```
 compile 'com.quantimodo.android:sdk:2.2.4'
 ```
 
-### Quantimodo-Tools
+**Use the SDK as a submodule**
 
-Maven:
+Create a folder, for example, libs/ and inside it execute:
 ```
-<dependency>
-  <groupId>com.quantimodo.android</groupId>
-  <artifactId>sdk-tools</artifactId>
-  <version>1.0</version>
-  <type>aar</type>
-</dependency>
+$ git submodule add git@github.com:QuantiModo/QuantiModo-SDK-Android.git
 ```
+After that, the folder 'Quantimodo-SDK-Android' will be created containing the SDK as a submodule.
 
-Gradle:
-```
-compile 'com.quantimodo.android:sdk-tools:1.0'
-```
+### Step 4. Enable your user to connect to the QM API
 
+To use SDK, you need to obtain an [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication), this is where you have to use your client_id and client_secret to connect with the API
 
-## About SDK
+Basically, you have to follow these steps:
+- Request an authorization code
+- Request the access token
+- Refreshing the access token
 
-This SDK contains model classes and API client for QuantiModo web-service.
-
-### How to create a new Android project and build it using the QuantiModo SDK
-
-Create regular Android project, and add SDK as [dependency](#sdk).
-
-#### Configure
-
-To use SDK you need to obtain [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication).
-After that you can get instance of QuantimodoApiV2
+After that you can get an instance of QuantimodoApiV2.
 
 ```
 String token = "oauth_token";
-QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
-SdkResponse<User> response = api.getUser(ctx,token);
+QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null, token);
 ```
 
-#### Use
-
-After configuration you can start using SDK.
-All requests return [SdkResponse<T>](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/sdk/index.html?com/quantimodo/android/sdk/SdkResponse.html) , which contain all info about response. 
-For example to submit measurement to QuantiModo service for variable "Overall Mood"
+### Step 5. Send user data to the QM API
+Here is an example of how to submit a measurement to QuantiModo service for variable "Overall Mood"
 
 ```
 //Variable Category : Mood
@@ -92,81 +82,119 @@ if (result.isSuccessful() && ((Integer) 1).equals(result.getData())){
 }
 ```
 
-For more info, please check [JavaDocs](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/sdk/).
-Or you can find examples in [tests](https://github.com/QuantiModo/QuantiModo-SDK-Android/tree/develop/sdk/src/androidTest/).
+For more info, please check the [JavaDocs](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/sdk/).
+You can find examples of usage in our [tests](https://github.com/QuantiModo/QuantiModo-SDK-Android/tree/develop/sdk/src/androidTest/).
 
-## About Quantimodo-Tools
+### Step 6. Get your user's data from the QM API
+You can get a QuantimodoUser object like this:
 
-Quantimodo Tools , set of components to create application that would work with QuantiModo.
+```
+QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null);
 
-This tools handles:
+SdkResponse<QuantimodoUser> response = api.getUser(context, token);
+```
 
+### Step 7. Add QTools to your application
+
+The Qtools module is a set of components that make it easy to create an application that will take full advantage of the QuantiModo platform. Qtools handles:
 - Auth and token management
-- Sync helper ( to handle sync with QuantiModo )
+- Data synchronization with the QuantiModo we service
 - Network interaction using [RoboSpice](https://github.com/stephanenicolas/robospice) 
 
-### How to create a new Android project and build it using the Quantimodo-Tools
+Using Maven:
+```
+<dependency>
+  <groupId>com.quantimodo.android</groupId>
+  <artifactId>sdk-tools</artifactId>
+  <version>1.0</version>
+  <type>aar</type>
+</dependency>
+```
 
-Create regular Android project, and add QuantiModo tools as [dependency](#quantimodo-tools).
+Or using Gradle:
+```
+compile 'com.quantimodo.android:sdk-tools:1.0'
+```
 
-#### Configure
+#### Configure QTools
 
-App uses DI to initialize components, there are several components that should be initialized in order to use tools:
+Dependency injection (DI) is used to initialize components. Several components need to be initialized to use QTools:
 
-- [Module](http://square.github.io/dagger/#using) that would provide dependencies
-- ToolsPrefs , that contain info about endpoint ( base URL, application source, permissions )
-- SpiceService, in order to configure caching
-- SyncService , if data should be synced
-- [QApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html) interface, which would provide dependencies to other components
+1. [Dagger](http://square.github.io/dagger/#using) facilitates dependency injection
+2. ToolsPrefs contains info about the endpoint such as the base URL, application source, permissions
+3. SpiceService is used to configure caching
+4. SyncService is used to sync data between the app and QuantiModo
+5. [QApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html) interface, which provides dependencies to other components.
 
-First you need to implement [QApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html) interface,
-or you can extend [QBaseApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html).
+First, you need to implement the [QApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html) interface,
+or you can extend the [QBaseApplication](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/QApplication.html).
 
-To do that you need to create a Module, that would provide dependency injection, example can be found in [tests sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blob/master/quantimodo-sdk-tools/src/androidTest/java/com/quantimodo/tools/testhelpers/TestModule.java)
+To do that, you need to create a Module that would provide dependency injection. An example can be found in [tests sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blob/master/quantimodo-sdk-tools/src/androidTest/java/com/quantimodo/tools/testhelpers/TestModule.java)
 
-Configuration stored in ToolsPrefs class instance, which should be created
+The configuration is stored in ToolsPrefs class instance, which should be created
 ```
 ToolsPrefs prefs = new ToolsPrefs("https://app.quantimo.do/","readmeasurements writemeasurements","QuantimodoTest");
 ```
-Then you need to create AuthHelper component
+Then you need to create AuthHelper component:
 ```
 mAuthHelper = new AuthHelper(applicationContext,prefs);
 ```
 
-Please refer to [test sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blob/master/quantimodo-sdk-tools/src/androidTest/java/com/quantimodo/tools/testhelpers/), to see how configure application.
+Refer to [test sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blob/master/quantimodo-sdk-tools/src/androidTest/java/com/quantimodo/tools/testhelpers/) to see how to configure the application.
 
-#### Use
+#### Useful QTools Components
 
-Most useful components could be :
-
-- [QuantimodoWebAuthenticatorActivity](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/activities/QuantimodoWebAuthenticatorActivity.html) , to handle auth. Just launch this activity and it would handle whole auth process, from auth till getting access token
-- [AuthHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sdk/AuthHelper.html), can provide and refresh access token
+- [AuthHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sdk/AuthHelper.html) provides access and refresh tokens needed to access the API.
 - [TrackingFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/TrackingFragment.html), would help you to submit tokens, could be configurated to show/submit to one category or to any
-- [FactorsFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/FactorsFragment.html), shows positive or negative correlations for effect
-- [ImportWebFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/ImportWebFragment.html), helps create connections with 3rd-party services
-- [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html), would help configure sync
+- [FactorsFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/FactorsFragment.html) lists the strongest predictors for a specified outcome such as Overall Mood or Back Pain.
+- [ImportWebFragment](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/fragments/ImportWebFragment.html) creates a view where your users can import their data from 3rd-party services like Fitbit, Withings, etc.
+- [SyncHelper](http://quantimodo.github.io/QuantiModo-SDK-Android/javadoc/qm-tools/index.html?com/quantimodo/tools/sync/SyncHelper.html) helps to configure data synchronization between the mobile device and the web service.
+
+
+### Step 8. Import user data from 3rd party sources
+Qtools provides an authenticator to easily manage your users.
+
+To use the authenticator, start `QuantimodoLoginActivity`. This allows the user to sign in with Facebook, Google, and Quantimodo directly.
+ 
+The QuantimodoLoginActivity can take two optional parameters:
+
+- `KEY_SHOW_LOGIN_AGAIN` (boolean): if true a toast will pop up right after the Activity starts saying: "You need to log in again"
+- `KEY_APP_NAME` (string): is used to customize the Quantimodo log in button. 
+If you provide it, the button text will be "Sign in with KEY_APP_NAME", if not, the text will just be: "Sign in".
+
+Example:
+
+```
+Intent auth = new Intent(context, QuantimodoLoginActivity.class);
+auth.putExtra(QuantimodoLoginActivity.KEY_APP_NAME, getString(R.string.app_name));
+auth.putExtra(QuantimodoLoginActivity.KEY_SHOW_LOGIN_AGAIN, true);
+startActivity(auth)
+```
+
+Of course, authentication uses internet connection, so make sure to include `android.permission.INTERNET` on your AndroidManifest.xml file:
+
+```
+<!-- Add it as a child of <manifest> tag -->
+<uses-permission android:name="android.permission.INTERNET" />
+```
 
 ## Running tests
 
-Connect device and run in project root
+Connect your device and run in the project root:
 
 ```
 ./gradlew cAT
 ```
 
-## Gradle SDK Distribution
-The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. 
+You can also run them in [Android Studio](http://developer.android.com/training/testing/unit-testing/local-unit-tests.html).
 
 [Guide To Publish An Aar To Maven Using Gradle](http://www.survivingwithandroid.com/2014/05/android-guide-to-publish-aar-to-maven-gradle.html)
 
-## Instructions to Deploy and Release Updates to the QM-Android SDK
-See http://central.sonatype.org/pages/ossrh-guide.html
+## Developing the SDK itself
+To work on the SDK you can add it manually as a git submodule folder inside your project. You have to do the following:
 
-## Working with the SDK itself
-To work with the SDK you can add it manually as a folder inside your project. You have to do the following:
-
-- Create libs/qm-sdk folder
-- Create a file callaed .gitmodules on the root of your project and write the following code:
+1. Create a folder in your project called `libs/qm-sdk`.
+2. Create a file called `.gitmodules` in the root of your project and include the following code:
 
 ```
 [submodule "libs/qm-sdk"]
@@ -174,10 +202,16 @@ To work with the SDK you can add it manually as a folder inside your project. Yo
 	url = git@github.com:QuantiModo/QuantiModo-SDK-Android.git
 ```
 
-- Then execute the following commands on the terminal (at the root of the project):
+3. Then execute the following commands in the terminal (at the root of the project):
 
 ```
 git submodule init
 git submodule sync
 git submodule update
 ```
+
+### Deploy and Release Updates to the QM-Android-SDK
+
+#### Gradle SDK Distribution
+
+The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. See http://central.sonatype.org/pages/ossrh-guide.html

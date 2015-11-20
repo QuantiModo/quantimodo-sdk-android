@@ -1,6 +1,6 @@
 package io.swagger.client.model;
 
-import io.swagger.client.model.HumanTime;
+import java.util.Date;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -9,43 +9,103 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class Measurement  {
   
-  @SerializedName("variable")
-  private String variable = null;
-  @SerializedName("source")
-  private String source = null;
-  @SerializedName("timestamp")
-  private Long timestamp = null;
-  @SerializedName("startTime")
+  @SerializedName("id")
+  private Integer id = null;
+  @SerializedName("user_id")
+  private Integer userId = null;
+  @SerializedName("client_id")
+  private String clientId = null;
+  @SerializedName("connector_id")
+  private Integer connectorId = null;
+  @SerializedName("variable_id")
+  private Integer variableId = null;
+  @SerializedName("source_id")
+  private Integer sourceId = null;
+  @SerializedName("start_time")
   private String startTime = null;
-  @SerializedName("humanTime")
-  private HumanTime humanTime = null;
   @SerializedName("value")
-  private Double value = null;
-  @SerializedName("unit")
-  private String unit = null;
-  @SerializedName("originalValue")
-  private Integer originalValue = null;
-  @SerializedName("storedValue")
-  private Double storedValue = null;
-  @SerializedName("storedAbbreviatedUnitName")
-  private String storedAbbreviatedUnitName = null;
-  @SerializedName("originalAbbreviatedUnitName")
-  private String originalAbbreviatedUnitName = null;
-  @SerializedName("abbreviatedUnitName")
-  private String abbreviatedUnitName = null;
+  private Float value = null;
+  @SerializedName("unit_id")
+  private Integer unitId = null;
+  @SerializedName("original_value")
+  private Float originalValue = null;
+  @SerializedName("original_unit_id")
+  private Integer originalUnitId = null;
+  @SerializedName("duration")
+  private Integer duration = null;
   @SerializedName("note")
   private String note = null;
+  @SerializedName("latitude")
+  private Float latitude = null;
+  @SerializedName("longitude")
+  private Float longitude = null;
+  @SerializedName("location")
+  private String location = null;
+  @SerializedName("created_at")
+  private Date createdAt = null;
+  @SerializedName("updated_at")
+  private Date updatedAt = null;
+  @SerializedName("error")
+  private String error = null;
 
   
   /**
-   * ORIGINAL Name of the variable for which we are creating the measurement records
+   * id
    **/
-  @ApiModelProperty(required = true, value = "ORIGINAL Name of the variable for which we are creating the measurement records")
-  public String getVariable() {
-    return variable;
+  @ApiModelProperty(value = "id")
+  public Integer getId() {
+    return id;
   }
-  public void setVariable(String variable) {
-    this.variable = variable;
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  
+  /**
+   * ID of user that owns this measurement
+   **/
+  @ApiModelProperty(value = "ID of user that owns this measurement")
+  public Integer getUserId() {
+    return userId;
+  }
+  public void setUserId(Integer userId) {
+    this.userId = userId;
+  }
+
+  
+  /**
+   * client_id
+   **/
+  @ApiModelProperty(value = "client_id")
+  public String getClientId() {
+    return clientId;
+  }
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
+
+  
+  /**
+   * The id for the connector data source from which the measurement was obtained
+   **/
+  @ApiModelProperty(value = "The id for the connector data source from which the measurement was obtained")
+  public Integer getConnectorId() {
+    return connectorId;
+  }
+  public void setConnectorId(Integer connectorId) {
+    this.connectorId = connectorId;
+  }
+
+  
+  /**
+   * ID of the variable for which we are creating the measurement records
+   **/
+  @ApiModelProperty(required = true, value = "ID of the variable for which we are creating the measurement records")
+  public Integer getVariableId() {
+    return variableId;
+  }
+  public void setVariableId(Integer variableId) {
+    this.variableId = variableId;
   }
 
   
@@ -53,30 +113,18 @@ public class Measurement  {
    * Application or device used to record the measurement values
    **/
   @ApiModelProperty(required = true, value = "Application or device used to record the measurement values")
-  public String getSource() {
-    return source;
+  public Integer getSourceId() {
+    return sourceId;
   }
-  public void setSource(String source) {
-    this.source = source;
-  }
-
-  
-  /**
-   * Timestamp for the measurement event in epoch time
-   **/
-  @ApiModelProperty(required = true, value = "Timestamp for the measurement event in epoch time")
-  public Long getTimestamp() {
-    return timestamp;
-  }
-  public void setTimestamp(Long timestamp) {
-    this.timestamp = timestamp;
+  public void setSourceId(Integer sourceId) {
+    this.sourceId = sourceId;
   }
 
   
   /**
-   * Start Time for the measurement event in ISO 8601
+   * Start Time for the measurement event. Use ISO 8601
    **/
-  @ApiModelProperty(value = "Start Time for the measurement event in ISO 8601")
+  @ApiModelProperty(required = true, value = "Start Time for the measurement event. Use ISO 8601")
   public String getStartTime() {
     return startTime;
   }
@@ -86,110 +134,146 @@ public class Measurement  {
 
   
   /**
-   * Start Time for the measurement event in ISO 8601
+   * The value of the measurement after conversion to the default unit for that variable
    **/
-  @ApiModelProperty(value = "Start Time for the measurement event in ISO 8601")
-  public HumanTime getHumanTime() {
-    return humanTime;
-  }
-  public void setHumanTime(HumanTime humanTime) {
-    this.humanTime = humanTime;
-  }
-
-  
-  /**
-   * Converted measurement value in requested unit
-   **/
-  @ApiModelProperty(required = true, value = "Converted measurement value in requested unit")
-  public Double getValue() {
+  @ApiModelProperty(required = true, value = "The value of the measurement after conversion to the default unit for that variable")
+  public Float getValue() {
     return value;
   }
-  public void setValue(Double value) {
+  public void setValue(Float value) {
     this.value = value;
   }
 
   
   /**
-   * Unit of measurement as requested in GET request
+   * The default unit for the variable
    **/
-  @ApiModelProperty(required = true, value = "Unit of measurement as requested in GET request")
-  public String getUnit() {
-    return unit;
+  @ApiModelProperty(required = true, value = "The default unit for the variable")
+  public Integer getUnitId() {
+    return unitId;
   }
-  public void setUnit(String unit) {
-    this.unit = unit;
+  public void setUnitId(Integer unitId) {
+    this.unitId = unitId;
   }
 
   
   /**
-   * Original value
+   * Value of measurement as originally posted (before conversion to default unit)
    **/
-  @ApiModelProperty(value = "Original value")
-  public Integer getOriginalValue() {
+  @ApiModelProperty(value = "Value of measurement as originally posted (before conversion to default unit)")
+  public Float getOriginalValue() {
     return originalValue;
   }
-  public void setOriginalValue(Integer originalValue) {
+  public void setOriginalValue(Float originalValue) {
     this.originalValue = originalValue;
   }
 
   
   /**
-   * Measurement value in the unit as orignally submitted
+   * Unit ID of measurement as originally submitted
    **/
-  @ApiModelProperty(value = "Measurement value in the unit as orignally submitted")
-  public Double getStoredValue() {
-    return storedValue;
+  @ApiModelProperty(value = "Unit ID of measurement as originally submitted")
+  public Integer getOriginalUnitId() {
+    return originalUnitId;
   }
-  public void setStoredValue(Double storedValue) {
-    this.storedValue = storedValue;
+  public void setOriginalUnitId(Integer originalUnitId) {
+    this.originalUnitId = originalUnitId;
   }
 
   
   /**
-   * Unit of measurement as originally submitted
+   * Duration of the event being measurement in seconds
    **/
-  @ApiModelProperty(value = "Unit of measurement as originally submitted")
-  public String getStoredAbbreviatedUnitName() {
-    return storedAbbreviatedUnitName;
+  @ApiModelProperty(value = "Duration of the event being measurement in seconds")
+  public Integer getDuration() {
+    return duration;
   }
-  public void setStoredAbbreviatedUnitName(String storedAbbreviatedUnitName) {
-    this.storedAbbreviatedUnitName = storedAbbreviatedUnitName;
+  public void setDuration(Integer duration) {
+    this.duration = duration;
   }
 
   
   /**
-   * Original Unit of measurement as originally submitted
+   * An optional note the user may include with their measurement
    **/
-  @ApiModelProperty(value = "Original Unit of measurement as originally submitted")
-  public String getOriginalAbbreviatedUnitName() {
-    return originalAbbreviatedUnitName;
-  }
-  public void setOriginalAbbreviatedUnitName(String originalAbbreviatedUnitName) {
-    this.originalAbbreviatedUnitName = originalAbbreviatedUnitName;
-  }
-
-  
-  /**
-   * Unit of measurement as originally submitted
-   **/
-  @ApiModelProperty(value = "Unit of measurement as originally submitted")
-  public String getAbbreviatedUnitName() {
-    return abbreviatedUnitName;
-  }
-  public void setAbbreviatedUnitName(String abbreviatedUnitName) {
-    this.abbreviatedUnitName = abbreviatedUnitName;
-  }
-
-  
-  /**
-   * Note of measurement
-   **/
-  @ApiModelProperty(value = "Note of measurement")
+  @ApiModelProperty(value = "An optional note the user may include with their measurement")
   public String getNote() {
     return note;
   }
   public void setNote(String note) {
     this.note = note;
+  }
+
+  
+  /**
+   * Latitude at which the measurement was taken
+   **/
+  @ApiModelProperty(value = "Latitude at which the measurement was taken")
+  public Float getLatitude() {
+    return latitude;
+  }
+  public void setLatitude(Float latitude) {
+    this.latitude = latitude;
+  }
+
+  
+  /**
+   * Longitude at which the measurement was taken
+   **/
+  @ApiModelProperty(value = "Longitude at which the measurement was taken")
+  public Float getLongitude() {
+    return longitude;
+  }
+  public void setLongitude(Float longitude) {
+    this.longitude = longitude;
+  }
+
+  
+  /**
+   * location
+   **/
+  @ApiModelProperty(value = "location")
+  public String getLocation() {
+    return location;
+  }
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  
+  /**
+   * When the record was first created. Use ISO 8601 datetime format
+   **/
+  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  
+  /**
+   * When the record in the database was last updated. Use ISO 8601 datetime format
+   **/
+  @ApiModelProperty(value = "When the record in the database was last updated. Use ISO 8601 datetime format")
+  public Date getUpdatedAt() {
+    return updatedAt;
+  }
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  
+  /**
+   * error
+   **/
+  @ApiModelProperty(value = "error")
+  public String getError() {
+    return error;
+  }
+  public void setError(String error) {
+    this.error = error;
   }
 
   
@@ -199,19 +283,25 @@ public class Measurement  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Measurement {\n");
     
-    sb.append("  variable: ").append(variable).append("\n");
-    sb.append("  source: ").append(source).append("\n");
-    sb.append("  timestamp: ").append(timestamp).append("\n");
+    sb.append("  id: ").append(id).append("\n");
+    sb.append("  userId: ").append(userId).append("\n");
+    sb.append("  clientId: ").append(clientId).append("\n");
+    sb.append("  connectorId: ").append(connectorId).append("\n");
+    sb.append("  variableId: ").append(variableId).append("\n");
+    sb.append("  sourceId: ").append(sourceId).append("\n");
     sb.append("  startTime: ").append(startTime).append("\n");
-    sb.append("  humanTime: ").append(humanTime).append("\n");
     sb.append("  value: ").append(value).append("\n");
-    sb.append("  unit: ").append(unit).append("\n");
+    sb.append("  unitId: ").append(unitId).append("\n");
     sb.append("  originalValue: ").append(originalValue).append("\n");
-    sb.append("  storedValue: ").append(storedValue).append("\n");
-    sb.append("  storedAbbreviatedUnitName: ").append(storedAbbreviatedUnitName).append("\n");
-    sb.append("  originalAbbreviatedUnitName: ").append(originalAbbreviatedUnitName).append("\n");
-    sb.append("  abbreviatedUnitName: ").append(abbreviatedUnitName).append("\n");
+    sb.append("  originalUnitId: ").append(originalUnitId).append("\n");
+    sb.append("  duration: ").append(duration).append("\n");
     sb.append("  note: ").append(note).append("\n");
+    sb.append("  latitude: ").append(latitude).append("\n");
+    sb.append("  longitude: ").append(longitude).append("\n");
+    sb.append("  location: ").append(location).append("\n");
+    sb.append("  createdAt: ").append(createdAt).append("\n");
+    sb.append("  updatedAt: ").append(updatedAt).append("\n");
+    sb.append("  error: ").append(error).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

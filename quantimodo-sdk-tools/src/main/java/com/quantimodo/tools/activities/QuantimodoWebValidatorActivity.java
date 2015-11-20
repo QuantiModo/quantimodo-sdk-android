@@ -1,7 +1,9 @@
 package com.quantimodo.tools.activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
@@ -11,6 +13,8 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
+import com.quantimodo.android.sdk.QuantimodoApiV2;
+import com.quantimodo.android.sdk.model.QuantimodoUser;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
@@ -31,6 +35,9 @@ public class QuantimodoWebValidatorActivity extends Activity {
 
     @Inject
     ToolsPrefs mPrefs;
+
+    @Inject
+    QuantimodoApiV2 quantimodoApiV2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +94,8 @@ public class QuantimodoWebValidatorActivity extends Activity {
 
                         authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
 
-                        //TODO: remove/update the tests related with this Activity
+                        getUserData();
+
                         setResult(RESULT_OK);
                         finish();
                     } catch (NullPointerException ignored) {
@@ -103,6 +111,12 @@ public class QuantimodoWebValidatorActivity extends Activity {
     protected void onStop() {
         super.onStop();
         CookieManager.getInstance().removeAllCookie();
+    }
+
+    private void getUserData(){
+        QuantimodoUser user = quantimodoApiV2.getUser(this, authHelper.getAuthToken()).getData();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(QuantimodoWebValidatorActivity.this);
+        prefs.edit().putString("userDisplayName", user.getDisplayName()).apply();
     }
 
     private static class OAuthClient extends WebViewClient {

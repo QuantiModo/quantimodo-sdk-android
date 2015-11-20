@@ -1,7 +1,6 @@
 package io.swagger.client.model;
 
-import io.swagger.client.model.Variable;
-import java.util.*;
+import java.util.Date;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -12,73 +11,82 @@ public class Variable  {
   
   @SerializedName("id")
   private Integer id = null;
+  @SerializedName("client_id")
+  private String clientId = null;
+  @SerializedName("parent_id")
+  private Integer parentId = null;
   @SerializedName("name")
   private String name = null;
-  @SerializedName("originalName")
-  private String originalName = null;
-  @SerializedName("category")
-  private String category = null;
-  @SerializedName("abbreviatedUnitName")
-  private String abbreviatedUnitName = null;
-  @SerializedName("abbreviatedUnitId")
-  private Integer abbreviatedUnitId = null;
-  @SerializedName("sources")
-  private String sources = null;
-  @SerializedName("minimumValue")
-  private Double minimumValue = null;
-  @SerializedName("maximumValue")
-  private Double maximumValue = null;
-  public enum CombinationOperationEnum {
-     MEAN,  SUM, 
-  };
-  @SerializedName("combinationOperation")
-  private CombinationOperationEnum combinationOperation = null;
-  @SerializedName("fillingValue")
-  private Double fillingValue = null;
-  @SerializedName("joinWith")
-  private String joinWith = null;
-  @SerializedName("joinedVariables")
-  private List<Variable> joinedVariables = null;
-  @SerializedName("parent")
-  private Integer parent = null;
-  @SerializedName("subVariables")
-  private List<Variable> subVariables = null;
-  @SerializedName("onsetDelay")
+  @SerializedName("variable_category_id")
+  private Integer variableCategoryId = null;
+  @SerializedName("default_unit_id")
+  private Integer defaultUnitId = null;
+  @SerializedName("combination_operation")
+  private String combinationOperation = null;
+  @SerializedName("filling_value")
+  private Float fillingValue = null;
+  @SerializedName("maximum_allowed_value")
+  private Float maximumAllowedValue = null;
+  @SerializedName("minimum_allowed_value")
+  private Float minimumAllowedValue = null;
+  @SerializedName("onset_delay")
   private Integer onsetDelay = null;
-  @SerializedName("durationOfAction")
+  @SerializedName("duration_of_action")
   private Integer durationOfAction = null;
-  @SerializedName("earliestMeasurementTime")
-  private Integer earliestMeasurementTime = null;
-  @SerializedName("latestMeasurementTime")
-  private Integer latestMeasurementTime = null;
-  @SerializedName("updated")
-  private Integer updated = null;
-  @SerializedName("causeOnly")
-  private Integer causeOnly = null;
-  @SerializedName("numberOfCorrelations")
-  private Integer numberOfCorrelations = null;
+  @SerializedName("public")
+  private Integer _public = null;
+  @SerializedName("cause_only")
+  private Boolean causeOnly = null;
+  @SerializedName("most_common_value")
+  private Float mostCommonValue = null;
+  @SerializedName("most_common_unit_id")
+  private Integer mostCommonUnitId = null;
+  @SerializedName("standard_deviation")
+  private Float standardDeviation = null;
+  @SerializedName("variance")
+  private Float variance = null;
+  @SerializedName("mean")
+  private Float mean = null;
+  @SerializedName("median")
+  private Float median = null;
+  @SerializedName("number_of_measurements")
+  private Float numberOfMeasurements = null;
+  @SerializedName("number_of_unique_values")
+  private Float numberOfUniqueValues = null;
+  @SerializedName("skewness")
+  private Float skewness = null;
+  @SerializedName("kurtosis")
+  private Float kurtosis = null;
+  @SerializedName("status")
+  private String status = null;
+  @SerializedName("error_message")
+  private String errorMessage = null;
+  @SerializedName("last_successful_update_time")
+  private Date lastSuccessfulUpdateTime = null;
+  @SerializedName("created_at")
+  private Date createdAt = null;
+  @SerializedName("updated_at")
+  private Date updatedAt = null;
+  @SerializedName("product_url")
+  private String productUrl = null;
+  @SerializedName("image_url")
+  private String imageUrl = null;
+  @SerializedName("price")
+  private Float price = null;
+  @SerializedName("number_of_user_variables")
+  private Integer numberOfUserVariables = null;
   @SerializedName("outcome")
-  private Integer outcome = null;
-  @SerializedName("measurementsAtLastAnalysis")
-  private Integer measurementsAtLastAnalysis = null;
-  @SerializedName("numberOfMeasurements")
-  private Integer numberOfMeasurements = null;
-  @SerializedName("lastUnit")
-  private String lastUnit = null;
-  @SerializedName("lastValue")
-  private Integer lastValue = null;
-  @SerializedName("mostCommonValue")
-  private Integer mostCommonValue = null;
-  @SerializedName("mostCommonUnit")
-  private String mostCommonUnit = null;
-  @SerializedName("lastSource")
-  private Integer lastSource = null;
+  private Boolean outcome = null;
+  @SerializedName("minimum_recorded_value")
+  private Float minimumRecordedValue = null;
+  @SerializedName("maximum_recorded_value")
+  private Float maximumRecordedValue = null;
 
   
   /**
-   * Variable ID
+   * id
    **/
-  @ApiModelProperty(value = "Variable ID")
+  @ApiModelProperty(value = "id")
   public Integer getId() {
     return id;
   }
@@ -88,9 +96,33 @@ public class Variable  {
 
   
   /**
-   * User-defined variable display name.
+   * client_id
    **/
-  @ApiModelProperty(required = true, value = "User-defined variable display name.")
+  @ApiModelProperty(value = "client_id")
+  public String getClientId() {
+    return clientId;
+  }
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
+
+  
+  /**
+   * ID of the parent variable if this variable has any parent
+   **/
+  @ApiModelProperty(value = "ID of the parent variable if this variable has any parent")
+  public Integer getParentId() {
+    return parentId;
+  }
+  public void setParentId(Integer parentId) {
+    this.parentId = parentId;
+  }
+
+  
+  /**
+   * User-defined variable display name
+   **/
+  @ApiModelProperty(required = true, value = "User-defined variable display name")
   public String getName() {
     return name;
   }
@@ -100,97 +132,37 @@ public class Variable  {
 
   
   /**
-   * Name used when the variable was originally created in the `variables` table.
+   * Variable category ID
    **/
-  @ApiModelProperty(required = true, value = "Name used when the variable was originally created in the `variables` table.")
-  public String getOriginalName() {
-    return originalName;
+  @ApiModelProperty(required = true, value = "Variable category ID")
+  public Integer getVariableCategoryId() {
+    return variableCategoryId;
   }
-  public void setOriginalName(String originalName) {
-    this.originalName = originalName;
+  public void setVariableCategoryId(Integer variableCategoryId) {
+    this.variableCategoryId = variableCategoryId;
   }
 
   
   /**
-   * Variable category like Mood, Sleep, Physical Activity, Treatment, Symptom, etc.
+   * ID of the default unit of measurement to use for this variable
    **/
-  @ApiModelProperty(required = true, value = "Variable category like Mood, Sleep, Physical Activity, Treatment, Symptom, etc.")
-  public String getCategory() {
-    return category;
+  @ApiModelProperty(required = true, value = "ID of the default unit of measurement to use for this variable")
+  public Integer getDefaultUnitId() {
+    return defaultUnitId;
   }
-  public void setCategory(String category) {
-    this.category = category;
+  public void setDefaultUnitId(Integer defaultUnitId) {
+    this.defaultUnitId = defaultUnitId;
   }
 
   
   /**
-   * Abbreviated name of the default unit for the variable
+   * How to combine values of this variable (for instance, to see a summary of the values over a month) SUM or MEAN
    **/
-  @ApiModelProperty(required = true, value = "Abbreviated name of the default unit for the variable")
-  public String getAbbreviatedUnitName() {
-    return abbreviatedUnitName;
-  }
-  public void setAbbreviatedUnitName(String abbreviatedUnitName) {
-    this.abbreviatedUnitName = abbreviatedUnitName;
-  }
-
-  
-  /**
-   * Id of the default unit for the variable
-   **/
-  @ApiModelProperty(required = true, value = "Id of the default unit for the variable")
-  public Integer getAbbreviatedUnitId() {
-    return abbreviatedUnitId;
-  }
-  public void setAbbreviatedUnitId(Integer abbreviatedUnitId) {
-    this.abbreviatedUnitId = abbreviatedUnitId;
-  }
-
-  
-  /**
-   * Comma-separated list of source names to limit variables to those sources
-   **/
-  @ApiModelProperty(required = true, value = "Comma-separated list of source names to limit variables to those sources")
-  public String getSources() {
-    return sources;
-  }
-  public void setSources(String sources) {
-    this.sources = sources;
-  }
-
-  
-  /**
-   * Minimum reasonable value for this variable (uses default unit)
-   **/
-  @ApiModelProperty(required = true, value = "Minimum reasonable value for this variable (uses default unit)")
-  public Double getMinimumValue() {
-    return minimumValue;
-  }
-  public void setMinimumValue(Double minimumValue) {
-    this.minimumValue = minimumValue;
-  }
-
-  
-  /**
-   * Maximum reasonable value for this variable (uses default unit)
-   **/
-  @ApiModelProperty(required = true, value = "Maximum reasonable value for this variable (uses default unit)")
-  public Double getMaximumValue() {
-    return maximumValue;
-  }
-  public void setMaximumValue(Double maximumValue) {
-    this.maximumValue = maximumValue;
-  }
-
-  
-  /**
-   * How to aggregate measurements over time.
-   **/
-  @ApiModelProperty(required = true, value = "How to aggregate measurements over time.")
-  public CombinationOperationEnum getCombinationOperation() {
+  @ApiModelProperty(value = "How to combine values of this variable (for instance, to see a summary of the values over a month) SUM or MEAN")
+  public String getCombinationOperation() {
     return combinationOperation;
   }
-  public void setCombinationOperation(CombinationOperationEnum combinationOperation) {
+  public void setCombinationOperation(String combinationOperation) {
     this.combinationOperation = combinationOperation;
   }
 
@@ -198,67 +170,43 @@ public class Variable  {
   /**
    * Value for replacing null measurements
    **/
-  @ApiModelProperty(required = true, value = "Value for replacing null measurements")
-  public Double getFillingValue() {
+  @ApiModelProperty(value = "Value for replacing null measurements")
+  public Float getFillingValue() {
     return fillingValue;
   }
-  public void setFillingValue(Double fillingValue) {
+  public void setFillingValue(Float fillingValue) {
     this.fillingValue = fillingValue;
   }
 
   
   /**
-   * The Variable this Variable should be joined with. If the variable is joined with some other variable then it is not shown to user in the list of variables.
+   * Maximum reasonable value for this variable (uses default unit)
    **/
-  @ApiModelProperty(required = true, value = "The Variable this Variable should be joined with. If the variable is joined with some other variable then it is not shown to user in the list of variables.")
-  public String getJoinWith() {
-    return joinWith;
+  @ApiModelProperty(value = "Maximum reasonable value for this variable (uses default unit)")
+  public Float getMaximumAllowedValue() {
+    return maximumAllowedValue;
   }
-  public void setJoinWith(String joinWith) {
-    this.joinWith = joinWith;
+  public void setMaximumAllowedValue(Float maximumAllowedValue) {
+    this.maximumAllowedValue = maximumAllowedValue;
   }
 
   
   /**
-   * Array of Variables that are joined with this Variable
+   * Minimum reasonable value for this variable (uses default unit)
    **/
-  @ApiModelProperty(required = true, value = "Array of Variables that are joined with this Variable")
-  public List<Variable> getJoinedVariables() {
-    return joinedVariables;
+  @ApiModelProperty(value = "Minimum reasonable value for this variable (uses default unit)")
+  public Float getMinimumAllowedValue() {
+    return minimumAllowedValue;
   }
-  public void setJoinedVariables(List<Variable> joinedVariables) {
-    this.joinedVariables = joinedVariables;
-  }
-
-  
-  /**
-   * Id of the parent variable if this variable has any parent
-   **/
-  @ApiModelProperty(required = true, value = "Id of the parent variable if this variable has any parent")
-  public Integer getParent() {
-    return parent;
-  }
-  public void setParent(Integer parent) {
-    this.parent = parent;
-  }
-
-  
-  /**
-   * Array of Variables that are sub variables to this Variable
-   **/
-  @ApiModelProperty(required = true, value = "Array of Variables that are sub variables to this Variable")
-  public List<Variable> getSubVariables() {
-    return subVariables;
-  }
-  public void setSubVariables(List<Variable> subVariables) {
-    this.subVariables = subVariables;
+  public void setMinimumAllowedValue(Float minimumAllowedValue) {
+    this.minimumAllowedValue = minimumAllowedValue;
   }
 
   
   /**
    * How long it takes for a measurement in this variable to take effect
    **/
-  @ApiModelProperty(required = true, value = "How long it takes for a measurement in this variable to take effect")
+  @ApiModelProperty(value = "How long it takes for a measurement in this variable to take effect")
   public Integer getOnsetDelay() {
     return onsetDelay;
   }
@@ -270,7 +218,7 @@ public class Variable  {
   /**
    * How long the effect of a measurement in this variable lasts
    **/
-  @ApiModelProperty(required = true, value = "How long the effect of a measurement in this variable lasts")
+  @ApiModelProperty(value = "How long the effect of a measurement in this variable lasts")
   public Integer getDurationOfAction() {
     return durationOfAction;
   }
@@ -280,158 +228,290 @@ public class Variable  {
 
   
   /**
-   * Earliest measurement time
+   * Is variable public
    **/
-  @ApiModelProperty(required = true, value = "Earliest measurement time")
-  public Integer getEarliestMeasurementTime() {
-    return earliestMeasurementTime;
+  @ApiModelProperty(value = "Is variable public")
+  public Integer getPublic() {
+    return _public;
   }
-  public void setEarliestMeasurementTime(Integer earliestMeasurementTime) {
-    this.earliestMeasurementTime = earliestMeasurementTime;
+  public void setPublic(Integer _public) {
+    this._public = _public;
   }
 
   
   /**
-   * Latest measurement time
+   * A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user
    **/
-  @ApiModelProperty(required = true, value = "Latest measurement time")
-  public Integer getLatestMeasurementTime() {
-    return latestMeasurementTime;
-  }
-  public void setLatestMeasurementTime(Integer latestMeasurementTime) {
-    this.latestMeasurementTime = latestMeasurementTime;
-  }
-
-  
-  /**
-   * When this variable or its settings were last updated
-   **/
-  @ApiModelProperty(required = true, value = "When this variable or its settings were last updated")
-  public Integer getUpdated() {
-    return updated;
-  }
-  public void setUpdated(Integer updated) {
-    this.updated = updated;
-  }
-
-  
-  /**
-   * A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user.
-   **/
-  @ApiModelProperty(required = true, value = "A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user.")
-  public Integer getCauseOnly() {
+  @ApiModelProperty(value = "A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user")
+  public Boolean getCauseOnly() {
     return causeOnly;
   }
-  public void setCauseOnly(Integer causeOnly) {
+  public void setCauseOnly(Boolean causeOnly) {
     this.causeOnly = causeOnly;
-  }
-
-  
-  /**
-   * Number of correlations
-   **/
-  @ApiModelProperty(required = true, value = "Number of correlations")
-  public Integer getNumberOfCorrelations() {
-    return numberOfCorrelations;
-  }
-  public void setNumberOfCorrelations(Integer numberOfCorrelations) {
-    this.numberOfCorrelations = numberOfCorrelations;
-  }
-
-  
-  /**
-   * Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables.
-   **/
-  @ApiModelProperty(required = true, value = "Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables.")
-  public Integer getOutcome() {
-    return outcome;
-  }
-  public void setOutcome(Integer outcome) {
-    this.outcome = outcome;
-  }
-
-  
-  /**
-   * The number of measurements that a given user had for this variable the last time a correlation calculation was performed. Generally correlation values are only updated once the current number of measurements for a variable is more than 10% greater than the measurementsAtLastAnalysis.  This avoids a computationally-demanding recalculation when there's not enough new data to make a significant difference in the correlation.
-   **/
-  @ApiModelProperty(required = true, value = "The number of measurements that a given user had for this variable the last time a correlation calculation was performed. Generally correlation values are only updated once the current number of measurements for a variable is more than 10% greater than the measurementsAtLastAnalysis.  This avoids a computationally-demanding recalculation when there's not enough new data to make a significant difference in the correlation.")
-  public Integer getMeasurementsAtLastAnalysis() {
-    return measurementsAtLastAnalysis;
-  }
-  public void setMeasurementsAtLastAnalysis(Integer measurementsAtLastAnalysis) {
-    this.measurementsAtLastAnalysis = measurementsAtLastAnalysis;
-  }
-
-  
-  /**
-   * Number of measurements
-   **/
-  @ApiModelProperty(required = true, value = "Number of measurements")
-  public Integer getNumberOfMeasurements() {
-    return numberOfMeasurements;
-  }
-  public void setNumberOfMeasurements(Integer numberOfMeasurements) {
-    this.numberOfMeasurements = numberOfMeasurements;
-  }
-
-  
-  /**
-   * Last unit
-   **/
-  @ApiModelProperty(required = true, value = "Last unit")
-  public String getLastUnit() {
-    return lastUnit;
-  }
-  public void setLastUnit(String lastUnit) {
-    this.lastUnit = lastUnit;
-  }
-
-  
-  /**
-   * Last value
-   **/
-  @ApiModelProperty(required = true, value = "Last value")
-  public Integer getLastValue() {
-    return lastValue;
-  }
-  public void setLastValue(Integer lastValue) {
-    this.lastValue = lastValue;
   }
 
   
   /**
    * Most common value
    **/
-  @ApiModelProperty(required = true, value = "Most common value")
-  public Integer getMostCommonValue() {
+  @ApiModelProperty(value = "Most common value")
+  public Float getMostCommonValue() {
     return mostCommonValue;
   }
-  public void setMostCommonValue(Integer mostCommonValue) {
+  public void setMostCommonValue(Float mostCommonValue) {
     this.mostCommonValue = mostCommonValue;
   }
 
   
   /**
-   * Most common unit
+   * Most common Unit
    **/
-  @ApiModelProperty(required = true, value = "Most common unit")
-  public String getMostCommonUnit() {
-    return mostCommonUnit;
+  @ApiModelProperty(value = "Most common Unit")
+  public Integer getMostCommonUnitId() {
+    return mostCommonUnitId;
   }
-  public void setMostCommonUnit(String mostCommonUnit) {
-    this.mostCommonUnit = mostCommonUnit;
+  public void setMostCommonUnitId(Integer mostCommonUnitId) {
+    this.mostCommonUnitId = mostCommonUnitId;
   }
 
   
   /**
-   * Last source
+   * Standard Deviation
    **/
-  @ApiModelProperty(required = true, value = "Last source")
-  public Integer getLastSource() {
-    return lastSource;
+  @ApiModelProperty(value = "Standard Deviation")
+  public Float getStandardDeviation() {
+    return standardDeviation;
   }
-  public void setLastSource(Integer lastSource) {
-    this.lastSource = lastSource;
+  public void setStandardDeviation(Float standardDeviation) {
+    this.standardDeviation = standardDeviation;
+  }
+
+  
+  /**
+   * Variance
+   **/
+  @ApiModelProperty(value = "Variance")
+  public Float getVariance() {
+    return variance;
+  }
+  public void setVariance(Float variance) {
+    this.variance = variance;
+  }
+
+  
+  /**
+   * Mean
+   **/
+  @ApiModelProperty(value = "Mean")
+  public Float getMean() {
+    return mean;
+  }
+  public void setMean(Float mean) {
+    this.mean = mean;
+  }
+
+  
+  /**
+   * Median
+   **/
+  @ApiModelProperty(value = "Median")
+  public Float getMedian() {
+    return median;
+  }
+  public void setMedian(Float median) {
+    this.median = median;
+  }
+
+  
+  /**
+   * Number of measurements
+   **/
+  @ApiModelProperty(value = "Number of measurements")
+  public Float getNumberOfMeasurements() {
+    return numberOfMeasurements;
+  }
+  public void setNumberOfMeasurements(Float numberOfMeasurements) {
+    this.numberOfMeasurements = numberOfMeasurements;
+  }
+
+  
+  /**
+   * Number of unique values
+   **/
+  @ApiModelProperty(value = "Number of unique values")
+  public Float getNumberOfUniqueValues() {
+    return numberOfUniqueValues;
+  }
+  public void setNumberOfUniqueValues(Float numberOfUniqueValues) {
+    this.numberOfUniqueValues = numberOfUniqueValues;
+  }
+
+  
+  /**
+   * Skewness
+   **/
+  @ApiModelProperty(value = "Skewness")
+  public Float getSkewness() {
+    return skewness;
+  }
+  public void setSkewness(Float skewness) {
+    this.skewness = skewness;
+  }
+
+  
+  /**
+   * Kurtosis
+   **/
+  @ApiModelProperty(value = "Kurtosis")
+  public Float getKurtosis() {
+    return kurtosis;
+  }
+  public void setKurtosis(Float kurtosis) {
+    this.kurtosis = kurtosis;
+  }
+
+  
+  /**
+   * status
+   **/
+  @ApiModelProperty(value = "status")
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  
+  /**
+   * error_message
+   **/
+  @ApiModelProperty(value = "error_message")
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
+
+  
+  /**
+   * When this variable or its settings were last updated
+   **/
+  @ApiModelProperty(value = "When this variable or its settings were last updated")
+  public Date getLastSuccessfulUpdateTime() {
+    return lastSuccessfulUpdateTime;
+  }
+  public void setLastSuccessfulUpdateTime(Date lastSuccessfulUpdateTime) {
+    this.lastSuccessfulUpdateTime = lastSuccessfulUpdateTime;
+  }
+
+  
+  /**
+   * When the record was first created. Use ISO 8601 datetime format
+   **/
+  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  
+  /**
+   * When the record in the database was last updated. Use ISO 8601 datetime format
+   **/
+  @ApiModelProperty(value = "When the record in the database was last updated. Use ISO 8601 datetime format")
+  public Date getUpdatedAt() {
+    return updatedAt;
+  }
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  
+  /**
+   * Product URL
+   **/
+  @ApiModelProperty(value = "Product URL")
+  public String getProductUrl() {
+    return productUrl;
+  }
+  public void setProductUrl(String productUrl) {
+    this.productUrl = productUrl;
+  }
+
+  
+  /**
+   * Image URL
+   **/
+  @ApiModelProperty(value = "Image URL")
+  public String getImageUrl() {
+    return imageUrl;
+  }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  
+  /**
+   * Price
+   **/
+  @ApiModelProperty(value = "Price")
+  public Float getPrice() {
+    return price;
+  }
+  public void setPrice(Float price) {
+    this.price = price;
+  }
+
+  
+  /**
+   * Number of variables
+   **/
+  @ApiModelProperty(value = "Number of variables")
+  public Integer getNumberOfUserVariables() {
+    return numberOfUserVariables;
+  }
+  public void setNumberOfUserVariables(Integer numberOfUserVariables) {
+    this.numberOfUserVariables = numberOfUserVariables;
+  }
+
+  
+  /**
+   * Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables.
+   **/
+  @ApiModelProperty(value = "Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables.")
+  public Boolean getOutcome() {
+    return outcome;
+  }
+  public void setOutcome(Boolean outcome) {
+    this.outcome = outcome;
+  }
+
+  
+  /**
+   * Minimum recorded value of this variable
+   **/
+  @ApiModelProperty(value = "Minimum recorded value of this variable")
+  public Float getMinimumRecordedValue() {
+    return minimumRecordedValue;
+  }
+  public void setMinimumRecordedValue(Float minimumRecordedValue) {
+    this.minimumRecordedValue = minimumRecordedValue;
+  }
+
+  
+  /**
+   * Maximum recorded value of this variable
+   **/
+  @ApiModelProperty(value = "Maximum recorded value of this variable")
+  public Float getMaximumRecordedValue() {
+    return maximumRecordedValue;
+  }
+  public void setMaximumRecordedValue(Float maximumRecordedValue) {
+    this.maximumRecordedValue = maximumRecordedValue;
   }
 
   
@@ -442,35 +522,41 @@ public class Variable  {
     sb.append("class Variable {\n");
     
     sb.append("  id: ").append(id).append("\n");
+    sb.append("  clientId: ").append(clientId).append("\n");
+    sb.append("  parentId: ").append(parentId).append("\n");
     sb.append("  name: ").append(name).append("\n");
-    sb.append("  originalName: ").append(originalName).append("\n");
-    sb.append("  category: ").append(category).append("\n");
-    sb.append("  abbreviatedUnitName: ").append(abbreviatedUnitName).append("\n");
-    sb.append("  abbreviatedUnitId: ").append(abbreviatedUnitId).append("\n");
-    sb.append("  sources: ").append(sources).append("\n");
-    sb.append("  minimumValue: ").append(minimumValue).append("\n");
-    sb.append("  maximumValue: ").append(maximumValue).append("\n");
+    sb.append("  variableCategoryId: ").append(variableCategoryId).append("\n");
+    sb.append("  defaultUnitId: ").append(defaultUnitId).append("\n");
     sb.append("  combinationOperation: ").append(combinationOperation).append("\n");
     sb.append("  fillingValue: ").append(fillingValue).append("\n");
-    sb.append("  joinWith: ").append(joinWith).append("\n");
-    sb.append("  joinedVariables: ").append(joinedVariables).append("\n");
-    sb.append("  parent: ").append(parent).append("\n");
-    sb.append("  subVariables: ").append(subVariables).append("\n");
+    sb.append("  maximumAllowedValue: ").append(maximumAllowedValue).append("\n");
+    sb.append("  minimumAllowedValue: ").append(minimumAllowedValue).append("\n");
     sb.append("  onsetDelay: ").append(onsetDelay).append("\n");
     sb.append("  durationOfAction: ").append(durationOfAction).append("\n");
-    sb.append("  earliestMeasurementTime: ").append(earliestMeasurementTime).append("\n");
-    sb.append("  latestMeasurementTime: ").append(latestMeasurementTime).append("\n");
-    sb.append("  updated: ").append(updated).append("\n");
+    sb.append("  _public: ").append(_public).append("\n");
     sb.append("  causeOnly: ").append(causeOnly).append("\n");
-    sb.append("  numberOfCorrelations: ").append(numberOfCorrelations).append("\n");
-    sb.append("  outcome: ").append(outcome).append("\n");
-    sb.append("  measurementsAtLastAnalysis: ").append(measurementsAtLastAnalysis).append("\n");
-    sb.append("  numberOfMeasurements: ").append(numberOfMeasurements).append("\n");
-    sb.append("  lastUnit: ").append(lastUnit).append("\n");
-    sb.append("  lastValue: ").append(lastValue).append("\n");
     sb.append("  mostCommonValue: ").append(mostCommonValue).append("\n");
-    sb.append("  mostCommonUnit: ").append(mostCommonUnit).append("\n");
-    sb.append("  lastSource: ").append(lastSource).append("\n");
+    sb.append("  mostCommonUnitId: ").append(mostCommonUnitId).append("\n");
+    sb.append("  standardDeviation: ").append(standardDeviation).append("\n");
+    sb.append("  variance: ").append(variance).append("\n");
+    sb.append("  mean: ").append(mean).append("\n");
+    sb.append("  median: ").append(median).append("\n");
+    sb.append("  numberOfMeasurements: ").append(numberOfMeasurements).append("\n");
+    sb.append("  numberOfUniqueValues: ").append(numberOfUniqueValues).append("\n");
+    sb.append("  skewness: ").append(skewness).append("\n");
+    sb.append("  kurtosis: ").append(kurtosis).append("\n");
+    sb.append("  status: ").append(status).append("\n");
+    sb.append("  errorMessage: ").append(errorMessage).append("\n");
+    sb.append("  lastSuccessfulUpdateTime: ").append(lastSuccessfulUpdateTime).append("\n");
+    sb.append("  createdAt: ").append(createdAt).append("\n");
+    sb.append("  updatedAt: ").append(updatedAt).append("\n");
+    sb.append("  productUrl: ").append(productUrl).append("\n");
+    sb.append("  imageUrl: ").append(imageUrl).append("\n");
+    sb.append("  price: ").append(price).append("\n");
+    sb.append("  numberOfUserVariables: ").append(numberOfUserVariables).append("\n");
+    sb.append("  outcome: ").append(outcome).append("\n");
+    sb.append("  minimumRecordedValue: ").append(minimumRecordedValue).append("\n");
+    sb.append("  maximumRecordedValue: ").append(maximumRecordedValue).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

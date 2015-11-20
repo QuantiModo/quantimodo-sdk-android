@@ -6,6 +6,8 @@
     <string name="sdk_unknown_error">Unknown error</string>
     <string name="oauth_refresh_failed">You need to log in again</string>
 
+    <string name="network_connection_error_message">Poor network connectivity. Please try again later.</string>
+
     <string name="tracking_measurement">Measurement</string>
     <string name="tracking_value">Value</string>
     <string name="tracking_date">Date (today)</string>
@@ -53,7 +55,10 @@
     <string name="qmt_dialog_sync_positive_button">Stop</string>
 
     <string name="tracking_item_no_category">What do you want to track?</string>
-    
+
+    <string name="tracking_item_emotions_title">Emotions</string>
+    <string name="tracking_item_emotions_question">What emotion do you want to track?</string>
+
     <string name="tracking_item_diet_title">Diet</string>
     <string name="tracking_item_diet_question">What did you eat?</string>
 
@@ -67,6 +72,7 @@
     <string name="tracking_item_mood_question">Enter a mood</string>
 
     <string name="tracking_fragment_no_category_title">Track data</string>
+    <string name="tracking_fragment_emotions_title">Track emotions</string>
     <string name="tracking_fragment_diet_title">Track diet</string>
     <string name="tracking_fragment_treatments_title">Track treatments</string>
     <string name="tracking_fragment_symptoms_title">Track symptoms</string>
