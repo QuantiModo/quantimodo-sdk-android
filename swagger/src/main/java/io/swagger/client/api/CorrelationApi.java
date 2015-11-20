@@ -64,8 +64,8 @@ public class CorrelationApi {
    * @param effectChanges Effect changes
    * @param qmScore QM Score
    * @param error error
-   * @param createdAt When the measurement record was first created in ISO 8601 datetime format
-   * @param updatedAt When the measurement record in the database was last updated. Use ISO 8601 datetime format
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record in the database was last updated. Use ISO 8601 datetime format
    * @param reversePearsonCorrelationCoefficient Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation
    * @param predictivePearsonCorrelationCoefficient Predictive Pearson Correlation Coefficient
    * @param limit Limit the number of results returned

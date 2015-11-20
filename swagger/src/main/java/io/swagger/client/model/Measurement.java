@@ -22,7 +22,7 @@ public class Measurement  {
   @SerializedName("source_id")
   private Integer sourceId = null;
   @SerializedName("start_time")
-  private Integer startTime = null;
+  private String startTime = null;
   @SerializedName("value")
   private Float value = null;
   @SerializedName("unit_id")
@@ -122,13 +122,13 @@ public class Measurement  {
 
   
   /**
-   * Start Time for the measurement event in ISO 8601
+   * Start Time for the measurement event. Use ISO 8601
    **/
-  @ApiModelProperty(required = true, value = "Start Time for the measurement event in ISO 8601")
-  public Integer getStartTime() {
+  @ApiModelProperty(required = true, value = "Start Time for the measurement event. Use ISO 8601")
+  public String getStartTime() {
     return startTime;
   }
-  public void setStartTime(Integer startTime) {
+  public void setStartTime(String startTime) {
     this.startTime = startTime;
   }
 
@@ -242,9 +242,9 @@ public class Measurement  {
 
   
   /**
-   * When the measurement record was first created in ISO 8601 datetime format
+   * When the record was first created. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "When the measurement record was first created in ISO 8601 datetime format")
+  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
   public Date getCreatedAt() {
     return createdAt;
   }
@@ -254,9 +254,9 @@ public class Measurement  {
 
   
   /**
-   * When the measurement record in the database was last updated. Use ISO 8601 datetime format
+   * When the record in the database was last updated. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "When the measurement record in the database was last updated. Use ISO 8601 datetime format")
+  @ApiModelProperty(value = "When the record in the database was last updated. Use ISO 8601 datetime format")
   public Date getUpdatedAt() {
     return updatedAt;
   }

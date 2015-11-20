@@ -52,7 +52,7 @@ public class MeasurementApi {
    * @param connectorId The id for the connector data source from which the measurement was obtained
    * @param variableId ID of the variable for which we are creating the measurement records
    * @param sourceId Application or device used to record the measurement values
-   * @param startTime start time for the measurement event in ISO 8601 datetime format
+   * @param startTime start time for the measurement event. Use ISO 8601 datetime format
    * @param value The value of the measurement after conversion to the default unit for that variable
    * @param unitId The default unit id for the variable
    * @param originalValue Unconverted value of measurement as originally posted (before conversion to default unit)
@@ -62,15 +62,15 @@ public class MeasurementApi {
    * @param latitude Latitude at which the measurement was taken
    * @param longitude Longitude at which the measurement was taken
    * @param location Optional human readable name for the location where the measurement was recorded
-   * @param createdAt When the measurement record was first created in ISO 8601 datetime format
-   * @param updatedAt When the measurement record was last updated in ISO 8601 datetime format
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param error An error message if there is a problem with the measurement
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20013
    */
-  public InlineResponse20013  measurementsGet (Integer userId, String clientId, Integer connectorId, Integer variableId, Integer sourceId, String startTime, BigDecimal value, Integer unitId, BigDecimal originalValue, Integer originalUnitId, Integer duration, String note, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, String error, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20013  measurementsGet (String token, Integer userId, String clientId, Integer connectorId, Integer variableId, Integer sourceId, String startTime, BigDecimal value, Integer unitId, BigDecimal originalValue, Integer originalUnitId, Integer duration, String note, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, String error, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -81,6 +81,7 @@ public class MeasurementApi {
     List<Pair> queryParams = new ArrayList<Pair>();
     // header params
     Map<String, String> headerParams = new HashMap<String, String>();
+    headerParams.put("Authorization", "Bearer " + token);
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 

@@ -49,8 +49,8 @@ public class VariableUserSourceApi {
    * @param timestamp Time that this measurement occurred Uses epoch minute (epoch time divided by 60)
    * @param earliestMeasurementTime Earliest measurement time
    * @param latestMeasurementTime Latest measurement time
-   * @param createdAt When the record was first created in ISO 8601 datetime format
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.

@@ -44,9 +44,9 @@ public class UnitCategory  {
 
   
   /**
-   * When the measurement record was first created in ISO 8601 datetime format
+   * When the record was first created. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "When the measurement record was first created in ISO 8601 datetime format")
+  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
   public Date getCreatedAt() {
     return createdAt;
   }
@@ -56,9 +56,9 @@ public class UnitCategory  {
 
   
   /**
-   * When the measurement record in the database was last updated. Use ISO 8601 datetime format
+   * When the record in the database was last updated. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "When the measurement record in the database was last updated. Use ISO 8601 datetime format")
+  @ApiModelProperty(value = "When the record in the database was last updated. Use ISO 8601 datetime format")
   public Date getUpdatedAt() {
     return updatedAt;
   }

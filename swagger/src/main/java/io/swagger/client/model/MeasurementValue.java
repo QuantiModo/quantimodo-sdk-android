@@ -9,19 +9,19 @@ import com.google.gson.annotations.SerializedName;
 public class MeasurementValue  {
   
   @SerializedName("start_time")
-  private Long startTime = null;
+  private String startTime = null;
   @SerializedName("value")
   private Float value = null;
 
   
   /**
-   * When the measurement event occurred in ISO 8601 datetime format
+   * When the measurement event occurred . Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(required = true, value = "When the measurement event occurred in ISO 8601 datetime format")
-  public Long getStartTime() {
+  @ApiModelProperty(required = true, value = "When the measurement event occurred . Use ISO 8601 datetime format")
+  public String getStartTime() {
     return startTime;
   }
-  public void setStartTime(Long startTime) {
+  public void setStartTime(String startTime) {
     this.startTime = startTime;
   }
 
