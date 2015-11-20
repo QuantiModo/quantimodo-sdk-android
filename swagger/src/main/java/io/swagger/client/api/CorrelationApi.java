@@ -45,6 +45,7 @@ public class CorrelationApi {
   /**
    * Get all Correlations
    * Get all Correlations
+   * @param accessToken User&#39;s OAuth2 access token
    * @param timestamp Time at which correlation was calculated
    * @param userId ID of user that owns this correlation
    * @param correlation Pearson correlation coefficient between cause and effect measurements
@@ -73,7 +74,7 @@ public class CorrelationApi {
    * @param sort Sort records by given field
    * @return InlineResponse2009
    */
-  public InlineResponse2009  correlationsGet (Integer timestamp, Integer userId, BigDecimal correlation, Integer causeId, Integer effectId, Integer onsetDelay, Integer durationOfAction, Integer numberOfPairs, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, BigDecimal optimalPearsonProduct, BigDecimal vote, BigDecimal statisticalSignificance, String causeUnit, Integer causeUnitId, Integer causeChanges, Integer effectChanges, BigDecimal qmScore, String error, String createdAt, String updatedAt, BigDecimal reversePearsonCorrelationCoefficient, BigDecimal predictivePearsonCorrelationCoefficient, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse2009  correlationsGet (String accessToken, Integer timestamp, Integer userId, BigDecimal correlation, Integer causeId, Integer effectId, Integer onsetDelay, Integer durationOfAction, Integer numberOfPairs, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, BigDecimal optimalPearsonProduct, BigDecimal vote, BigDecimal statisticalSignificance, String causeUnit, Integer causeUnitId, Integer causeChanges, Integer effectChanges, BigDecimal qmScore, String error, String createdAt, String updatedAt, BigDecimal reversePearsonCorrelationCoefficient, BigDecimal predictivePearsonCorrelationCoefficient, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -87,6 +88,8 @@ public class CorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "timestamp", timestamp));
     
@@ -176,10 +179,11 @@ public class CorrelationApi {
   /**
    * Store Correlation
    * Store Correlation
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Correlation that should be stored
    * @return InlineResponse20010
    */
-  public InlineResponse20010  correlationsPost (Correlation body) throws ApiException {
+  public InlineResponse20010  correlationsPost (String accessToken, Correlation body) throws ApiException {
     Object postBody = body;
     
 
@@ -193,6 +197,8 @@ public class CorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -231,9 +237,10 @@ public class CorrelationApi {
    * Get Correlation Details
    * Get Correlation
    * @param id id of Correlation
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20010
    */
-  public InlineResponse20010  correlationsIdGet (Integer id) throws ApiException {
+  public InlineResponse20010  correlationsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -252,6 +259,8 @@ public class CorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -290,10 +299,11 @@ public class CorrelationApi {
    * Update Correlation
    * Update Correlation
    * @param id id of Correlation
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Correlation that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  correlationsIdPut (Integer id, Correlation body) throws ApiException {
+  public InlineResponse2002  correlationsIdPut (Integer id, String accessToken, Correlation body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -312,6 +322,8 @@ public class CorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -350,9 +362,10 @@ public class CorrelationApi {
    * Delete Correlation
    * Delete Correlation
    * @param id id of Correlation
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  correlationsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  correlationsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -371,6 +384,8 @@ public class CorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

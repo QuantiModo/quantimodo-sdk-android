@@ -44,6 +44,7 @@ public class VoteApi {
   /**
    * Get all Votes
    * Get all Votes
+   * @param accessToken User&#39;s OAuth2 access token
    * @param clientId The ID of the client application which last created or updated this vote
    * @param userId ID of the user who voted
    * @param causeId ID of predictor variable
@@ -56,7 +57,7 @@ public class VoteApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20033
    */
-  public InlineResponse20033  votesGet (String clientId, Integer userId, Integer causeId, Integer effectId, Integer value, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20033  votesGet (String accessToken, String clientId, Integer userId, Integer causeId, Integer effectId, Integer value, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -70,6 +71,8 @@ public class VoteApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
     
@@ -127,10 +130,11 @@ public class VoteApi {
   /**
    * Store Vote
    * This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Vote that should be stored
    * @return InlineResponse20034
    */
-  public InlineResponse20034  votesPost (Vote body) throws ApiException {
+  public InlineResponse20034  votesPost (String accessToken, Vote body) throws ApiException {
     Object postBody = body;
     
 
@@ -144,6 +148,8 @@ public class VoteApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -182,9 +188,10 @@ public class VoteApi {
    * Get Vote
    * Get Vote
    * @param id id of Vote
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20034
    */
-  public InlineResponse20034  votesIdGet (Integer id) throws ApiException {
+  public InlineResponse20034  votesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -203,6 +210,8 @@ public class VoteApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -241,10 +250,11 @@ public class VoteApi {
    * Update Vote
    * Update Vote
    * @param id id of Vote
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Vote that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  votesIdPut (Integer id, Vote body) throws ApiException {
+  public InlineResponse2002  votesIdPut (Integer id, String accessToken, Vote body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -263,6 +273,8 @@ public class VoteApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -301,9 +313,10 @@ public class VoteApi {
    * Delete Vote
    * Delete previously posted vote
    * @param id id of Vote
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  votesIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  votesIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -322,6 +335,8 @@ public class VoteApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

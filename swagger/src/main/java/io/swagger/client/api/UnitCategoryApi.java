@@ -44,6 +44,7 @@ public class UnitCategoryApi {
   /**
    * Get unit categories
    * Get a list of the categories of measurement units such as &#39;Distance&#39;, &#39;Duration&#39;, &#39;Energy&#39;, &#39;Frequency&#39;, &#39;Miscellany&#39;, &#39;Pressure&#39;, &#39;Proportion&#39;, &#39;Rating&#39;, &#39;Temperature&#39;, &#39;Volume&#39;, and &#39;Weight&#39;.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param name Unit category name
    * @param createdAt When the record was first created. Use ISO 8601 datetime format
    * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
@@ -52,7 +53,7 @@ public class UnitCategoryApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20017
    */
-  public InlineResponse20017  unitCategoriesGet (String name, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20017  unitCategoriesGet (String accessToken, String name, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -66,6 +67,8 @@ public class UnitCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "name", name));
     
@@ -115,10 +118,11 @@ public class UnitCategoryApi {
   /**
    * Store UnitCategory
    * Store UnitCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body UnitCategory that should be stored
    * @return InlineResponse20018
    */
-  public InlineResponse20018  unitCategoriesPost (UnitCategory body) throws ApiException {
+  public InlineResponse20018  unitCategoriesPost (String accessToken, UnitCategory body) throws ApiException {
     Object postBody = body;
     
 
@@ -132,6 +136,8 @@ public class UnitCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -170,9 +176,10 @@ public class UnitCategoryApi {
    * Get UnitCategory
    * Get UnitCategory
    * @param id id of UnitCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20018
    */
-  public InlineResponse20018  unitCategoriesIdGet (Integer id) throws ApiException {
+  public InlineResponse20018  unitCategoriesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -191,6 +198,8 @@ public class UnitCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -229,10 +238,11 @@ public class UnitCategoryApi {
    * Update UnitCategory
    * Update UnitCategory
    * @param id id of UnitCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body UnitCategory that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  unitCategoriesIdPut (Integer id, UnitCategory body) throws ApiException {
+  public InlineResponse2002  unitCategoriesIdPut (Integer id, String accessToken, UnitCategory body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -251,6 +261,8 @@ public class UnitCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -289,9 +301,10 @@ public class UnitCategoryApi {
    * Delete UnitCategory
    * Delete UnitCategory
    * @param id id of UnitCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  unitCategoriesIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  unitCategoriesIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -310,6 +323,8 @@ public class UnitCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

@@ -45,6 +45,7 @@ public class CommonVariableRelationshipApi {
   /**
    * Get all CommonVariableRelationships
    * Get all CommonVariableRelationships
+   * @param accessToken User&#39;s OAuth2 access token
    * @param id id
    * @param confidenceLevel Our confidence that a consistent predictive relationship exists based on the amount of evidence, reproducibility, and other factors
    * @param confidenceScore A quantitative representation of our confidence that a consistent predictive relationship exists based on the amount of evidence, reproducibility, and other factors
@@ -69,7 +70,7 @@ public class CommonVariableRelationshipApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse2003
    */
-  public InlineResponse2003  commonVariableRelationshipsGet (Integer id, String confidenceLevel, BigDecimal confidenceScore, String direction, Integer durationOfAction, String errorMessage, Integer onsetDelay, Integer outcomeVariableId, Integer predictorVariableId, Integer predictorUnitId, BigDecimal sinnRank, BigDecimal strengthScore, String strengthLevel, Integer upVotes, Integer downVotes, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, Integer numberOfUsers, String dataSource, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse2003  commonVariableRelationshipsGet (String accessToken, Integer id, String confidenceLevel, BigDecimal confidenceScore, String direction, Integer durationOfAction, String errorMessage, Integer onsetDelay, Integer outcomeVariableId, Integer predictorVariableId, Integer predictorUnitId, BigDecimal sinnRank, BigDecimal strengthScore, String strengthLevel, Integer upVotes, Integer downVotes, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, Integer numberOfUsers, String dataSource, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -83,6 +84,8 @@ public class CommonVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "id", id));
     
@@ -164,10 +167,11 @@ public class CommonVariableRelationshipApi {
   /**
    * Store CommonVariableRelationship
    * Store CommonVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body CommonVariableRelationship that should be stored
    * @return InlineResponse2004
    */
-  public InlineResponse2004  commonVariableRelationshipsPost (CommonVariableRelationship body) throws ApiException {
+  public InlineResponse2004  commonVariableRelationshipsPost (String accessToken, CommonVariableRelationship body) throws ApiException {
     Object postBody = body;
     
 
@@ -181,6 +185,8 @@ public class CommonVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -219,9 +225,10 @@ public class CommonVariableRelationshipApi {
    * Get CommonVariableRelationship
    * Get CommonVariableRelationship
    * @param id id of CommonVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2004
    */
-  public InlineResponse2004  commonVariableRelationshipsIdGet (Integer id) throws ApiException {
+  public InlineResponse2004  commonVariableRelationshipsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -240,6 +247,8 @@ public class CommonVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -278,10 +287,11 @@ public class CommonVariableRelationshipApi {
    * Update CommonVariableRelationship
    * Update CommonVariableRelationship
    * @param id id of CommonVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body CommonVariableRelationship that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  commonVariableRelationshipsIdPut (Integer id, CommonVariableRelationship body) throws ApiException {
+  public InlineResponse2002  commonVariableRelationshipsIdPut (Integer id, String accessToken, CommonVariableRelationship body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -300,6 +310,8 @@ public class CommonVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -338,9 +350,10 @@ public class CommonVariableRelationshipApi {
    * Delete CommonVariableRelationship
    * Delete CommonVariableRelationship
    * @param id id of CommonVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  commonVariableRelationshipsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  commonVariableRelationshipsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -359,6 +372,8 @@ public class CommonVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
