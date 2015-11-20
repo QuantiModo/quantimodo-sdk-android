@@ -44,6 +44,7 @@ public class ConnectorApi {
   /**
    * Get list of Connectors
    * A connector pulls data from other data providers using their API or a screenscraper. Returns a list of all available connectors and information about them such as their id, name, whether the user has provided access, logo url, connection instructions, and the update history.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param name Lowercase system name for the data source
    * @param displayName Pretty display name for the data source
    * @param image URL to the image of the connector logo
@@ -57,7 +58,7 @@ public class ConnectorApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse2007
    */
-  public InlineResponse2007  connectorsGet (String name, String displayName, String image, String getItUrl, String shortDescription, String longDescription, Boolean enabled, Boolean oauth, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse2007  connectorsGet (String accessToken, String name, String displayName, String image, String getItUrl, String shortDescription, String longDescription, Boolean enabled, Boolean oauth, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -71,6 +72,8 @@ public class ConnectorApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "name", name));
     
@@ -130,10 +133,11 @@ public class ConnectorApi {
   /**
    * Store Connector
    * Store Connector
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Connector that should be stored
    * @return InlineResponse2008
    */
-  public InlineResponse2008  connectorsPost (Connector body) throws ApiException {
+  public InlineResponse2008  connectorsPost (String accessToken, Connector body) throws ApiException {
     Object postBody = body;
     
 
@@ -147,6 +151,8 @@ public class ConnectorApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -185,9 +191,10 @@ public class ConnectorApi {
    * Get connector info for user
    * Returns information about the connector such as the connector id, whether or not is connected for this user (i.e. we have a token or credentials), and its update history for the user.
    * @param id id of Connector
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2008
    */
-  public InlineResponse2008  connectorsIdGet (Integer id) throws ApiException {
+  public InlineResponse2008  connectorsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -206,6 +213,8 @@ public class ConnectorApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -244,10 +253,11 @@ public class ConnectorApi {
    * Update Connector
    * Update Connector
    * @param id id of Connector
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Connector that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  connectorsIdPut (Integer id, Connector body) throws ApiException {
+  public InlineResponse2002  connectorsIdPut (Integer id, String accessToken, Connector body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -266,6 +276,8 @@ public class ConnectorApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -304,9 +316,10 @@ public class ConnectorApi {
    * Delete Connector
    * Delete Connector
    * @param id id of Connector
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  connectorsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  connectorsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -325,6 +338,8 @@ public class ConnectorApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

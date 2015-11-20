@@ -44,6 +44,7 @@ public class SourceApi {
   /**
    * Get measurement sources
    * Returns a list of all the apps from which measurement data is obtained.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param clientId The ID of the client application which last created or updated this source
    * @param name Name of the application or device
    * @param createdAt When the record was first created. Use ISO 8601 datetime format
@@ -53,7 +54,7 @@ public class SourceApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20015
    */
-  public InlineResponse20015  sourcesGet (String clientId, String name, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20015  sourcesGet (String accessToken, String clientId, String name, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -67,6 +68,8 @@ public class SourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
     
@@ -118,10 +121,11 @@ public class SourceApi {
   /**
    * Add a data source
    * Add a life-tracking app or device to the QuantiModo list of data sources.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Source that should be stored
    * @return InlineResponse20016
    */
-  public InlineResponse20016  sourcesPost (Source body) throws ApiException {
+  public InlineResponse20016  sourcesPost (String accessToken, Source body) throws ApiException {
     Object postBody = body;
     
 
@@ -135,6 +139,8 @@ public class SourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -173,9 +179,10 @@ public class SourceApi {
    * Get Source
    * Get Source
    * @param id id of Source
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20016
    */
-  public InlineResponse20016  sourcesIdGet (Integer id) throws ApiException {
+  public InlineResponse20016  sourcesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -194,6 +201,8 @@ public class SourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -232,10 +241,11 @@ public class SourceApi {
    * Update Source
    * Update Source
    * @param id id of Source
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Source that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  sourcesIdPut (Integer id, Source body) throws ApiException {
+  public InlineResponse2002  sourcesIdPut (Integer id, String accessToken, Source body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -254,6 +264,8 @@ public class SourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -292,9 +304,10 @@ public class SourceApi {
    * Delete Source
    * Delete Source
    * @param id id of Source
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  sourcesIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  sourcesIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -313,6 +326,8 @@ public class SourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

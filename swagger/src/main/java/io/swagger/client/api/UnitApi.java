@@ -45,15 +45,16 @@ public class UnitApi {
   /**
    * Get all available units
    * Get all available units
+   * @param accessToken User&#39;s OAuth2 access token
    * @param clientId The ID of the client application which last created or updated this unit
    * @param name Unit name
    * @param abbreviatedName Unit abbreviation
-   * @param categoryId Unit category ID
-   * @param minimumValue Unit minimum value
-   * @param maximumValue Unit maximum value
+   * @param unitCategoryId Unit category ID
+   * @param minimumValue Minimum value permitted for this unit
+   * @param maximumValue Maximum value permitted for this unit
    * @param updated updated
-   * @param defaultUnitId ID of default unit
-   * @param multiply Value multiplied to
+   * @param defaultUnitId ID of default unit for this units category
+   * @param multiply Value multiplied to convert to default unit in this unit category
    * @param add Value which should be added to convert to default unit
    * @param createdAt When the record was first created. Use ISO 8601 datetime format
    * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
@@ -62,7 +63,7 @@ public class UnitApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20019
    */
-  public InlineResponse20019  unitsGet (String clientId, String name, String abbreviatedName, Boolean categoryId, BigDecimal minimumValue, BigDecimal maximumValue, Integer updated, Integer defaultUnitId, BigDecimal multiply, BigDecimal add, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20019  unitsGet (String accessToken, String clientId, String name, String abbreviatedName, Integer unitCategoryId, BigDecimal minimumValue, BigDecimal maximumValue, Integer updated, Integer defaultUnitId, BigDecimal multiply, BigDecimal add, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -77,13 +78,15 @@ public class UnitApi {
     Map<String, String> formParams = new HashMap<String, String>();
 
     
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
+    
     queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "name", name));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "abbreviated_name", abbreviatedName));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "category_id", categoryId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "unit_category_id", unitCategoryId));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "minimum_value", minimumValue));
     
@@ -143,10 +146,11 @@ public class UnitApi {
   /**
    * Store Unit
    * Store Unit
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Unit that should be stored
    * @return InlineResponse20020
    */
-  public InlineResponse20020  unitsPost (Unit body) throws ApiException {
+  public InlineResponse20020  unitsPost (String accessToken, Unit body) throws ApiException {
     Object postBody = body;
     
 
@@ -160,6 +164,8 @@ public class UnitApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -198,9 +204,10 @@ public class UnitApi {
    * Get Unit
    * Get Unit
    * @param id id of Unit
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20020
    */
-  public InlineResponse20020  unitsIdGet (Integer id) throws ApiException {
+  public InlineResponse20020  unitsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -219,6 +226,8 @@ public class UnitApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -257,10 +266,11 @@ public class UnitApi {
    * Update Unit
    * Update Unit
    * @param id id of Unit
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Unit that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  unitsIdPut (Integer id, Unit body) throws ApiException {
+  public InlineResponse2002  unitsIdPut (Integer id, String accessToken, Unit body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -279,6 +289,8 @@ public class UnitApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -317,9 +329,10 @@ public class UnitApi {
    * Delete Unit
    * Delete Unit
    * @param id id of Unit
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  unitsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  unitsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -338,6 +351,8 @@ public class UnitApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
