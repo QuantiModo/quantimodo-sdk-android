@@ -291,7 +291,7 @@ public abstract class SyncService extends IntentService {
 
     protected Unit getUnitForName(ArrayList<Unit> units, String name){
         for (Unit u : units){
-            if (u.getName().equals(name)){
+            if (u.getAbbr().equals(name)){
                 return u;
             }
         }
@@ -317,13 +317,11 @@ public abstract class SyncService extends IntentService {
      * </ul>
      */
     protected void defaultSync(){
-        //TODO Check if we need sync right now
         long lastMetaSync = mSharePrefs.getLong(LAST_META_SYNC, 0);
         if (System.currentTimeMillis() / 1000 - lastMetaSync < DEFAULT_META_SYNC_TIMEOUT){
             return;
         }
 
-        //TODO Sync categories
         SdkResponse<ArrayList<VariableCategory>> response = mClient.getCategories(this,mToken);
         ArrayList<Category> categories = new ArrayList<>();
         if (response.isSuccessful()){
@@ -334,21 +332,17 @@ public abstract class SyncService extends IntentService {
             categoryDao.insertOrReplaceInTx(categories);
         }
 
-        //TODO Sync units
         SdkResponse<ArrayList<com.quantimodo.android.sdk.model.Unit>> unitsResponse =  mClient.getUnits(this, mToken);
         ArrayList<Unit> units = new ArrayList<>();
         if (unitsResponse.isSuccessful()){
             UnitDao unitDao = mDaoSession.getUnitDao();
             for (com.quantimodo.android.sdk.model.Unit unit : unitsResponse.getData()){
                 Unit u = Unit.fromWsUnit(unit);
-                u.setCategory(getCategoryForName(categories, unit.getCategory()));
                 units.add(u);
             }
             unitDao.insertOrReplaceInTx(units);
         }
 
-        //TODO Sync user variables
-        //TODO add method to get
         //What with unit conversations after sync?
         SdkResponse<ArrayList<Variable>> variablesResponse = mClient.searchVariables(this,mToken,"",100,0,null,null);
         if(variablesResponse.isSuccessful()){
