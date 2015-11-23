@@ -77,6 +77,10 @@ public class ScreenSlidePageFragment extends Fragment {
                 imageRes = R.drawable.walkthrough_6;
                 contentRes = R.string.walkthrough_content_6;
                 break;
+            case 6:
+                imageRes = R.drawable.walkthrough_7;
+                contentRes = R.string.walkthrough_content_7;
+                break;
         }
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inScaled = false;

@@ -19,9 +19,9 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="17sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center_horizontal"
-        android:textColor="@color/button_color"
+        android:textColor="@android:color/black"
         android:text="@string/walkthrough_content_1"/>
 </LinearLayout>
