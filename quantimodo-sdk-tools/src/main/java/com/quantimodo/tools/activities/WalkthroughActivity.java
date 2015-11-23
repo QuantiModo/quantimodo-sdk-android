@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.fragments.WalkthroughPageFragment;
@@ -37,6 +38,14 @@ public class WalkthroughActivity extends FragmentActivity {
         ViewPager mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+
+        Button skipButton = (Button) findViewById(R.id.walkthrough_skip);
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 
