@@ -2,8 +2,12 @@ package com.quantimodo.tools.sdk.request;
 
 import com.quantimodo.android.sdk.SdkResponse;
 import com.quantimodo.android.sdk.model.VariableCategory;
+import com.quantimodo.tools.models.Category;
+import com.quantimodo.tools.models.DaoSession;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Get categories request
@@ -11,20 +15,36 @@ import java.util.ArrayList;
  */
 public class GetCategoriesRequest extends SdkRequest<GetCategoriesRequest.GetCategoriesResponse> {
 
+    @Inject
+    DaoSession mDaoSession;
+
     public GetCategoriesRequest() {
         super(GetCategoriesResponse.class);
     }
 
     @Override
     public GetCategoriesResponse loadDataFromNetwork() throws Exception {
-        SdkResponse<ArrayList<VariableCategory>> categorySdkResponse = getClient().getCategories(getCtx(), getToken());
-        checkResponse(categorySdkResponse);
-        return new GetCategoriesResponse(categorySdkResponse.getData());
+        List<Category> categories = mDaoSession.getCategoryDao().loadAll();
+        ArrayList<VariableCategory> result = new ArrayList<>();
+        if (categories.size() > 0){
+            for (Category c : categories) {
+                result.add(c.toVariableCategory());
+            }
+        } else {
+            SdkResponse<ArrayList<VariableCategory>> categorySdkResponse = getClient().getCategories(getCtx(), getToken());
+            checkResponse(categorySdkResponse);
+            result.addAll(categorySdkResponse.getData());
+            for (VariableCategory vc : result){
+                categories.add(Category.fromVariableCategory(vc));
+            }
+            mDaoSession.getCategoryDao().insertOrReplaceInTx(categories);
+        }
+        return new GetCategoriesResponse(result);
     }
 
     @Override
     protected long getCacheTime() {
-        return 2 * 24 * 3600; //2 days
+        return 0; //0 Moved to database cache
     }
 
     @Override

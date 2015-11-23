@@ -45,6 +45,7 @@ public class AggregatedCorrelationApi {
   /**
    * Get all AggregatedCorrelations
    * Get all AggregatedCorrelations
+   * @param accessToken User&#39;s OAuth2 access token
    * @param correlation Pearson correlation coefficient between cause and effect measurements
    * @param causeId Variable ID of the predictor variable for which the user desires correlations
    * @param effectId Variable ID of the outcome variable for which the user desires correlations
@@ -74,7 +75,7 @@ public class AggregatedCorrelationApi {
    * @param sort Sort records by given field
    * @return InlineResponse200
    */
-  public InlineResponse200  aggregatedCorrelationsGet (BigDecimal correlation, Integer causeId, Integer effectId, Integer onsetDelay, Integer durationOfAction, Integer numberOfPairs, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, BigDecimal optimalPearsonProduct, Integer numberOfUsers, Integer numberOfCorrelations, BigDecimal statisticalSignificance, String causeUnit, Integer causeUnitId, Integer causeChanges, Integer effectChanges, BigDecimal aggregateQmScore, String createdAt, String updatedAt, String status, String errorMessage, String lastSuccessfulUpdateTime, BigDecimal reversePearsonCorrelationCoefficient, BigDecimal predictivePearsonCorrelationCoefficient, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse200  aggregatedCorrelationsGet (String accessToken, BigDecimal correlation, Integer causeId, Integer effectId, Integer onsetDelay, Integer durationOfAction, Integer numberOfPairs, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, BigDecimal optimalPearsonProduct, Integer numberOfUsers, Integer numberOfCorrelations, BigDecimal statisticalSignificance, String causeUnit, Integer causeUnitId, Integer causeChanges, Integer effectChanges, BigDecimal aggregateQmScore, String createdAt, String updatedAt, String status, String errorMessage, String lastSuccessfulUpdateTime, BigDecimal reversePearsonCorrelationCoefficient, BigDecimal predictivePearsonCorrelationCoefficient, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -88,6 +89,8 @@ public class AggregatedCorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "correlation", correlation));
     
@@ -179,10 +182,11 @@ public class AggregatedCorrelationApi {
   /**
    * Store AggregatedCorrelation
    * Store AggregatedCorrelation
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body AggregatedCorrelation that should be stored
    * @return InlineResponse2001
    */
-  public InlineResponse2001  aggregatedCorrelationsPost (AggregatedCorrelation body) throws ApiException {
+  public InlineResponse2001  aggregatedCorrelationsPost (String accessToken, AggregatedCorrelation body) throws ApiException {
     Object postBody = body;
     
 
@@ -196,6 +200,8 @@ public class AggregatedCorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -234,9 +240,10 @@ public class AggregatedCorrelationApi {
    * Get AggregatedCorrelation
    * Get AggregatedCorrelation
    * @param id id of AggregatedCorrelation
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2001
    */
-  public InlineResponse2001  aggregatedCorrelationsIdGet (Integer id) throws ApiException {
+  public InlineResponse2001  aggregatedCorrelationsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -255,6 +262,8 @@ public class AggregatedCorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -293,10 +302,11 @@ public class AggregatedCorrelationApi {
    * Update AggregatedCorrelation
    * Update AggregatedCorrelation
    * @param id id of AggregatedCorrelation
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body AggregatedCorrelation that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  aggregatedCorrelationsIdPut (Integer id, AggregatedCorrelation body) throws ApiException {
+  public InlineResponse2002  aggregatedCorrelationsIdPut (Integer id, String accessToken, AggregatedCorrelation body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -315,6 +325,8 @@ public class AggregatedCorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -353,9 +365,10 @@ public class AggregatedCorrelationApi {
    * Delete AggregatedCorrelation
    * Delete AggregatedCorrelation
    * @param id id of AggregatedCorrelation
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  aggregatedCorrelationsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  aggregatedCorrelationsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -374,6 +387,8 @@ public class AggregatedCorrelationApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

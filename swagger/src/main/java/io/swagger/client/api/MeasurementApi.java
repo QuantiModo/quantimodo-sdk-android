@@ -47,6 +47,7 @@ public class MeasurementApi {
   /**
    * Get measurements for this user
    * Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param userId ID of user that owns this measurement
    * @param clientId The ID of the client application which originally stored the measurement
    * @param connectorId The id for the connector data source from which the measurement was obtained
@@ -70,7 +71,7 @@ public class MeasurementApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20013
    */
-  public InlineResponse20013  measurementsGet (String token, Integer userId, String clientId, Integer connectorId, Integer variableId, Integer sourceId, String startTime, BigDecimal value, Integer unitId, BigDecimal originalValue, Integer originalUnitId, Integer duration, String note, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, String error, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20013  measurementsGet (String accessToken, Integer userId, String clientId, Integer connectorId, Integer variableId, Integer sourceId, String startTime, BigDecimal value, Integer unitId, BigDecimal originalValue, Integer originalUnitId, Integer duration, String note, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, String error, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -81,10 +82,11 @@ public class MeasurementApi {
     List<Pair> queryParams = new ArrayList<Pair>();
     // header params
     Map<String, String> headerParams = new HashMap<String, String>();
-    headerParams.put("Authorization", "Bearer " + token);
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "user_id", userId));
     
@@ -164,10 +166,11 @@ public class MeasurementApi {
   /**
    * Post a new set or update existing measurements to the database
    * You can submit or update multiple measurements in a measurements sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Measurement that should be stored
    * @return InlineResponse20013
    */
-  public InlineResponse20013  measurementsPost (MeasurementPost body) throws ApiException {
+  public InlineResponse20013  measurementsPost (String accessToken, MeasurementPost body) throws ApiException {
     Object postBody = body;
     
 
@@ -181,6 +184,8 @@ public class MeasurementApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -218,9 +223,10 @@ public class MeasurementApi {
   /**
    * Get Measurements CSV
    * Download a CSV containing all user measurements
+   * @param accessToken User&#39;s OAuth2 access token
    * @return File
    */
-  public File  measurementsCsvGet () throws ApiException {
+  public File  measurementsCsvGet (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -234,6 +240,8 @@ public class MeasurementApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -271,9 +279,10 @@ public class MeasurementApi {
   /**
    * Post Request for Measurements CSV
    * Use this endpoint to schedule a CSV export containing all user measurements to be emailed to the user within 24 hours.
+   * @param accessToken User&#39;s OAuth2 access token
    * @return Integer
    */
-  public Integer  measurementsRequestCsvPost () throws ApiException {
+  public Integer  measurementsRequestCsvPost (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -287,6 +296,8 @@ public class MeasurementApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -325,9 +336,10 @@ public class MeasurementApi {
    * Get Measurement
    * Get Measurement
    * @param id id of Measurement
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20014
    */
-  public InlineResponse20014  measurementsIdGet (Integer id) throws ApiException {
+  public InlineResponse20014  measurementsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -346,6 +358,8 @@ public class MeasurementApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -384,10 +398,11 @@ public class MeasurementApi {
    * Update Measurement
    * Update Measurement
    * @param id id of Measurement
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Measurement that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  measurementsIdPut (Integer id, Measurement body) throws ApiException {
+  public InlineResponse2002  measurementsIdPut (Integer id, String accessToken, Measurement body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -406,6 +421,8 @@ public class MeasurementApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -444,9 +461,10 @@ public class MeasurementApi {
    * Delete Measurement
    * Delete Measurement
    * @param id id of Measurement
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  measurementsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  measurementsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -465,6 +483,8 @@ public class MeasurementApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

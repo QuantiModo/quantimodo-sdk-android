@@ -14,16 +14,24 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import com.quantimodo.android.sdk.QuantimodoApiV2;
+import com.quantimodo.android.sdk.SdkResponse;
+import com.quantimodo.android.sdk.model.*;
+import com.quantimodo.android.sdk.model.Variable;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.events.RequestSyncStopEvent;
 import com.quantimodo.tools.events.SyncFinished;
 import com.quantimodo.tools.events.SyncStarted;
+import com.quantimodo.tools.models.*;
+import com.quantimodo.tools.models.Unit;
 import com.quantimodo.tools.receivers.SyncStopReceiver;
 import com.quantimodo.tools.sdk.AuthHelper;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.quantimodo.tools.ToolsPrefs.DEBUG_TAG;
 
@@ -38,6 +46,8 @@ public abstract class SyncService extends IntentService {
     public static final String TYPE_REQUEST_CLOSE = "rClose";
     public static final String SYNC_FROM_SCRATCH_KEY = "syncFromScratch";
     public static final String LAST_SUCCESFULL_SYNC_KEY = "lastSuccessfulMoodSync";
+    public static final String LAST_META_SYNC = "lastMetaSync";
+    public static final long DEFAULT_META_SYNC_TIMEOUT = 3600 * 24; //1 day
     private static final int FOREGROUND_ID = 1345;
 
     protected long lastSuccessfulMoodSync;
@@ -56,6 +66,9 @@ public abstract class SyncService extends IntentService {
 
     @Inject
     protected ToolsPrefs mToolPrefs;
+
+    @Inject
+    protected DaoSession mDaoSession;
 
     private Intent mCurrentIntent;
 
@@ -168,7 +181,7 @@ public abstract class SyncService extends IntentService {
     protected void runForeground(Bundle bundle){
         mBuilder = createNotificationBuilder(bundle);
         Notification notification = mBuilder.getNotification();
-        startForeground(FOREGROUND_ID,notification);
+        startForeground(FOREGROUND_ID, notification);
     }
 
     /**
@@ -220,7 +233,7 @@ public abstract class SyncService extends IntentService {
             QTools.getInstance().postEvent(new SyncFinished(successful));
         }
 
-        Log.i(DEBUG_TAG,"Sync finished.");
+        Log.i(DEBUG_TAG, "Sync finished.");
     }
 
     /**
@@ -251,7 +264,7 @@ public abstract class SyncService extends IntentService {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if(activeNetwork == null){
-            Log.i(DEBUG_TAG,"No active network connection");
+            Log.i(DEBUG_TAG, "No active network connection");
             return false;
         }
 
@@ -264,6 +277,87 @@ public abstract class SyncService extends IntentService {
         }
 
         return true;
+    }
+
+    protected Category getCategoryForName(ArrayList<Category> cats, String name){
+        for (Category c : cats){
+            if (c.getName().equals(name)){
+                return c;
+            }
+        }
+
+        return null;
+    }
+
+    protected Unit getUnitForName(ArrayList<Unit> units, String name){
+        for (Unit u : units){
+            if (u.getAbbr().equals(name)){
+                return u;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Invoke sync of measurments for variables, that are in local DB
+     */
+    protected void syncMeasurements(){
+        VariableDao variableDao = mDaoSession.getVariableDao();
+        List<com.quantimodo.tools.models.Variable> vars = variableDao.loadAll();
+        //Check if we can get measurments without specify variable
+    }
+
+    /**
+     * Invoke META sync, which would sync data like:
+     * <ul>
+     *     <li>Variable Categories</li>
+     *     <li>Units</li>
+     *     <li>User variables</li>
+     * </ul>
+     */
+    protected void defaultSync(){
+        long lastMetaSync = mSharePrefs.getLong(LAST_META_SYNC, 0);
+        if (System.currentTimeMillis() / 1000 - lastMetaSync < DEFAULT_META_SYNC_TIMEOUT){
+            return;
+        }
+
+        SdkResponse<ArrayList<VariableCategory>> response = mClient.getCategories(this,mToken);
+        ArrayList<Category> categories = new ArrayList<>();
+        if (response.isSuccessful()){
+            CategoryDao categoryDao = mDaoSession.getCategoryDao();
+            for (VariableCategory cat : response.getData()){
+                categories.add(Category.fromVariableCategory(cat));
+            }
+            categoryDao.insertOrReplaceInTx(categories);
+        }
+
+        SdkResponse<ArrayList<com.quantimodo.android.sdk.model.Unit>> unitsResponse =  mClient.getUnits(this, mToken);
+        ArrayList<Unit> units = new ArrayList<>();
+        if (unitsResponse.isSuccessful()){
+            UnitDao unitDao = mDaoSession.getUnitDao();
+            for (com.quantimodo.android.sdk.model.Unit unit : unitsResponse.getData()){
+                Unit u = Unit.fromWsUnit(unit);
+                units.add(u);
+            }
+            unitDao.insertOrReplaceInTx(units);
+        }
+
+        //What with unit conversations after sync?
+        SdkResponse<ArrayList<Variable>> variablesResponse = mClient.searchVariables(this,mToken,"",100,0,null,null);
+        if(variablesResponse.isSuccessful()){
+            VariableDao variableDao = mDaoSession.getVariableDao();
+            ArrayList<com.quantimodo.tools.models.Variable> vars = new ArrayList<>();
+            for (Variable v : variablesResponse.getData()){
+                com.quantimodo.tools.models.Variable tv = com.quantimodo.tools.models.Variable.fromVariable(v);
+                tv.setUnit(getUnitForName(units,v.getTargetUnit()));
+                tv.setCategory(getCategoryForName(categories,v.getCategory()));
+                vars.add(tv);
+            }
+            variableDao.insertOrReplaceInTx(vars);
+        }
+
+        mSharePrefs.edit().putLong(LAST_META_SYNC,System.currentTimeMillis() / 1000).commit();
     }
 
     /**

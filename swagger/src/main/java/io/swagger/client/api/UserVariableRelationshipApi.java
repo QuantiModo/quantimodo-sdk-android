@@ -45,6 +45,7 @@ public class UserVariableRelationshipApi {
   /**
    * Get all UserVariableRelationships
    * Get all UserVariableRelationships
+   * @param accessToken User&#39;s OAuth2 access token
    * @param id id
    * @param confidenceLevel Our confidence that a consistent predictive relationship exists based on the amount of evidence, reproducibility, and other factors
    * @param confidenceScore A quantitative representation of our confidence that a consistent predictive relationship exists based on the amount of evidence, reproducibility, and other factors
@@ -67,7 +68,7 @@ public class UserVariableRelationshipApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20023
    */
-  public InlineResponse20023  userVariableRelationshipsGet (Integer id, String confidenceLevel, BigDecimal confidenceScore, String direction, Integer durationOfAction, String errorMessage, Integer onsetDelay, Integer outcomeVariableId, Integer predictorVariableId, Integer predictorUnitId, BigDecimal sinnRank, String strengthLevel, BigDecimal strengthScore, Integer userId, String vote, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20023  userVariableRelationshipsGet (String accessToken, Integer id, String confidenceLevel, BigDecimal confidenceScore, String direction, Integer durationOfAction, String errorMessage, Integer onsetDelay, Integer outcomeVariableId, Integer predictorVariableId, Integer predictorUnitId, BigDecimal sinnRank, String strengthLevel, BigDecimal strengthScore, Integer userId, String vote, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -81,6 +82,8 @@ public class UserVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "id", id));
     
@@ -158,10 +161,11 @@ public class UserVariableRelationshipApi {
   /**
    * Store UserVariableRelationship
    * Store UserVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body UserVariableRelationship that should be stored
    * @return InlineResponse20024
    */
-  public InlineResponse20024  userVariableRelationshipsPost (UserVariableRelationship body) throws ApiException {
+  public InlineResponse20024  userVariableRelationshipsPost (String accessToken, UserVariableRelationship body) throws ApiException {
     Object postBody = body;
     
 
@@ -175,6 +179,8 @@ public class UserVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -213,9 +219,10 @@ public class UserVariableRelationshipApi {
    * Get UserVariableRelationship
    * Get UserVariableRelationship
    * @param id id of UserVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20024
    */
-  public InlineResponse20024  userVariableRelationshipsIdGet (Integer id) throws ApiException {
+  public InlineResponse20024  userVariableRelationshipsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -234,6 +241,8 @@ public class UserVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -272,10 +281,11 @@ public class UserVariableRelationshipApi {
    * Update UserVariableRelationship
    * Update UserVariableRelationship
    * @param id id of UserVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body UserVariableRelationship that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  userVariableRelationshipsIdPut (Integer id, UserVariableRelationship body) throws ApiException {
+  public InlineResponse2002  userVariableRelationshipsIdPut (Integer id, String accessToken, UserVariableRelationship body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -294,6 +304,8 @@ public class UserVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -332,9 +344,10 @@ public class UserVariableRelationshipApi {
    * Delete UserVariableRelationship
    * Delete UserVariableRelationship
    * @param id id of UserVariableRelationship
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  userVariableRelationshipsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  userVariableRelationshipsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -353,6 +366,8 @@ public class UserVariableRelationshipApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

@@ -44,6 +44,7 @@ public class ConnectionApi {
   /**
    * Get all Connections
    * Get all Connections
+   * @param accessToken User&#39;s OAuth2 access token
    * @param userId ID of user that owns this correlation
    * @param connectorId The id for the connector data source for which the connection is connected
    * @param connectStatus Indicates whether a connector is currently connected to a service for a user.
@@ -59,7 +60,7 @@ public class ConnectionApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse2005
    */
-  public InlineResponse2005  connectionsGet (Integer userId, Integer connectorId, String connectStatus, String connectError, String updateRequestedAt, String updateStatus, String updateError, String lastSuccessfulUpdatedAt, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse2005  connectionsGet (String accessToken, Integer userId, Integer connectorId, String connectStatus, String connectError, String updateRequestedAt, String updateStatus, String updateError, String lastSuccessfulUpdatedAt, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -73,6 +74,8 @@ public class ConnectionApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "user_id", userId));
     
@@ -136,10 +139,11 @@ public class ConnectionApi {
   /**
    * Store Connection
    * Store Connection
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Connection that should be stored
    * @return InlineResponse2006
    */
-  public InlineResponse2006  connectionsPost (Connection body) throws ApiException {
+  public InlineResponse2006  connectionsPost (String accessToken, Connection body) throws ApiException {
     Object postBody = body;
     
 
@@ -153,6 +157,8 @@ public class ConnectionApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -191,9 +197,10 @@ public class ConnectionApi {
    * Get Connection
    * Get Connection
    * @param id id of Connection
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2006
    */
-  public InlineResponse2006  connectionsIdGet (Integer id) throws ApiException {
+  public InlineResponse2006  connectionsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -212,6 +219,8 @@ public class ConnectionApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -250,10 +259,11 @@ public class ConnectionApi {
    * Update Connection
    * Update Connection
    * @param id id of Connection
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Connection that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  connectionsIdPut (Integer id, Connection body) throws ApiException {
+  public InlineResponse2002  connectionsIdPut (Integer id, String accessToken, Connection body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -272,6 +282,8 @@ public class ConnectionApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -310,9 +322,10 @@ public class ConnectionApi {
    * Delete Connection
    * Delete Connection
    * @param id id of Connection
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  connectionsIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  connectionsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -331,6 +344,8 @@ public class ConnectionApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

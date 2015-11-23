@@ -45,6 +45,7 @@ public class VariableCategoryApi {
   /**
    * Get all VariableCategories
    * The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param name Name of the category
    * @param fillingValue Value for replacing null measurements
    * @param maximumAllowedValue Maximum recorded value of this category
@@ -65,7 +66,7 @@ public class VariableCategoryApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20027
    */
-  public InlineResponse20027  variableCategoriesGet (String name, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer durationOfAction, Integer onsetDelay, String combinationOperation, Integer updated, Boolean causeOnly, Integer _public, Boolean outcome, String createdAt, String updatedAt, String imageUrl, Integer defaultUnitId, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20027  variableCategoriesGet (String accessToken, String name, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer durationOfAction, Integer onsetDelay, String combinationOperation, Integer updated, Boolean causeOnly, Integer _public, Boolean outcome, String createdAt, String updatedAt, String imageUrl, Integer defaultUnitId, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -79,6 +80,8 @@ public class VariableCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "name", name));
     
@@ -152,10 +155,11 @@ public class VariableCategoryApi {
   /**
    * Store VariableCategory
    * Store VariableCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body VariableCategory that should be stored
    * @return InlineResponse20028
    */
-  public InlineResponse20028  variableCategoriesPost (VariableCategory body) throws ApiException {
+  public InlineResponse20028  variableCategoriesPost (String accessToken, VariableCategory body) throws ApiException {
     Object postBody = body;
     
 
@@ -169,6 +173,8 @@ public class VariableCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -207,9 +213,10 @@ public class VariableCategoryApi {
    * Get VariableCategory
    * Get VariableCategory
    * @param id id of VariableCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20028
    */
-  public InlineResponse20028  variableCategoriesIdGet (Integer id) throws ApiException {
+  public InlineResponse20028  variableCategoriesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -228,6 +235,8 @@ public class VariableCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -266,10 +275,11 @@ public class VariableCategoryApi {
    * Update VariableCategory
    * Update VariableCategory
    * @param id id of VariableCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body VariableCategory that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  variableCategoriesIdPut (Integer id, VariableCategory body) throws ApiException {
+  public InlineResponse2002  variableCategoriesIdPut (Integer id, String accessToken, VariableCategory body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -288,6 +298,8 @@ public class VariableCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -326,9 +338,10 @@ public class VariableCategoryApi {
    * Delete VariableCategory
    * Delete VariableCategory
    * @param id id of VariableCategory
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  variableCategoriesIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  variableCategoriesIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -347,6 +360,8 @@ public class VariableCategoryApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
