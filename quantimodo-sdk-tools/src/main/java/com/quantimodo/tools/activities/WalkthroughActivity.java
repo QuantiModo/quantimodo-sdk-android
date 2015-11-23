@@ -7,19 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.quantimodo.tools.R;
-import com.quantimodo.tools.fragments.ScreenSlidePageFragment;
+import com.quantimodo.tools.fragments.WalkthroughPageFragment;
 
 public class WalkthroughActivity extends FragmentActivity {
-    private static final int NUM_PAGES = 6;
-
-    private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
+    private static final int NUM_PAGES = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +34,8 @@ public class WalkthroughActivity extends FragmentActivity {
         }
         setContentView(R.layout.qmt_walkthrough);
 
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new PageAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        ViewPager mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
     }
 
@@ -52,7 +47,7 @@ public class WalkthroughActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return ScreenSlidePageFragment.create(position);
+            return WalkthroughPageFragment.create(position);
         }
 
         @Override
@@ -60,6 +55,7 @@ public class WalkthroughActivity extends FragmentActivity {
             return NUM_PAGES;
         }
     }
+
     public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.85f;
         private static final float MIN_ALPHA = 0.5f;

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.quantimodo.tools.R;
 
-public class ScreenSlidePageFragment extends Fragment {
+public class WalkthroughPageFragment extends Fragment {
     /**
      * The argument key for the page number this fragment represents.
      */
@@ -26,15 +26,15 @@ public class ScreenSlidePageFragment extends Fragment {
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
      */
-    public static ScreenSlidePageFragment create(int pageNumber) {
-        ScreenSlidePageFragment fragment = new ScreenSlidePageFragment();
+    public static WalkthroughPageFragment create(int pageNumber) {
+        WalkthroughPageFragment fragment = new WalkthroughPageFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, pageNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public ScreenSlidePageFragment() {
+    public WalkthroughPageFragment() {
     }
 
     @Override
