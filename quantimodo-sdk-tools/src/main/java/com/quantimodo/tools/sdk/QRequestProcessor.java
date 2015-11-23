@@ -8,6 +8,7 @@ import com.octo.android.robospice.request.RequestRunner;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.events.TokenEvent;
+import com.quantimodo.tools.sdk.db.DbRequest;
 import com.quantimodo.tools.sdk.request.SdkRequest;
 
 import java.util.HashMap;
@@ -48,7 +49,12 @@ public class QRequestProcessor extends RequestProcessor {
             } else {
                 mAwaitingRequests.put(request, listRequestListener);
             }
-        } else {
+        }  else if (request.getSpiceRequest() instanceof DbRequest) {
+            QTools.getInstance().inject(request.getSpiceRequest());
+            request.setOffline(true);
+            super.addRequest(request,listRequestListener);
+        }
+        else {
             super.addRequest(request, listRequestListener);
         }
     }

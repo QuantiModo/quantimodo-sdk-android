@@ -35,6 +35,7 @@ public class VariableDao extends AbstractDao<Variable, Long> {
         public final static Property CombOperation = new Property(6, short.class, "combOperation", false, "COMB_OPERATION");
         public final static Property Updated = new Property(7, java.util.Date.class, "updated", false, "UPDATED");
         public final static Property LatestMeasurementTime = new Property(8, java.util.Date.class, "latestMeasurementTime", false, "LATEST_MEASUREMENT_TIME");
+        public final static Property LastMeasurementSync = new Property(9, Long.class, "lastMeasurementSync", false, "LAST_MEASUREMENT_SYNC");
     };
 
     private DaoSession daoSession;
@@ -61,7 +62,8 @@ public class VariableDao extends AbstractDao<Variable, Long> {
                 "\"CATEGORY_ID\" INTEGER," + // 5: categoryId
                 "\"COMB_OPERATION\" INTEGER NOT NULL ," + // 6: combOperation
                 "\"UPDATED\" INTEGER," + // 7: updated
-                "\"LATEST_MEASUREMENT_TIME\" INTEGER);"); // 8: latestMeasurementTime
+                "\"LATEST_MEASUREMENT_TIME\" INTEGER," + // 8: latestMeasurementTime
+                "\"LAST_MEASUREMENT_SYNC\" INTEGER);"); // 9: lastMeasurementSync
     }
 
     /** Drops the underlying database table. */
@@ -111,6 +113,11 @@ public class VariableDao extends AbstractDao<Variable, Long> {
         if (latestMeasurementTime != null) {
             stmt.bindLong(9, latestMeasurementTime.getTime());
         }
+ 
+        Long lastMeasurementSync = entity.getLastMeasurementSync();
+        if (lastMeasurementSync != null) {
+            stmt.bindLong(10, lastMeasurementSync);
+        }
     }
 
     @Override
@@ -137,7 +144,8 @@ public class VariableDao extends AbstractDao<Variable, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // categoryId
             cursor.getShort(offset + 6), // combOperation
             cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // updated
-            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // latestMeasurementTime
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)), // latestMeasurementTime
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // lastMeasurementSync
         );
         return entity;
     }
@@ -154,6 +162,7 @@ public class VariableDao extends AbstractDao<Variable, Long> {
         entity.setCombOperation(cursor.getShort(offset + 6));
         entity.setUpdated(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
         entity.setLatestMeasurementTime(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setLastMeasurementSync(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
      }
     
     /** @inheritdoc */

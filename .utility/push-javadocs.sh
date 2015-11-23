@@ -1,10 +1,12 @@
 #!/bin/bash
 
-if [ "$TRAVIS_REPO_SLUG" == "QuantiModo/QuantiModo-SDK-Android" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "QuantiModo/QuantiModo-SDK-Android" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
   echo -e "Publishing javadoc...\n"
 
-  cp -R quantimodo-sdk-tools/build/docs/javadoc $HOME/javadoc-latest
+  mkdir $HOME/javadoc-latest
+  cp -R quantimodo-sdk-tools/build/docs/javadoc $HOME/javadoc-latest/qm-tools
+  cp -R sdk/build/docs/javadoc $HOME/javadoc-latest/sdk
 
   cd $HOME
   git config --global user.email "travis@travis-ci.org"

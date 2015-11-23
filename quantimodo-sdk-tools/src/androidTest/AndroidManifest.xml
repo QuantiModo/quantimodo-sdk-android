@@ -12,6 +12,7 @@
         <activity android:name="com.quantimodo.tools.testhelpers.TestMainActivity"/>
         <activity android:name="com.quantimodo.tools.activities.QuantimodoWebAuthenticatorActivity" />
         <service android:name="com.quantimodo.tools.testhelpers.TestService"/>
+        <service android:name="com.quantimodo.tools.testhelpers.TestSyncService"/>
 
         <amazon:enable-feature
             android:name="com.amazon.device.messaging"

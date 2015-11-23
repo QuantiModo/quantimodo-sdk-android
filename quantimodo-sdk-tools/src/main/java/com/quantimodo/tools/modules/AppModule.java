@@ -6,6 +6,8 @@ import com.quantimodo.tools.BuildConfig;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.activities.QuantimodoLoginActivity;
 import com.quantimodo.tools.activities.QuantimodoWebAuthenticatorActivity;
+import com.quantimodo.tools.models.DaoMaster;
+import com.quantimodo.tools.models.DaoSession;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sync.SyncService;
 
@@ -29,12 +31,16 @@ public class AppModule {
     private QuantimodoApiV2 mClient;
     private AuthHelper mAuthHelper;
     private ToolsPrefs mPrefs;
+    private DaoMaster mDaoMaster;
+    private DaoSession mDaoSession;
 
     public AppModule(Context ctx,ToolsPrefs prefs) {
         mContext = ctx.getApplicationContext();
         mPrefs = prefs;
         mAuthHelper = new AuthHelper(mContext,mPrefs);
         mClient = QuantimodoApiV2.getInstance(mPrefs.getApiUrl());
+//        mDaoMaster = new DaoMaster();
+        mDaoSession = mDaoMaster.newSession();
     }
 
 
@@ -64,4 +70,8 @@ public class AppModule {
         return mClient;
     }
 
+    @Provides
+    public DaoSession getDaoSession(){
+        return mDaoSession;
+    }
 }

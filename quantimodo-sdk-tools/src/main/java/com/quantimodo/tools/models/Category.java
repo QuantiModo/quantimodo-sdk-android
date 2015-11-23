@@ -1,6 +1,5 @@
 package com.quantimodo.tools.models;
 
-
 import com.quantimodo.tools.models.DaoSession;
 import de.greenrobot.dao.DaoException;
 
