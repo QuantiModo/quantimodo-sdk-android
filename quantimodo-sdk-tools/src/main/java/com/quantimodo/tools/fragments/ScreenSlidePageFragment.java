@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.quantimodo.tools.R;
 
@@ -45,34 +46,36 @@ public class ScreenSlidePageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout containing a title and body text.
         ViewGroup rootView = (ViewGroup) inflater
                 .inflate(R.layout.qmt_f_walkthrough_page, container, false);
 
-        // Set the title view to show the page number.
-//        ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-//                String.format("test string fragment %s", mPageNumber + 1));
-
         ImageView image = (ImageView) rootView.findViewById(R.id.walkthrough_image);
         int imageRes = R.drawable.walkthrough_1;
+        int contentRes = R.string.walkthrough_content_1;
         switch (mPageNumber){
             case 0:
                 imageRes = R.drawable.walkthrough_1;
+                contentRes = R.string.walkthrough_content_1;
                 break;
             case 1:
                 imageRes = R.drawable.walkthrough_2;
+                contentRes = R.string.walkthrough_content_2;
                 break;
             case 2:
                 imageRes = R.drawable.walkthrough_3;
+                contentRes = R.string.walkthrough_content_3;
                 break;
             case 3:
                 imageRes = R.drawable.walkthrough_4;
+                contentRes = R.string.walkthrough_content_4;
                 break;
             case 4:
                 imageRes = R.drawable.walkthrough_5;
+                contentRes = R.string.walkthrough_content_5;
                 break;
             case 5:
                 imageRes = R.drawable.walkthrough_6;
+                contentRes = R.string.walkthrough_content_6;
                 break;
         }
         BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -80,7 +83,9 @@ public class ScreenSlidePageFragment extends Fragment {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageRes, opts);
 
         image.setImageBitmap(bitmap);
-//        image.setImageResource(imageRes);
+
+        TextView contentText = (TextView) rootView.findViewById(R.id.walkthrough_text);
+        contentText.setText(contentRes);
         return rootView;
     }
 

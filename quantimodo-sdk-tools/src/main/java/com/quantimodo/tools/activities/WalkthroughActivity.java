@@ -41,7 +41,7 @@ public class WalkthroughActivity extends FragmentActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new PageAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-//        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
     }
 
 

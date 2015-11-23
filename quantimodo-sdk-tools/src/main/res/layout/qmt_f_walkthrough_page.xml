@@ -16,5 +16,11 @@
     <TextView
         android:id="@+id/walkthrough_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:textColor="@color/button_color"
+        android:text="@string/walkthrough_content_1"/>
 </LinearLayout>
