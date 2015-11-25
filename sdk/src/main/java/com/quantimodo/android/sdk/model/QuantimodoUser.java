@@ -12,6 +12,7 @@ public class QuantimodoUser {
     public String token;
     @Deprecated
     public boolean isAdministrator;
+    public int id;
 
     // Do not use this constructor
     public QuantimodoUser() {
@@ -63,5 +64,9 @@ public class QuantimodoUser {
 
     public void setIsAdministrator(boolean isAdministrator) {
         this.isAdministrator = isAdministrator;
+    }
+
+    public int getId() {
+        return id;
     }
 }

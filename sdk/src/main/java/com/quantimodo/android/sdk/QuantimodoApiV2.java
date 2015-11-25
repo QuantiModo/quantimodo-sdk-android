@@ -120,11 +120,11 @@ public class QuantimodoApiV2 {
     }
 
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
-        return getMeasurementHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
+        return getMeasurementHistory(context, token, startTime, endTime, variableName, source, toUnitName, null, null);
     }
 
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime,
-                                                                           String variableName, String source, String toUnitName,Integer limit, Integer offset) {
+                                                                            String variableName, String source, String toUnitName,Integer limit, Integer offset) {
         return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName, limit, offset);
     }
 
@@ -143,6 +143,11 @@ public class QuantimodoApiV2 {
         return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
     }
 
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(
+            Context context, String token, Date startTime, Date endTime, String variableName,
+            String source, String toUnitName, Integer limit, Integer offset){
+        return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName, limit, offset, null, null);
+    }
     /**
      * Get measurements in specified range
      * @param context Context
@@ -157,17 +162,21 @@ public class QuantimodoApiV2 {
      * @return SdkReponse with ArrayList of HistoryMeasurement
      */
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime,
-                                                                           String variableName, String source, String toUnitName,Integer limit, Integer offset) {
+                                                                           String variableName, String source, String toUnitName,
+                                                                           Integer limit, Integer offset, Date createdAt, Date updatedAt) {
         setupIon(context);
 
+        //TODO: Add createdAt, and updatedAt
         SdkResponse<ArrayList<HistoryMeasurement>> sdkResponse = new SdkResponse<>();
 
-        Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/measurements").buildUpon();
+        Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/v1/measurements").buildUpon();
         if (startTime != null) {
             uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
+//            uriBuilder.appendQueryParameter("startTime", Utils.formatDateToString(startTime));
         }
         if (endTime != null) {
             uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
+//            uriBuilder.appendQueryParameter("endTime", Utils.formatDateToString(endTime));
         }
         if (variableName != null) {
             uriBuilder.appendQueryParameter("variableName", variableName);
@@ -183,6 +192,12 @@ public class QuantimodoApiV2 {
         }
         if (offset != null){
             uriBuilder.appendQueryParameter("offset",offset.toString());
+        }
+        if(createdAt != null){
+            uriBuilder.appendQueryParameter("createdAt", "(lt)" + Utils.formatDateToString(createdAt));
+        }
+        if(updatedAt!= null){
+            uriBuilder.appendQueryParameter("updatedAt", "(gt)" + Utils.formatDateToString(updatedAt));
         }
 
         FutureBuilder futureBuilder = Ion.with(context)
