@@ -44,18 +44,19 @@ public class CredentialApi {
   /**
    * Get all Credentials
    * Get all Credentials
+   * @param accessToken User&#39;s OAuth2 access token
    * @param userId ID of user that owns this credential
    * @param connectorId The id for the connector data source from which the credential was obtained
    * @param attrKey Attribute name such as token, userid, username, or password
    * @param attrValue Encrypted value for the attribute specified
-   * @param createdAt When the record was first created in ISO 8601 datetime format
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20011
    */
-  public InlineResponse20011  credentialsGet (Integer userId, Integer connectorId, String attrKey, String attrValue, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20011  credentialsGet (String accessToken, Integer userId, Integer connectorId, String attrKey, String attrValue, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -69,6 +70,8 @@ public class CredentialApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "user_id", userId));
     
@@ -124,10 +127,11 @@ public class CredentialApi {
   /**
    * Store Credential
    * Store Credential
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Credential that should be stored
    * @return InlineResponse20012
    */
-  public InlineResponse20012  credentialsPost (Credential body) throws ApiException {
+  public InlineResponse20012  credentialsPost (String accessToken, Credential body) throws ApiException {
     Object postBody = body;
     
 
@@ -141,6 +145,8 @@ public class CredentialApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -180,9 +186,10 @@ public class CredentialApi {
    * Get Credential
    * @param id connector id
    * @param attrKey attrKey
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20012
    */
-  public InlineResponse20012  credentialsIdGet (Integer id, String attrKey) throws ApiException {
+  public InlineResponse20012  credentialsIdGet (Integer id, String attrKey, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -206,6 +213,8 @@ public class CredentialApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "attrKey", attrKey));
     
@@ -247,10 +256,11 @@ public class CredentialApi {
    * Update Credential
    * @param id connector id
    * @param attrKey attrKey
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Credential that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  credentialsIdPut (Integer id, String attrKey, Credential body) throws ApiException {
+  public InlineResponse2002  credentialsIdPut (Integer id, String attrKey, String accessToken, Credential body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -274,6 +284,8 @@ public class CredentialApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "attrKey", attrKey));
     
@@ -315,9 +327,10 @@ public class CredentialApi {
    * Delete Credential
    * @param id connector id
    * @param attrKey attrKey
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  credentialsIdDelete (Integer id, String attrKey) throws ApiException {
+  public InlineResponse2002  credentialsIdDelete (Integer id, String attrKey, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -341,6 +354,8 @@ public class CredentialApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "attrKey", attrKey));
     

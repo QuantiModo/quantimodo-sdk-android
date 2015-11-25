@@ -42,5 +42,6 @@ script:
 
 after_script:
   - ./gradlew :quantimodo-sdk-tools:releaseJavadoc
+  - ./gradlew :sdk:releaseJavadoc
   - chmod +x .utility/push-javadocs.sh
   - .utility/push-javadocs.sh

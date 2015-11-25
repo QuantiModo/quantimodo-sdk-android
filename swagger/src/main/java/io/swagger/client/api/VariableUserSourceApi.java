@@ -44,19 +44,20 @@ public class VariableUserSourceApi {
   /**
    * Get all VariableUserSources
    * Get all VariableUserSources
+   * @param accessToken User&#39;s OAuth2 access token
    * @param variableId ID of variable
    * @param userId ID of User
    * @param timestamp Time that this measurement occurred Uses epoch minute (epoch time divided by 60)
    * @param earliestMeasurementTime Earliest measurement time
    * @param latestMeasurementTime Latest measurement time
-   * @param createdAt When the record was first created in ISO 8601 datetime format
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20029
    */
-  public InlineResponse20029  variableUserSourcesGet (Integer variableId, Integer userId, Integer timestamp, Integer earliestMeasurementTime, Integer latestMeasurementTime, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20029  variableUserSourcesGet (String accessToken, Integer variableId, Integer userId, Integer timestamp, Integer earliestMeasurementTime, Integer latestMeasurementTime, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -70,6 +71,8 @@ public class VariableUserSourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "variable_id", variableId));
     
@@ -127,10 +130,11 @@ public class VariableUserSourceApi {
   /**
    * Store VariableUserSource
    * Store VariableUserSource
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body VariableUserSource that should be stored
    * @return InlineResponse20030
    */
-  public InlineResponse20030  variableUserSourcesPost (VariableUserSource body) throws ApiException {
+  public InlineResponse20030  variableUserSourcesPost (String accessToken, VariableUserSource body) throws ApiException {
     Object postBody = body;
     
 
@@ -144,6 +148,8 @@ public class VariableUserSourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -183,9 +189,10 @@ public class VariableUserSourceApi {
    * Get VariableUserSource
    * @param id id of VariableUserSource
    * @param sourceId source id of VariableUserSource
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20030
    */
-  public InlineResponse20030  variableUserSourcesIdGet (Integer id, Integer sourceId) throws ApiException {
+  public InlineResponse20030  variableUserSourcesIdGet (Integer id, Integer sourceId, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -209,6 +216,8 @@ public class VariableUserSourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "source_id", sourceId));
     
@@ -250,10 +259,11 @@ public class VariableUserSourceApi {
    * Update VariableUserSource
    * @param id variable_id of VariableUserSource
    * @param sourceId source id of VariableUserSource
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body VariableUserSource that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  variableUserSourcesIdPut (Integer id, Integer sourceId, VariableUserSource body) throws ApiException {
+  public InlineResponse2002  variableUserSourcesIdPut (Integer id, Integer sourceId, String accessToken, VariableUserSource body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -277,6 +287,8 @@ public class VariableUserSourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "source_id", sourceId));
     
@@ -318,9 +330,10 @@ public class VariableUserSourceApi {
    * Delete VariableUserSource
    * @param id variable_id of VariableUserSource
    * @param sourceId source id of VariableUserSource
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  variableUserSourcesIdDelete (Integer id, Integer sourceId) throws ApiException {
+  public InlineResponse2002  variableUserSourcesIdDelete (Integer id, Integer sourceId, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -344,6 +357,8 @@ public class VariableUserSourceApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "source_id", sourceId));
     

@@ -12,7 +12,7 @@ public class CorrelationPost {
 
     @IntDef({VOTE_UP,VOTE_DOWN})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Vote{};
+    public @interface Vote{}
 
     String cause;
     String effect;

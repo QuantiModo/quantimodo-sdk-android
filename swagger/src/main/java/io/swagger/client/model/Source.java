@@ -58,9 +58,9 @@ public class Source  {
 
   
   /**
-   * created_at
+   * When the record was first created. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "created_at")
+  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
   public Date getCreatedAt() {
     return createdAt;
   }
@@ -70,9 +70,9 @@ public class Source  {
 
   
   /**
-   * updated_at
+   * When the record in the database was last updated. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "updated_at")
+  @ApiModelProperty(value = "When the record in the database was last updated. Use ISO 8601 datetime format")
   public Date getUpdatedAt() {
     return updatedAt;
   }

@@ -45,6 +45,7 @@ public class UserVariableApi {
   /**
    * Get all UserVariables
    * Get all UserVariables
+   * @param accessToken User&#39;s OAuth2 access token
    * @param clientId The ID of the client application which last created or updated this user variable
    * @param parentId ID of the parent variable if this variable has any parent
    * @param variableId ID of variable
@@ -89,8 +90,8 @@ public class UserVariableApi {
    * @param latitude Latitude
    * @param longitude Longitude
    * @param location Location
-   * @param createdAt When the record was first created in ISO 8601 datetime format
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param outcome Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables
    * @param sources Comma-separated list of source names to limit variables to those sources
    * @param earliestSourceTime Earliest source time
@@ -104,7 +105,7 @@ public class UserVariableApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20025
    */
-  public InlineResponse20025  userVariablesGet (String clientId, Integer parentId, Integer variableId, Integer userId, Integer defaultUnitId, BigDecimal minimumAllowedValue, BigDecimal maximumAllowedValue, BigDecimal fillingValue, Integer joinWith, Integer onsetDelay, Integer durationOfAction, Integer variableCategoryId, Integer updated, Integer _public, Boolean causeOnly, String fillingType, Integer numberOfMeasurements, Integer numberOfProcessedMeasurements, Integer measurementsAtLastAnalysis, Integer lastUnitId, Integer lastOriginalUnitId, Integer lastOriginalValue, BigDecimal lastValue, BigDecimal lastOriginalValue2, Integer lastSourceId, Integer numberOfCorrelations, String status, String errorMessage, String lastSuccessfulUpdateTime, BigDecimal standardDeviation, BigDecimal variance, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, BigDecimal mean, BigDecimal median, Integer mostCommonUnitId, BigDecimal mostCommonValue, BigDecimal numberOfUniqueDailyValues, Integer numberOfChanges, BigDecimal skewness, BigDecimal kurtosis, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, Boolean outcome, String sources, Integer earliestSourceTime, Integer latestSourceTime, Integer earliestMeasurementTime, Integer latestMeasurementTime, Integer earliestFillingTime, Integer latestFillingTime, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20025  userVariablesGet (String accessToken, String clientId, Integer parentId, Integer variableId, Integer userId, Integer defaultUnitId, BigDecimal minimumAllowedValue, BigDecimal maximumAllowedValue, BigDecimal fillingValue, Integer joinWith, Integer onsetDelay, Integer durationOfAction, Integer variableCategoryId, Integer updated, Integer _public, Boolean causeOnly, String fillingType, Integer numberOfMeasurements, Integer numberOfProcessedMeasurements, Integer measurementsAtLastAnalysis, Integer lastUnitId, Integer lastOriginalUnitId, Integer lastOriginalValue, BigDecimal lastValue, BigDecimal lastOriginalValue2, Integer lastSourceId, Integer numberOfCorrelations, String status, String errorMessage, String lastSuccessfulUpdateTime, BigDecimal standardDeviation, BigDecimal variance, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, BigDecimal mean, BigDecimal median, Integer mostCommonUnitId, BigDecimal mostCommonValue, BigDecimal numberOfUniqueDailyValues, Integer numberOfChanges, BigDecimal skewness, BigDecimal kurtosis, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, Boolean outcome, String sources, Integer earliestSourceTime, Integer latestSourceTime, Integer earliestMeasurementTime, Integer latestMeasurementTime, Integer earliestFillingTime, Integer latestFillingTime, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -118,6 +119,8 @@ public class UserVariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
     
@@ -269,10 +272,11 @@ public class UserVariableApi {
   /**
    * Store UserVariable
    * Users can change things like the display name for a variable. They can also change the parameters used in analysis of that variable such as the expected duration of action for a variable to have an effect, the estimated delay before the onset of action. In order to filter out erroneous data, they are able to set the maximum and minimum reasonable daily values for a variable.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body UserVariable that should be stored
    * @return InlineResponse20026
    */
-  public InlineResponse20026  userVariablesPost (UserVariable body) throws ApiException {
+  public InlineResponse20026  userVariablesPost (String accessToken, UserVariable body) throws ApiException {
     Object postBody = body;
     
 
@@ -286,6 +290,8 @@ public class UserVariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -324,9 +330,10 @@ public class UserVariableApi {
    * Get UserVariable
    * Get UserVariable
    * @param id id of UserVariable
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20026
    */
-  public InlineResponse20026  userVariablesIdGet (Integer id) throws ApiException {
+  public InlineResponse20026  userVariablesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -345,6 +352,8 @@ public class UserVariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -383,10 +392,11 @@ public class UserVariableApi {
    * Update UserVariable
    * Update UserVariable
    * @param id id of UserVariable
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body UserVariable that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  userVariablesIdPut (Integer id, UserVariable body) throws ApiException {
+  public InlineResponse2002  userVariablesIdPut (Integer id, String accessToken, UserVariable body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -405,6 +415,8 @@ public class UserVariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -443,9 +455,10 @@ public class UserVariableApi {
    * Delete UserVariable
    * Delete UserVariable
    * @param id id of UserVariable
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  userVariablesIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  userVariablesIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -464,6 +477,8 @@ public class UserVariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

@@ -17,8 +17,8 @@ public class Unit  {
   private String name = null;
   @SerializedName("abbreviated_name")
   private String abbreviatedName = null;
-  @SerializedName("category_id")
-  private Integer categoryId = null;
+  @SerializedName("unit_category_id")
+  private Integer unitCategoryId = null;
   @SerializedName("minimum_value")
   private Float minimumValue = null;
   @SerializedName("maximum_value")
@@ -88,19 +88,19 @@ public class Unit  {
   /**
    * Unit category ID
    **/
-  @ApiModelProperty(required = true, value = "Unit category ID")
-  public Integer getCategoryId() {
-    return categoryId;
+  @ApiModelProperty(value = "Unit category ID")
+  public Integer getUnitCategoryId() {
+    return unitCategoryId;
   }
-  public void setCategoryId(Integer categoryId) {
-    this.categoryId = categoryId;
+  public void setUnitCategoryId(Integer unitCategoryId) {
+    this.unitCategoryId = unitCategoryId;
   }
 
   
   /**
-   * Unit minimum value
+   * Minimum value permitted for this unit
    **/
-  @ApiModelProperty(value = "Unit minimum value")
+  @ApiModelProperty(value = "Minimum value permitted for this unit")
   public Float getMinimumValue() {
     return minimumValue;
   }
@@ -110,9 +110,9 @@ public class Unit  {
 
   
   /**
-   * Unit maximum value
+   * Maximum value permitted for this unit
    **/
-  @ApiModelProperty(value = "Unit maximum value")
+  @ApiModelProperty(value = "Maximum value permitted for this unit")
   public Float getMaximumValue() {
     return maximumValue;
   }
@@ -134,9 +134,9 @@ public class Unit  {
 
   
   /**
-   * ID of default unit
+   * ID of default unit for this units category
    **/
-  @ApiModelProperty(value = "ID of default unit")
+  @ApiModelProperty(value = "ID of default unit for this units category")
   public Integer getDefaultUnitId() {
     return defaultUnitId;
   }
@@ -146,9 +146,9 @@ public class Unit  {
 
   
   /**
-   * Value multiplied to
+   * Value multiplied to convert to default unit in this unit category
    **/
-  @ApiModelProperty(value = "Value multiplied to")
+  @ApiModelProperty(value = "Value multiplied to convert to default unit in this unit category")
   public Float getMultiply() {
     return multiply;
   }
@@ -170,9 +170,9 @@ public class Unit  {
 
   
   /**
-   * created_at
+   * When the record was first created. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "created_at")
+  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
   public Date getCreatedAt() {
     return createdAt;
   }
@@ -182,9 +182,9 @@ public class Unit  {
 
   
   /**
-   * updated_at
+   * When the record in the database was last updated. Use ISO 8601 datetime format
    **/
-  @ApiModelProperty(value = "updated_at")
+  @ApiModelProperty(value = "When the record in the database was last updated. Use ISO 8601 datetime format")
   public Date getUpdatedAt() {
     return updatedAt;
   }
@@ -203,7 +203,7 @@ public class Unit  {
     sb.append("  clientId: ").append(clientId).append("\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  abbreviatedName: ").append(abbreviatedName).append("\n");
-    sb.append("  categoryId: ").append(categoryId).append("\n");
+    sb.append("  unitCategoryId: ").append(unitCategoryId).append("\n");
     sb.append("  minimumValue: ").append(minimumValue).append("\n");
     sb.append("  maximumValue: ").append(maximumValue).append("\n");
     sb.append("  updated: ").append(updated).append("\n");

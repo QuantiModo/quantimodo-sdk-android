@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class TestHelper {
-    public static final String TEST_USERNAME = "Quantimodo";
-    public static final String TEST_PASSWORD = "B1ggerstaff!";
+    public static final String TEST_USERNAME = "testuser";
+    public static final String TEST_PASSWORD = "testing123";
     public static final String QUANTIMODO_ADDRESS = "https://staging.quantimo.do/";
     public static final String QUANTIMODO_SOCIAL_AUTH = "https://staging.quantimo.do/api/v2/auth/social/authorizeToken";
 

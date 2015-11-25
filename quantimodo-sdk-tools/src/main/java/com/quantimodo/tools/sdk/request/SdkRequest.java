@@ -1,6 +1,8 @@
 package com.quantimodo.tools.sdk.request;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import com.octo.android.robospice.request.CachedSpiceRequest;
 import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.retry.DefaultRetryPolicy;
@@ -66,5 +68,21 @@ public abstract class SdkRequest<T> extends SpiceRequest<T>{
 
     public String getToken() throws NoNetworkConnection {
         return mAuthHelper.getAuthTokenWithRefresh();
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService("connectivity");
+        NetworkInfo[] allNetworkInfos = connectivityManager.getAllNetworkInfo();
+        NetworkInfo[] arr$ = allNetworkInfos;
+        int len$ = allNetworkInfos.length;
+
+        for(int i$ = 0; i$ < len$; ++i$) {
+            NetworkInfo networkInfo = arr$[i$];
+            if(networkInfo.getState() == NetworkInfo.State.CONNECTED || networkInfo.getState() == NetworkInfo.State.CONNECTING) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

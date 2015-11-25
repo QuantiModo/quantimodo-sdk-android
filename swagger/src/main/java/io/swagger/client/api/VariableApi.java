@@ -45,6 +45,7 @@ public class VariableApi {
   /**
    * Get all Variables
    * Get all Variables
+   * @param accessToken User&#39;s OAuth2 access token
    * @param id id
    * @param clientId The ID of the client application which last created or updated this common variable
    * @param parentId ID of the parent variable if this variable has any parent
@@ -72,8 +73,8 @@ public class VariableApi {
    * @param status status
    * @param errorMessage error_message
    * @param lastSuccessfulUpdateTime When this variable or its settings were last updated
-   * @param createdAt When the record was first created in ISO 8601 datetime format
-   * @param updatedAt When the record was last updated in ISO 8601 datetime format
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param productUrl Product URL
    * @param imageUrl Image URL
    * @param price Price
@@ -86,7 +87,7 @@ public class VariableApi {
    * @param sort Sort records by a given field name. If the field name is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse20031
    */
-  public InlineResponse20031  variablesGet (Integer id, String clientId, Integer parentId, String name, Integer variableCategoryId, Integer defaultUnitId, String combinationOperation, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer onsetDelay, Integer durationOfAction, Integer _public, Boolean causeOnly, BigDecimal mostCommonValue, Integer mostCommonUnitId, BigDecimal standardDeviation, BigDecimal variance, BigDecimal mean, BigDecimal median, BigDecimal numberOfMeasurements, BigDecimal numberOfUniqueValues, BigDecimal skewness, BigDecimal kurtosis, String status, String errorMessage, String lastSuccessfulUpdateTime, String createdAt, String updatedAt, String productUrl, String imageUrl, BigDecimal price, Integer numberOfUserVariables, Boolean outcome, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20031  variablesGet (String accessToken, Integer id, String clientId, Integer parentId, String name, Integer variableCategoryId, Integer defaultUnitId, String combinationOperation, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer onsetDelay, Integer durationOfAction, Integer _public, Boolean causeOnly, BigDecimal mostCommonValue, Integer mostCommonUnitId, BigDecimal standardDeviation, BigDecimal variance, BigDecimal mean, BigDecimal median, BigDecimal numberOfMeasurements, BigDecimal numberOfUniqueValues, BigDecimal skewness, BigDecimal kurtosis, String status, String errorMessage, String lastSuccessfulUpdateTime, String createdAt, String updatedAt, String productUrl, String imageUrl, BigDecimal price, Integer numberOfUserVariables, Boolean outcome, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -100,6 +101,8 @@ public class VariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "id", id));
     
@@ -215,10 +218,11 @@ public class VariableApi {
   /**
    * Store Variable
    * Allows the client to create a new variable in the `variables` table.
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Variable that should be stored
    * @return InlineResponse20032
    */
-  public InlineResponse20032  variablesPost (Variable body) throws ApiException {
+  public InlineResponse20032  variablesPost (String accessToken, Variable body) throws ApiException {
     Object postBody = body;
     
 
@@ -232,6 +236,8 @@ public class VariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -270,9 +276,10 @@ public class VariableApi {
    * Get Variable
    * Get Variable
    * @param id id of Variable
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse20032
    */
-  public InlineResponse20032  variablesIdGet (Integer id) throws ApiException {
+  public InlineResponse20032  variablesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -291,6 +298,8 @@ public class VariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -329,10 +338,11 @@ public class VariableApi {
    * Update Variable
    * Update Variable
    * @param id id of Variable
+   * @param accessToken User&#39;s OAuth2 access token
    * @param body Variable that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  variablesIdPut (Integer id, Variable body) throws ApiException {
+  public InlineResponse2002  variablesIdPut (Integer id, String accessToken, Variable body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -351,6 +361,8 @@ public class VariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
@@ -389,9 +401,10 @@ public class VariableApi {
    * Delete Variable
    * Delete Variable
    * @param id id of Variable
+   * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  variablesIdDelete (Integer id) throws ApiException {
+  public InlineResponse2002  variablesIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -410,6 +423,8 @@ public class VariableApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     

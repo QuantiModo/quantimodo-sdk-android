@@ -1,6 +1,5 @@
 package com.quantimodo.tools.models;
 
-
 import com.quantimodo.tools.models.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -164,7 +163,7 @@ public class Measurement {
     public void delete() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }
+        }    
         myDao.delete(this);
     }
 
@@ -172,7 +171,7 @@ public class Measurement {
     public void update() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }
+        }    
         myDao.update(this);
     }
 
@@ -180,7 +179,7 @@ public class Measurement {
     public void refresh() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }
+        }    
         myDao.refresh(this);
     }
 
