@@ -12,6 +12,8 @@ public class MeasurementValue  {
   private String startTime = null;
   @SerializedName("value")
   private Float value = null;
+  @SerializedName("note")
+  private String note = null;
 
   
   /**
@@ -38,6 +40,18 @@ public class MeasurementValue  {
   }
 
   
+  /**
+   * An optional note the user may include with their measurement
+   **/
+  @ApiModelProperty(value = "An optional note the user may include with their measurement")
+  public String getNote() {
+    return note;
+  }
+  public void setNote(String note) {
+    this.note = note;
+  }
+
+  
 
   @Override
   public String toString()  {
@@ -46,6 +60,7 @@ public class MeasurementValue  {
     
     sb.append("  startTime: ").append(startTime).append("\n");
     sb.append("  value: ").append(value).append("\n");
+    sb.append("  note: ").append(note).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
