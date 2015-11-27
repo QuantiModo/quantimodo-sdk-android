@@ -145,13 +145,13 @@ public class TrackingFragment extends QFragment {
     }
 
     //this category has to be in the same orther of the TYPE_ constants
-   private static final CategoryDef[] mCategoryFilter = {
+    private static final CategoryDef[] mCategoryFilter = {
             new CategoryDef(null,Double.NaN,"units", R.string.tracking_item_no_category, null,R.string.tracking_fragment_no_category_title),
-           new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
+            new CategoryDef("Foods",1d,"serving", R.string.tracking_item_diet_question, Variable.COMBINE_SUM,R.string.tracking_fragment_diet_title),
             new CategoryDef("Treatments",1d,"units", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
             new CategoryDef("Symptoms",1d,"%", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
             new CategoryDef("Mood",0d,"serving", R.string.tracking_item_mood_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_mood_title),
-           new CategoryDef("Mood",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
+            new CategoryDef("Mood",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
     };
 
     public static final int TYPE_ALL = 0;
@@ -278,7 +278,7 @@ public class TrackingFragment extends QFragment {
 
         registerForContextMenu(lvVariableSuggestions);
     }
-    
+
     void cleanViews(){
         unregisterForContextMenu(lvVariableSuggestions);
         etVariableName = null;
@@ -702,6 +702,7 @@ public class TrackingFragment extends QFragment {
             } else {
                 spVariableCategory.setVisibility(View.VISIBLE);
             }
+            etVariableNameNew.requestFocus();
         }
     }
 
