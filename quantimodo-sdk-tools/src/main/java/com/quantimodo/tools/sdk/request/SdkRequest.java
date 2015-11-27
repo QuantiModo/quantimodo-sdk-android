@@ -10,6 +10,7 @@ import com.quantimodo.android.sdk.QuantimodoApiV2;
 import com.quantimodo.android.sdk.SdkResponse;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.SdkException;
+import com.quantimodo.tools.utils.QtoolsUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -71,18 +72,6 @@ public abstract class SdkRequest<T> extends SpiceRequest<T>{
     }
 
     public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService("connectivity");
-        NetworkInfo[] allNetworkInfos = connectivityManager.getAllNetworkInfo();
-        NetworkInfo[] arr$ = allNetworkInfos;
-        int len$ = allNetworkInfos.length;
-
-        for(int i$ = 0; i$ < len$; ++i$) {
-            NetworkInfo networkInfo = arr$[i$];
-            if(networkInfo.getState() == NetworkInfo.State.CONNECTED || networkInfo.getState() == NetworkInfo.State.CONNECTING) {
-                return true;
-            }
-        }
-
-        return false;
+        return QtoolsUtils.hasInternetConnection(getCtx());
     }
 }

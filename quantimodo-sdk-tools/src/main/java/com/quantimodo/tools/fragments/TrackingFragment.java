@@ -5,10 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntDef;
@@ -24,7 +21,6 @@ import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
-import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
@@ -32,6 +28,7 @@ import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.QtoolsUtils;
 import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 import com.quantimodo.tools.views.ScrollViewExt;
@@ -377,14 +374,7 @@ public class TrackingFragment extends QFragment {
     }
 
     private void loadAndInitData() {
-        //checking network connection
-        ConnectivityManager cm =
-                (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if(!isConnected){
+        if(!QtoolsUtils.hasInternetConnection(getActivity())){
             Toast.makeText(getActivity(), R.string.network_connection_error_message, Toast.LENGTH_LONG).show();
             return;
         }

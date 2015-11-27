@@ -7,8 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -27,6 +25,7 @@ import com.quantimodo.tools.models.*;
 import com.quantimodo.tools.models.Unit;
 import com.quantimodo.tools.receivers.SyncStopReceiver;
 import com.quantimodo.tools.sdk.AuthHelper;
+import com.quantimodo.tools.utils.QtoolsUtils;
 
 import javax.inject.Inject;
 
@@ -261,9 +260,7 @@ public abstract class SyncService extends IntentService {
             lastSuccessfulMoodSync = 0;
         }
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if(activeNetwork == null){
+        if(!QtoolsUtils.hasInternetConnection(this)){
             Log.i(DEBUG_TAG, "No active network connection");
             return false;
         }
