@@ -179,8 +179,6 @@ public class TrackingFragment extends QFragment {
     // All measurement cards currently visible
     ArrayList<MeasurementCardHolder> measurementCards = new ArrayList<>();
 
-    private FragmentAdderListener mFragmentListener;
-
     /**
      * Creates new TrackingFragment
      * @param type category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
@@ -294,10 +292,6 @@ public class TrackingFragment extends QFragment {
         rgVariableCombinationOperation = null;
 
         lnButtons = null;
-    }
-
-    public void setFragmentAdderListener(FragmentAdderListener mFragmentListener) {
-        this.mFragmentListener = mFragmentListener;
     }
 
     @Override

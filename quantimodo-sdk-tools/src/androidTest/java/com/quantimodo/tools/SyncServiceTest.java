@@ -10,6 +10,7 @@ import com.quantimodo.sdk.testing.utils.Utils;
 import com.quantimodo.tools.events.SyncFinished;
 import com.quantimodo.tools.events.SyncStarted;
 import com.quantimodo.tools.models.*;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sync.SyncService;
 import com.quantimodo.tools.testhelpers.TestModule;
 import com.quantimodo.tools.testhelpers.TestSyncService;
