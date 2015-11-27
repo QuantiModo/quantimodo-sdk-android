@@ -71,7 +71,7 @@
     <string name="tracking_item_mood_title">Mood</string>
     <string name="tracking_item_mood_question">Enter a mood</string>
 
-    <string name="tracking_fragment_no_category_title">Track data</string>
+    <string name="tracking_fragment_no_category_title">Track Anything</string>
     <string name="tracking_fragment_emotions_title">Track emotions</string>
     <string name="tracking_fragment_diet_title">Track diet</string>
     <string name="tracking_fragment_treatments_title">Track treatments</string>
