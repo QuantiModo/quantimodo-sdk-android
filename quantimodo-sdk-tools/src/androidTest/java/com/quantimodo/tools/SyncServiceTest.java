@@ -75,7 +75,7 @@ public class SyncServiceTest {
             public boolean check() {
                 return !syncInProgress && syncStarted;
             }
-        }, 60000 * 2);
+        }, 60000 * 4);
 
         assertTrue(session.getCategoryDao().count() > 0);
         assertTrue(session.getUnitDao().count() > 0);
