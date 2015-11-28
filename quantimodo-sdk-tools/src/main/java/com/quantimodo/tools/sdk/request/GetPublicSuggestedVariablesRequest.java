@@ -11,7 +11,7 @@ import java.util.Comparator;
 import javax.inject.Inject;
 
 /**
- * Get suggested variables from search box
+ * Get pubñic suggested variables from search box
  * Would sort them by latest measurement time DESC
  * If now search string is provided, would search for Variables with source equals current application source
  */
@@ -54,8 +54,14 @@ public class GetPublicSuggestedVariablesRequest extends SdkRequest<GetPublicSugg
         SdkResponse<ArrayList<Variable>> variableSdkResponse;
         variableSdkResponse = getClient()
                 .searchPublicVariables(getCtx(), getToken(), search, limit, 0);
-        checkResponse(variableSdkResponse);
-        return variableSdkResponse.getData();
+
+        try {
+            checkResponse(variableSdkResponse);
+            return variableSdkResponse.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 

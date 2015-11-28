@@ -627,10 +627,7 @@ public class TrackingFragment extends QFragment {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 super.onRequestFailure(spiceException);
-                refreshesRunning--;
-                if (refreshesRunning <= 0) {
-                    pbAutoCompleteLoading.setVisibility(View.GONE);
-                }
+                getPublicVariables(search);
             }
 
             @Override
