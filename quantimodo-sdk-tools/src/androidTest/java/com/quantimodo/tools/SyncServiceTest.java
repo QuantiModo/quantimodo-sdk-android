@@ -3,9 +3,12 @@ package com.quantimodo.tools;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
+
 import com.quantimodo.sdk.testing.utils.Utils;
 import com.quantimodo.tools.events.SyncFinished;
 import com.quantimodo.tools.events.SyncStarted;
@@ -58,7 +61,8 @@ public class SyncServiceTest {
         intent.putExtra(SYNC_FROM_SCRATCH_KEY,false);
         InstrumentationRegistry.getContext().startService(intent);
 
-
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getContext());
+        Log.i("SyncServiceTest", "Username " + prefs.getString("userDisplayName", null));
         Utils.waitForCondition(new Utils.Condition() {
             @Override
             public boolean check() {
