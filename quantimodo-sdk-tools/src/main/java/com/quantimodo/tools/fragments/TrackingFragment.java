@@ -24,6 +24,7 @@ import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
+import com.quantimodo.tools.sdk.request.GetPublicSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
@@ -179,8 +180,6 @@ public class TrackingFragment extends QFragment {
     // All measurement cards currently visible
     ArrayList<MeasurementCardHolder> measurementCards = new ArrayList<>();
 
-    private FragmentAdderListener mFragmentListener;
-
     /**
      * Creates new TrackingFragment
      * @param type category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
@@ -278,7 +277,7 @@ public class TrackingFragment extends QFragment {
 
         registerForContextMenu(lvVariableSuggestions);
     }
-    
+
     void cleanViews(){
         unregisterForContextMenu(lvVariableSuggestions);
         etVariableName = null;
@@ -294,10 +293,6 @@ public class TrackingFragment extends QFragment {
         rgVariableCombinationOperation = null;
 
         lnButtons = null;
-    }
-
-    public void setFragmentAdderListener(FragmentAdderListener mFragmentListener) {
-        this.mFragmentListener = mFragmentListener;
     }
 
     @Override
@@ -635,6 +630,36 @@ public class TrackingFragment extends QFragment {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 super.onRequestFailure(spiceException);
+                getPublicVariables(search);
+            }
+
+            @Override
+            public void onRequestSuccess(GetSuggestedVariablesRequest.GetSuggestedVariablesResponse response) {
+                if(response.variables.size() == 0){
+                    getPublicVariables(search);
+                }
+                else {
+                    suggestedVariables = response.variables;
+                    autoCompleteListAdapter.clear();
+                    autoCompleteListAdapter.addAll(response.variables);
+                    refreshesRunning--;
+                    if (refreshesRunning <= 0) {
+                        if (isVisible()) {
+                            pbAutoCompleteLoading.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void getPublicVariables(final String search){
+        getSpiceManager().execute(
+                new GetPublicSuggestedVariablesRequest(search),
+                new DefaultSdkResponseListener<GetPublicSuggestedVariablesRequest.Response>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                super.onRequestFailure(spiceException);
                 refreshesRunning--;
                 if (refreshesRunning <= 0) {
                     pbAutoCompleteLoading.setVisibility(View.GONE);
@@ -642,10 +667,10 @@ public class TrackingFragment extends QFragment {
             }
 
             @Override
-            public void onRequestSuccess(GetSuggestedVariablesRequest.GetSuggestedVariablesResponse getSuggestedVariablesResponse) {
-                suggestedVariables = getSuggestedVariablesResponse.variables;
+            public void onRequestSuccess(GetPublicSuggestedVariablesRequest.Response response) {
+                suggestedVariables = response.variables;
                 autoCompleteListAdapter.clear();
-                autoCompleteListAdapter.addAll(getSuggestedVariablesResponse.variables);
+                autoCompleteListAdapter.addAll(response.variables);
                 refreshesRunning--;
                 if (refreshesRunning <= 0) {
                     if (isVisible()) {
@@ -704,6 +729,7 @@ public class TrackingFragment extends QFragment {
             } else {
                 spVariableCategory.setVisibility(View.VISIBLE);
             }
+            etVariableNameNew.requestFocus();
         }
     }
 

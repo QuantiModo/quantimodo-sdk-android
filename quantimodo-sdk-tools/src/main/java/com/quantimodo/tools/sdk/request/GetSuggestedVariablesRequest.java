@@ -76,7 +76,7 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
         return getQmSuggestedVariables("", 10, true);
     }
 
-    private ArrayList<Variable> getQmSuggestedVariables(String search, int limit, boolean filtered) throws Exception {
+    private ArrayList<Variable> getQmSuggestedVariables(String search, int limit, boolean filtered) throws NoNetworkConnection {
         SdkResponse<ArrayList<Variable>> variableSdkResponse;
         if (filtered) {
             variableSdkResponse = getClient().searchVariables(getCtx(), getToken(), search, limit, 0, prefs.getApplicationSource(), category);
@@ -84,8 +84,13 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
             variableSdkResponse = getClient().searchVariables(getCtx(), getToken(), search, limit, 0, null, category);
         }
 
-        checkResponse(variableSdkResponse);
-        return variableSdkResponse.getData();
+        try {
+            checkResponse(variableSdkResponse);
+            return variableSdkResponse.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 

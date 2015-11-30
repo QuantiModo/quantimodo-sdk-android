@@ -312,6 +312,47 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Search for variables on the public domain
+     * @param context Context
+     * @param token OAuth token
+     * @param search Search string
+     * @param limit size of response
+     * @param offset offset of response
+     * @return SdkResponse with ArrayList of Variable
+     */
+    public SdkResponse<ArrayList<Variable>> searchPublicVariables(
+            Context context, String token, String search, int limit, int offset) {
+        setupIon(context);
+
+        if (search == null) {
+            throw new IllegalArgumentException("\"search\" cannot be null");
+        }
+
+        SdkResponse<ArrayList<Variable>> sdkResponse = new SdkResponse<>();
+
+        try {
+            search = URLEncoder.encode(search, "utf-8");
+            search = "*" + search + "*";
+
+            Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/public/variables/search/" + search).buildUpon();
+            uriBuilder.appendQueryParameter("limit", "" + limit);
+            uriBuilder.appendQueryParameter("offset", "" + offset);
+
+            FutureBuilder futureBuilder = Ion.with(context)
+                    .load(uriBuilder.build().toString())
+                    .setHeader("Authorization", "Bearer " + token);
+
+            executeRequest(context, sdkResponse, new TypeToken<ArrayList<Variable>>() {
+            }, futureBuilder);
+        } catch (UnsupportedEncodingException e) {
+            Log.d(TAG, e.getMessage());
+            sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
+            sdkResponse.setCause(e);
+        }
+
+        return sdkResponse;
+    }
 
     /**
      * Get unit definitions

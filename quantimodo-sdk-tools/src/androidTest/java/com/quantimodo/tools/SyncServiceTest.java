@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ServiceTestRule;
+import android.support.test.espresso.web.sugar.Web;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
+
 import com.quantimodo.sdk.testing.utils.Utils;
+import com.quantimodo.tools.activities.QuantimodoWebAuthenticatorActivity;
 import com.quantimodo.tools.events.SyncFinished;
 import com.quantimodo.tools.events.SyncStarted;
 import com.quantimodo.tools.models.*;
 import com.quantimodo.tools.sync.SyncService;
+import com.quantimodo.tools.testhelpers.TestHelper;
 import com.quantimodo.tools.testhelpers.TestModule;
 import com.quantimodo.tools.testhelpers.TestSyncService;
 import org.junit.*;
@@ -20,6 +24,14 @@ import javax.inject.Inject;
 
 import java.util.List;
 
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.getText;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.webClick;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.webKeys;
+import static android.support.test.espresso.web.webdriver.Locator.CLASS_NAME;
+import static android.support.test.espresso.web.webdriver.Locator.ID;
+import static android.support.test.espresso.web.webdriver.Locator.NAME;
 import static com.quantimodo.tools.sync.SyncService.SYNC_FROM_SCRATCH_KEY;
 import static org.junit.Assert.*;
 
@@ -46,31 +58,28 @@ public class SyncServiceTest {
         session.getCategoryDao().deleteAll();
 
         SharedPreferences prefs = InstrumentationRegistry.getContext().getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_PRIVATE);
-        prefs.edit().remove(SyncService.LAST_META_SYNC).commit();
+        prefs.edit().remove(SyncService.LAST_META_SYNC).apply();
 
         QTools.getInstance().register(this);
     }
 
     @Test
     public void testSync() throws Exception {
+        logIn();
         Intent intent = new Intent(InstrumentationRegistry.getContext(), TestSyncService.class);
-        intent.putExtra(SYNC_FROM_SCRATCH_KEY,false);
+        intent.putExtra(SYNC_FROM_SCRATCH_KEY, false);
         InstrumentationRegistry.getContext().startService(intent);
-
 
         Utils.waitForCondition(new Utils.Condition() {
             @Override
             public boolean check() {
                 return !syncInProgress && syncStarted;
             }
-        }, 60000 * 2);
+        }, 60000 * 4);
 
         assertTrue(session.getCategoryDao().count() > 0);
         assertTrue(session.getUnitDao().count() > 0);
         assertTrue(session.getVariableDao().count() > 0);
-
-        UnitDao unitDao = session.getUnitDao();
-        List<Unit> unitList = unitDao.loadAll();
 
         VariableDao variableDao = session.getVariableDao();
         List<Variable> variables = variableDao.loadAll();
@@ -94,6 +103,28 @@ public class SyncServiceTest {
         QTools.getInstance().unregister(this);
     }
 
+    private void logIn() throws InterruptedException {
+        Intent intent = new Intent(InstrumentationRegistry.getContext(), QuantimodoWebAuthenticatorActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        InstrumentationRegistry.getContext().startActivity(intent);
 
+        Web.WebInteraction wi = Web.onWebView(withId(R.id.web));
+
+        Thread.sleep(3000);
+
+        wi
+                .withElement(findElement(NAME, "user_login")).perform(webKeys(TestHelper.TEST_USERNAME))
+                .withElement(findElement(NAME,"user_pass")).perform(webKeys(TestHelper.TEST_PASSWORD))
+                .withElement(findElement(CLASS_NAME, "btn-primary")).perform(webClick());
+
+        //Wait sometime until page is loaded
+        Thread.sleep(5000);
+        Log.d("WebAuthActivityTest", "content: " + wi.toString());
+        String text = wi.withElement(findElement(ID,"request-heading")).perform(getText()).get().toString();
+        assertTrue(text.contains("would like to"));
+        wi.withElement(findElement(ID,"button-approve")).perform(webClick());
+
+        Thread.sleep(5000);
+    }
 
 }
