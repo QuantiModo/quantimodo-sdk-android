@@ -197,6 +197,7 @@ public class Measurement {
 
     public HistoryMeasurement toHistoryMeasurement(){
         return new HistoryMeasurement(
+                safeLongToInt(getId()),
                 getSource(),
                 getVariable().getName(),
                 getTimestamp(),
@@ -204,6 +205,12 @@ public class Measurement {
                 getUnit().getName()
         );
     }
-    // KEEP METHODS END
+    public static int safeLongToInt(long l) {
+        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException
+                    (l + " cannot be cast to int without changing its value.");
+        }
+        return (int) l;
+    }
 
 }

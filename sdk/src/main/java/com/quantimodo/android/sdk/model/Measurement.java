@@ -8,7 +8,9 @@ public class Measurement {
     @Deprecated
     public int duration;
 
-    String note;
+    public String note;
+
+    public int id;
 
     private Measurement() {
     }
@@ -55,5 +57,13 @@ public class Measurement {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
