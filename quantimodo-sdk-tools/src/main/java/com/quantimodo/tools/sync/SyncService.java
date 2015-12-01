@@ -257,7 +257,7 @@ public abstract class SyncService extends IntentService {
             SharedPreferences sp = getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_MULTI_PROCESS);
             sp.edit().remove(ToolsPrefs.PREF_SYNC_FROM)
                     .remove(LAST_SUCCESFULL_SYNC_KEY)
-                    .commit();
+                    .apply();
             lastSuccessfulMoodSync = 0;
         }
 
@@ -357,7 +357,7 @@ public abstract class SyncService extends IntentService {
             variableDao.insertOrReplaceInTx(vars);
         }
 
-        mSharePrefs.edit().putLong(LAST_META_SYNC,System.currentTimeMillis() / 1000).commit();
+        mSharePrefs.edit().putLong(LAST_META_SYNC,System.currentTimeMillis() / 1000).apply();
     }
 
     /**
