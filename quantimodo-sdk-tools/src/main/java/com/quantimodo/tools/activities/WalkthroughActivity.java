@@ -8,7 +8,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -17,6 +19,7 @@ import com.quantimodo.tools.fragments.WalkthroughPageFragment;
 
 public class WalkthroughActivity extends FragmentActivity {
     private static final int NUM_PAGES = 7;
+    Button mSkipButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +42,8 @@ public class WalkthroughActivity extends FragmentActivity {
         mPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
-        Button skipButton = (Button) findViewById(R.id.walkthrough_skip);
-        skipButton.setOnClickListener(new View.OnClickListener() {
+        mSkipButton = (Button) findViewById(R.id.walkthrough_skip);
+        mSkipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -62,6 +65,13 @@ public class WalkthroughActivity extends FragmentActivity {
         @Override
         public int getCount() {
             return NUM_PAGES;
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            if(position == NUM_PAGES  - 1) mSkipButton.setText(R.string.walkthrough_finish);
+            else mSkipButton.setText(R.string.walkthrough_skip);
+            super.setPrimaryItem(container, position, object);
         }
     }
 
