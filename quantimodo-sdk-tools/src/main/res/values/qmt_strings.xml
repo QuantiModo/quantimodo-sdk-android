@@ -97,4 +97,5 @@
     <string name="walkthrough_content_6">Help improve our algorithms by down voting the predictors that incorrect or merely coincidental.</string>
     <string name="walkthrough_content_7">Change notification frequency on the settings page.</string>
     <string name="walkthrough_skip">Skip Tour</string>
+    <string name="walkthrough_finish">Finish Tour</string>
 </resources>
