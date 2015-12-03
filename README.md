@@ -11,16 +11,11 @@ Create your free developer account and app at [https://admin.quantimo.do/registe
 ### Step 2: Create Your App
 Create your app on [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps) and get your client_id and client_secret from it, save them to set up your project later.
 
-### Step 3: Authenticate Your First User
-
-1. Add QuantiModo Dependencies to Your App
-The QuantiModo SDK for Android consists of two modules. 
-
-**1. SDK Module**
+### Step 3: Add the QM SDK module to your app
 
 The SDK module contains the model classes and API client for QuantiModo API web-service.
 
-Using Maven:
+Add the QM SDK Module Using Maven:
 ```
 <dependency>
   <groupId>com.quantimodo.android</groupId>
