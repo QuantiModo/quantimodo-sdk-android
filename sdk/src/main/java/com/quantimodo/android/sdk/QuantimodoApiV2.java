@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.util.Log;
 import com.google.gson.*;
@@ -26,9 +27,11 @@ import java.lang.reflect.Type;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.quantimodo.android.sdk.SdkDefs.QUANTIMODO_ADDRESS;
 
@@ -156,19 +159,19 @@ public class QuantimodoApiV2 {
      * @param offset used with limit, for paging results
      * @return SdkReponse with ArrayList of HistoryMeasurement
      */
-    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime,
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date createdAt, Date updatedAt,
                                                                            String variableName, String source, String toUnitName,Integer limit, Integer offset) {
         setupIon(context);
 
         SdkResponse<ArrayList<HistoryMeasurement>> sdkResponse = new SdkResponse<>();
 
         Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/measurements").buildUpon();
-        if (startTime != null) {
-            uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
-        }
-        if (endTime != null) {
-            uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
-        }
+//        if (startTime != null) {
+//            uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
+//        }
+//        if (endTime != null) {
+//            uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
+//        }
         if (variableName != null) {
             uriBuilder.appendQueryParameter("variableName", variableName);
         }
@@ -184,6 +187,12 @@ public class QuantimodoApiV2 {
         if (offset != null){
             uriBuilder.appendQueryParameter("offset",offset.toString());
         }
+        if(createdAt != null){
+            uriBuilder.appendQueryParameter("createdAt", "(lt)" + formatDate(createdAt));
+        }
+        if(updatedAt != null){
+            uriBuilder.appendQueryParameter("updatedAt", "(gt)" + formatDate(updatedAt));
+        }
 
         FutureBuilder futureBuilder = Ion.with(context)
                 .load(uriBuilder.build().toString())
@@ -194,6 +203,14 @@ public class QuantimodoApiV2 {
         }, futureBuilder);
 
         return sdkResponse;
+    }
+
+    @NonNull
+    private String formatDate(@NonNull final Date date){
+        SimpleDateFormat formatter;
+
+        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        return formatter.format(date);
     }
 
     /**
