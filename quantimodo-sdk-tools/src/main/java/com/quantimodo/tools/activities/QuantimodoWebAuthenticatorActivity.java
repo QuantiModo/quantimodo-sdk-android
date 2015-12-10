@@ -24,6 +24,7 @@ import com.quantimodo.tools.sdk.AuthHelper;
 
 import javax.inject.Inject;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Activity for auth, used in pair with {@link AuthHelper AuthHelper},
@@ -233,25 +234,19 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (!url.startsWith(mPrefs.getApiUrl())) {
-                int startCode = url.indexOf("code=") + 5;
-                int endCode = url.indexOf("&state=");
+                Uri uri = Uri.parse(url);
 
-                if (startCode == 4)  // -1 + 5
-                {
-                    // Code and state not found, so we got an error
-                    int startError = url.indexOf("error=") + 6;
-                    int endError = url.indexOf("error_description=");
+                Set<String> params = uri.getQueryParameterNames();
 
-                    String error = url.substring(startError, endError);
-                    String errorDescription = url.substring(endError + 6, url.length());
-                    listener.onError(error, errorDescription);
-                } else {
-                    String code = url.substring(startCode, endCode);
-                    String state = url.substring(endCode + 7, url.length());
+                if (params.contains("code")){
+                    String code = uri.getQueryParameter("code");
+                    String state = uri.getQueryParameter("state");
                     listener.onSuccess(code, state);
+                } else {
+                    String error = uri.getQueryParameter("error");
+                    String errorDescription = uri.getQueryParameter("error_description");
+                    listener.onError(error, errorDescription);
                 }
-
-                return true;
             } else {
                 view.loadUrl(url);
             }
