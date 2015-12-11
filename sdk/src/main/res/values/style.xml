@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="QM_ButtonStyle" parent="android:Widget.Button">
+        <item name="android:minHeight">50dp</item>
+        <item name="android:maxWidth">200dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@color/qm_button_color</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>
