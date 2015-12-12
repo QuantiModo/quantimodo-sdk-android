@@ -30,9 +30,6 @@ import java.util.Random;
  */
 public class QuantimodoWebAuthenticatorActivity extends Activity {
     private String mNonce;
-    private LoginCallback mLoginCallback;
-    private boolean succeed = false;
-    private boolean failed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +94,6 @@ public class QuantimodoWebAuthenticatorActivity extends Activity {
 
             @Override
             public void onError(String error, String errorDescription) {
-                failed = true;
                 Log.d("QMWebAuthActivity", "Error: " + error + ", description: " + errorDescription);
                 finish();
 
@@ -143,12 +139,11 @@ public class QuantimodoWebAuthenticatorActivity extends Activity {
                         );
                         getUserData();
                         setResult(RESULT_OK);
-                        succeed = true;
                         finish();
                     } catch (NullPointerException ignored) {
-                        failed = true;
                         Log.i(ToolsPrefs.DEBUG_TAG, "Error getting access token: " + result.get("error").getAsString()
                                 + ", " + result.get("error_description").getAsString());
+                        finish();
                     }
                 }
             }
@@ -162,11 +157,9 @@ public class QuantimodoWebAuthenticatorActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(succeed) mLoginCallback.onSuccess();
-        else if(failed) mLoginCallback.onError("Internal error when getting the access token");
-        else mLoginCallback.onCancel();
+    public void onBackPressed(){
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     @Override
@@ -221,16 +214,6 @@ public class QuantimodoWebAuthenticatorActivity extends Activity {
         } catch (NoNetworkConnection e){
 
         }
-    }
-
-    public void registerCallback(
-            final CallbackManager callbackManager,
-            final LoginCallback callback) {
-        if (!(callbackManager instanceof CallbackManagerImpl)) {
-            throw new RuntimeException("Unexpected CallbackManager, " +
-                    "please use the provided Factory.");
-        }
-        this.mLoginCallback = callback;
     }
 
     private static class OAuthClient extends WebViewClient {

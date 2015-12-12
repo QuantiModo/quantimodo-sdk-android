@@ -1,27 +1,16 @@
 package com.quantimodo.android.sdk.login.widget;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.quantimodo.android.sdk.AuthHelper;
-import com.quantimodo.android.sdk.CallbackManager;
-import com.quantimodo.android.sdk.CallbackManagerImpl;
-import com.quantimodo.android.sdk.LoginCallback;
-import com.quantimodo.android.sdk.LoginManager;
-import com.quantimodo.android.sdk.NoNetworkConnection;
-import com.quantimodo.android.sdk.QuantimodoWebAuthenticatorActivity;
+import com.quantimodo.android.sdk.login.AuthHelper;
+import com.quantimodo.android.sdk.login.NoNetworkConnection;
+import com.quantimodo.android.sdk.login.QuantimodoWebAuthenticatorActivity;
 import com.quantimodo.android.sdk.R;
-
-import java.util.List;
 
 /**
  * A Log In/Log Out button that maintains login state and logs in/out for the app.

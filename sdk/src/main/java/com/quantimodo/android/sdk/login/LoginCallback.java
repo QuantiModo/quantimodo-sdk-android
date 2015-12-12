@@ -1,7 +1,7 @@
 package com.quantimodo.android.sdk.login;
 
 /**
- * Created by Andrés on 10-12-2015.
+ * Interface used to deliver the result from a login process
  */
 public interface LoginCallback {
     /**
@@ -9,17 +9,16 @@ public interface LoginCallback {
      * If the operation was succeed you can get the token from now on using
      * {@link AuthHelper}.getInstance().getAuthTokenWithRefresh()
      */
-    public void onSuccess();
+    void onSuccess();
 
     /**
      * Called when the dialog is canceled
      */
-    public void onCancel();
+    void onCancel();
 
     /**
      * Called when the dialog finishes with an error
      * @param error The error that occurred
      */
-    public void onError(String error);
-
+    void onError(String error);
 }
