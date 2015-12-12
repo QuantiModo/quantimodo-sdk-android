@@ -1,4 +1,4 @@
-package com.quantimodo.android.sdk;
+package com.quantimodo.android.sdk.login;
 
 /**
  * Thrown if there is no internet connection

@@ -1,4 +1,4 @@
-package com.quantimodo.android.sdk;
+package com.quantimodo.android.sdk.login;
 
 /**
  * Configuration of toolprefs and quantimodo app

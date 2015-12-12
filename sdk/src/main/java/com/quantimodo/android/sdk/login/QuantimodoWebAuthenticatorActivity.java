@@ -1,7 +1,6 @@
-package com.quantimodo.android.sdk;
+package com.quantimodo.android.sdk.login;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -20,6 +19,8 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
+import com.quantimodo.android.sdk.QuantimodoApiV2;
+import com.quantimodo.android.sdk.R;
 import com.quantimodo.android.sdk.model.QuantimodoUser;
 
 import java.util.Random;
@@ -135,7 +136,11 @@ public class QuantimodoWebAuthenticatorActivity extends Activity {
                         String refreshToken = result.get("refresh_token").getAsString();
                         int expiresIn = result.get("expires_in").getAsInt();
 
-                        AuthHelper.getInstance().setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
+                        AuthHelper.getInstance().setAuthToken(
+                                new AuthHelper.AuthToken(
+                                        accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn
+                                ), true
+                        );
                         getUserData();
                         setResult(RESULT_OK);
                         succeed = true;

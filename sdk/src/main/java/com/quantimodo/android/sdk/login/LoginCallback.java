@@ -1,4 +1,4 @@
-package com.quantimodo.android.sdk;
+package com.quantimodo.android.sdk.login;
 
 /**
  * Created by Andrés on 10-12-2015.

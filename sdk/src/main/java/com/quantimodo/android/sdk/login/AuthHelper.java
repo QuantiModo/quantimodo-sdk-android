@@ -1,4 +1,4 @@
-package com.quantimodo.android.sdk;
+package com.quantimodo.android.sdk.login;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -140,7 +140,7 @@ public class AuthHelper {
      * Set AuthToken to current instance of AuthHelper and save it in storage
      * @param token
      */
-    public void setAuthToken(AuthToken token){
+    public void setAuthToken(AuthToken token, boolean startCallback){
         saveAuthToken(token);
         mToken = token.accessToken;
         if (mListener != null){
@@ -253,6 +253,31 @@ public class AuthHelper {
 
     }
 
+    /**
+     * Registers a login callback to the given callback manager.
+     * @param callbackManager The callback manager that will encapsulate the callback.
+     * @param callback The login callback that will be called on login completion.
+     */
+    public void registerCallback(
+            final CallbackManager callbackManager,
+            final CallbackManagerImpl.Callback callback) {
+//        if (!(callbackManager instanceof CallbackManagerImpl)) {
+//            throw new RuntimeException("Unexpected CallbackManager, " +
+//                    "please use the provided Factory.");
+//        }
+//        ((CallbackManagerImpl) callbackManager).registerCallback(
+//                0,
+//                new CallbackManagerImpl.Callback() {
+//                    @Override
+//                    public boolean onActivityResult(int resultCode, Intent data) {
+//                        return LoginManager.this.onActivityResult(
+//                                resultCode,
+//                                data,
+//                                callback);
+//                    }
+//                }
+//        );
+    }
     public static class AuthToken {
         public final String accessToken;
         public final String refreshToken;
