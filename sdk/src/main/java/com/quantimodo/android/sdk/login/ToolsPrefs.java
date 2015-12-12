@@ -34,6 +34,7 @@ public class ToolsPrefs {
         this.mApiScopes = mApiScopes;
         this.mApplicationSource = mApplicationSource;
         this.mApiSocialAuth = mApiSocialAuth;
+        this.isInitialized = true;
     }
 
     private ToolsPrefs(){
