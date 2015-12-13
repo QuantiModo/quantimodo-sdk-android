@@ -63,10 +63,10 @@ public class AuthHelper {
 //        QTools.getInstance().postStickyEvent(new TokenEvent(false));
     }
 
-    public void initialize(Context ctx, ToolsPrefs prefs, String clientId, String clientSecret) {
+    public void initialize(Context ctx, String clientId, String clientSecret) {
         isInitialized = true;
         mCtx = ctx.getApplicationContext();
-        mToolsPrefs = prefs;
+        mToolsPrefs = ToolsPrefs.getInstance();
         mPrefs = mCtx.getSharedPreferences(AUTH_PREF, Context.MODE_PRIVATE);
         mToken = mPrefs.getString(PREF_KEY, null);
         mClientId = clientId;
