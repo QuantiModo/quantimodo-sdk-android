@@ -28,7 +28,7 @@ import java.util.Random;
 /**
  * Activity for auth, used in pair with {@link AuthHelper AuthHelper}
  */
-public class QuantimodoWebAuthenticatorActivity extends Activity {
+public class AuthenticatorActivity extends Activity {
     private String mNonce;
 
     @Override
@@ -209,7 +209,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity {
                     ToolsPrefs.getInstance().getApiUrl(),
                     AuthHelper.getInstance().getAuthTokenWithRefresh());
             QuantimodoUser user = quantimodoApiV2.getUser(this, AuthHelper.getInstance().getAuthTokenWithRefresh()).getData();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(QuantimodoWebAuthenticatorActivity.this);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AuthenticatorActivity.this);
             prefs.edit().putString("userDisplayName", user.getDisplayName()).apply();
         } catch (NoNetworkConnection e){
 

@@ -20,7 +20,6 @@ public class ToolsPrefs {
     private static final String QUANTIMODO_SCOPES = createScopeString(QM_SCOPES_ARRAY);
 
     private static final String mApiUrl = BuildConfig.APP_BASE_PATH;
-    private String mApplicationSource;
     private static final String mApiSocialAuth = mApiUrl + "api/v2/auth/social/authorizeToken";
     private static ToolsPrefs instance = new ToolsPrefs();
     private boolean isInitialized = false;
@@ -29,12 +28,7 @@ public class ToolsPrefs {
         return instance;
     }
 
-    /**
-     *
-     * @param mApplicationSource Application name, used to submit and search data
-     */
-    public void initialize(String mApplicationSource) {
-        this.mApplicationSource = mApplicationSource;
+    public void initialize() {
         this.isInitialized = true;
     }
 
@@ -60,11 +54,6 @@ public class ToolsPrefs {
     public String getApiSocialAuth(){
         checkInitialized();
         return mApiSocialAuth;
-    }
-
-    public String getApplicationSource() {
-        checkInitialized();
-        return mApplicationSource;
     }
 
     public static String createScopeString(String[] scopes) {

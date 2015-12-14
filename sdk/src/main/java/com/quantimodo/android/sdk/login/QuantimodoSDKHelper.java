@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
  * Tokens stored in private shared preferences
  * This class should be use as Singleton, in most cases it would be injected as dependency
  */
-public class AuthHelper {
+public class QuantimodoSDKHelper {
 
     public static final String AUTH_PREF = "authPref";
     public static final String PREF_KEY = "key";
@@ -31,6 +31,7 @@ public class AuthHelper {
     private SharedPreferences mPrefs;
     private String mToken;
     private boolean isInitialized = false;
+    private String mApplicationSource;
 
     private AuthListener mListener;
 
@@ -46,29 +47,31 @@ public class AuthHelper {
         return mCtx;
     }
 
-    private static AuthHelper instance = new AuthHelper();
+    private static QuantimodoSDKHelper instance = new QuantimodoSDKHelper();
 
-    public static AuthHelper getInstance() {
+    public static QuantimodoSDKHelper getInstance() {
         return instance;
     }
 
-    public void initialize(Context ctx, ToolsPrefs prefs) {
+    public void initialize(Context context, String applicationSource) {
         isInitialized = true;
-        mCtx = ctx.getApplicationContext();
-        mToolsPrefs = prefs;
+        mCtx = context.getApplicationContext();
+        mToolsPrefs = ToolsPrefs.getInstance();
         mPrefs = mCtx.getSharedPreferences(AUTH_PREF, Context.MODE_PRIVATE);
         mToken = mPrefs.getString(PREF_KEY, null);
+        this.mApplicationSource = applicationSource;
         mClientId = null;
         mClientSecret = null;
 //        QTools.getInstance().postStickyEvent(new TokenEvent(false));
     }
 
-    public void initialize(Context ctx, String clientId, String clientSecret) {
+    public void initialize(Context context, String applicationSource, String clientId, String clientSecret) {
         isInitialized = true;
-        mCtx = ctx.getApplicationContext();
+        mCtx = context.getApplicationContext();
         mToolsPrefs = ToolsPrefs.getInstance();
         mPrefs = mCtx.getSharedPreferences(AUTH_PREF, Context.MODE_PRIVATE);
         mToken = mPrefs.getString(PREF_KEY, null);
+        this.mApplicationSource = applicationSource;
         mClientId = clientId;
         mClientSecret = clientSecret;
     }
@@ -253,31 +256,10 @@ public class AuthHelper {
 
     }
 
-    /**
-     * Registers a login callback to the given callback manager.
-     * @param callbackManager The callback manager that will encapsulate the callback.
-     * @param callback The login callback that will be called on login completion.
-     */
-    public void registerCallback(
-            final CallbackManager callbackManager,
-            final CallbackManagerImpl.Callback callback) {
-//        if (!(callbackManager instanceof CallbackManagerImpl)) {
-//            throw new RuntimeException("Unexpected CallbackManager, " +
-//                    "please use the provided Factory.");
-//        }
-//        ((CallbackManagerImpl) callbackManager).registerCallback(
-//                0,
-//                new CallbackManagerImpl.Callback() {
-//                    @Override
-//                    public boolean onActivityResult(int resultCode, Intent data) {
-//                        return LoginManager.this.onActivityResult(
-//                                resultCode,
-//                                data,
-//                                callback);
-//                    }
-//                }
-//        );
+    public String getApplicationSource() {
+        return mApplicationSource;
     }
+
     public static class AuthToken {
         public final String accessToken;
         public final String refreshToken;
