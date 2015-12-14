@@ -176,7 +176,7 @@ There are two ways to implement Quantimodo login on Android:
 - LoginManager class - To initiate login without using a UI element.
 
 ### Prerequisites
-Before you implement Facebook Login you need:
+Before you implement Quantimodo Login you need:
 
 - Create your Quantimodo App. Refer to Getting Started - Step 2
 - Get the Client Id and Client Secret 
@@ -208,7 +208,7 @@ compile 'com.quantimodo.android:sdk:2.2.4'
 </activity>
 ```
 
-### Add Facebook Login
+### Add Quantimodo Login
     
 The simplest way to add Quantimodo Login to your app is to add LoginButton from the SDK. 
 
