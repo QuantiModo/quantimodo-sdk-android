@@ -7,7 +7,7 @@ public interface LoginCallback {
     /**
      * Called when the dialog completes without error
      * If the operation was succeed you can get the token from now on using
-     * {@link AuthHelper}.getInstance().getAuthTokenWithRefresh()
+     * {@link QuantimodoSDKHelper#getInstance()#getAuthTokenWithRefresh()}
      */
     void onSuccess();
 

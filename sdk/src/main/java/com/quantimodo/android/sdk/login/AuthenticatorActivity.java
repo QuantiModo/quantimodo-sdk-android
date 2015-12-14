@@ -26,7 +26,7 @@ import com.quantimodo.android.sdk.model.QuantimodoUser;
 import java.util.Random;
 
 /**
- * Activity for auth, used in pair with {@link AuthHelper AuthHelper}
+ * Activity for auth, used in pair with {@link QuantimodoSDKHelper AuthHelper}
  */
 public class AuthenticatorActivity extends Activity {
     private String mNonce;
@@ -100,7 +100,7 @@ public class AuthenticatorActivity extends Activity {
             }
         }));
 
-        final String url = ToolsPrefs.getInstance().getApiUrl() + "api/oauth2/authorize?client_id=" + AuthHelper.getInstance().getClientId()
+        final String url = ToolsPrefs.getInstance().getApiUrl() + "api/oauth2/authorize?client_id=" + QuantimodoSDKHelper.getInstance().getClientId()
                 + "&response_type=code&scope=" + ToolsPrefs.getInstance().getApiScopes() + "&state=" + mNonce;
         Log.d("QMWebAuthActivity", "Loading: " + url);
         webView.loadUrl(url);
@@ -117,8 +117,8 @@ public class AuthenticatorActivity extends Activity {
 
     private void getAccessToken(String authorizationCode) {
         Ion.with(this, ToolsPrefs.getInstance().getApiUrl() + "api/oauth2/token")
-                .setBodyParameter("client_id", AuthHelper.getInstance().getClientId())
-                .setBodyParameter("client_secret", AuthHelper.getInstance().getClientSecret())
+                .setBodyParameter("client_id", QuantimodoSDKHelper.getInstance().getClientId())
+                .setBodyParameter("client_secret", QuantimodoSDKHelper.getInstance().getClientSecret())
                 .setBodyParameter("grant_type", "authorization_code")
                 .setBodyParameter("code", authorizationCode)
                 .asJsonObject()
@@ -132,8 +132,8 @@ public class AuthenticatorActivity extends Activity {
                         String refreshToken = result.get("refresh_token").getAsString();
                         int expiresIn = result.get("expires_in").getAsInt();
 
-                        AuthHelper.getInstance().setAuthToken(
-                                new AuthHelper.AuthToken(
+                        QuantimodoSDKHelper.getInstance().setAuthToken(
+                                new QuantimodoSDKHelper.AuthToken(
                                         accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn
                                 ), true
                         );
@@ -207,8 +207,8 @@ public class AuthenticatorActivity extends Activity {
         try {
             QuantimodoApiV2 quantimodoApiV2 = QuantimodoApiV2.getInstance(
                     ToolsPrefs.getInstance().getApiUrl(),
-                    AuthHelper.getInstance().getAuthTokenWithRefresh());
-            QuantimodoUser user = quantimodoApiV2.getUser(this, AuthHelper.getInstance().getAuthTokenWithRefresh()).getData();
+                    QuantimodoSDKHelper.getInstance().getAuthTokenWithRefresh());
+            QuantimodoUser user = quantimodoApiV2.getUser(this, QuantimodoSDKHelper.getInstance().getAuthTokenWithRefresh()).getData();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AuthenticatorActivity.this);
             prefs.edit().putString("userDisplayName", user.getDisplayName()).apply();
         } catch (NoNetworkConnection e){

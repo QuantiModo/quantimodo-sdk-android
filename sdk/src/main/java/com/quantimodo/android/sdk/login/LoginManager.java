@@ -86,7 +86,7 @@ public class LoginManager {
                 }
         );
         Intent intent = new Intent(
-                delegate.getActivityContext(), QuantimodoWebAuthenticatorActivity.class);
+                delegate.getActivityContext(), AuthenticatorActivity.class);
         delegate.startActivityForResult(intent);
     }
 
