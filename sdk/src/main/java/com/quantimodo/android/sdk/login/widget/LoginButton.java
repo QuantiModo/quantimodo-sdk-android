@@ -15,10 +15,16 @@ import com.quantimodo.android.sdk.R;
 import com.quantimodo.android.sdk.login.LoginManager;
 
 /**
- * Custom button to sign in
+ * Custom button to sign in. The result goes to onActivityResult,
+ * either using a Fragment or Activity.
+ * When it's a fragment you should call {@link LoginButton#setFragment(Fragment)} first.
+ * To get the result you should implement onActivityResult where the request code is
+ * {@link LoginManager#LOGIN_REQUEST_CODE} and the result code is either
+ * {@link Activity#RESULT_OK} or {@link Activity#RESULT_CANCELED} when is none of those an error
+ * occurred while signing in
  */
 public class LoginButton extends Button {
-    enum AttributeType{
+    private enum AttributeType{
         BACKGROUND,
         TEXT_COLOR,
         TEXT
@@ -36,8 +42,8 @@ public class LoginButton extends Button {
         setAttr(context, attrs, new int[]{android.R.attr.textColor}, AttributeType.TEXT_COLOR);
         setAttr(context, attrs, new int[]{android.R.attr.text}, AttributeType.TEXT);
         internalOnClickListener = new LoginClickListener();
+        setupOnClickListener();
     }
-
 
     private void setAttr(Context context, AttributeSet attrs, int[] attrsResources, AttributeType type){
         final TypedArray a = context.getTheme().obtainStyledAttributes(
@@ -78,13 +84,26 @@ public class LoginButton extends Button {
                 LoginManager.getInstance().performLogin(LoginButton.this.getFragment());
             }
             else LoginManager.getInstance().performLogin(LoginButton.this.getActivity());
+
+            //manually calling the internal onClickListener
+            if (externalOnClickListener != null) {
+                externalOnClickListener.onClick(v);
+            }
         }
     }
 
+    /**
+     * Gets the set {@link Fragment}
+     * @return The Fragment where to deliver the result after login in
+     */
     public Fragment getFragment() {
         return parentFragment;
     }
 
+    /**
+     * Sets the current fragment to get the callback after login in using onActivityResult
+     * @param parentFragment the current Fragment
+     */
     public void setFragment(Fragment parentFragment) {
         this.parentFragment = parentFragment;
     }
@@ -95,7 +114,6 @@ public class LoginButton extends Button {
         super.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
-                //TODO: fix this
                 if (LoginButton.this.internalOnClickListener != null) {
                     LoginButton.this.internalOnClickListener.onClick(v);
                 } else if (LoginButton.this.externalOnClickListener != null) {
@@ -105,7 +123,7 @@ public class LoginButton extends Button {
         });
     }
 
-    protected Activity getActivity() {
+    private Activity getActivity() {
         final Context context = getContext();
         if (context instanceof Activity) {
             return (Activity) context;
