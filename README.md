@@ -169,6 +169,121 @@ Of course, authentication uses internet connection, so make sure to include `and
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
+## Using the Quantimodo login
+There are two ways to implement Quantimodo login on Android:
+
+- LoginButton class - Which provides a button you can add to your UI. It follows the current access token and can log people in and out.
+- LoginManager class - To initiate login without using a UI element.
+
+### Prerequisites
+Before you implement Facebook Login you need:
+
+- Create your Quantimodo App. Refer to Getting Started - Step 2
+- Get the Client Id and Client Secret 
+- Add the QuantimodoSDK to your project:
+
+Using Maven:
+
+```
+<dependency>
+  <groupId>com.quantimodo.android</groupId>
+  <artifactId>sdk</artifactId>
+  <version>2.2.4</version>
+  <type>aar</type>
+</dependency>
+```
+
+Or using Gradle:
+
+```
+compile 'com.quantimodo.android:sdk:2.2.4'
+```
+
+- Add AuthenticatorActivity to your AndroidManifest.xml
+
+```
+<activity android:name="com.quantimodo.android.sdk.login.AuthenticatorActivity"
+    android:configChanges="orientation|keyboardHidden|screenSize"
+    >
+</activity>
+```
+
+### Add Facebook Login
+    
+The simplest way to add Quantimodo Login to your app is to add LoginButton from the SDK. 
+
+There are other classes you use to add login to your app. The SDK includes:
+
+- LoginManager: Initiates the login process.
+- LoginButton: This UI element wraps functionality available in the LoginManager. So when someone clicks on the button, the login is initiated.
+- QuantimodoSDKHelper: This class holds the auth token after successfully signed in, which can be used to perform request to the API
+- ToolsPrefs: Needed class to setup the constants used by the SDK
+
+### Add the Login Button
+    
+Add the button to your layout XML file with the full class name, com.quantimodo.android.sdk.login.widget.LoginButton:
+
+```
+<com.quantimodo.android.sdk.login.widget.LoginButton
+    android:id="@+id/login_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="30dp"
+    android:layout_marginBottom="30dp" />
+```
+
+As a second option you can directly call `LoginManager.getInstance().performLogin`, you have to pass the current Activity 
+or Fragment as parameter to performLogin:
+
+```
+LoginManager.getInstance().performLogin(MainActivity.this);
+```
+
+### Implementing the code
+
+To use the authenticator follow this full example:
+```
+public class MainActivity extends FragmentActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ToolsPrefs.getInstance().initialize();
+        QuantimodoSDKHelper.getInstance().initialize(
+                this, //current context
+                "myAppName", //your app name
+                "my_client_id", //your private client id
+                "my_client_secret" //your private client secret or password
+        );
+    }
+}
+```
+
+
+If login succeeds, the `QuantimodoSDKHelper` object has the new auth token value, you can get it implementing 
+onActivityResult on your Activity or Fragment
+
+```
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if(requestCode == LoginManager.LOGIN_REQUEST_CODE){
+        if(resultCode == RESULT_OK){ 
+            Toast.makeText(this, "login result ok", Toast.LENGTH_LONG).show();
+            try {
+                String authToken = QuantimodoSDKHelper.getInstance().getAuthTokenWithRefresh();
+            } catch (NoNetworkConnection noNetworkConnection) {
+                noNetworkConnection.printStackTrace();
+            }
+        }
+        else if(resultCode == RESULT_CANCELED) Toast.makeText(this, "login result canceled", Toast.LENGTH_LONG).show();
+        else Toast.makeText(this, "login error", Toast.LENGTH_LONG).show();
+    }
+}
+```
+
+
+
 ## Running tests
 
 Connect your device and run in the project root:
