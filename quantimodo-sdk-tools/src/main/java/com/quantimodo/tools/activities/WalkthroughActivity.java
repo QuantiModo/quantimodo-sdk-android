@@ -41,6 +41,8 @@ public class WalkthroughActivity extends FragmentActivity {
         ViewPager mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mPager.setOffscreenPageLimit(1);
+        mPager.setSaveEnabled(false);
 
         mSkipButton = (Button) findViewById(R.id.walkthrough_skip);
         mSkipButton.setOnClickListener(new View.OnClickListener() {
