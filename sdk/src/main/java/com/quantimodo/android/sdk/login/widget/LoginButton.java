@@ -41,8 +41,10 @@ public class LoginButton extends Button {
         setAttr(context, attrs, new int[]{android.R.attr.background}, AttributeType.BACKGROUND);
         setAttr(context, attrs, new int[]{android.R.attr.textColor}, AttributeType.TEXT_COLOR);
         setAttr(context, attrs, new int[]{android.R.attr.text}, AttributeType.TEXT);
-        internalOnClickListener = new LoginClickListener();
-        setupOnClickListener();
+        if(!isInEditMode()) {
+            internalOnClickListener = new LoginClickListener();
+            setupOnClickListener();
+        }
     }
 
     private void setAttr(Context context, AttributeSet attrs, int[] attrsResources, AttributeType type){
