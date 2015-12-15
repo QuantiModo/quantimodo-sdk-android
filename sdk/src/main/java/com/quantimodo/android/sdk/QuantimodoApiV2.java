@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.util.Log;
 import com.google.gson.*;
@@ -26,9 +27,11 @@ import java.lang.reflect.Type;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.quantimodo.android.sdk.SdkDefs.QUANTIMODO_ADDRESS;
 
@@ -124,7 +127,7 @@ public class QuantimodoApiV2 {
     }
 
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime,
-                                                                            String variableName, String source, String toUnitName,Integer limit, Integer offset) {
+                                                                           String variableName, String source, String toUnitName,Integer limit, Integer offset) {
         return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName, limit, offset);
     }
 
@@ -143,17 +146,10 @@ public class QuantimodoApiV2 {
         return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
     }
 
-    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(
-            Context context, String token, Date startTime, Date endTime, String variableName,
-            String source, String toUnitName, Integer limit, Integer offset){
-        return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName, limit, offset, null, null);
-    }
     /**
      * Get measurements in specified range
      * @param context Context
      * @param token OAuth Token
-     * @param startTime timestamp from ( instead of 0 use 1 )
-     * @param endTime timestamp  to
      * @param variableName variable name
      * @param source source name, which is name of application that submitted measurement
      * @param toUnitName convert to unit
@@ -161,23 +157,19 @@ public class QuantimodoApiV2 {
      * @param offset used with limit, for paging results
      * @return SdkReponse with ArrayList of HistoryMeasurement
      */
-    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime,
-                                                                           String variableName, String source, String toUnitName,
-                                                                           Integer limit, Integer offset, Date createdAt, Date updatedAt) {
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date createdAt, Date updatedAt,
+                                                                           String variableName, String source, String toUnitName,Integer limit, Integer offset) {
         setupIon(context);
 
-        //TODO: Add createdAt, and updatedAt
         SdkResponse<ArrayList<HistoryMeasurement>> sdkResponse = new SdkResponse<>();
 
-        Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/v1/measurements").buildUpon();
-        if (startTime != null) {
-            uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
-//            uriBuilder.appendQueryParameter("startTime", Utils.formatDateToString(startTime));
-        }
-        if (endTime != null) {
-            uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
-//            uriBuilder.appendQueryParameter("endTime", Utils.formatDateToString(endTime));
-        }
+        Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/measurements").buildUpon();
+//        if (startTime != null) {
+//            uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
+//        }
+//        if (endTime != null) {
+//            uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
+//        }
         if (variableName != null) {
             uriBuilder.appendQueryParameter("variableName", variableName);
         }
@@ -194,10 +186,10 @@ public class QuantimodoApiV2 {
             uriBuilder.appendQueryParameter("offset",offset.toString());
         }
         if(createdAt != null){
-            uriBuilder.appendQueryParameter("createdAt", "(lt)" + Utils.formatDateToString(createdAt));
+            uriBuilder.appendQueryParameter("createdAt", "(lt)" + formatDate(createdAt));
         }
-        if(updatedAt!= null){
-            uriBuilder.appendQueryParameter("updatedAt", "(gt)" + Utils.formatDateToString(updatedAt));
+        if(updatedAt != null){
+            uriBuilder.appendQueryParameter("updatedAt", "(gt)" + formatDate(updatedAt));
         }
 
         FutureBuilder futureBuilder = Ion.with(context)
@@ -209,6 +201,14 @@ public class QuantimodoApiV2 {
         }, futureBuilder);
 
         return sdkResponse;
+    }
+
+    @NonNull
+    private String formatDate(@NonNull final Date date){
+        SimpleDateFormat formatter;
+
+        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        return formatter.format(date);
     }
 
     /**

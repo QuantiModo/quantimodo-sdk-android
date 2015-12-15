@@ -11,14 +11,11 @@ Create your free developer account and app at [https://admin.quantimo.do/registe
 ### Step 2: Create Your App
 Create your app on [https://admin.quantimo.do/apps](https://admin.quantimo.do/apps) and get your client_id and client_secret from it, save them to set up your project later.
 
-### Step 3: Add QuantiModo Dependencies to Your App
-The QuantiModo SDK for Android consists of two modules. 
-
-**1. SDK Module**
+### Step 3: Add the QM SDK module to your app
 
 The SDK module contains the model classes and API client for QuantiModo API web-service.
 
-Using Maven:
+Add the QM SDK Module Using Maven:
 ```
 <dependency>
   <groupId>com.quantimodo.android</groupId>
@@ -33,28 +30,102 @@ Or using Gradle:
 compile 'com.quantimodo.android:sdk:2.2.4'
 ```
 
-**Use the SDK as a submodule**
 
-Create a folder, for example, libs/ and inside it execute:
-```
-$ git submodule add git@github.com:QuantiModo/QuantiModo-SDK-Android.git
-```
-After that, the folder 'Quantimodo-SDK-Android' will be created containing the SDK as a submodule.
 
 ### Step 4. Enable your user to connect to the QM API
 
-To use SDK, you need to obtain an [OAuth2 token](https://app.quantimo.do/api/docs/#oauth2-authentication), this is where you have to use your client_id and client_secret to connect with the API
+There are two ways to implement Quantimodo login on Android:
 
-Basically, you have to follow these steps:
-- Request an authorization code
-- Request the access token
-- Refreshing the access token
+- LoginButton class - Which provides a button you can add to your UI. It follows the current access token and can log people in and out.
+- LoginManager class - To initiate login without using a UI element.
 
-After that you can get an instance of QuantimodoApiV2.
+### Prerequisites
+Before you implement Quantimodo Login you need:
+
+- Create your Quantimodo App. See Step 2
+- Get the Client Id and Client Secret 
+- Add the QuantimodoSDK to your project. See step 3
+- Add AuthenticatorActivity to your AndroidManifest.xml:s
 
 ```
-String token = "oauth_token";
-QuantimodoApiV2 api = QuantimodoApiV2.getInstance(null, token);
+<activity android:name="com.quantimodo.android.sdk.login.AuthenticatorActivity"
+    android:configChanges="orientation|keyboardHidden|screenSize"
+    >
+</activity>
+```
+
+### Add Quantimodo Login
+    
+The simplest way to add Quantimodo Login to your app is to add LoginButton from the SDK. 
+
+There are other classes you use to add login to your app. The SDK includes:
+
+- LoginManager: Initiates the login process.
+- LoginButton: This UI element wraps functionality available in the LoginManager. So when someone clicks on the button, the login is initiated.
+- QuantimodoSDKHelper: This class holds the auth token after successfully signed in, which can be used to perform request to the API
+- ToolsPrefs: Needed class to setup the constants used by the SDK
+
+### Add the Login Button
+    
+Add the button to your layout XML file with the full class name, com.quantimodo.android.sdk.login.widget.LoginButton:
+
+```
+<com.quantimodo.android.sdk.login.widget.LoginButton
+    android:id="@+id/login_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="30dp"
+    android:layout_marginBottom="30dp" />
+```
+
+As a second option you can directly call `LoginManager.getInstance().performLogin`, you have to pass the current Activity 
+or Fragment as parameter to performLogin:
+
+```
+LoginManager.getInstance().performLogin(MainActivity.this);
+```
+
+### Implementing the code
+
+To use the authenticator follow this full example:
+```
+public class MainActivity extends FragmentActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ToolsPrefs.getInstance().initialize();
+        QuantimodoSDKHelper.getInstance().initialize(
+                this, //current context
+                "myAppName", //your app name
+                "my_client_id", //your private client id
+                "my_client_secret" //your private client secret or password
+        );
+    }
+}
+```
+
+
+If login succeeds, the `QuantimodoSDKHelper` object has the new auth token value, you can get it implementing 
+onActivityResult on your Activity or Fragment
+
+```
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if(requestCode == LoginManager.LOGIN_REQUEST_CODE){
+        if(resultCode == RESULT_OK){ 
+            Toast.makeText(this, "login result ok", Toast.LENGTH_LONG).show();
+            try {
+                String authToken = QuantimodoSDKHelper.getInstance().getAuthTokenWithRefresh();
+            } catch (NoNetworkConnection noNetworkConnection) {
+                noNetworkConnection.printStackTrace();
+            }
+        }
+        else if(resultCode == RESULT_CANCELED) Toast.makeText(this, "login result canceled", Toast.LENGTH_LONG).show();
+        else Toast.makeText(this, "login error", Toast.LENGTH_LONG).show();
+    }
+}
 ```
 
 ### Step 5. Send user data to the QM API
@@ -209,6 +280,14 @@ git submodule init
 git submodule sync
 git submodule update
 ```
+
+**Use the SDK as a submodule**
+
+Create a folder, for example, libs/ and inside it execute:
+```
+$ git submodule add git@github.com:QuantiModo/QuantiModo-SDK-Android.git
+```
+After that, the folder 'Quantimodo-SDK-Android' will be created containing the SDK as a submodule.
 
 ### Deploy and Release Updates to the QM-Android-SDK
 

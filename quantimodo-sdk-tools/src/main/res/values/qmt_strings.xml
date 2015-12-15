@@ -95,6 +95,7 @@
     <string name="walkthrough_content_4">Once you\'ve accumulated enough data for analysis, you can see the top predictors or your mood and optimal values on the Your Predictors page.</string>
     <string name="walkthrough_content_5">See the top predictors of everyone\'s mood on the Common Predictors page.</string>
     <string name="walkthrough_content_6">Help improve our algorithms by down voting the predictors that incorrect or merely coincidental.</string>
-    <string name="walkthrough_content_7">Change or Disable Notification Frequency on the Setting page.</string>
+    <string name="walkthrough_content_7">Change notification frequency on the settings page.</string>
     <string name="walkthrough_skip">Skip Tour</string>
+    <string name="walkthrough_finish">Finish Tour</string>
 </resources>

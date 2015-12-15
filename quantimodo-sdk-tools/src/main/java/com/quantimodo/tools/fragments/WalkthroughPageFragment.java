@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,9 @@ public class WalkthroughPageFragment extends Fragment {
      * The fragment's page number, which is set to the argument value for {@link #ARG_PAGE}.
      */
     private int mPageNumber;
+
+    ViewGroup rootView;
+    Bitmap mBitmap;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -46,7 +50,7 @@ public class WalkthroughPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater
+        rootView = (ViewGroup) inflater
                 .inflate(R.layout.qmt_f_walkthrough_page, container, false);
 
         ImageView image = (ImageView) rootView.findViewById(R.id.walkthrough_image);
@@ -84,13 +88,33 @@ public class WalkthroughPageFragment extends Fragment {
         }
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inScaled = false;
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageRes, opts);
+        mBitmap = BitmapFactory.decodeResource(getResources(), imageRes, opts);
 
-        image.setImageBitmap(bitmap);
+        image.setImageBitmap(mBitmap);
 
         TextView contentText = (TextView) rootView.findViewById(R.id.walkthrough_text);
         contentText.setText(contentRes);
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBitmap.recycle();
+        unbindDrawables(rootView.findViewById(R.id.content));
+    }
+
+    private void unbindDrawables(View view) {
+        if (view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+
+        }
     }
 
     /**

@@ -1,3 +1,4 @@
+
 package com.quantimodo.tools.utils;
 
 import android.content.Context;

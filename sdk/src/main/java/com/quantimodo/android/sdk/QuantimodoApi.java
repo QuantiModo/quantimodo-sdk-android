@@ -103,44 +103,45 @@ public class QuantimodoApi {
         }
     }
 
-    public ArrayList<HistoryMeasurement> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName) {
-        setupIon(context);
-
-        try {
-            Uri.Builder uriBuilder = Uri.parse(QUANTIMODO_ADDRESS + "api/measurements/history").buildUpon();
-            if (startTime != null) {
-                uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
-            }
-            if (endTime != null) {
-                uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
-            }
-            if (variableName != null) {
-                uriBuilder.appendQueryParameter("variableName", variableName);
-            }
-            if (source != null) {
-                uriBuilder.appendQueryParameter("source", source);
-            }
-            if (toUnitName != null) {
-                uriBuilder.appendQueryParameter("unit", toUnitName);
-            }
-
-            String response = Ion.with(context)
-                    .load(uriBuilder.build().toString())
-                    .setHeader("Authorization", "Bearer " + token)
-                    .asString()
-                    .get();
-
-            Type measurementType = new TypeToken<Collection<HistoryMeasurement>>() {
-            }.getType();
-            return Ion.getDefault(context).configure().getGson().fromJson(response, measurementType);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
+//    @Deprecated
+//    public ArrayList<HistoryMeasurement> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName) {
+//        setupIon(context);
+//
+//        try {
+//            Uri.Builder uriBuilder = Uri.parse(QUANTIMODO_ADDRESS + "api/measurements/history").buildUpon();
+//            if (startTime != null) {
+//                uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
+//            }
+//            if (endTime != null) {
+//                uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
+//            }
+//            if (variableName != null) {
+//                uriBuilder.appendQueryParameter("variableName", variableName);
+//            }
+//            if (source != null) {
+//                uriBuilder.appendQueryParameter("source", source);
+//            }
+//            if (toUnitName != null) {
+//                uriBuilder.appendQueryParameter("unit", toUnitName);
+//            }
+//
+//            String response = Ion.with(context)
+//                    .load(uriBuilder.build().toString())
+//                    .setHeader("Authorization", "Bearer " + token)
+//                    .asString()
+//                    .get();
+//
+//            Type measurementType = new TypeToken<Collection<HistoryMeasurement>>() {
+//            }.getType();
+//            return Ion.getDefault(context).configure().getGson().fromJson(response, measurementType);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 
     public int putMeasurementsSynchronous(Context context, String token, List<MeasurementSet> measurementSets) {
         setupIon(context);

@@ -16,17 +16,20 @@ public class HistoryMeasurement {
 
     final String note;
 
-    public HistoryMeasurement(String source, String variable, Date timestamp, double value, String unit){
-        this(source, variable, timestamp, value, unit,null);
+    final int id;
+
+    public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit){
+        this(id, source, variable, timestamp, value, unit,null);
     }
 
-    public HistoryMeasurement(String source, String variable, Date timestamp, double value, String unit,String note) {
+    public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit,String note) {
         this.source = source;
         this.variable = variable;
         this.timestamp = timestamp;
         this.value = value;
         this.unit = unit;
         this.note = note;
+        this.id = id;
     }
 
     public String getSource() {
@@ -51,5 +54,9 @@ public class HistoryMeasurement {
 
     public String getNote() {
         return note;
+    }
+
+    public int getId() {
+        return id;
     }
 }
