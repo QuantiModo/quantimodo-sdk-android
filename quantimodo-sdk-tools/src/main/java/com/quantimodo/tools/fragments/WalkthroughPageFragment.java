@@ -88,7 +88,6 @@ public class WalkthroughPageFragment extends Fragment {
         }
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inScaled = false;
-        opts.inSampleSize = 4;
         mBitmap = BitmapFactory.decodeResource(getResources(), imageRes, opts);
 
         image.setImageBitmap(mBitmap);
