@@ -4,14 +4,12 @@ package io.swagger.client.model;
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 
 @ApiModel(description = "")
 public class MeasurementValue  {
   
   @SerializedName("start_time")
-  private Date startTime = null;
+  private String startTime = null;
   @SerializedName("value")
   private Float value = null;
   @SerializedName("note")
@@ -22,10 +20,10 @@ public class MeasurementValue  {
    * When the measurement event occurred . Use ISO 8601 datetime format
    **/
   @ApiModelProperty(required = true, value = "When the measurement event occurred . Use ISO 8601 datetime format")
-  public Date getStartTime() {
+  public String getStartTime() {
     return startTime;
   }
-  public void setStartTime(Date startTime) {
+  public void setStartTime(String startTime) {
     this.startTime = startTime;
   }
 

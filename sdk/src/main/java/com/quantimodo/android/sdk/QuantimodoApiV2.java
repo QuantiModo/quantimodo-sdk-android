@@ -123,7 +123,7 @@ public class QuantimodoApiV2 {
     }
 
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
-        return getMeasurementHistory(context, token, startTime, endTime, variableName, source, toUnitName, null, null);
+        return getMeasurementHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
     }
 
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime,
@@ -150,6 +150,8 @@ public class QuantimodoApiV2 {
      * Get measurements in specified range
      * @param context Context
      * @param token OAuth Token
+     * @param startTime timestamp from ( instead of 0 use 1 )
+     * @param endTime timestamp  to
      * @param variableName variable name
      * @param source source name, which is name of application that submitted measurement
      * @param toUnitName convert to unit

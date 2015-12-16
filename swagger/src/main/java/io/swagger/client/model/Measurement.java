@@ -22,7 +22,7 @@ public class Measurement  {
   @SerializedName("source_id")
   private Integer sourceId = null;
   @SerializedName("start_time")
-  private Date startTime = null;
+  private String startTime = null;
   @SerializedName("value")
   private Float value = null;
   @SerializedName("unit_id")
@@ -125,10 +125,10 @@ public class Measurement  {
    * Start Time for the measurement event. Use ISO 8601
    **/
   @ApiModelProperty(required = true, value = "Start Time for the measurement event. Use ISO 8601")
-  public Date getStartTime() {
+  public String getStartTime() {
     return startTime;
   }
-  public void setStartTime(Date startTime) {
+  public void setStartTime(String startTime) {
     this.startTime = startTime;
   }
 
