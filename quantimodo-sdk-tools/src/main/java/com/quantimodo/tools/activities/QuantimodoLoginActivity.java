@@ -4,12 +4,8 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +32,7 @@ import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.utils.GetUsernameTask;
+import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.Arrays;
 
@@ -204,19 +201,12 @@ public class QuantimodoLoginActivity extends Activity {
         if (mEmail == null) {
             pickUserAccount();
         } else {
-            if (isDeviceOnline()) {
+            if (QtoolsUtils.hasInternetConnection(this)) {
                 new GetUsernameTask(QuantimodoLoginActivity.this, mEmail, SCOPE, mPrefs).execute();
             } else {
                 Toast.makeText(this, "You must have internet connection to proceed", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    private boolean isDeviceOnline(){
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 
     /**

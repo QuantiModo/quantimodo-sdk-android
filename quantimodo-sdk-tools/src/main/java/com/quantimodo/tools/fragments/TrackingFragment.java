@@ -5,10 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntDef;
@@ -24,7 +21,6 @@ import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
-import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
@@ -33,6 +29,7 @@ import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.QtoolsUtils;
 import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 import com.quantimodo.tools.views.ScrollViewExt;
@@ -70,6 +67,9 @@ public class TrackingFragment extends QFragment {
     Spinner spVariableCategory;
     RadioGroup rgVariableCombinationOperation;
 
+    /**
+     * Linear layout that contains the bottom buttons, when editing or creating a new measurement
+     */
     LinearLayout lnButtons;
 
     @Inject
@@ -369,14 +369,7 @@ public class TrackingFragment extends QFragment {
     }
 
     private void loadAndInitData() {
-        //checking network connection
-        ConnectivityManager cm =
-                (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if(!isConnected){
+        if(!QtoolsUtils.hasInternetConnection(getActivity())){
             Toast.makeText(getActivity(), R.string.network_connection_error_message, Toast.LENGTH_LONG).show();
             return;
         }
@@ -490,12 +483,20 @@ public class TrackingFragment extends QFragment {
         return selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
     }
 
-    void onVariableClick(AdapterView<?> adapterView, View view, int position, long l) {
+    /**
+     * Method to call when an item on the list was clicked
+     * @param parent The AdapterView where the click happened.
+     * @param view The view within the AdapterView that was clicked (this
+     *            will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id The row id of the item that was clicked.
+     */
+    void onVariableClick(AdapterView<?> parent, View view, int position, long id) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
             return;
         }
-
+        //when pressed Add Variable
         if (suggestedVariables == null || position >= suggestedVariables.size()) {
             selectedVariable = null;
             // Delay showing the cards for a bit so that the animations all run smoothly
@@ -513,7 +514,9 @@ public class TrackingFragment extends QFragment {
                     showButtonsCard();
                 }
             }, 400);
-        } else {
+        }
+        //When selected a variable so opens the cards to edit it
+        else {
             selectedVariable = suggestedVariables.get(position);
             etVariableName.setText(selectedVariable.getName());
 
@@ -678,28 +681,27 @@ public class TrackingFragment extends QFragment {
         });
     }
 
-
-    /*
-    **  Shows the button row at the bottom of the screen
-    */
+    /**
+     * Shows the button row at the bottom of the screen
+     */
     private void showButtonsCard() {
         if (lnButtons.getVisibility() != View.VISIBLE) {
             ViewUtils.expandView(lnButtons, null);
         }
     }
 
-    /*
-    **  Shows the button row at the bottom of the screen
-    */
+    /**
+     * Shows the button row at the bottom of the screen
+     */
     private void hideButtonsCard() {
         if (lnButtons.getVisibility() == View.VISIBLE) {
             ViewUtils.collapseView(lnButtons, null);
         }
     }
 
-    /*
-    **  Shows the card the user uses to input a new variable
-    */
+    /**
+     * Shows the card the user uses to input a new variable
+     */
     private void showAddVariableCard() {
         if (lnAddVariableContainer.getVisibility() != View.VISIBLE) {
             ViewUtils.expandView(lnAddVariableContainer, null);

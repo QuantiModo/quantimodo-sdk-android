@@ -20,6 +20,7 @@ import com.quantimodo.android.sdk.model.QuantimodoUser;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.UserPreferences;
 import com.quantimodo.tools.sdk.AuthHelper;
 
 import javax.inject.Inject;
@@ -213,8 +214,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
     private void getUserData(){
         QuantimodoUser user = quantimodoApiV2.getUser(this, authHelper.getAuthToken()).getData();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(QuantimodoWebAuthenticatorActivity.this);
-        prefs.edit().putString("userDisplayName", user.getDisplayName()).apply();
+        UserPreferences.setFullUserdata(this, user);
     }
 
     private static class OAuthClient extends WebViewClient {
