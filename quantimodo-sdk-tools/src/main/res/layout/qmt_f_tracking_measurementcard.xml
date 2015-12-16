@@ -19,7 +19,7 @@
         android:cropToPadding="true"
         android:padding="12dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_action_overflow_dark" />
+        android:src="@drawable/clock" />
 
 
 
