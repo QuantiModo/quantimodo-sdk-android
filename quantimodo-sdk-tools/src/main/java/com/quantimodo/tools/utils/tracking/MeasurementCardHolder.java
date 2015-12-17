@@ -40,6 +40,8 @@ public class MeasurementCardHolder {
     public final Spinner spMeasurementUnit;
     public final EditText etValue;
     public final EditText etNote;
+    private final NDSpinner spReminderTime;
+    private final TextView reminderTitle;
 
     public UnitSelectSpinnerAdapter unitAdapter;
 
@@ -59,6 +61,8 @@ public class MeasurementCardHolder {
         etValue = (EditText) measurementCard.findViewById(R.id.etMeasurementValue);
         etNote = (EditText) measurementCard.findViewById(R.id.etNote);
         spMeasurementTime = (NDSpinner) measurementCard.findViewById(R.id.spMeasurementTime);
+        spReminderTime = (NDSpinner) measurementCard.findViewById(R.id.spReminderTime);
+        reminderTitle = (TextView) measurementCard.findViewById(R.id.reminder_title);
 
         this.context = context;
     }
@@ -81,13 +85,14 @@ public class MeasurementCardHolder {
         initTimePicker();
         initValueEntry(focus);
         initUnitPicker();
+        initReminderTime();
 
         initCategory(categoryDef);
     }
 
     public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
                      int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef) {
-        init(removable, focus, allUnits, defaultUnitIndex, categoryDef,null);
+        init(removable, focus, allUnits, defaultUnitIndex, categoryDef, null);
     }
 
     private void initCategory(TrackingFragment.CategoryDef categoryDef) {
@@ -95,11 +100,15 @@ public class MeasurementCardHolder {
             spMeasurementDate.setVisibility(View.GONE);
             spMeasurementTime.setVisibility(View.GONE);
         }
+        spReminderTime.setVisibility(View.GONE);
+        reminderTitle.setVisibility(View.GONE);
     }
 
     private void showDateTime(){
         spMeasurementDate.setVisibility(View.VISIBLE);
         spMeasurementTime.setVisibility(View.VISIBLE);
+        spReminderTime.setVisibility(View.VISIBLE);
+        reminderTitle.setVisibility(View.VISIBLE);
     }
 
 
@@ -294,11 +303,30 @@ public class MeasurementCardHolder {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedUnit = allUnits.get(i);
-                Log.i(ToolsPrefs.DEBUG_TAG,"Selected unit: " + selectedUnit.abbreviatedName);
+                Log.i(ToolsPrefs.DEBUG_TAG, "Selected unit: " + selectedUnit.abbreviatedName);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+    }
+
+    //TODO: fill this in
+    private void initReminderTime(){
+        final List<String> timeOptions = Arrays.asList(context.getResources().getStringArray(R.array.mood_interval_entries));
+        final ArrayAdapter<String> timeSpinnerAdapter = new ArrayAdapter<String>(context, R.layout.qmt_v_simple_spinner_item, timeOptions);
+
+        spReminderTime.setAdapter(timeSpinnerAdapter);
+        spReminderTime.setOnItemSelectedEvenIfUnchangedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                Toast.makeText(context, "Hi " + position + "!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

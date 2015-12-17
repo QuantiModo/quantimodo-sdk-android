@@ -98,4 +98,12 @@
     <string name="walkthrough_content_7">Change notification frequency on the settings page.</string>
     <string name="walkthrough_skip">Skip Tour</string>
     <string name="walkthrough_finish">Finish Tour</string>
+
+
+    <!-- Reminders intervals -->
+    <string name="interval_never">Never</string>
+    <string name="interval_hourly">Hourly</string>
+    <string name="interval_everythreehours">Every three hours</string>
+    <string name="interval_twicedaily">Twice daily</string>
+    <string name="interval_daily">Daily</string>
 </resources>

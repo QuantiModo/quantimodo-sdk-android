@@ -80,7 +80,26 @@
         android:layout_below="@id/spMeasurementTime"
         android:hint="Note"
         android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_height="52dp"/>
 
+    <TextView
+        android:id="@+id/reminder_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/card_title"
+        android:layout_below="@id/etNote"
+        android:textSize="24sp"
+        android:text="Remind me to track"/>
+
+    <com.quantimodo.tools.views.NDSpinner
+        android:id="@+id/spReminderTime"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_below="@id/reminder_title"
+        android:layout_marginRight="12dp"
+        android:inputType="none" />
 </RelativeLayout>
