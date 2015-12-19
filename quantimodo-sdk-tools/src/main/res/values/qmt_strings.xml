@@ -106,4 +106,9 @@
     <string name="interval_everythreehours">Every three hours</string>
     <string name="interval_twicedaily">Twice daily</string>
     <string name="interval_daily">Daily</string>
+
+    <string name="reminders_notif_button_track">Track it</string>
+    <string name="reminders_notif_button_snooze">Snooze</string>
+    <string name="reminders_notif_button_edit">Edit</string>
+    <string name="reminders_notif_subtitle">Tap to track it!</string>
 </resources>

@@ -32,4 +32,7 @@
     <color name="text_card">#797979</color>
     <color name="text_card_light">#99000000</color>
     <color name="text_card_spinner">#E6000000</color>
+
+    <color name="notification_background">#181818</color>
+    <color name="notification_separator">#383838</color>
 </resources>

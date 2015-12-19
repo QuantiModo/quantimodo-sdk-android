@@ -29,6 +29,7 @@ import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
@@ -152,7 +153,7 @@ public class TrackingFragment extends QFragment {
             new CategoryDef("Treatments",1d,"units", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
             new CategoryDef("Symptoms",1d,"%", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
             new CategoryDef("Mood",0d,"serving", R.string.tracking_item_mood_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_mood_title),
-            new CategoryDef("Mood",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
+            new CategoryDef("Emotions",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
     };
 
     public static final int TYPE_ALL = 0;
@@ -529,6 +530,10 @@ public class TrackingFragment extends QFragment {
                     if (measurementCards.size() == 0) {
                         addMeasurementCard(false, true, true);
                     }
+                    else{
+                        measurementCards.get(0).init(false, true, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+                                selectedVariable.getDefaultValue(), selectedVariable);
+                    }
                     showButtonsCard();
                 }
             }, 400);
@@ -769,7 +774,8 @@ public class TrackingFragment extends QFragment {
         lnCardsContainer.addView(measurementCardHolder.measurementCard, lnCardsContainer.getChildCount() - 1);
 
         Double defaultValue = selectedVariable == null ? null : selectedVariable.getDefaultValue();
-        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex,mCategoryDef,defaultValue);
+        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+                defaultValue, selectedVariable);
 
         if (animate) {
             ViewUtils.expandView(measurementCardHolder.measurementCard, null);
@@ -849,6 +855,39 @@ public class TrackingFragment extends QFragment {
                 measurementSets.put(unit.getAbbreviatedName(), newSet);
             } else {
                 measurementSets.get(unit.getAbbreviatedName()).getMeasurements().add(measurement);
+            }
+            //Saving the custom reminder
+            if(currentHolder.spReminderTime.getSelectedItemPosition() != 0) {
+                CustomRemindersHelper.Reminder reminder = new CustomRemindersHelper.Reminder(
+                        Long.toString(selectedVariable.getId()),//id
+                        selectedVariable.getName(),//name
+                        Double.toString(measurement.getValue()), //value
+                        measurementSets.get(unit.getAbbreviatedName()).getUnit(), //unit name
+                        unit.getId(), //unit id
+                        currentHolder.spReminderTime.getSelectedItemPosition() //frequency
+                );
+                CustomRemindersHelper.putReminder(getActivity(), reminder);
+                switch (currentHolder.spReminderTime.getSelectedItemPosition()){
+                    case 0://never
+                        CustomRemindersHelper.cancelAlarm(getActivity(), reminder.id);
+                        break;
+                    case 1://hourly
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.HOURLY);
+                        break;
+                    case 2://every three hours
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.EVERY_THREE_HOURS);
+                        break;
+                    case 3://twice a day
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.TWICE_A_DAY);
+                        break;
+                    case 4://daily
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.DAILY);
+                        break;
+                }
             }
         }
 

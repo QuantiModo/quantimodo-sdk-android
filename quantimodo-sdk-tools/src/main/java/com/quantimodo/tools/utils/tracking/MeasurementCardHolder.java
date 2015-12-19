@@ -16,10 +16,12 @@ import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.quantimodo.android.sdk.model.Unit;
+import com.quantimodo.android.sdk.model.Variable;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.fragments.TrackingFragment;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.views.NDSpinner;
 
@@ -40,7 +42,7 @@ public class MeasurementCardHolder {
     public final Spinner spMeasurementUnit;
     public final EditText etValue;
     public final EditText etNote;
-    private final NDSpinner spReminderTime;
+    public final NDSpinner spReminderTime;
     private final TextView reminderTitle;
 
     public UnitSelectSpinnerAdapter unitAdapter;
@@ -68,7 +70,8 @@ public class MeasurementCardHolder {
     }
 
     public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
-                     int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef,Double defaultValue) {
+                     int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef,
+                     Double defaultValue, Variable variable) {
         this.allUnits = allUnits;
         this.defaultUnitIndex = defaultUnitIndex;
 
@@ -88,11 +91,30 @@ public class MeasurementCardHolder {
         initReminderTime();
 
         initCategory(categoryDef);
+        fillSavedData(variable);
     }
 
     public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
                      int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef) {
-        init(removable, focus, allUnits, defaultUnitIndex, categoryDef, null);
+        init(removable, focus, allUnits, defaultUnitIndex, categoryDef, null, null);
+    }
+
+    private void fillSavedData(Variable variable){
+        CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
+                context, Long.toString(variable.getId()));
+        //load value
+        etValue.setText(reminder.value);
+        //load selected unit
+        for (int i=0; i<allUnits.size(); i++){
+            Unit unit = allUnits.get(i);
+            if(reminder.unitId == unit.getId()) {
+                selectedUnit = unit;
+                defaultUnitIndex = i;
+                spMeasurementUnit.setSelection(i);
+            }
+        }
+        //load frequency
+        spReminderTime.setSelection(reminder.frequencyIndex);
     }
 
     private void initCategory(TrackingFragment.CategoryDef categoryDef) {
@@ -318,17 +340,6 @@ public class MeasurementCardHolder {
         final ArrayAdapter<String> timeSpinnerAdapter = new ArrayAdapter<String>(context, R.layout.qmt_v_simple_spinner_item, timeOptions);
 
         spReminderTime.setAdapter(timeSpinnerAdapter);
-        spReminderTime.setOnItemSelectedEvenIfUnchangedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Toast.makeText(context, "Hi " + position + "!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     public void setOnRemovedListener(OnMeasurementCardRemovedListener listener) {
