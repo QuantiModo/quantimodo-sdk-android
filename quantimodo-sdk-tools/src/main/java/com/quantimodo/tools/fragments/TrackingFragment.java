@@ -394,6 +394,9 @@ public class TrackingFragment extends QFragment {
         @Override
         public void onClick(View v) {
             addMeasurementCard(true, true, true);
+            if(!measurementCards.get(0).spMeasurementUnit.isEnabled()){
+                measurementCards.get(measurementCards.size() - 1).spMeasurementUnit.setEnabled(false);
+            }
         }
     };
 
