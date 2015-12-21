@@ -861,6 +861,8 @@ public class TrackingFragment extends QFragment {
                 CustomRemindersHelper.Reminder reminder = new CustomRemindersHelper.Reminder(
                         Long.toString(selectedVariable.getId()),//id
                         selectedVariable.getName(),//name
+                        selectedVariable.getCategory(), //variable category
+                        selectedVariable.getCombinationOperation(), //combination operation
                         Double.toString(measurement.getValue()), //value
                         measurementSets.get(unit.getAbbreviatedName()).getUnit(), //unit name
                         unit.getId(), //unit id

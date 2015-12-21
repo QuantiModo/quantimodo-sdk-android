@@ -5,23 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.util.Log;
+import android.widget.Toast;
 
-import com.quantimodo.android.sdk.Utils;
+import com.octo.android.robospice.SpiceManager;
+import com.quantimodo.android.sdk.model.Measurement;
+import com.quantimodo.android.sdk.model.MeasurementSet;
+import com.quantimodo.tools.QTools;
+import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.sdk.AuthHelper;
-import com.quantimodo.tools.sdk.request.NoNetworkConnection;
+import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
+import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import io.swagger.client.ApiException;
-import io.swagger.client.api.MeasurementApi;
-import io.swagger.client.model.MeasurementPost;
-import io.swagger.client.model.MeasurementValue;
 
 /**
  * Broadcast receiver that gets the triggered alarms and display a popup to track custom measurements
@@ -34,12 +35,13 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
     public static final String EXTRA_NOTIFICATION_ID = "extra_notification_id";
 
     @Inject
-    AuthHelper authHelper;
+    ToolsPrefs mPrefs;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
+        QTools.getInstance().inject(this);
         Bundle extras = intent.getExtras();
-        CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
+        final CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
                 context, extras.getString(CustomRemindersHelper.EXTRA_REMINDER_ID, ""));
         //TODO: testear app para desplegar notification, luego crear popup dialog
         if(intent.hasExtra(EXTRA_REQUEST_ALARM)) {
@@ -52,31 +54,42 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
             startWakefulService(context, service);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_REMINDER)){
-            cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID));
+            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
 
             //when it's a custom reminder we need to directly send the measurement
-            MeasurementApi api = new MeasurementApi();
-            MeasurementPost body = new MeasurementPost();
-            body.setVariableId(Integer.parseInt(reminder.id));
-            body.setUnitId(reminder.unitId);
-            List<MeasurementValue> values = new ArrayList<>(1);
-            MeasurementValue value = new MeasurementValue();
-            value.setStartTime(Utils.formatDateToString(new Date()));
-            value.setValue(Float.parseFloat(reminder.value));
-            values.add(value);
-            try {
-                api.measurementsPost(authHelper.getAuthTokenWithRefresh(), body);
-            } catch (ApiException | NoNetworkConnection e) {
-                e.printStackTrace();
-            }
+            Thread thread = new Thread(new Runnable(){
+                @Override
+                public void run() {
+                    final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
+                    long timestampSeconds = new Date().getTime() / 1000;
 
+                    Measurement measurement = new Measurement(timestampSeconds, Float.parseFloat(reminder.value));
+                    MeasurementSet newSet = new MeasurementSet(
+                            reminder.name, null, reminder.variableCategory, reminder.unitName,
+                            reminder.combinationOperation, mPrefs.getApplicationSource());
+                    newSet.getMeasurements().add(measurement);
+                    measurementSets.put(reminder.unitName, newSet);
+
+                    SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
+                    mSpiceManager.start(context.getApplicationContext());
+                    mSpiceManager.execute(new SendMeasurementsRequest(null, new ArrayList<>(measurementSets.values())),
+                            new DefaultSdkResponseListener<Boolean>() {
+                                @Override
+                                public void onRequestSuccess(Boolean aBoolean) {
+                                    Toast.makeText(context, "Tracked!", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+            });
+
+            thread.start();
         }
         else if(intent.hasExtra(EXTRA_REQUEST_SNOOZE)){
-            cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID));
+            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
             CustomRemindersHelper.setAlarm(context, reminder.id, CustomRemindersHelper.FrecuencyType.SNOOZE);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
-            cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID));
+            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
             startTracking(context, reminder.id);
         }
     }

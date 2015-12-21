@@ -28,8 +28,6 @@ public class RemindersService extends IntentService {
         super("RemindersService");
     }
 
-    private NotificationManager mNotificationManager;
-
     @Override
     protected void onHandleIntent(Intent intent) {
         if(intent.hasExtra(CustomRemindersHelper.EXTRA_REMINDER_ID)){
@@ -57,7 +55,7 @@ public class RemindersService extends IntentService {
      * @param title the title to put on the notification
      */
     private void sendNotification(String reminderId, String title) {
-        mNotificationManager = (NotificationManager)
+        NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent snoozeIntent = new Intent(this, CustomRemindersReceiver.class);
@@ -66,20 +64,23 @@ public class RemindersService extends IntentService {
 
 
         snoozeIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        snoozeIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         snoozeIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_SNOOZE, true);
         trackIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        trackIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         trackIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_REMINDER, true);
         editIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        editIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         editIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_EDIT, true);
 
         PendingIntent trackPendingIntent = PendingIntent.getBroadcast(this,
-                Integer.parseInt(reminderId),
+                0,
                 trackIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this,
-                Integer.parseInt(reminderId),
+                1,
                 snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent editPendingIntent = PendingIntent.getBroadcast(this,
-                Integer.parseInt(reminderId),
+                2,
                 editIntent, PendingIntent.FLAG_ONE_SHOT);
 
         Notification notification = new NotificationCompat.Builder(this)
@@ -100,6 +101,6 @@ public class RemindersService extends IntentService {
         }
 
         notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-        mNotificationManager.notify(Integer.parseInt(reminderId), notification);
+        notificationManager.notify(Integer.parseInt(reminderId), notification);
     }
 }

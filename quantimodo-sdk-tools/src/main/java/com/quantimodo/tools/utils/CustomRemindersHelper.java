@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
@@ -25,6 +26,8 @@ public class CustomRemindersHelper {
     private static final String TAG = CustomRemindersHelper.class.getSimpleName();
     private static final String PREFERENCES_KEY = "custom_reminders_preferences";
     private static final String KEY_NAME = "name";
+    private static final String KEY_CATEGORY = "category";
+    private static final String KEY_COMBINATION_OPERATION = "combination_oepration";
     private static final String KEY_VALUE = "value";
     private static final String KEY_UNIT_NAME = "unit_name";
     private static final String KEY_UNIT_ID = "unit_id";
@@ -106,8 +109,8 @@ public class CustomRemindersHelper {
                         intent, PendingIntent.FLAG_ONE_SHOT);
                 alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         //Testing line:
-//                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
-                        AlarmManager.INTERVAL_HOUR, alarmIntent);
+                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
+//                        AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
         }
         setBootReceiver(context, true);
@@ -160,6 +163,10 @@ public class CustomRemindersHelper {
 
         mEdit1.remove("reminder_" + reminder.id + KEY_NAME);
         mEdit1.putString("reminder_" + reminder.id + KEY_NAME, reminder.name);
+        mEdit1.remove("reminder_" + reminder.id + KEY_CATEGORY);
+        mEdit1.putString("reminder_" + reminder.id + KEY_CATEGORY, reminder.variableCategory);
+        mEdit1.remove("reminder_" + reminder.id + KEY_COMBINATION_OPERATION);
+        mEdit1.putString("reminder_" + reminder.id + KEY_COMBINATION_OPERATION, reminder.combinationOperation);
         mEdit1.remove("reminder_" + reminder.id + KEY_VALUE);
         mEdit1.putString("reminder_" + reminder.id + KEY_VALUE, reminder.value);
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
@@ -195,6 +202,8 @@ public class CustomRemindersHelper {
         return new Reminder(
                 id,
                 preferences.getString("reminder_" + id + KEY_NAME, ""),
+                preferences.getString("reminder_" + id + KEY_CATEGORY, ""),
+                preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
                 preferences.getInt("reminder_" + id + KEY_UNIT_ID, 0),
@@ -209,14 +218,19 @@ public class CustomRemindersHelper {
     public static class Reminder{
         public final String id;
         public final String name;
+        public final String variableCategory;
+        public final String combinationOperation;
         public final String value;
         public final String unitName;
         public final int unitId;
         public final int frequencyIndex;
 
-        public Reminder(String id, String name, String value, String unitName, int unitId, int frequency){
+        public Reminder(String id, String name, String variableCategory, String combinationOperation,
+                        String value, String unitName, int unitId, int frequency){
             this.id = id;
             this.name = name;
+            this.variableCategory = variableCategory;
+            this.combinationOperation = combinationOperation;
             this.value = value;
             this.unitName = unitName;
             this.unitId =unitId;
