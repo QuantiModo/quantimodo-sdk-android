@@ -100,6 +100,7 @@ public class MeasurementCardHolder {
     }
 
     private void fillSavedData(Variable variable){
+        if(variable == null) return;
         CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
                 context, Long.toString(variable.getId()));
         //load value
@@ -334,7 +335,6 @@ public class MeasurementCardHolder {
         });
     }
 
-    //TODO: fill this in
     private void initReminderTime(){
         final List<String> timeOptions = Arrays.asList(context.getResources().getStringArray(R.array.mood_interval_entries));
         final ArrayAdapter<String> timeSpinnerAdapter = new ArrayAdapter<String>(context, R.layout.qmt_v_simple_spinner_item, timeOptions);
