@@ -37,6 +37,7 @@ public class MeasurementCardHolder {
 
     // Views
     public final View measurementCard;
+    public final TextView tvMeasurementTimeTitle;
     public final NDSpinner spMeasurementTime;
     public final NDSpinner spMeasurementDate;
     public final Spinner spMeasurementUnit;
@@ -58,6 +59,7 @@ public class MeasurementCardHolder {
 
     public MeasurementCardHolder(Context context) {
         measurementCard = LayoutInflater.from(context).inflate(R.layout.qmt_f_tracking_measurementcard, null);
+        tvMeasurementTimeTitle = (TextView) measurementCard.findViewById(R.id.tvMeasurementsTimeTitle);
         spMeasurementDate = (NDSpinner) measurementCard.findViewById(R.id.spMeasurementDate);
         spMeasurementUnit = (Spinner) measurementCard.findViewById(R.id.spMeasurementUnit);
         etValue = (EditText) measurementCard.findViewById(R.id.etMeasurementValue);
@@ -103,31 +105,20 @@ public class MeasurementCardHolder {
         if(variable == null) return;
         CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
                 context, Long.toString(variable.getId()));
-        //load value
-        etValue.setText(reminder.value);
-        //load selected unit
-        for (int i=0; i<allUnits.size(); i++){
-            Unit unit = allUnits.get(i);
-            if(reminder.unitId == unit.getId()) {
-                selectedUnit = unit;
-                defaultUnitIndex = i;
-                spMeasurementUnit.setSelection(i);
-            }
-        }
         //load frequency
         spReminderTime.setSelection(reminder.frequencyIndex);
     }
 
     private void initCategory(TrackingFragment.CategoryDef categoryDef) {
-        if (categoryDef.getFilter() != null && !categoryDef.getFilter().isEmpty()){
-            spMeasurementDate.setVisibility(View.GONE);
-            spMeasurementTime.setVisibility(View.GONE);
-        }
+        tvMeasurementTimeTitle.setVisibility(View.GONE);
+        spMeasurementDate.setVisibility(View.GONE);
+        spMeasurementTime.setVisibility(View.GONE);
         spReminderTime.setVisibility(View.GONE);
         reminderTitle.setVisibility(View.GONE);
     }
 
     private void showDateTime(){
+        tvMeasurementTimeTitle.setVisibility(View.VISIBLE);
         spMeasurementDate.setVisibility(View.VISIBLE);
         spMeasurementTime.setVisibility(View.VISIBLE);
         spReminderTime.setVisibility(View.VISIBLE);
@@ -139,26 +130,26 @@ public class MeasurementCardHolder {
         // Remove button
         final ImageButton btOverflow = (ImageButton) measurementCard.findViewById(R.id.btOverflow);
 
-        final PopupMenu popupMenu = new PopupMenu(context, btOverflow);
-        popupMenu.inflate(R.menu.measurement_overflow);
-        popupMenu.getMenu().getItem(0).setEnabled(removable);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                int i = menuItem.getItemId();
-                if (i == R.id.action_remove) {
-                    remove(removedListener);
-                }
-                return false;
-            }
-        });
+//        final PopupMenu popupMenu = new PopupMenu(context, btOverflow);
+//        popupMenu.inflate(R.menu.measurement_overflow);
+//        popupMenu.getMenu().getItem(0).setEnabled(removable);
+//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                int i = menuItem.getItemId();
+//                if (i == R.id.action_remove) {
+//                    remove(removedListener);
+//                }
+//                return false;
+//            }
+//        });
 
-        btOverflow.setOnTouchListener(PopupMenuCompat.getDragToOpenListener(popupMenu));
+//        btOverflow.setOnTouchListener(PopupMenuCompat.getDragToOpenListener(popupMenu));
         btOverflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDateTime();
-                popupMenu.show();
+//                popupMenu.show();
             }
         });
 

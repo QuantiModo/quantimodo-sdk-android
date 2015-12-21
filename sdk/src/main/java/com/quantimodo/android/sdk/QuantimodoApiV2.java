@@ -324,7 +324,7 @@ public class QuantimodoApiV2 {
      * @return SdkResponse with ArrayList of Variable
      */
     public SdkResponse<ArrayList<Variable>> searchPublicVariables(
-            Context context, String token, String search, int limit, int offset) {
+            Context context, String token, String search, int limit, int offset, String categoryName) {
         setupIon(context);
 
         if (search == null) {
@@ -340,6 +340,7 @@ public class QuantimodoApiV2 {
             Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/public/variables/search/" + search).buildUpon();
             uriBuilder.appendQueryParameter("limit", "" + limit);
             uriBuilder.appendQueryParameter("offset", "" + offset);
+            uriBuilder.appendQueryParameter("categoryName", categoryName);
 
             FutureBuilder futureBuilder = Ion.with(context)
                     .load(uriBuilder.build().toString())

@@ -254,9 +254,9 @@ public class TrackingFragment extends QFragment {
         etVariableName.setHint(mCategoryDef.hintId);
 
         view.findViewById(R.id.btSend).setOnClickListener(onBtSendClick);
-        View v = view.findViewById(R.id.btAddMeasurement);
-        v.setOnClickListener(onBtAddMeasurmentsClick);
-        v.setOnLongClickListener(onBtAddMeasurmentLongClick);
+//        View v = view.findViewById(R.id.btAddMeasurement);
+//        v.setOnClickListener(onBtAddMeasurmentsClick);
+//        v.setOnLongClickListener(onBtAddMeasurmentLongClick);
 
         lvVariableSuggestions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -655,7 +655,7 @@ public class TrackingFragment extends QFragment {
 
     private void getPublicVariables(final String search){
         getSpiceManager().execute(
-                new GetPublicSuggestedVariablesRequest(search),
+                new GetPublicSuggestedVariablesRequest(search,mCategoryDef.filter),
                 new DefaultSdkResponseListener<GetPublicSuggestedVariablesRequest.Response>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
