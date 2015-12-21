@@ -524,6 +524,8 @@ public class TrackingFragment extends QFragment {
                                 selectedVariable.getDefaultValue(), selectedVariable);
                     }
                     showButtonsCard();
+                    //when editing a variable the unit spinner is disabled by default
+                    measurementCards.get(0).spMeasurementUnit.setEnabled(false);
                 }
             }, 400);
         }
@@ -750,13 +752,17 @@ public class TrackingFragment extends QFragment {
         }
     }
 
-    /*
-    **  Adds a new measurement card
-    */
-    private void addMeasurementCard(boolean removable, boolean animate, boolean focus) {
+    /**
+     * Adds a new measurement card to create a new variable or edit it
+     * @param removable if removable
+     * @param animate if animate to open it
+     * @param focus to give the focus to the view
+     * @return the created card, null when data is still loading
+     */
+    private MeasurementCardHolder addMeasurementCard(boolean removable, boolean animate, boolean focus) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
-            return;
+            return null;
         }
 
         final MeasurementCardHolder measurementCardHolder = new MeasurementCardHolder(this.getActivity());
@@ -783,6 +789,7 @@ public class TrackingFragment extends QFragment {
         if (animate) {
             ViewUtils.expandView(measurementCardHolder.measurementCard, null);
         }
+        return measurementCardHolder;
     }
 
     /*
