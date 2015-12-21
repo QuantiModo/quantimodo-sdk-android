@@ -37,7 +37,11 @@ public class CustomRemindersHelper {
      * Extra used to broadcast the alarm when triggered
      */
     public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
-    public static final String EXTRA_REQUEST_REMINDER = "extra_request_reminder";
+    /**
+     * Extra used to send the variable name to the Activity that will open a
+     * view to edit it
+     */
+    public static final String EXTRA_VARIABLE_NAME = "extra_variable_name";
 
     public static final long INTERVAL_THREE_HOURS = 3 * AlarmManager.INTERVAL_HOUR;
 

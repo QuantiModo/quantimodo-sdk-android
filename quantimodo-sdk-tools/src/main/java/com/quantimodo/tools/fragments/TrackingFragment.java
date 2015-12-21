@@ -181,38 +181,26 @@ public class TrackingFragment extends QFragment {
     // All measurement cards currently visible
     ArrayList<MeasurementCardHolder> measurementCards = new ArrayList<>();
 
+    private String mSearchText = null;
+
     /**
      * Creates new TrackingFragment
      * @param type category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
      * @return new instance of TrackingFragment
      */
     public static TrackingFragment newInstance(int type){
+        return newInstance(type, "");
+    }
+
+    public static TrackingFragment newInstance(int type, String searchText){
         TrackingFragment fragment = new TrackingFragment();
 
         Bundle args = new Bundle();
         args.putInt(KEY_TYPE, type);
+        args.putString(KEY_SEARCH, searchText);
 
         fragment.setArguments(args);
         return fragment;
-    }
-
-    /**
-     * Creates new TrackingFragment
-     * @param categoryDef category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
-     * @return new instance of TrackingFragment
-     */
-    public static TrackingFragment newInstance(CategoryDef categoryDef, String defaultSearch){
-        TrackingFragment fragment = new TrackingFragment();
-
-        Bundle args = new Bundle();
-        args.putSerializable(KEY_CATEGORY, categoryDef);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static TrackingFragment newInstance(CategoryDef categoryDef){
-        return newInstance(categoryDef, null);
     }
 
     @Override
@@ -228,6 +216,7 @@ public class TrackingFragment extends QFragment {
         mType = TYPE_ALL;
         if (getArguments() != null){
             mType = getArguments().getInt(KEY_TYPE,TYPE_ALL);
+            mSearchText = getArguments().getString(KEY_SEARCH, "");
         }
         mCategoryDef = mCategoryFilter[mType];
 
@@ -390,8 +379,8 @@ public class TrackingFragment extends QFragment {
                 categoriesUpdated();
             }
         });
-
-        refreshAutoComplete("");
+        if(!TextUtils.isEmpty(mSearchText)) refreshAutoComplete(mSearchText);
+        else refreshAutoComplete("");
     }
 
     private View.OnClickListener onBtSendClick = new View.OnClickListener(){
@@ -653,6 +642,7 @@ public class TrackingFragment extends QFragment {
                             pbAutoCompleteLoading.setVisibility(View.GONE);
                         }
                     }
+                    openSearchVariable();
                 }
             }
         });
@@ -682,8 +672,21 @@ public class TrackingFragment extends QFragment {
                         pbAutoCompleteLoading.setVisibility(View.GONE);
                     }
                 }
+                openSearchVariable();
             }
         });
+    }
+
+    /**
+     * Opens the variable that was previously setted, using {@link #mSearchText}
+     */
+    private void openSearchVariable(){
+        if(mSearchText == null) return;
+        for(int i = 0; i < suggestedVariables.size(); i++){
+            Variable variable = suggestedVariables.get(i);
+            if(variable.getName().equals(mSearchText)) onVariableClick(null, null, i, 0);
+        }
+        mSearchText = null;
     }
 
     /**

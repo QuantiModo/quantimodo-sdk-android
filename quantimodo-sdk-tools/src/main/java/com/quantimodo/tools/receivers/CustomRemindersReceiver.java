@@ -43,7 +43,6 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         Bundle extras = intent.getExtras();
         final CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
                 context, extras.getString(CustomRemindersHelper.EXTRA_REMINDER_ID, ""));
-        //TODO: testear app para desplegar notification, luego crear popup dialog
         if(intent.hasExtra(EXTRA_REQUEST_ALARM)) {
             Intent service = new Intent(context, RemindersService.class);
             //shows the popup dialog
@@ -90,11 +89,11 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         }
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
-            startTracking(context, reminder.id);
+            startTracking(context, reminder.name);
         }
     }
 
-    private void startTracking(Context context, String id){
+    private void startTracking(Context context, String varName){
         Intent trackIntent = new Intent(context,
                 CustomRemindersHelper.getInstance().getRegisteredActivity().getClass());
         trackIntent.addFlags(
@@ -102,7 +101,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
                         Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_SINGLE_TOP |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        trackIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, id);
+        trackIntent.putExtra(CustomRemindersHelper.EXTRA_VARIABLE_NAME, varName);
         context.startActivity(trackIntent);
     }
 
