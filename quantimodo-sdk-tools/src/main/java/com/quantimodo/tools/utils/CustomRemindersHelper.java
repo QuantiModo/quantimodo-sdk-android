@@ -90,9 +90,9 @@ public class CustomRemindersHelper {
         switch(frecuencyType){
             case HOURLY:
                 alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        //Testing line:
-                        10 * 1000, 120 * 1000, alarmIntent);
-//                        AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alarmIntent);
+//                        Testing line:
+//                        10 * 1000, 120 * 1000, alarmIntent);
+                        AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
             case EVERY_THREE_HOURS:
                 alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -113,8 +113,8 @@ public class CustomRemindersHelper {
                         intent, PendingIntent.FLAG_ONE_SHOT);
                 alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         //Testing line:
-                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
-//                        AlarmManager.INTERVAL_HOUR, alarmIntent);
+//                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
+                        AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
         }
         setBootReceiver(context, true);

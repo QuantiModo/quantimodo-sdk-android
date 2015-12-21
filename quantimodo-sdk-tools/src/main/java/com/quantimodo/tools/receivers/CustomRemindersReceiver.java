@@ -12,6 +12,7 @@ import com.quantimodo.android.sdk.model.Measurement;
 import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.dialogs.CustomReminderDialog;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
@@ -46,7 +47,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         if(intent.hasExtra(EXTRA_REQUEST_ALARM)) {
             Intent service = new Intent(context, RemindersService.class);
             //shows the popup dialog
-//            ReminderDialog.getInstance().show(context, reminder.id);
+            CustomReminderDialog.getInstance().show(context, reminder.id);
             service.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminder.id);
             // Start the service, keeping the device awake while it is launching.
             //this service shows the notification and set the events for buttons
@@ -80,7 +81,6 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
                             });
                 }
             });
-
             thread.start();
         }
         else if(intent.hasExtra(EXTRA_REQUEST_SNOOZE)){
