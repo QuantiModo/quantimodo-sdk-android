@@ -67,6 +67,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
     }
 }
 
@@ -76,6 +77,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
 
     compile project(':sdk')
+    compile project(':swagger')
 
     //RoboSpice  https://github.com/stephanenicolas/robospice
     compile 'com.octo.android.robospice:robospice:1.4.14'

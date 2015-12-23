@@ -29,6 +29,7 @@ import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
@@ -152,7 +153,7 @@ public class TrackingFragment extends QFragment {
             new CategoryDef("Treatments",1d,"units", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
             new CategoryDef("Symptoms",1d,"%", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
             new CategoryDef("Mood",0d,"serving", R.string.tracking_item_mood_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_mood_title),
-            new CategoryDef("Mood",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
+            new CategoryDef("Emotions",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
     };
 
     public static final int TYPE_ALL = 0;
@@ -180,38 +181,26 @@ public class TrackingFragment extends QFragment {
     // All measurement cards currently visible
     ArrayList<MeasurementCardHolder> measurementCards = new ArrayList<>();
 
+    private String mSearchText = null;
+
     /**
      * Creates new TrackingFragment
      * @param type category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
      * @return new instance of TrackingFragment
      */
     public static TrackingFragment newInstance(int type){
+        return newInstance(type, "");
+    }
+
+    public static TrackingFragment newInstance(int type, String searchText){
         TrackingFragment fragment = new TrackingFragment();
 
         Bundle args = new Bundle();
         args.putInt(KEY_TYPE, type);
+        args.putString(KEY_SEARCH, searchText);
 
         fragment.setArguments(args);
         return fragment;
-    }
-
-    /**
-     * Creates new TrackingFragment
-     * @param categoryDef category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
-     * @return new instance of TrackingFragment
-     */
-    public static TrackingFragment newInstance(CategoryDef categoryDef, String defaultSearch){
-        TrackingFragment fragment = new TrackingFragment();
-
-        Bundle args = new Bundle();
-        args.putSerializable(KEY_CATEGORY, categoryDef);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static TrackingFragment newInstance(CategoryDef categoryDef){
-        return newInstance(categoryDef, null);
     }
 
     @Override
@@ -227,6 +216,7 @@ public class TrackingFragment extends QFragment {
         mType = TYPE_ALL;
         if (getArguments() != null){
             mType = getArguments().getInt(KEY_TYPE,TYPE_ALL);
+            mSearchText = getArguments().getString(KEY_SEARCH, "");
         }
         mCategoryDef = mCategoryFilter[mType];
 
@@ -264,9 +254,9 @@ public class TrackingFragment extends QFragment {
         etVariableName.setHint(mCategoryDef.hintId);
 
         view.findViewById(R.id.btSend).setOnClickListener(onBtSendClick);
-        View v = view.findViewById(R.id.btAddMeasurement);
-        v.setOnClickListener(onBtAddMeasurmentsClick);
-        v.setOnLongClickListener(onBtAddMeasurmentLongClick);
+//        View v = view.findViewById(R.id.btAddMeasurement);
+//        v.setOnClickListener(onBtAddMeasurmentsClick);
+//        v.setOnLongClickListener(onBtAddMeasurmentLongClick);
 
         lvVariableSuggestions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -389,8 +379,8 @@ public class TrackingFragment extends QFragment {
                 categoriesUpdated();
             }
         });
-
-        refreshAutoComplete("");
+        if(!TextUtils.isEmpty(mSearchText)) refreshAutoComplete(mSearchText);
+        else refreshAutoComplete("");
     }
 
     private View.OnClickListener onBtSendClick = new View.OnClickListener(){
@@ -404,6 +394,9 @@ public class TrackingFragment extends QFragment {
         @Override
         public void onClick(View v) {
             addMeasurementCard(true, true, true);
+            if(!measurementCards.get(0).spMeasurementUnit.isEnabled()){
+                measurementCards.get(measurementCards.size() - 1).spMeasurementUnit.setEnabled(false);
+            }
         }
     };
 
@@ -529,7 +522,13 @@ public class TrackingFragment extends QFragment {
                     if (measurementCards.size() == 0) {
                         addMeasurementCard(false, true, true);
                     }
+                    else{
+                        measurementCards.get(0).init(false, true, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+                                selectedVariable.getDefaultValue(), selectedVariable);
+                    }
                     showButtonsCard();
+                    //when editing a variable the unit spinner is disabled by default
+                    measurementCards.get(0).spMeasurementUnit.setEnabled(false);
                 }
             }, 400);
         }
@@ -648,6 +647,7 @@ public class TrackingFragment extends QFragment {
                             pbAutoCompleteLoading.setVisibility(View.GONE);
                         }
                     }
+                    openSearchVariable();
                 }
             }
         });
@@ -655,7 +655,7 @@ public class TrackingFragment extends QFragment {
 
     private void getPublicVariables(final String search){
         getSpiceManager().execute(
-                new GetPublicSuggestedVariablesRequest(search),
+                new GetPublicSuggestedVariablesRequest(search,mCategoryDef.filter),
                 new DefaultSdkResponseListener<GetPublicSuggestedVariablesRequest.Response>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -677,8 +677,21 @@ public class TrackingFragment extends QFragment {
                         pbAutoCompleteLoading.setVisibility(View.GONE);
                     }
                 }
+                openSearchVariable();
             }
         });
+    }
+
+    /**
+     * Opens the variable that was previously setted, using {@link #mSearchText}
+     */
+    private void openSearchVariable(){
+        if(mSearchText == null) return;
+        for(int i = 0; i < suggestedVariables.size(); i++){
+            Variable variable = suggestedVariables.get(i);
+            if(variable.getName().equals(mSearchText)) onVariableClick(null, null, i, 0);
+        }
+        mSearchText = null;
     }
 
     /**
@@ -742,13 +755,17 @@ public class TrackingFragment extends QFragment {
         }
     }
 
-    /*
-    **  Adds a new measurement card
-    */
-    private void addMeasurementCard(boolean removable, boolean animate, boolean focus) {
+    /**
+     * Adds a new measurement card to create a new variable or edit it
+     * @param removable if removable
+     * @param animate if animate to open it
+     * @param focus to give the focus to the view
+     * @return the created card, null when data is still loading
+     */
+    private MeasurementCardHolder addMeasurementCard(boolean removable, boolean animate, boolean focus) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
-            return;
+            return null;
         }
 
         final MeasurementCardHolder measurementCardHolder = new MeasurementCardHolder(this.getActivity());
@@ -769,11 +786,13 @@ public class TrackingFragment extends QFragment {
         lnCardsContainer.addView(measurementCardHolder.measurementCard, lnCardsContainer.getChildCount() - 1);
 
         Double defaultValue = selectedVariable == null ? null : selectedVariable.getDefaultValue();
-        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex,mCategoryDef,defaultValue);
+        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+                defaultValue, selectedVariable);
 
         if (animate) {
             ViewUtils.expandView(measurementCardHolder.measurementCard, null);
         }
+        return measurementCardHolder;
     }
 
     /*
@@ -849,6 +868,41 @@ public class TrackingFragment extends QFragment {
                 measurementSets.put(unit.getAbbreviatedName(), newSet);
             } else {
                 measurementSets.get(unit.getAbbreviatedName()).getMeasurements().add(measurement);
+            }
+            //Saving the custom reminder
+            if(currentHolder.spReminderTime.getSelectedItemPosition() != 0) {
+                CustomRemindersHelper.Reminder reminder = new CustomRemindersHelper.Reminder(
+                        Long.toString(selectedVariable.getId()),//id
+                        selectedVariable.getName(),//name
+                        selectedVariable.getCategory(), //variable category
+                        selectedVariable.getCombinationOperation(), //combination operation
+                        Double.toString(measurement.getValue()), //value
+                        measurementSets.get(unit.getAbbreviatedName()).getUnit(), //unit name
+                        unit.getId(), //unit id
+                        currentHolder.spReminderTime.getSelectedItemPosition() //frequency
+                );
+                CustomRemindersHelper.putReminder(getActivity(), reminder);
+                switch (currentHolder.spReminderTime.getSelectedItemPosition()){
+                    case 0://never
+                        CustomRemindersHelper.cancelAlarm(getActivity(), reminder.id);
+                        break;
+                    case 1://hourly
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.HOURLY);
+                        break;
+                    case 2://every three hours
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.EVERY_THREE_HOURS);
+                        break;
+                    case 3://twice a day
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.TWICE_A_DAY);
+                        break;
+                    case 4://daily
+                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
+                                CustomRemindersHelper.FrecuencyType.DAILY);
+                        break;
+                }
             }
         }
 
