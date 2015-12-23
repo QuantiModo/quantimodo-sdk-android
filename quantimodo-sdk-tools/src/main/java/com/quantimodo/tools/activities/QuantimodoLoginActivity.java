@@ -6,10 +6,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -24,6 +26,7 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.SignInButton;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -77,7 +80,7 @@ public class QuantimodoLoginActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         QTools.getInstance().inject(this);
         setContentView(R.layout.qmt_login);
-        View buttonGoogle = findViewById(R.id.qmt_signin_google);
+        SignInButton buttonGoogle = (SignInButton) findViewById(R.id.qmt_signin_google);
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +96,7 @@ public class QuantimodoLoginActivity extends Activity {
                 }
             }
         });
+        setGooglePlusButtonText(buttonGoogle, getString(R.string.signin_google_button));
         Button buttonMoodi = (Button) findViewById(R.id.qmt_signin_moodimodo);
         if(getIntent().hasExtra(KEY_APP_NAME)){
             String appName = getIntent().getExtras().getString(KEY_APP_NAME);
@@ -143,6 +147,22 @@ public class QuantimodoLoginActivity extends Activity {
 
         if (getIntent().hasExtra(KEY_SHOW_LOGIN_AGAIN) && getIntent().getExtras().getBoolean(KEY_SHOW_LOGIN_AGAIN,false)) {
             Toast.makeText(this, R.string.oauth_refresh_failed, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton,
+                                           String buttonText) {
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setTextSize(15);
+                tv.setTypeface(null, Typeface.NORMAL);
+                tv.setText(buttonText);
+                tv.setAllCaps(false);
+                return;
+            }
         }
     }
 
