@@ -260,7 +260,7 @@ public class CustomReminderDialog {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "snooze clicked");
-                CustomRemindersHelper.setAlarm(mContext, mReminder.id, CustomRemindersHelper.FrecuencyType.SNOOZE);
+                CustomRemindersHelper.setAlarm(mContext, mReminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
                 dismiss(mContext);
             }
         });

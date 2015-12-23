@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.SystemClock;
-import android.util.Log;
 
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 import com.quantimodo.tools.receivers.QToolsBootReceiver;
@@ -45,7 +43,7 @@ public class CustomRemindersHelper {
 
     public static final long INTERVAL_THREE_HOURS = 3 * AlarmManager.INTERVAL_HOUR;
 
-    public enum FrecuencyType{
+    public enum FrequencyType {
         HOURLY,
         EVERY_THREE_HOURS,
         TWICE_A_DAY,
@@ -78,7 +76,7 @@ public class CustomRemindersHelper {
         return registeredActivity;
     }
 
-    public static void setAlarm(Context context, String reminderId,  FrecuencyType frecuencyType) {
+    public static void setAlarm(Context context, String reminderId, FrequencyType frequencyType) {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, CustomRemindersReceiver.class);
         intent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_ALARM, true);
@@ -87,7 +85,7 @@ public class CustomRemindersHelper {
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(reminderId),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        switch(frecuencyType){
+        switch(frequencyType){
             case HOURLY:
                 alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
 //                        Testing line:
@@ -118,6 +116,10 @@ public class CustomRemindersHelper {
                 break;
         }
         setBootReceiver(context, true);
+    }
+    public static void setAlarm(Context context, String reminderId) {
+        FrequencyType frequencyType = FrequencyType.values()[getReminder(context, reminderId).frequencyIndex];
+        setAlarm(context, reminderId, frequencyType);
     }
 
     /**

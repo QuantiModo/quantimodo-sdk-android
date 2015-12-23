@@ -13,7 +13,6 @@ import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.dialogs.CustomReminderDialog;
-import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
@@ -23,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 import javax.inject.Inject;
-
 
 /**
  * Broadcast receiver that gets the triggered alarms and display a popup to track custom measurements
@@ -85,7 +83,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         }
         else if(intent.hasExtra(EXTRA_REQUEST_SNOOZE)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
-            CustomRemindersHelper.setAlarm(context, reminder.id, CustomRemindersHelper.FrecuencyType.SNOOZE);
+            CustomRemindersHelper.setAlarm(context, reminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
