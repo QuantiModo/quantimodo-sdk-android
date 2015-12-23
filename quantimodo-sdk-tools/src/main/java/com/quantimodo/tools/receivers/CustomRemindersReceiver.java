@@ -31,6 +31,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
     public static final String EXTRA_REQUEST_REMINDER = "extra_request_reminder";
     public static final String EXTRA_REQUEST_SNOOZE = "extra_request_snooze";
     public static final String EXTRA_REQUEST_EDIT = "extra_request_edit";
+    public static final String EXTRA_REQUEST_POPUP = "extra_request_popup";
     public static final String EXTRA_NOTIFICATION_ID = "extra_notification_id";
 
     @Inject
@@ -88,6 +89,10 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
             startTracking(context, reminder.name);
+        }
+        else if(intent.hasExtra(EXTRA_REQUEST_POPUP)){
+            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
+            CustomReminderDialog.getInstance().show(context, reminder.id);
         }
     }
 

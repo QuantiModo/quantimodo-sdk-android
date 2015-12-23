@@ -89,7 +89,7 @@ public class CustomRemindersHelper {
             case HOURLY:
                 alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
 //                        Testing line:
-//                        10 * 1000, 120 * 1000, alarmIntent);
+//                        10 * 1000, 20 * 1000, alarmIntent);
                         AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
             case EVERY_THREE_HOURS:

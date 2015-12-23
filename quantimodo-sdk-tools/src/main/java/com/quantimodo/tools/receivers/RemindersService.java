@@ -61,6 +61,7 @@ public class RemindersService extends IntentService {
         Intent snoozeIntent = new Intent(this, CustomRemindersReceiver.class);
         Intent trackIntent = new Intent(this, CustomRemindersReceiver.class);
         Intent editIntent = new Intent(this, CustomRemindersReceiver.class);
+        Intent popupIntent = new Intent(this, CustomRemindersReceiver.class);
 
 
         snoozeIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
@@ -72,23 +73,25 @@ public class RemindersService extends IntentService {
         editIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
         editIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         editIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_EDIT, true);
+        popupIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        popupIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
+        popupIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_POPUP, true);
 
-        PendingIntent trackPendingIntent = PendingIntent.getBroadcast(this,
-                0,
+        PendingIntent trackPendingIntent = PendingIntent.getBroadcast(this, 0,
                 trackIntent, PendingIntent.FLAG_ONE_SHOT);
-        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this,
-                1,
+        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this, 1,
                 snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
-        PendingIntent editPendingIntent = PendingIntent.getBroadcast(this,
-                2,
+        PendingIntent editPendingIntent = PendingIntent.getBroadcast(this, 2,
                 editIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent popupPendingIntent= PendingIntent.getBroadcast(this, 3,
+                popupIntent, PendingIntent.FLAG_ONE_SHOT);
 
         Notification notification = new NotificationCompat.Builder(this)
                 .setContentTitle(title)
                 .setContentText(getString(R.string.reminders_notif_subtitle))
                 .setSmallIcon(R.drawable.clock)
                 .setAutoCancel(true)
-                .setContentIntent(trackPendingIntent)
+                .setContentIntent(popupPendingIntent)
                 .build();
 
         if (Build.VERSION.SDK_INT >= 16) {
