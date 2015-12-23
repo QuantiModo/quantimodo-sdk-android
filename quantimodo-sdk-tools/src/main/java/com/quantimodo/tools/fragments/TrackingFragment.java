@@ -415,10 +415,10 @@ public class TrackingFragment extends QFragment {
     View.OnTouchListener onRootViewFocusChanged = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int action = motionEvent.getAction();
-            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
-                etVariableName.clearFocus();
-            }
+//            int action = motionEvent.getAction();
+//            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
+//                etVariableName.clearFocus();
+//            }
             return false;
         }
     };
@@ -505,6 +505,7 @@ public class TrackingFragment extends QFragment {
                         addMeasurementCard(false, true, false);
                     }
                     showButtonsCard();
+                    measurementCards.get(0).spMeasurementUnit.setEnabled(true);
                 }
             }, 400);
         }
