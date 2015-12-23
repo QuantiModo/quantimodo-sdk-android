@@ -44,6 +44,7 @@ public class CustomRemindersHelper {
     public static final long INTERVAL_THREE_HOURS = 3 * AlarmManager.INTERVAL_HOUR;
 
     public enum FrequencyType {
+        NEVER,
         HOURLY,
         EVERY_THREE_HOURS,
         TWICE_A_DAY,
