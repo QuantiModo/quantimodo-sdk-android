@@ -14,6 +14,7 @@ public class QtoolsUtils {
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork.isConnectedOrConnecting();
+        if(activeNetwork != null) return activeNetwork.isConnectedOrConnecting();
+        return false;
     }
 }
