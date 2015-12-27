@@ -24,6 +24,7 @@ import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.SdkException;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,19 +73,21 @@ public class TrackPlacesReceiver extends WakefulBroadcastReceiver
         result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
             @Override
             public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                if(!likelyPlaces.getStatus().isSuccess()){
+                if (!likelyPlaces.getStatus().isSuccess()) {
                     likelyPlaces.release();
                     mGoogleApiClient.disconnect();
                     return;
                 }
                 final PlaceLikelihood placeLikelihood = likelyPlaces.get(0);
-                    Log.i(TAG, String.format("Place '%s' has likelihood: %g",
-                            placeLikelihood.getPlace().getName(),
-                            placeLikelihood.getLikelihood()));
+                String message = String.format("Place '%s' has likelihood: %g",
+                        placeLikelihood.getPlace().getName(),
+                        placeLikelihood.getLikelihood());
+                Log.i(TAG, message);
+                sendCrashlyticsLog(message);
                 final String placeName = placeLikelihood.getPlace().getName().toString();
                 final Context context = mGoogleApiClient.getContext();
 
-                Thread thread = new Thread(new Runnable(){
+                Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
@@ -107,10 +110,13 @@ public class TrackPlacesReceiver extends WakefulBroadcastReceiver
                                 new DefaultSdkResponseListener<Boolean>() {
                                     @Override
                                     public void onRequestSuccess(Boolean aBoolean) {
+                                        String message;
                                         if (aBoolean)
-                                            Log.d(TAG, "Succeed sending measurement!: " + placeName);
+                                            message = "Succeed sending measurement!: " + placeName;
                                         else
-                                            Log.d(TAG, "Error when sending measurement:(!: " + placeName);
+                                            message = "Error when sending measurement:(!: " + placeName;
+                                        Log.d(TAG, message);
+                                        sendCrashlyticsLog(message);
                                     }
 
                                     @Override
@@ -142,6 +148,17 @@ public class TrackPlacesReceiver extends WakefulBroadcastReceiver
         Log.d(TAG, "Google places connection failed event");
     }
 
+    private void sendCrashlyticsLog(String message){
+        try {
+            //We log if we have Crashlytics
+            Class cls = Class.forName("com.crashlytics.android.Crashlytics");
+            Method method = cls.getMethod("log",String.class);
+            method.invoke(null, message);
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+    }
+
     public void setAlarm(Context context) {
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TrackPlacesReceiver.class);
@@ -149,7 +166,7 @@ public class TrackPlacesReceiver extends WakefulBroadcastReceiver
 
         alarmIntent = PendingIntent.getBroadcast(context, REQUEST_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, AlarmManager.INTERVAL_HOUR, alarmIntent);
-//        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, 15 * 1000, alarmIntent);
+//        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, 60 * 1000, alarmIntent);
 
         setBootReceiver(context, true);
     }
