@@ -4,7 +4,6 @@ import io.swagger.client.ApiException;
 import io.swagger.client.ApiInvoker;
 import io.swagger.client.Pair;
 
-import io.swagger.client.SwaggerClient;
 import io.swagger.client.model.*;
 
 import java.util.*;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class MeasurementApi {
-  String basePath = SwaggerClient.getInstance().getAppBasePath();
+  String basePath = "https://app.quantimo.do/api/v2";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {

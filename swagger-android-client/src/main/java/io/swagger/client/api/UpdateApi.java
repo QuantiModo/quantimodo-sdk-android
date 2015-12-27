@@ -4,13 +4,12 @@ import io.swagger.client.ApiException;
 import io.swagger.client.ApiInvoker;
 import io.swagger.client.Pair;
 
-import io.swagger.client.SwaggerClient;
 import io.swagger.client.model.*;
 
 import java.util.*;
 
-import io.swagger.client.model.InlineResponse20021;
-import io.swagger.client.model.InlineResponse20022;
+import io.swagger.client.model.InlineResponse20016;
+import io.swagger.client.model.InlineResponse20028;
 import io.swagger.client.model.Update;
 import io.swagger.client.model.InlineResponse2002;
 
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class UpdateApi {
-  String basePath = SwaggerClient.getInstance().getAppBasePath();
+  String basePath = "https://app.quantimo.do/api/v2";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -56,9 +55,9 @@ public class UpdateApi {
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20021
+   * @return InlineResponse20016
    */
-  public InlineResponse20021  updatesGet (String accessToken, Integer userId, Integer connectorId, Integer numberOfMeasurements, Boolean success, String message, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20016  updatesGet (String accessToken, Integer userId, Integer connectorId, Integer numberOfMeasurements, Boolean success, String message, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -118,7 +117,7 @@ public class UpdateApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20021) ApiInvoker.deserialize(response, "", InlineResponse20021.class);
+        return (InlineResponse20016) ApiInvoker.deserialize(response, "", InlineResponse20016.class);
       }
       else {
         return null;
@@ -133,9 +132,9 @@ public class UpdateApi {
    * Store Update
    * @param accessToken User&#39;s OAuth2 access token
    * @param body Update that should be stored
-   * @return InlineResponse20022
+   * @return InlineResponse20028
    */
-  public InlineResponse20022  updatesPost (String accessToken, Update body) throws ApiException {
+  public InlineResponse20028  updatesPost (String accessToken, Update body) throws ApiException {
     Object postBody = body;
     
 
@@ -175,7 +174,7 @@ public class UpdateApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20022) ApiInvoker.deserialize(response, "", InlineResponse20022.class);
+        return (InlineResponse20028) ApiInvoker.deserialize(response, "", InlineResponse20028.class);
       }
       else {
         return null;
@@ -190,9 +189,9 @@ public class UpdateApi {
    * Get Update
    * @param id id of Update
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20022
+   * @return InlineResponse20028
    */
-  public InlineResponse20022  updatesIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20028  updatesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -237,7 +236,7 @@ public class UpdateApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20022) ApiInvoker.deserialize(response, "", InlineResponse20022.class);
+        return (InlineResponse20028) ApiInvoker.deserialize(response, "", InlineResponse20028.class);
       }
       else {
         return null;

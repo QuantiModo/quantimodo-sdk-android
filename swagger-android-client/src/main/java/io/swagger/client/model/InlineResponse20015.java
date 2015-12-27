@@ -1,6 +1,6 @@
 package io.swagger.client.model;
 
-import io.swagger.client.model.Source;
+import io.swagger.client.model.TrackingReminder;
 import java.util.*;
 
 import io.swagger.annotations.*;
@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class InlineResponse20015  {
   
   @SerializedName("data")
-  private List<Source> data = null;
+  private List<TrackingReminder> data = null;
   @SerializedName("success")
   private Boolean success = null;
 
@@ -19,10 +19,10 @@ public class InlineResponse20015  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public List<Source> getData() {
+  public List<TrackingReminder> getData() {
     return data;
   }
-  public void setData(List<Source> data) {
+  public void setData(List<TrackingReminder> data) {
     this.data = data;
   }
 

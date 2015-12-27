@@ -4,14 +4,13 @@ import io.swagger.client.ApiException;
 import io.swagger.client.ApiInvoker;
 import io.swagger.client.Pair;
 
-import io.swagger.client.SwaggerClient;
 import io.swagger.client.model.*;
 
 import java.util.*;
 
-import io.swagger.client.model.InlineResponse20017;
+import io.swagger.client.model.InlineResponse20024;
+import io.swagger.client.model.InlineResponse20025;
 import io.swagger.client.model.UnitCategory;
-import io.swagger.client.model.InlineResponse20018;
 import io.swagger.client.model.InlineResponse2002;
 
 import org.apache.http.HttpEntity;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class UnitCategoryApi {
-  String basePath = SwaggerClient.getInstance().getAppBasePath();
+  String basePath = "https://app.quantimo.do/api/v2";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -52,9 +51,9 @@ public class UnitCategoryApi {
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20017
+   * @return InlineResponse20024
    */
-  public InlineResponse20017  unitCategoriesGet (String accessToken, String name, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20024  unitCategoriesGet (String accessToken, String name, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -106,7 +105,7 @@ public class UnitCategoryApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20017) ApiInvoker.deserialize(response, "", InlineResponse20017.class);
+        return (InlineResponse20024) ApiInvoker.deserialize(response, "", InlineResponse20024.class);
       }
       else {
         return null;
@@ -121,9 +120,9 @@ public class UnitCategoryApi {
    * Store UnitCategory
    * @param accessToken User&#39;s OAuth2 access token
    * @param body UnitCategory that should be stored
-   * @return InlineResponse20018
+   * @return InlineResponse20025
    */
-  public InlineResponse20018  unitCategoriesPost (String accessToken, UnitCategory body) throws ApiException {
+  public InlineResponse20025  unitCategoriesPost (String accessToken, UnitCategory body) throws ApiException {
     Object postBody = body;
     
 
@@ -163,7 +162,7 @@ public class UnitCategoryApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20018) ApiInvoker.deserialize(response, "", InlineResponse20018.class);
+        return (InlineResponse20025) ApiInvoker.deserialize(response, "", InlineResponse20025.class);
       }
       else {
         return null;
@@ -178,9 +177,9 @@ public class UnitCategoryApi {
    * Get UnitCategory
    * @param id id of UnitCategory
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20018
+   * @return InlineResponse20025
    */
-  public InlineResponse20018  unitCategoriesIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20025  unitCategoriesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -225,7 +224,7 @@ public class UnitCategoryApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20018) ApiInvoker.deserialize(response, "", InlineResponse20018.class);
+        return (InlineResponse20025) ApiInvoker.deserialize(response, "", InlineResponse20025.class);
       }
       else {
         return null;

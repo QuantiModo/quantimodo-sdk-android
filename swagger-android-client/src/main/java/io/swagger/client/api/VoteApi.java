@@ -4,13 +4,12 @@ import io.swagger.client.ApiException;
 import io.swagger.client.ApiInvoker;
 import io.swagger.client.Pair;
 
-import io.swagger.client.SwaggerClient;
 import io.swagger.client.model.*;
 
 import java.util.*;
 
-import io.swagger.client.model.InlineResponse20033;
-import io.swagger.client.model.InlineResponse20034;
+import io.swagger.client.model.InlineResponse20020;
+import io.swagger.client.model.InlineResponse20036;
 import io.swagger.client.model.Vote;
 import io.swagger.client.model.InlineResponse2002;
 
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.io.File;
 
 public class VoteApi {
-  String basePath = SwaggerClient.getInstance().getAppBasePath();
+  String basePath = "https://app.quantimo.do/api/v2";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -56,9 +55,9 @@ public class VoteApi {
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20033
+   * @return InlineResponse20020
    */
-  public InlineResponse20033  votesGet (String accessToken, String clientId, Integer userId, Integer causeId, Integer effectId, Integer value, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20020  votesGet (String accessToken, String clientId, Integer userId, Integer causeId, Integer effectId, Integer value, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -118,7 +117,7 @@ public class VoteApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20033) ApiInvoker.deserialize(response, "", InlineResponse20033.class);
+        return (InlineResponse20020) ApiInvoker.deserialize(response, "", InlineResponse20020.class);
       }
       else {
         return null;
@@ -133,9 +132,9 @@ public class VoteApi {
    * This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
    * @param accessToken User&#39;s OAuth2 access token
    * @param body Vote that should be stored
-   * @return InlineResponse20034
+   * @return InlineResponse20036
    */
-  public InlineResponse20034  votesPost (String accessToken, Vote body) throws ApiException {
+  public InlineResponse20036  votesPost (String accessToken, Vote body) throws ApiException {
     Object postBody = body;
     
 
@@ -175,7 +174,7 @@ public class VoteApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20034) ApiInvoker.deserialize(response, "", InlineResponse20034.class);
+        return (InlineResponse20036) ApiInvoker.deserialize(response, "", InlineResponse20036.class);
       }
       else {
         return null;
@@ -190,9 +189,9 @@ public class VoteApi {
    * Get Vote
    * @param id id of Vote
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20034
+   * @return InlineResponse20036
    */
-  public InlineResponse20034  votesIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20036  votesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -237,7 +236,7 @@ public class VoteApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20034) ApiInvoker.deserialize(response, "", InlineResponse20034.class);
+        return (InlineResponse20036) ApiInvoker.deserialize(response, "", InlineResponse20036.class);
       }
       else {
         return null;

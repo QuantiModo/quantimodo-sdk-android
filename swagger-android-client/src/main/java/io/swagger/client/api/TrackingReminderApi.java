@@ -8,10 +8,9 @@ import io.swagger.client.model.*;
 
 import java.util.*;
 
-import java.math.BigDecimal;
-import io.swagger.client.model.InlineResponse20017;
-import io.swagger.client.model.InlineResponse20029;
-import io.swagger.client.model.UserVariableRelationship;
+import io.swagger.client.model.InlineResponse20015;
+import io.swagger.client.model.TrackingReminder;
+import io.swagger.client.model.InlineResponse20023;
 import io.swagger.client.model.InlineResponse2002;
 
 import org.apache.http.HttpEntity;
@@ -21,7 +20,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
 
-public class UserVariableRelationshipApi {
+public class TrackingReminderApi {
   String basePath = "https://app.quantimo.do/api/v2";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
@@ -43,37 +42,31 @@ public class UserVariableRelationshipApi {
 
   
   /**
-   * Get all UserVariableRelationships
-   * Get all UserVariableRelationships
+   * Get tracking reminders
+   * Users can be reminded to track certain variables at a specified frequency with a default value.
    * @param accessToken User&#39;s OAuth2 access token
-   * @param id id
-   * @param confidenceLevel Our confidence that a consistent predictive relationship exists based on the amount of evidence, reproducibility, and other factors
-   * @param confidenceScore A quantitative representation of our confidence that a consistent predictive relationship exists based on the amount of evidence, reproducibility, and other factors
-   * @param direction Direction is positive if higher predictor values generally precede higher outcome values. Direction is negative if higher predictor values generally precede lower outcome values.
-   * @param durationOfAction Estimated number of seconds following the onset delay in which a stimulus produces a perceivable effect
-   * @param errorMessage error_message
-   * @param onsetDelay Estimated number of seconds that pass before a stimulus produces a perceivable effect
-   * @param outcomeVariableId Variable ID for the outcome variable
-   * @param predictorVariableId Variable ID for the predictor variable
-   * @param predictorUnitId ID for default unit of the predictor variable
-   * @param sinnRank A value representative of the relevance of this predictor relative to other predictors of this outcome.  Usually used for relevancy sorting.
-   * @param strengthLevel Can be weak, medium, or strong based on the size of the effect which the predictor appears to have on the outcome relative to other variable relationship strength scores.
-   * @param strengthScore A value represented to the size of the effect which the predictor appears to have on the outcome.
-   * @param userId user_id
-   * @param vote vote
-   * @param valuePredictingHighOutcome Value for the predictor variable (in it&#39;s default unit) which typically precedes an above average outcome value
-   * @param valuePredictingLowOutcome Value for the predictor variable (in it&#39;s default unit) which typically precedes a below average outcome value
+   * @param clientId The ID of the client application which last created or updated this tracking reminder
+   * @param userId ID of the user who created a reminder
+   * @param variableId Id for the variable to be tracked
+   * @param popUp True if the reminders should appear as a popup notification
+   * @param sms True if the reminders should be delivered via SMS
+   * @param email True if the reminders should be delivered via email
+   * @param notificationBar True if the reminders should appear in the notification bar
+   * @param lastReminded ISO 8601 timestamp for the last time a reminder was sent
+   * @param lastTracked ISO 8601 timestamp for the last time a measurement was received for this user and variable
+   * @param createdAt When the record was first created. Use ISO 8601 datetime format
+   * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20017
+   * @return InlineResponse20015
    */
-  public InlineResponse20017  userVariableRelationshipsGet (String accessToken, Integer id, String confidenceLevel, BigDecimal confidenceScore, String direction, Integer durationOfAction, String errorMessage, Integer onsetDelay, Integer outcomeVariableId, Integer predictorVariableId, Integer predictorUnitId, BigDecimal sinnRank, String strengthLevel, BigDecimal strengthScore, Integer userId, String vote, BigDecimal valuePredictingHighOutcome, BigDecimal valuePredictingLowOutcome, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20015  trackingRemindersGet (String accessToken, String clientId, Integer userId, Integer variableId, Boolean popUp, Boolean sms, Boolean email, Boolean notificationBar, String lastReminded, String lastTracked, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
     // create path and map variables
-    String path = "/userVariableRelationships".replaceAll("\\{format\\}","json");
+    String path = "/trackingReminders".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -85,39 +78,27 @@ public class UserVariableRelationshipApi {
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "id", id));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "confidence_level", confidenceLevel));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "confidence_score", confidenceScore));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "direction", direction));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "duration_of_action", durationOfAction));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "error_message", errorMessage));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "onset_delay", onsetDelay));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "outcome_variable_id", outcomeVariableId));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "predictor_variable_id", predictorVariableId));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "predictor_unit_id", predictorUnitId));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "sinn_rank", sinnRank));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "strength_level", strengthLevel));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "strength_score", strengthScore));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "user_id", userId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "vote", vote));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "variable_id", variableId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "value_predicting_high_outcome", valuePredictingHighOutcome));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "pop_up", popUp));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "value_predicting_low_outcome", valuePredictingLowOutcome));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "sms", sms));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "email", email));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "notification_bar", notificationBar));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_reminded", lastReminded));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_tracked", lastTracked));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "created_at", createdAt));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "updated_at", updatedAt));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
     
@@ -148,7 +129,7 @@ public class UserVariableRelationshipApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20017) ApiInvoker.deserialize(response, "", InlineResponse20017.class);
+        return (InlineResponse20015) ApiInvoker.deserialize(response, "", InlineResponse20015.class);
       }
       else {
         return null;
@@ -159,18 +140,18 @@ public class UserVariableRelationshipApi {
   }
   
   /**
-   * Store UserVariableRelationship
-   * Store UserVariableRelationship
+   * Store TrackingReminder
+   * This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
    * @param accessToken User&#39;s OAuth2 access token
-   * @param body UserVariableRelationship that should be stored
-   * @return InlineResponse20029
+   * @param body TrackingReminder that should be stored
+   * @return InlineResponse20023
    */
-  public InlineResponse20029  userVariableRelationshipsPost (String accessToken, UserVariableRelationship body) throws ApiException {
+  public InlineResponse20023  trackingRemindersPost (String accessToken, TrackingReminder body) throws ApiException {
     Object postBody = body;
     
 
     // create path and map variables
-    String path = "/userVariableRelationships".replaceAll("\\{format\\}","json");
+    String path = "/trackingReminders".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -205,7 +186,7 @@ public class UserVariableRelationshipApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20029) ApiInvoker.deserialize(response, "", InlineResponse20029.class);
+        return (InlineResponse20023) ApiInvoker.deserialize(response, "", InlineResponse20023.class);
       }
       else {
         return null;
@@ -216,23 +197,23 @@ public class UserVariableRelationshipApi {
   }
   
   /**
-   * Get UserVariableRelationship
-   * Get UserVariableRelationship
-   * @param id id of UserVariableRelationship
+   * Get TrackingReminder
+   * Get TrackingReminder
+   * @param id id of TrackingReminder
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20029
+   * @return InlineResponse20023
    */
-  public InlineResponse20029  userVariableRelationshipsIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20023  trackingRemindersIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
     if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling userVariableRelationshipsIdGet");
+       throw new ApiException(400, "Missing the required parameter 'id' when calling trackingRemindersIdGet");
     }
     
 
     // create path and map variables
-    String path = "/userVariableRelationships/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/trackingReminders/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -267,7 +248,7 @@ public class UserVariableRelationshipApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20029) ApiInvoker.deserialize(response, "", InlineResponse20029.class);
+        return (InlineResponse20023) ApiInvoker.deserialize(response, "", InlineResponse20023.class);
       }
       else {
         return null;
@@ -278,24 +259,24 @@ public class UserVariableRelationshipApi {
   }
   
   /**
-   * Update UserVariableRelationship
-   * Update UserVariableRelationship
-   * @param id id of UserVariableRelationship
+   * Update TrackingReminder
+   * Update TrackingReminder
+   * @param id id of TrackingReminder
    * @param accessToken User&#39;s OAuth2 access token
-   * @param body UserVariableRelationship that should be updated
+   * @param body TrackingReminder that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  userVariableRelationshipsIdPut (Integer id, String accessToken, UserVariableRelationship body) throws ApiException {
+  public InlineResponse2002  trackingRemindersIdPut (Integer id, String accessToken, TrackingReminder body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
     if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling userVariableRelationshipsIdPut");
+       throw new ApiException(400, "Missing the required parameter 'id' when calling trackingRemindersIdPut");
     }
     
 
     // create path and map variables
-    String path = "/userVariableRelationships/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/trackingReminders/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -341,23 +322,23 @@ public class UserVariableRelationshipApi {
   }
   
   /**
-   * Delete UserVariableRelationship
-   * Delete UserVariableRelationship
-   * @param id id of UserVariableRelationship
+   * Delete TrackingReminder
+   * Delete previously posted trackingReminder
+   * @param id id of TrackingReminder
    * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  userVariableRelationshipsIdDelete (Integer id, String accessToken) throws ApiException {
+  public InlineResponse2002  trackingRemindersIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
     if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling userVariableRelationshipsIdDelete");
+       throw new ApiException(400, "Missing the required parameter 'id' when calling trackingRemindersIdDelete");
     }
     
 
     // create path and map variables
-    String path = "/userVariableRelationships/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/trackingReminders/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
