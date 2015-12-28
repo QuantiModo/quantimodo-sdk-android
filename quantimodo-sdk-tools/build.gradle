@@ -92,7 +92,7 @@ dependencies {
     androidTestApt 'com.squareup.dagger:dagger-compiler:1.2.2'
 
     //Green Dao
-    compile 'de.greenrobot:greendao:2.0.0'
+    compile 'de.greenrobot:greendao:2.1.0'
 
     compile 'com.android.support:multidex:1.0.0'
 

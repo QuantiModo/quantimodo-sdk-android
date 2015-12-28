@@ -9,7 +9,7 @@ sourceCompatibility = 1.6
 mainClassName = "com.quantimodo.tools.generator.QmDaoGenerator"
 
 dependencies {
-    compile 'de.greenrobot:greendao-generator:2.0.0'
+    compile 'de.greenrobot:greendao-generator:2.1.0'
 }
 
 sourceSets {

@@ -7,7 +7,7 @@ import java.io.File;
 public class QmDaoGenerator {
 
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1002, "com.quantimodo.tools.models");
+        Schema schema = new Schema(1003, "com.quantimodo.tools.models");
         schema.enableKeepSectionsByDefault();
         schema.enableActiveEntitiesByDefault();
 
@@ -77,6 +77,8 @@ public class QmDaoGenerator {
 
         measurement.addDoubleProperty("value").notNull();
         measurement.addStringProperty("source");
+        measurement.addBooleanProperty("needUpdate");
+        measurement.addStringProperty("note");
     }
 
 }
