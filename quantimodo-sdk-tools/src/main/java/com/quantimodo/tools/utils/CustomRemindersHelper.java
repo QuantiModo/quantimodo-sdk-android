@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.SystemClock;
 
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 import com.quantimodo.tools.receivers.QToolsBootReceiver;
@@ -88,29 +89,36 @@ public class CustomRemindersHelper {
 
         switch(frequencyType){
             case HOURLY:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                        Testing line:
-//                        10 * 1000, 20 * 1000, alarmIntent);
-                        AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        //Testing line:
+//                        System.currentTimeMillis() + 10 * 1000, 120 * 1000, alarmIntent);
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
+                        AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
             case EVERY_THREE_HOURS:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        INTERVAL_THREE_HOURS, INTERVAL_THREE_HOURS, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        System.currentTimeMillis() + INTERVAL_THREE_HOURS,
+                        INTERVAL_THREE_HOURS,
+                        alarmIntent);
                 break;
             case TWICE_A_DAY:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        AlarmManager.INTERVAL_HALF_DAY, AlarmManager.INTERVAL_HALF_DAY, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HALF_DAY,
+                        AlarmManager.INTERVAL_HALF_DAY,
+                        alarmIntent);
                 break;
             case DAILY:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_DAY,
+                        AlarmManager.INTERVAL_DAY,
+                        alarmIntent);
                 break;
             case SNOOZE:
                 //Create a one time reminder to run in one hour as a snooze of a previous reminder
                 //We crete a new intent to not replace the running ones
                 alarmIntent = PendingIntent.getBroadcast(context, (int) new Date().getTime(),
                         intent, PendingIntent.FLAG_ONE_SHOT);
-                alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
                         //Testing line:
 //                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
                         AlarmManager.INTERVAL_HOUR, alarmIntent);
