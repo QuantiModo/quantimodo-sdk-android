@@ -269,7 +269,7 @@ public class CustomReminderDialog {
             public void onClick(View v) {
                 Log.i(TAG, "edit clicked");
                 Intent trackIntent = new Intent(mContext,
-                        CustomRemindersHelper.getInstance().getRegisteredActivity().getClass());
+                        CustomRemindersHelper.getInstance().getRegisteredActivity());
                 trackIntent.addFlags(
                         Intent.FLAG_ACTIVITY_CLEAR_TOP |
                                 Intent.FLAG_ACTIVITY_NEW_TASK |

@@ -54,7 +54,7 @@ public class CustomRemindersHelper {
     }
 
     private static final CustomRemindersHelper INSTANCE = new CustomRemindersHelper();
-    private Activity registeredActivity;
+    private Class registeredActivity;
 
     private CustomRemindersHelper(){
 
@@ -70,11 +70,11 @@ public class CustomRemindersHelper {
      * {@link com.quantimodo.tools.fragments.TrackingFragment} loading the data
      * @param activity the Activity to register
      */
-    public void registerActivity(Activity activity){
+    public void registerActivity(Class activity){
         this.registeredActivity = activity;
     }
 
-    public Activity getRegisteredActivity(){
+    public Class getRegisteredActivity(){
         return registeredActivity;
     }
 
