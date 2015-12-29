@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -18,6 +19,7 @@ import android.widget.RemoteViews;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
@@ -49,6 +51,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
 
     @Override
     public void onCreate(){
+        Log.d(TAG, "onCreate");
         super.onCreate();
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -61,6 +64,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand");
         // The service is starting, due to a call to startService()
         this.startId = startId;
         appSource = intent.getStringExtra(EXTRA_SOURCE);
@@ -94,6 +98,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
             @Override
             public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
                 if (!likelyPlaces.getStatus().isSuccess()) {
+                    Log.d(TAG, "Error when getting places");
                     likelyPlaces.release();
                     mGoogleApiClient.disconnect();
                     return;
