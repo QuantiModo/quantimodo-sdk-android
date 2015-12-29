@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -37,8 +38,8 @@ public class RemindersService extends IntentService {
             StringBuilder builder = new StringBuilder();
             builder
                     .append("Track ")
-                    .append(reminder.value).append(" ")
-                    .append(reminder.unitName).append(" ")
+                    .append(CustomRemindersHelper.removeTrailingZeros(reminder.value)).append(" ")
+                    .append(reminder.unitName).append(" of ")
                     .append(reminder.name).append("?");
 
             sendNotification(reminderId, builder.toString());

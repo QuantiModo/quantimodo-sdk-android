@@ -159,8 +159,8 @@ public class CustomReminderDialog {
 		StringBuilder builder = new StringBuilder();
 		builder
 				.append("Track ")
-				.append(mReminder.value).append(" ")
-				.append(mReminder.unitName).append(" ")
+				.append(CustomRemindersHelper.removeTrailingZeros(mReminder.value)).append(" ")
+				.append(mReminder.unitName).append(" of ")
 				.append(mReminder.name).append("?");
 
         mTitleTextView.setText(builder.toString());

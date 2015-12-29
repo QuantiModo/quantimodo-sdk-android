@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 import com.quantimodo.tools.receivers.QToolsBootReceiver;
@@ -228,6 +229,22 @@ public class CustomRemindersHelper {
 
     private static SharedPreferences getPreferences(Context context){
         return context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
+
+
+    @NonNull
+    public static String removeTrailingZeros(@NonNull String number){
+        int i;
+        for(i = number.toCharArray().length - 1;i >= 0; i--){
+            char c = number.toCharArray()[i];
+            if(Character.getNumericValue(c) > 0)
+                break;
+            if(c == '.'){
+                i--;
+                break;
+            }
+        }
+        return number.substring(0, i + 1);
     }
 
     public static class Reminder{
