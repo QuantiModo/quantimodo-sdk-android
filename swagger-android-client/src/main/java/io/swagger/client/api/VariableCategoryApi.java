@@ -9,10 +9,10 @@ import io.swagger.client.model.*;
 
 import java.util.*;
 
-import io.swagger.client.model.InlineResponse20027;
+import io.swagger.client.model.InlineResponse20031;
 import java.math.BigDecimal;
-import io.swagger.client.model.InlineResponse20028;
 import io.swagger.client.model.VariableCategory;
+import io.swagger.client.model.InlineResponse20032;
 import io.swagger.client.model.InlineResponse2002;
 
 import org.apache.http.HttpEntity;
@@ -65,9 +65,9 @@ public class VariableCategoryApi {
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20027
+   * @return InlineResponse20031
    */
-  public InlineResponse20027  variableCategoriesGet (String accessToken, String name, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer durationOfAction, Integer onsetDelay, String combinationOperation, Integer updated, Boolean causeOnly, Integer _public, Boolean outcome, String createdAt, String updatedAt, String imageUrl, Integer defaultUnitId, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20031  variableCategoriesGet (String accessToken, String name, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer durationOfAction, Integer onsetDelay, String combinationOperation, Integer updated, Boolean causeOnly, Integer _public, Boolean outcome, String createdAt, String updatedAt, String imageUrl, Integer defaultUnitId, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -143,7 +143,7 @@ public class VariableCategoryApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20027) ApiInvoker.deserialize(response, "", InlineResponse20027.class);
+        return (InlineResponse20031) ApiInvoker.deserialize(response, "", InlineResponse20031.class);
       }
       else {
         return null;
@@ -158,9 +158,9 @@ public class VariableCategoryApi {
    * Store VariableCategory
    * @param accessToken User&#39;s OAuth2 access token
    * @param body VariableCategory that should be stored
-   * @return InlineResponse20028
+   * @return InlineResponse20032
    */
-  public InlineResponse20028  variableCategoriesPost (String accessToken, VariableCategory body) throws ApiException {
+  public InlineResponse20032  variableCategoriesPost (String accessToken, VariableCategory body) throws ApiException {
     Object postBody = body;
     
 
@@ -200,7 +200,7 @@ public class VariableCategoryApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20028) ApiInvoker.deserialize(response, "", InlineResponse20028.class);
+        return (InlineResponse20032) ApiInvoker.deserialize(response, "", InlineResponse20032.class);
       }
       else {
         return null;
@@ -215,9 +215,9 @@ public class VariableCategoryApi {
    * Get VariableCategory
    * @param id id of VariableCategory
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20028
+   * @return InlineResponse20032
    */
-  public InlineResponse20028  variableCategoriesIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20032  variableCategoriesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -262,7 +262,7 @@ public class VariableCategoryApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20028) ApiInvoker.deserialize(response, "", InlineResponse20028.class);
+        return (InlineResponse20032) ApiInvoker.deserialize(response, "", InlineResponse20032.class);
       }
       else {
         return null;

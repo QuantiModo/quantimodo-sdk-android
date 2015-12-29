@@ -17,8 +17,8 @@ public class Unit  {
   private String name = null;
   @SerializedName("abbreviated_name")
   private String abbreviatedName = null;
-  @SerializedName("unit_category_id")
-  private Integer unitCategoryId = null;
+  @SerializedName("category_id")
+  private Integer categoryId = null;
   @SerializedName("minimum_value")
   private Float minimumValue = null;
   @SerializedName("maximum_value")
@@ -88,12 +88,12 @@ public class Unit  {
   /**
    * Unit category ID
    **/
-  @ApiModelProperty(value = "Unit category ID")
-  public Integer getUnitCategoryId() {
-    return unitCategoryId;
+  @ApiModelProperty(required = true, value = "Unit category ID")
+  public Integer getCategoryId() {
+    return categoryId;
   }
-  public void setUnitCategoryId(Integer unitCategoryId) {
-    this.unitCategoryId = unitCategoryId;
+  public void setCategoryId(Integer categoryId) {
+    this.categoryId = categoryId;
   }
 
   
@@ -203,7 +203,7 @@ public class Unit  {
     sb.append("  clientId: ").append(clientId).append("\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  abbreviatedName: ").append(abbreviatedName).append("\n");
-    sb.append("  unitCategoryId: ").append(unitCategoryId).append("\n");
+    sb.append("  categoryId: ").append(categoryId).append("\n");
     sb.append("  minimumValue: ").append(minimumValue).append("\n");
     sb.append("  maximumValue: ").append(maximumValue).append("\n");
     sb.append("  updated: ").append(updated).append("\n");

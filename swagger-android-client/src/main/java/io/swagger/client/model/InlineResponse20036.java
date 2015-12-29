@@ -1,16 +1,16 @@
 package io.swagger.client.model;
 
-import io.swagger.client.model.Source;
+import io.swagger.client.model.Vote;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class InlineResponse20022  {
+public class InlineResponse20036  {
   
   @SerializedName("data")
-  private Source data = null;
+  private Vote data = null;
   @SerializedName("success")
   private Boolean success = null;
 
@@ -18,10 +18,10 @@ public class InlineResponse20022  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public Source getData() {
+  public Vote getData() {
     return data;
   }
-  public void setData(Source data) {
+  public void setData(Vote data) {
     this.data = data;
   }
 
@@ -41,7 +41,7 @@ public class InlineResponse20022  {
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InlineResponse20022 {\n");
+    sb.append("class InlineResponse20036 {\n");
     
     sb.append("  data: ").append(data).append("\n");
     sb.append("  success: ").append(success).append("\n");

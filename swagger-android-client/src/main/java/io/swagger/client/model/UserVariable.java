@@ -95,6 +95,10 @@ public class UserVariable  {
   private Float longitude = null;
   @SerializedName("location")
   private String location = null;
+  @SerializedName("experiment_start_time")
+  private Date experimentStartTime = null;
+  @SerializedName("experiment_end_time")
+  private Date experimentEndTime = null;
   @SerializedName("created_at")
   private Date createdAt = null;
   @SerializedName("updated_at")
@@ -634,6 +638,30 @@ public class UserVariable  {
 
   
   /**
+   * Earliest measurement start_time to be used in analysis. Use ISO 8601 datetime format
+   **/
+  @ApiModelProperty(value = "Earliest measurement start_time to be used in analysis. Use ISO 8601 datetime format")
+  public Date getExperimentStartTime() {
+    return experimentStartTime;
+  }
+  public void setExperimentStartTime(Date experimentStartTime) {
+    this.experimentStartTime = experimentStartTime;
+  }
+
+  
+  /**
+   * Latest measurement start_time to be used in analysis. Use ISO 8601 datetime format
+   **/
+  @ApiModelProperty(value = "Latest measurement start_time to be used in analysis. Use ISO 8601 datetime format")
+  public Date getExperimentEndTime() {
+    return experimentEndTime;
+  }
+  public void setExperimentEndTime(Date experimentEndTime) {
+    this.experimentEndTime = experimentEndTime;
+  }
+
+  
+  /**
    * When the record was first created. Use ISO 8601 datetime format
    **/
   @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
@@ -802,6 +830,8 @@ public class UserVariable  {
     sb.append("  latitude: ").append(latitude).append("\n");
     sb.append("  longitude: ").append(longitude).append("\n");
     sb.append("  location: ").append(location).append("\n");
+    sb.append("  experimentStartTime: ").append(experimentStartTime).append("\n");
+    sb.append("  experimentEndTime: ").append(experimentEndTime).append("\n");
     sb.append("  createdAt: ").append(createdAt).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
     sb.append("  outcome: ").append(outcome).append("\n");

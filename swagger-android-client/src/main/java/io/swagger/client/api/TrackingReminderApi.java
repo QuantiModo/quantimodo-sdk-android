@@ -9,9 +9,9 @@ import io.swagger.client.model.*;
 
 import java.util.*;
 
-import io.swagger.client.model.InlineResponse20021;
-import io.swagger.client.model.Source;
-import io.swagger.client.model.InlineResponse20022;
+import io.swagger.client.model.InlineResponse20015;
+import io.swagger.client.model.TrackingReminder;
+import io.swagger.client.model.InlineResponse20023;
 import io.swagger.client.model.InlineResponse2002;
 
 import org.apache.http.HttpEntity;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
 
-public class SourceApi {
+public class TrackingReminderApi {
   String basePath = SwaggerClient.getInstance().getAppBasePath();
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
@@ -43,24 +43,31 @@ public class SourceApi {
 
   
   /**
-   * Get measurement sources
-   * Returns a list of all the apps from which measurement data is obtained.
+   * Get tracking reminders
+   * Users can be reminded to track certain variables at a specified frequency with a default value.
    * @param accessToken User&#39;s OAuth2 access token
-   * @param clientId The ID of the client application which last created or updated this source
-   * @param name Name of the application or device
+   * @param clientId The ID of the client application which last created or updated this tracking reminder
+   * @param userId ID of the user who created a reminder
+   * @param variableId Id for the variable to be tracked
+   * @param popUp True if the reminders should appear as a popup notification
+   * @param sms True if the reminders should be delivered via SMS
+   * @param email True if the reminders should be delivered via email
+   * @param notificationBar True if the reminders should appear in the notification bar
+   * @param lastReminded ISO 8601 timestamp for the last time a reminder was sent
+   * @param lastTracked ISO 8601 timestamp for the last time a measurement was received for this user and variable
    * @param createdAt When the record was first created. Use ISO 8601 datetime format
    * @param updatedAt When the record was last updated. Use ISO 8601 datetime format
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20021
+   * @return InlineResponse20015
    */
-  public InlineResponse20021  sourcesGet (String accessToken, String clientId, String name, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20015  trackingRemindersGet (String accessToken, String clientId, Integer userId, Integer variableId, Boolean popUp, Boolean sms, Boolean email, Boolean notificationBar, String lastReminded, String lastTracked, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
     // create path and map variables
-    String path = "/sources".replaceAll("\\{format\\}","json");
+    String path = "/trackingReminders".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -74,7 +81,21 @@ public class SourceApi {
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "name", name));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "user_id", userId));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "variable_id", variableId));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "pop_up", popUp));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "sms", sms));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "email", email));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "notification_bar", notificationBar));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_reminded", lastReminded));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_tracked", lastTracked));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "created_at", createdAt));
     
@@ -109,7 +130,7 @@ public class SourceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20021) ApiInvoker.deserialize(response, "", InlineResponse20021.class);
+        return (InlineResponse20015) ApiInvoker.deserialize(response, "", InlineResponse20015.class);
       }
       else {
         return null;
@@ -120,18 +141,18 @@ public class SourceApi {
   }
   
   /**
-   * Add a data source
-   * Add a life-tracking app or device to the QuantiModo list of data sources.
+   * Store TrackingReminder
+   * This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
    * @param accessToken User&#39;s OAuth2 access token
-   * @param body Source that should be stored
-   * @return InlineResponse20022
+   * @param body TrackingReminder that should be stored
+   * @return InlineResponse20023
    */
-  public InlineResponse20022  sourcesPost (String accessToken, Source body) throws ApiException {
+  public InlineResponse20023  trackingRemindersPost (String accessToken, TrackingReminder body) throws ApiException {
     Object postBody = body;
     
 
     // create path and map variables
-    String path = "/sources".replaceAll("\\{format\\}","json");
+    String path = "/trackingReminders".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -166,7 +187,7 @@ public class SourceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20022) ApiInvoker.deserialize(response, "", InlineResponse20022.class);
+        return (InlineResponse20023) ApiInvoker.deserialize(response, "", InlineResponse20023.class);
       }
       else {
         return null;
@@ -177,23 +198,23 @@ public class SourceApi {
   }
   
   /**
-   * Get Source
-   * Get Source
-   * @param id id of Source
+   * Get TrackingReminder
+   * Get TrackingReminder
+   * @param id id of TrackingReminder
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20022
+   * @return InlineResponse20023
    */
-  public InlineResponse20022  sourcesIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20023  trackingRemindersIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
     if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling sourcesIdGet");
+       throw new ApiException(400, "Missing the required parameter 'id' when calling trackingRemindersIdGet");
     }
     
 
     // create path and map variables
-    String path = "/sources/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/trackingReminders/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -228,7 +249,7 @@ public class SourceApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20022) ApiInvoker.deserialize(response, "", InlineResponse20022.class);
+        return (InlineResponse20023) ApiInvoker.deserialize(response, "", InlineResponse20023.class);
       }
       else {
         return null;
@@ -239,24 +260,24 @@ public class SourceApi {
   }
   
   /**
-   * Update Source
-   * Update Source
-   * @param id id of Source
+   * Update TrackingReminder
+   * Update TrackingReminder
+   * @param id id of TrackingReminder
    * @param accessToken User&#39;s OAuth2 access token
-   * @param body Source that should be updated
+   * @param body TrackingReminder that should be updated
    * @return InlineResponse2002
    */
-  public InlineResponse2002  sourcesIdPut (Integer id, String accessToken, Source body) throws ApiException {
+  public InlineResponse2002  trackingRemindersIdPut (Integer id, String accessToken, TrackingReminder body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
     if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling sourcesIdPut");
+       throw new ApiException(400, "Missing the required parameter 'id' when calling trackingRemindersIdPut");
     }
     
 
     // create path and map variables
-    String path = "/sources/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/trackingReminders/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -302,23 +323,23 @@ public class SourceApi {
   }
   
   /**
-   * Delete Source
-   * Delete Source
-   * @param id id of Source
+   * Delete TrackingReminder
+   * Delete previously posted trackingReminder
+   * @param id id of TrackingReminder
    * @param accessToken User&#39;s OAuth2 access token
    * @return InlineResponse2002
    */
-  public InlineResponse2002  sourcesIdDelete (Integer id, String accessToken) throws ApiException {
+  public InlineResponse2002  trackingRemindersIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
     if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling sourcesIdDelete");
+       throw new ApiException(400, "Missing the required parameter 'id' when calling trackingRemindersIdDelete");
     }
     
 
     // create path and map variables
-    String path = "/sources/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/trackingReminders/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();

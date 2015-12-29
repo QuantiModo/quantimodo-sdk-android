@@ -9,10 +9,10 @@ import io.swagger.client.model.*;
 
 import java.util.*;
 
-import io.swagger.client.model.InlineResponse20031;
+import io.swagger.client.model.InlineResponse20034;
 import java.math.BigDecimal;
 import io.swagger.client.model.Variable;
-import io.swagger.client.model.InlineResponse20032;
+import io.swagger.client.model.InlineResponse20035;
 import io.swagger.client.model.InlineResponse2002;
 
 import org.apache.http.HttpEntity;
@@ -86,9 +86,9 @@ public class VariableApi {
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort records by a given field name. If the field name is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20031
+   * @return InlineResponse20034
    */
-  public InlineResponse20031  variablesGet (String accessToken, Integer id, String clientId, Integer parentId, String name, Integer variableCategoryId, Integer defaultUnitId, String combinationOperation, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer onsetDelay, Integer durationOfAction, Integer _public, Boolean causeOnly, BigDecimal mostCommonValue, Integer mostCommonUnitId, BigDecimal standardDeviation, BigDecimal variance, BigDecimal mean, BigDecimal median, BigDecimal numberOfMeasurements, BigDecimal numberOfUniqueValues, BigDecimal skewness, BigDecimal kurtosis, String status, String errorMessage, String lastSuccessfulUpdateTime, String createdAt, String updatedAt, String productUrl, String imageUrl, BigDecimal price, Integer numberOfUserVariables, Boolean outcome, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20034  variablesGet (String accessToken, Integer id, String clientId, Integer parentId, String name, Integer variableCategoryId, Integer defaultUnitId, String combinationOperation, BigDecimal fillingValue, BigDecimal maximumAllowedValue, BigDecimal minimumAllowedValue, Integer onsetDelay, Integer durationOfAction, Integer _public, Boolean causeOnly, BigDecimal mostCommonValue, Integer mostCommonUnitId, BigDecimal standardDeviation, BigDecimal variance, BigDecimal mean, BigDecimal median, BigDecimal numberOfMeasurements, BigDecimal numberOfUniqueValues, BigDecimal skewness, BigDecimal kurtosis, String status, String errorMessage, String lastSuccessfulUpdateTime, String createdAt, String updatedAt, String productUrl, String imageUrl, BigDecimal price, Integer numberOfUserVariables, Boolean outcome, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -206,7 +206,7 @@ public class VariableApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20031) ApiInvoker.deserialize(response, "", InlineResponse20031.class);
+        return (InlineResponse20034) ApiInvoker.deserialize(response, "", InlineResponse20034.class);
       }
       else {
         return null;
@@ -221,9 +221,9 @@ public class VariableApi {
    * Allows the client to create a new variable in the `variables` table.
    * @param accessToken User&#39;s OAuth2 access token
    * @param body Variable that should be stored
-   * @return InlineResponse20032
+   * @return InlineResponse20035
    */
-  public InlineResponse20032  variablesPost (String accessToken, Variable body) throws ApiException {
+  public InlineResponse20035  variablesPost (String accessToken, Variable body) throws ApiException {
     Object postBody = body;
     
 
@@ -263,7 +263,7 @@ public class VariableApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20032) ApiInvoker.deserialize(response, "", InlineResponse20032.class);
+        return (InlineResponse20035) ApiInvoker.deserialize(response, "", InlineResponse20035.class);
       }
       else {
         return null;
@@ -278,9 +278,9 @@ public class VariableApi {
    * Get Variable
    * @param id id of Variable
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20032
+   * @return InlineResponse20035
    */
-  public InlineResponse20032  variablesIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20035  variablesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -325,7 +325,7 @@ public class VariableApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20032) ApiInvoker.deserialize(response, "", InlineResponse20032.class);
+        return (InlineResponse20035) ApiInvoker.deserialize(response, "", InlineResponse20035.class);
       }
       else {
         return null;
