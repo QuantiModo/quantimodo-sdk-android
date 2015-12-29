@@ -291,6 +291,9 @@ After that, the folder 'Quantimodo-SDK-Android' will be created containing the S
 
 #### Releasing a new version of the SDK's
 
+- Run `gradle upload artifact` in the `/quantimodo-sdk-tools` and in `/sdk`.
+- Credentials can be found [here](https://docs.google.com/document/d/1kOqPrefgqHAoOylIdCuvcremAJ7dUWVSVK9QiN_uJrQ/edit)
+
 The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. See http://central.sonatype.org/pages/ossrh-guide.html
 
 [Guide To Publish An Aar To Maven Using Gradle](http://www.survivingwithandroid.com/2014/05/android-guide-to-publish-aar-to-maven-gradle.html)
