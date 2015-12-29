@@ -98,7 +98,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
 
     private void startTracking(Context context, String varName){
         Intent trackIntent = new Intent(context,
-                CustomRemindersHelper.getInstance().getRegisteredActivity().getClass());
+                CustomRemindersHelper.getInstance().getRegisteredActivity());
         trackIntent.addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TOP |
                         Intent.FLAG_ACTIVITY_NEW_TASK |
