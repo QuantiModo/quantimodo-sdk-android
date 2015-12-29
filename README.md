@@ -289,9 +289,9 @@ After that, the folder 'Quantimodo-SDK-Android' will be created containing the S
 
 ### Deploy and Release Updates to the QM-Android-SDK
 
-#### Releasing a new version of the SDK's
+#### Releasing a new version of the SDK and QTools
 
-- See detailed instrutions [here](https://github.com/Abolitionist-Project/OLD-QuantiModo-SDK-Android/wiki/Android-SDK-Distribution)
+- See detailed instructions [here](https://github.com/Abolitionist-Project/OLD-QuantiModo-SDK-Android/wiki/Android-SDK-Distribution)
 - Run `gradle upload artifact` in the `/quantimodo-sdk-tools` and in `/sdk`.
 - Credentials can be found [here](https://docs.google.com/document/d/1kOqPrefgqHAoOylIdCuvcremAJ7dUWVSVK9QiN_uJrQ/edit)
 
