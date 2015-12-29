@@ -259,8 +259,6 @@ Connect your device and run in the project root:
 
 You can also run them in [Android Studio](http://developer.android.com/training/testing/unit-testing/local-unit-tests.html).
 
-[Guide To Publish An Aar To Maven Using Gradle](http://www.survivingwithandroid.com/2014/05/android-guide-to-publish-aar-to-maven-gradle.html)
-
 ## Developing the SDK itself
 To work on the SDK you can add it manually as a git submodule folder inside your project. You have to do the following:
 
@@ -291,6 +289,8 @@ After that, the folder 'Quantimodo-SDK-Android' will be created containing the S
 
 ### Deploy and Release Updates to the QM-Android-SDK
 
-#### Gradle SDK Distribution
+#### Releasing a new version of the SDK's
 
 The SDK can be found in the [Sonatype Central Repository](https://oss.sonatype.org/#nexus-search;quick~quantimodo) for open-source software. See http://central.sonatype.org/pages/ossrh-guide.html
+
+[Guide To Publish An Aar To Maven Using Gradle](http://www.survivingwithandroid.com/2014/05/android-guide-to-publish-aar-to-maven-gradle.html)
