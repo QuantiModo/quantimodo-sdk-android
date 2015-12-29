@@ -291,6 +291,7 @@ After that, the folder 'Quantimodo-SDK-Android' will be created containing the S
 
 #### Releasing a new version of the SDK's
 
+- See detailed instrutions [here](https://github.com/Abolitionist-Project/OLD-QuantiModo-SDK-Android/wiki/Android-SDK-Distribution)
 - Run `gradle upload artifact` in the `/quantimodo-sdk-tools` and in `/sdk`.
 - Credentials can be found [here](https://docs.google.com/document/d/1kOqPrefgqHAoOylIdCuvcremAJ7dUWVSVK9QiN_uJrQ/edit)
 
