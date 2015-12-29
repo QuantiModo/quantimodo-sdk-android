@@ -1,6 +1,7 @@
 package io.swagger.client.model;
 
-import io.swagger.client.model.UserVariable;
+import java.util.*;
+import io.swagger.client.model.Unit;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -10,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class InlineResponse20026  {
   
   @SerializedName("data")
-  private UserVariable data = null;
+  private List<Unit> data = null;
   @SerializedName("success")
   private Boolean success = null;
 
@@ -18,10 +19,10 @@ public class InlineResponse20026  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public UserVariable getData() {
+  public List<Unit> getData() {
     return data;
   }
-  public void setData(UserVariable data) {
+  public void setData(List<Unit> data) {
     this.data = data;
   }
 

@@ -9,9 +9,9 @@ import io.swagger.client.model.*;
 
 import java.util.*;
 
-import io.swagger.client.model.InlineResponse20025;
 import java.math.BigDecimal;
-import io.swagger.client.model.InlineResponse20026;
+import io.swagger.client.model.InlineResponse20018;
+import io.swagger.client.model.InlineResponse20030;
 import io.swagger.client.model.UserVariable;
 import io.swagger.client.model.InlineResponse2002;
 
@@ -104,9 +104,9 @@ public class UserVariableApi {
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20025
+   * @return InlineResponse20018
    */
-  public InlineResponse20025  userVariablesGet (String accessToken, String clientId, Integer parentId, Integer variableId, Integer userId, Integer defaultUnitId, BigDecimal minimumAllowedValue, BigDecimal maximumAllowedValue, BigDecimal fillingValue, Integer joinWith, Integer onsetDelay, Integer durationOfAction, Integer variableCategoryId, Integer updated, Integer _public, Boolean causeOnly, String fillingType, Integer numberOfMeasurements, Integer numberOfProcessedMeasurements, Integer measurementsAtLastAnalysis, Integer lastUnitId, Integer lastOriginalUnitId, Integer lastOriginalValue, BigDecimal lastValue, BigDecimal lastOriginalValue2, Integer lastSourceId, Integer numberOfCorrelations, String status, String errorMessage, String lastSuccessfulUpdateTime, BigDecimal standardDeviation, BigDecimal variance, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, BigDecimal mean, BigDecimal median, Integer mostCommonUnitId, BigDecimal mostCommonValue, BigDecimal numberOfUniqueDailyValues, Integer numberOfChanges, BigDecimal skewness, BigDecimal kurtosis, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, Boolean outcome, String sources, Integer earliestSourceTime, Integer latestSourceTime, Integer earliestMeasurementTime, Integer latestMeasurementTime, Integer earliestFillingTime, Integer latestFillingTime, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20018  userVariablesGet (String accessToken, String clientId, Integer parentId, Integer variableId, Integer userId, Integer defaultUnitId, BigDecimal minimumAllowedValue, BigDecimal maximumAllowedValue, BigDecimal fillingValue, Integer joinWith, Integer onsetDelay, Integer durationOfAction, Integer variableCategoryId, Integer updated, Integer _public, Boolean causeOnly, String fillingType, Integer numberOfMeasurements, Integer numberOfProcessedMeasurements, Integer measurementsAtLastAnalysis, Integer lastUnitId, Integer lastOriginalUnitId, Integer lastOriginalValue, BigDecimal lastValue, BigDecimal lastOriginalValue2, Integer lastSourceId, Integer numberOfCorrelations, String status, String errorMessage, String lastSuccessfulUpdateTime, BigDecimal standardDeviation, BigDecimal variance, BigDecimal minimumRecordedValue, BigDecimal maximumRecordedValue, BigDecimal mean, BigDecimal median, Integer mostCommonUnitId, BigDecimal mostCommonValue, BigDecimal numberOfUniqueDailyValues, Integer numberOfChanges, BigDecimal skewness, BigDecimal kurtosis, BigDecimal latitude, BigDecimal longitude, String location, String createdAt, String updatedAt, Boolean outcome, String sources, Integer earliestSourceTime, Integer latestSourceTime, Integer earliestMeasurementTime, Integer latestMeasurementTime, Integer earliestFillingTime, Integer latestFillingTime, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -260,7 +260,7 @@ public class UserVariableApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20025) ApiInvoker.deserialize(response, "", InlineResponse20025.class);
+        return (InlineResponse20018) ApiInvoker.deserialize(response, "", InlineResponse20018.class);
       }
       else {
         return null;
@@ -275,9 +275,9 @@ public class UserVariableApi {
    * Users can change things like the display name for a variable. They can also change the parameters used in analysis of that variable such as the expected duration of action for a variable to have an effect, the estimated delay before the onset of action. In order to filter out erroneous data, they are able to set the maximum and minimum reasonable daily values for a variable.
    * @param accessToken User&#39;s OAuth2 access token
    * @param body UserVariable that should be stored
-   * @return InlineResponse20026
+   * @return InlineResponse20030
    */
-  public InlineResponse20026  userVariablesPost (String accessToken, UserVariable body) throws ApiException {
+  public InlineResponse20030  userVariablesPost (String accessToken, UserVariable body) throws ApiException {
     Object postBody = body;
     
 
@@ -317,7 +317,7 @@ public class UserVariableApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20026) ApiInvoker.deserialize(response, "", InlineResponse20026.class);
+        return (InlineResponse20030) ApiInvoker.deserialize(response, "", InlineResponse20030.class);
       }
       else {
         return null;
@@ -332,9 +332,9 @@ public class UserVariableApi {
    * Get UserVariable
    * @param id id of UserVariable
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20026
+   * @return InlineResponse20030
    */
-  public InlineResponse20026  userVariablesIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20030  userVariablesIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -379,7 +379,7 @@ public class UserVariableApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20026) ApiInvoker.deserialize(response, "", InlineResponse20026.class);
+        return (InlineResponse20030) ApiInvoker.deserialize(response, "", InlineResponse20030.class);
       }
       else {
         return null;

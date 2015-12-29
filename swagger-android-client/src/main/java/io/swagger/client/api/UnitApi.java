@@ -9,9 +9,9 @@ import io.swagger.client.model.*;
 
 import java.util.*;
 
+import io.swagger.client.model.InlineResponse20026;
 import java.math.BigDecimal;
-import io.swagger.client.model.InlineResponse20019;
-import io.swagger.client.model.InlineResponse20020;
+import io.swagger.client.model.InlineResponse20027;
 import io.swagger.client.model.Unit;
 import io.swagger.client.model.InlineResponse2002;
 
@@ -50,7 +50,7 @@ public class UnitApi {
    * @param clientId The ID of the client application which last created or updated this unit
    * @param name Unit name
    * @param abbreviatedName Unit abbreviation
-   * @param unitCategoryId Unit category ID
+   * @param categoryId Unit category ID
    * @param minimumValue Minimum value permitted for this unit
    * @param maximumValue Maximum value permitted for this unit
    * @param updated updated
@@ -62,9 +62,9 @@ public class UnitApi {
    * @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0. The maximum limit is 200 records.
    * @param offset OFFSET says to skip that many rows before beginning to return rows to the client. OFFSET 0 is the same as omitting the OFFSET clause. If both OFFSET and LIMIT appear, then OFFSET rows are skipped before starting to count the LIMIT rows that are returned.
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
-   * @return InlineResponse20019
+   * @return InlineResponse20026
    */
-  public InlineResponse20019  unitsGet (String accessToken, String clientId, String name, String abbreviatedName, Integer unitCategoryId, BigDecimal minimumValue, BigDecimal maximumValue, Integer updated, Integer defaultUnitId, BigDecimal multiply, BigDecimal add, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public InlineResponse20026  unitsGet (String accessToken, String clientId, String name, String abbreviatedName, Integer categoryId, BigDecimal minimumValue, BigDecimal maximumValue, Integer updated, Integer defaultUnitId, BigDecimal multiply, BigDecimal add, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -87,7 +87,7 @@ public class UnitApi {
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "abbreviated_name", abbreviatedName));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "unit_category_id", unitCategoryId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "category_id", categoryId));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "minimum_value", minimumValue));
     
@@ -134,7 +134,7 @@ public class UnitApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20019) ApiInvoker.deserialize(response, "", InlineResponse20019.class);
+        return (InlineResponse20026) ApiInvoker.deserialize(response, "", InlineResponse20026.class);
       }
       else {
         return null;
@@ -149,9 +149,9 @@ public class UnitApi {
    * Store Unit
    * @param accessToken User&#39;s OAuth2 access token
    * @param body Unit that should be stored
-   * @return InlineResponse20020
+   * @return InlineResponse20027
    */
-  public InlineResponse20020  unitsPost (String accessToken, Unit body) throws ApiException {
+  public InlineResponse20027  unitsPost (String accessToken, Unit body) throws ApiException {
     Object postBody = body;
     
 
@@ -191,7 +191,7 @@ public class UnitApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20020) ApiInvoker.deserialize(response, "", InlineResponse20020.class);
+        return (InlineResponse20027) ApiInvoker.deserialize(response, "", InlineResponse20027.class);
       }
       else {
         return null;
@@ -206,9 +206,9 @@ public class UnitApi {
    * Get Unit
    * @param id id of Unit
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse20020
+   * @return InlineResponse20027
    */
-  public InlineResponse20020  unitsIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse20027  unitsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -253,7 +253,7 @@ public class UnitApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse20020) ApiInvoker.deserialize(response, "", InlineResponse20020.class);
+        return (InlineResponse20027) ApiInvoker.deserialize(response, "", InlineResponse20027.class);
       }
       else {
         return null;

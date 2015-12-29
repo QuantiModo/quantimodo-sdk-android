@@ -19,8 +19,8 @@ android {
 //        applicationId "com.quantimodo.android.sdk"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 104
-        versionName "2.2"
+        versionCode 230
+        versionName "2.3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
