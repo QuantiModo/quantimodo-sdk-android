@@ -1,6 +1,5 @@
 package com.quantimodo.tools.models;
 
-
 import com.quantimodo.tools.models.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -164,7 +163,7 @@ public class Measurement {
     public void delete() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }
+        }    
         myDao.delete(this);
     }
 
@@ -172,7 +171,7 @@ public class Measurement {
     public void update() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }
+        }    
         myDao.update(this);
     }
 
@@ -180,7 +179,7 @@ public class Measurement {
     public void refresh() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }
+        }    
         myDao.refresh(this);
     }
 
@@ -198,6 +197,7 @@ public class Measurement {
 
     public HistoryMeasurement toHistoryMeasurement(){
         return new HistoryMeasurement(
+                safeLongToInt(getId()),
                 getSource(),
                 getVariable().getName(),
                 getTimestamp(),
@@ -205,6 +205,12 @@ public class Measurement {
                 getUnit().getName()
         );
     }
-    // KEEP METHODS END
+    public static int safeLongToInt(long l) {
+        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException
+                    (l + " cannot be cast to int without changing its value.");
+        }
+        return (int) l;
+    }
 
 }

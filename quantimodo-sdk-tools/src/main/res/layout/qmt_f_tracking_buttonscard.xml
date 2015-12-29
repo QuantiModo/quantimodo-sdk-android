@@ -19,19 +19,19 @@
         android:textColor="@color/card_title"
         android:background="@drawable/selector" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/separator_card"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+    <!--<View-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@color/separator_card"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp" />-->
 
-    <ImageButton
-        android:id="@+id/btAddMeasurement"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_new"
-        android:scaleType="fitCenter"
-        android:padding="10dp"
-        android:background="@drawable/selector" />
+    <!--<ImageButton-->
+        <!--android:id="@+id/btAddMeasurement"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:src="@drawable/ic_new"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:padding="10dp"-->
+        <!--android:background="@drawable/selector" />-->
 </LinearLayout>

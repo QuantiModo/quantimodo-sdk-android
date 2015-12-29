@@ -45,7 +45,7 @@ public class QuantimodoApiV2Test extends AndroidTestCase{
         Measurement measurement = new Measurement(System.currentTimeMillis()/1000 - 1,1.0);
         ArrayList<Measurement> measurements = new ArrayList<>();
         measurements.add(measurement);
-        MeasurementSet measurementSet = new MeasurementSet("Overall Mood",null,"Mood","/5","MEAN","QuantiModo",measurements);
+        MeasurementSet measurementSet = new MeasurementSet("Overall Mood",null,"Emotions","/5","MEAN","QuantiModo",measurements);
         List<MeasurementSet> measurementSets = new ArrayList<>();
         measurementSets.add(measurementSet);
         SdkResponse<Integer> response = instance.putMeasurements(getContext(), token, measurementSets);

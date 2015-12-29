@@ -1,9 +1,11 @@
 package com.quantimodo.tools.activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.webkit.*;
@@ -13,13 +15,17 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
+import com.quantimodo.android.sdk.QuantimodoApiV2;
+import com.quantimodo.android.sdk.model.QuantimodoUser;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.UserPreferences;
 import com.quantimodo.tools.sdk.AuthHelper;
 
 import javax.inject.Inject;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Activity for auth, used in pair with {@link AuthHelper AuthHelper},
@@ -34,6 +40,9 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
     @Inject
     ToolsPrefs mPrefs;
+
+    @Inject
+    QuantimodoApiV2 quantimodoApiV2;
 
     private String mNonce;
 
@@ -92,7 +101,7 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
         Uri uri = Uri.parse(mPrefs.getApiUrl());
         CookieManager.getInstance().setAcceptCookie(true);
         CookieManager.getInstance().setCookie(mPrefs.getApiUrl(), "wordpress_test_cookie=WP+Cookie+check; domain=" + uri.getHost());
-        webView.loadUrl(mPrefs.getApiUrl() + "wp-login.php");
+        webView.loadUrl(mPrefs.getApiUrl() + "api/oauth2/authorize");
     }
 
     private void initOAuthWebView() {
@@ -105,12 +114,14 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
 
             @Override
             public void onError(String error, String errorDescription) {
-
+                Log.d("QMWebAuthActivity", "Error: " + error + ", description: " + errorDescription);
             }
         }, mPrefs));
 
-        webView.loadUrl(mPrefs.getApiUrl() + "api/oauth2/authorize?client_id=" + authHelper.getClientId()
-                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&state=" + mNonce);
+        final String url = mPrefs.getApiUrl() + "api/oauth2/authorize?client_id=" + authHelper.getClientId()
+                + "&response_type=code&scope=" + mPrefs.getApiScopes() + "&state=" + mNonce;
+        Log.d("QMWebAuthActivity", "Loading: " + url);
+        webView.loadUrl(url);
     }
 
     private void handleAuthorizationSuccess(String authorizationCode, String nonce) {
@@ -140,7 +151,8 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
                         int expiresIn = result.get("expires_in").getAsInt();
 
                         authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken,refreshToken, System.currentTimeMillis()/1000 + expiresIn));
-
+                        getUserData();
+                        setResult(RESULT_OK);
                         finish();
                     } catch (NullPointerException ignored) {
                         Log.i(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()
@@ -200,6 +212,11 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
         }
     }
 
+    private void getUserData(){
+        QuantimodoUser user = quantimodoApiV2.getUser(this, authHelper.getAuthToken()).getData();
+        UserPreferences.setFullUserdata(this, user);
+    }
+
     private static class OAuthClient extends WebViewClient {
         private final OnReceivedAuthorizeResponse listener;
         private final ToolsPrefs mPrefs;
@@ -217,25 +234,19 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (!url.startsWith(mPrefs.getApiUrl())) {
-                int startCode = url.indexOf("code=") + 5;
-                int endCode = url.indexOf("&state=");
+                Uri uri = Uri.parse(url);
 
-                if (startCode == 4)  // -1 + 5
-                {
-                    // Code and state not found, so we got an error
-                    int startError = url.indexOf("error=") + 6;
-                    int endError = url.indexOf("error_description=");
+                Set<String> params = uri.getQueryParameterNames();
 
-                    String error = url.substring(startError, endError);
-                    String errorDescription = url.substring(endError + 6, url.length());
-                    listener.onError(error, errorDescription);
-                } else {
-                    String code = url.substring(startCode, endCode);
-                    String state = url.substring(endCode + 7, url.length());
+                if (params.contains("code")){
+                    String code = uri.getQueryParameter("code");
+                    String state = uri.getQueryParameter("state");
                     listener.onSuccess(code, state);
+                } else {
+                    String error = uri.getQueryParameter("error");
+                    String errorDescription = uri.getQueryParameter("error_description");
+                    listener.onError(error, errorDescription);
                 }
-
-                return true;
             } else {
                 view.loadUrl(url);
             }

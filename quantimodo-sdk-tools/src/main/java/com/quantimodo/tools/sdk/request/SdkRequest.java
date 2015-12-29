@@ -1,6 +1,8 @@
 package com.quantimodo.tools.sdk.request;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import com.octo.android.robospice.request.CachedSpiceRequest;
 import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.retry.DefaultRetryPolicy;
@@ -8,6 +10,7 @@ import com.quantimodo.android.sdk.QuantimodoApiV2;
 import com.quantimodo.android.sdk.SdkResponse;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.SdkException;
+import com.quantimodo.tools.utils.QtoolsUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,5 +69,9 @@ public abstract class SdkRequest<T> extends SpiceRequest<T>{
 
     public String getToken() throws NoNetworkConnection {
         return mAuthHelper.getAuthTokenWithRefresh();
+    }
+
+    public boolean isNetworkAvailable() {
+        return QtoolsUtils.hasInternetConnection(getCtx());
     }
 }

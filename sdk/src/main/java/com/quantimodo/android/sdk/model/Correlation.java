@@ -1,5 +1,7 @@
 package com.quantimodo.android.sdk.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -9,6 +11,9 @@ public class Correlation implements Serializable {
     double correlationCoefficient;
     String causeCategory;
     String cause;
+    String causeName;    //same as cause, is used for the new model
+    String causeUnit;
+    int causeUnitId;
     String originalCause;
     String effectCategory;
     String effect;
@@ -19,6 +24,9 @@ public class Correlation implements Serializable {
     int numberOfPairs;
     long timestamp;
     Double userVote;
+    String predictorExplanation;
+    String valuePredictingHighOutcomeExplanation;
+    String valuePredictingLowOutcomeExplanation;
 
     public double getCorrelationCoefficient() {
         return correlationCoefficient;
@@ -29,11 +37,21 @@ public class Correlation implements Serializable {
     }
 
     public String getCause() {
+        if(TextUtils.isEmpty(cause))
+            return causeName;
         return cause;
     }
 
     public String getOriginalCause() {
         return originalCause;
+    }
+
+    public String getCauseUnit() {
+        return causeUnit;
+    }
+
+    public int getCauseUnitId() {
+        return causeUnitId;
     }
 
     public String getEffectCategory() {
@@ -77,6 +95,18 @@ public class Correlation implements Serializable {
         this.userVote = userVote;
     }
 
+    public String getPredictorExplanation() {
+        return predictorExplanation;
+    }
+
+    public String getValuePredictingHighOutcomeExplanation() {
+        return valuePredictingHighOutcomeExplanation;
+    }
+
+    public String getValuePredictingLowOutcomeExplanation() {
+        return valuePredictingLowOutcomeExplanation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,6 +122,7 @@ public class Correlation implements Serializable {
         if (causeCategory != null ? !causeCategory.equals(that.causeCategory) : that.causeCategory != null)
             return false;
         if (!cause.equals(that.cause)) return false;
+        if(!causeName.equals(that.causeName)) return false;
         if (originalCause != null ? !originalCause.equals(that.originalCause) : that.originalCause != null)
             return false;
         if (effectCategory != null ? !effectCategory.equals(that.effectCategory) : that.effectCategory != null)
@@ -111,6 +142,7 @@ public class Correlation implements Serializable {
         result = (int) (temp ^ (temp >>> 32));
         result = 31 * result + (causeCategory != null ? causeCategory.hashCode() : 0);
         result = 31 * result + cause.hashCode();
+        result = 31 * result + causeName.hashCode();
         result = 31 * result + (originalCause != null ? originalCause.hashCode() : 0);
         result = 31 * result + (effectCategory != null ? effectCategory.hashCode() : 0);
         result = 31 * result + effect.hashCode();

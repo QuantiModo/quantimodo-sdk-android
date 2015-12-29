@@ -19,6 +19,8 @@ package com.quantimodo.android.sdk.model;
 }
 */
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 import com.quantimodo.android.sdk.SdkDefs;
 
@@ -131,9 +133,9 @@ public class Variable {
     public String getTargetUnit(){
         if (lastUnit != null && !lastUnit.isEmpty()){
             return lastUnit;
-        } else {
-            return mostCommonUnit;
         }
+        else if(!TextUtils.isEmpty(unit)) return unit;
+        else return mostCommonUnit;
     }
 
     public Double getDefaultValue(){

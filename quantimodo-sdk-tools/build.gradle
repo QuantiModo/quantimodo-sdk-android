@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.1'
+        classpath 'com.android.tools.build:gradle:1.2.3'
 
         // the latest version of the android-apt plugin, to process anotations
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
@@ -13,6 +13,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
@@ -23,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 230
+        versionName "2.3.0"
         testInstrumentationRunner "com.quantimodo.sdk.testing.utils.TestRunner"
         testHandleProfiling true
         testFunctionalTest true
@@ -66,6 +67,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
     }
 }
 
@@ -75,6 +77,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
 
     compile project(':sdk')
+    compile project(':swagger')
 
     //RoboSpice  https://github.com/stephanenicolas/robospice
     compile 'com.octo.android.robospice:robospice:1.4.14'
@@ -97,6 +100,10 @@ dependencies {
 
     androidTestCompile project(":testing-utils")
 
+    compile 'com.google.android.gms:play-services-identity:8.1.0'
+    compile 'com.google.android.gms:play-services-basement:8.1.0'
+    compile 'com.google.android.gms:play-services-base:8.1.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
 }
 
 android.libraryVariants.all { variant ->
@@ -125,3 +132,5 @@ task testReport(type: TestReport, group: 'Verification',
     reportOn subprojects*.integrationTest
 }
 check.dependsOn testReport
+
+apply from: '../maven.gradle'

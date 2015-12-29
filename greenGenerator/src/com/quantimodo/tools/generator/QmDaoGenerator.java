@@ -7,7 +7,7 @@ import java.io.File;
 public class QmDaoGenerator {
 
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1000, "com.quantimodo.tools.models");
+        Schema schema = new Schema(1002, "com.quantimodo.tools.models");
         schema.enableKeepSectionsByDefault();
         schema.enableActiveEntitiesByDefault();
 
@@ -39,6 +39,7 @@ public class QmDaoGenerator {
         variable.addShortProperty("combOperation").notNull();
         variable.addDateProperty("updated");
         variable.addDateProperty("latestMeasurementTime");
+        variable.addLongProperty("lastMeasurementSync");
 
         return variable;
     }
@@ -50,10 +51,8 @@ public class QmDaoGenerator {
         unit.addDoubleProperty("min");
         unit.addDoubleProperty("max");
 
-        Property property = unit.addLongProperty("categoryId").getProperty();
-
-        unit.addToOne(category,property);
-
+        unit.addStringProperty("category");
+        unit.addStringProperty("abbr");
         return unit;
     }
 

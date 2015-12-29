@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.util.Log;
 import com.google.gson.*;
@@ -26,13 +27,15 @@ import java.lang.reflect.Type;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.quantimodo.android.sdk.SdkDefs.QUANTIMODO_ADDRESS;
 
-/*
+/**
    API class to interact with QuantiModo web-service
    All method are synchronous
  */
@@ -93,8 +96,9 @@ public class QuantimodoApiV2 {
     }
 
     private <T> void executeRequest(Context context, SdkResponse<T> sdkResponse,TypeToken<T> type,FutureBuilder requestBuilder){
+        Response<String> stringResponse = null;
         try {
-            Response<String> stringResponse = requestBuilder.asString().withResponse().get();
+            stringResponse = requestBuilder.asString().withResponse().get();
             sdkResponse.setHeaders(stringResponse.getHeaders().toMultimap());
             sdkResponse.setHttpCode(stringResponse.getHeaders().getResponseCode());
             if (sdkResponse.getHttpCode() <= 300){
@@ -111,26 +115,63 @@ public class QuantimodoApiV2 {
             }
             sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
             sdkResponse.setCause(e);
+
+            if (stringResponse != null){
+                sdkResponse.setStringBody(stringResponse.getResult());
+            }
         }
     }
 
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
+        return getMeasurementHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
+    }
+
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurementHistory(Context context, String token, Date startTime, Date endTime,
+                                                                           String variableName, String source, String toUnitName,Integer limit, Integer offset) {
+        return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName, limit, offset);
+    }
+
+    /**
+     * Get measurements in specified range
+     * @param context Context
+     * @param token OAuth Token
+     * @param startTime timestamp from ( instead of 0 use 1 )
+     * @param endTime timestamp  to
+     * @param variableName variable name
+     * @param source source name, which is name of application that submitted measurement
+     * @param toUnitName convert to unit
+     * @return SdkReponse with ArrayList of HistoryMeasurement
+     */
     public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime, String variableName, String source, String toUnitName){
         return getMeasurmentHistory(context, token, startTime, endTime, variableName, source, toUnitName,null,null);
     }
 
-    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date startTime, Date endTime,
+    /**
+     * Get measurements in specified range
+     * @param context Context
+     * @param token OAuth Token
+     * @param startTime timestamp from ( instead of 0 use 1 )
+     * @param endTime timestamp  to
+     * @param variableName variable name
+     * @param source source name, which is name of application that submitted measurement
+     * @param toUnitName convert to unit
+     * @param limit limit request by number of measurements
+     * @param offset used with limit, for paging results
+     * @return SdkReponse with ArrayList of HistoryMeasurement
+     */
+    public SdkResponse<ArrayList<HistoryMeasurement>> getMeasurmentHistory(Context context, String token, Date createdAt, Date updatedAt,
                                                                            String variableName, String source, String toUnitName,Integer limit, Integer offset) {
         setupIon(context);
 
         SdkResponse<ArrayList<HistoryMeasurement>> sdkResponse = new SdkResponse<>();
 
         Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/measurements").buildUpon();
-        if (startTime != null) {
-            uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
-        }
-        if (endTime != null) {
-            uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
-        }
+//        if (startTime != null) {
+//            uriBuilder.appendQueryParameter("startTime", "" + startTime.getTime() / 1000);
+//        }
+//        if (endTime != null) {
+//            uriBuilder.appendQueryParameter("endTime", "" + endTime.getTime() / 1000);
+//        }
         if (variableName != null) {
             uriBuilder.appendQueryParameter("variableName", variableName);
         }
@@ -146,6 +187,12 @@ public class QuantimodoApiV2 {
         if (offset != null){
             uriBuilder.appendQueryParameter("offset",offset.toString());
         }
+        if(createdAt != null){
+            uriBuilder.appendQueryParameter("createdAt", "(lt)" + formatDate(createdAt));
+        }
+        if(updatedAt != null){
+            uriBuilder.appendQueryParameter("updatedAt", "(gt)" + formatDate(updatedAt));
+        }
 
         FutureBuilder futureBuilder = Ion.with(context)
                 .load(uriBuilder.build().toString())
@@ -158,14 +205,30 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    @NonNull
+    private String formatDate(@NonNull final Date date){
+        SimpleDateFormat formatter;
+
+        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        return formatter.format(date);
+    }
+
+    /**
+     * Send measurements
+     * @param context Context
+     * @param token OAuth token
+     * @param measurementSets List of MeasurementSets
+     * @return Sdk response, contains integer value, which equals "1" for successful request
+     */
     public SdkResponse<Integer> putMeasurements(Context context, String token, List<MeasurementSet> measurementSets) {
         setupIon(context);
 
         SdkResponse<Integer> sdkResponse = new SdkResponse<>();
+        Response<String> response = null;
 
         try {
             Log.i("QMSDK", "Sending " + measurementSets.size() + " measurement sets");
-            Response<String> response = Ion.with(context)
+            response = Ion.with(context)
                     .load(mBaseUrl + "api/measurements/v2")
                     .setHeader("Authorization", "Bearer " + token)
                     .setJsonPojoBody(measurementSets)
@@ -191,11 +254,26 @@ public class QuantimodoApiV2 {
             }
             sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
             sdkResponse.setCause(e);
+
+            if(response != null) {
+                sdkResponse.setStringBody(response.getResult());
+            }
         }
 
         return sdkResponse;
     }
 
+    /**
+     * Search for variables
+     * @param context Context
+     * @param token OAuth token
+     * @param search Search string
+     * @param limit size of response
+     * @param offset offset of response
+     * @param source source name, which is name of application that submitted measurement
+     * @param category variable category
+     * @return SdkResponse with ArrayList of Variable
+     */
     public SdkResponse<ArrayList<Variable>> searchVariables(Context context, String token, String search, int limit, int offset, String source, String category) {
         setupIon(context);
 
@@ -236,7 +314,55 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Search for variables on the public domain
+     * @param context Context
+     * @param token OAuth token
+     * @param search Search string
+     * @param limit size of response
+     * @param offset offset of response
+     * @return SdkResponse with ArrayList of Variable
+     */
+    public SdkResponse<ArrayList<Variable>> searchPublicVariables(
+            Context context, String token, String search, int limit, int offset, String categoryName) {
+        setupIon(context);
 
+        if (search == null) {
+            throw new IllegalArgumentException("\"search\" cannot be null");
+        }
+
+        SdkResponse<ArrayList<Variable>> sdkResponse = new SdkResponse<>();
+
+        try {
+            search = URLEncoder.encode(search, "utf-8");
+            search = "*" + search + "*";
+
+            Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/public/variables/search/" + search).buildUpon();
+            uriBuilder.appendQueryParameter("limit", "" + limit);
+            uriBuilder.appendQueryParameter("offset", "" + offset);
+            uriBuilder.appendQueryParameter("categoryName", categoryName);
+
+            FutureBuilder futureBuilder = Ion.with(context)
+                    .load(uriBuilder.build().toString())
+                    .setHeader("Authorization", "Bearer " + token);
+
+            executeRequest(context, sdkResponse, new TypeToken<ArrayList<Variable>>() {
+            }, futureBuilder);
+        } catch (UnsupportedEncodingException e) {
+            Log.d(TAG, e.getMessage());
+            sdkResponse.setErrorCode(SdkResponse.ERROR_UNKNOWN);
+            sdkResponse.setCause(e);
+        }
+
+        return sdkResponse;
+    }
+
+    /**
+     * Get unit definitions
+     * @param context Context
+     * @param token OAuth token
+     * @return SdkResponse with ArrayList of Unit
+     */
     public SdkResponse<ArrayList<Unit>> getUnits(Context context, String token) {
         setupIon(context);
 
@@ -252,6 +378,14 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Search for correlation by cause or effect
+     * @param context Context
+     * @param token OAuth Token
+     * @param variableName variable name, which would be used as cause or effect
+     * @param causeOrEffect cause or effect
+     * @return SdkResponse with Array of Correlations
+     */
     public SdkResponse<ArrayList<Correlation>> searchCorrelations(Context context, String token,String variableName,@CauseOrEffect String causeOrEffect){
         setupIon(context);
 
@@ -275,6 +409,30 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Get variable categories
+     * @param context Context
+     * @param token OAuth token
+     * @return SdkResponse with ArrayList of VariableCategory
+     */
+    public SdkResponse<ArrayList<Correlation>> searchCustomCorrelations(Context context, String token){
+        setupIon(context);
+
+        SdkResponse<ArrayList<Correlation>> sdkResponse = new SdkResponse<>();
+
+        Uri.Builder uriBuilder = Uri.parse(mBaseUrl + "api/v1/correlations").buildUpon();
+        uriBuilder.appendQueryParameter("effect", "Overall Mood");
+
+        FutureBuilder futureBuilder =  Ion.with(context)
+                .load(uriBuilder.build().toString().replace("\\+", "%20"))
+                .setHeader("Authorization", "Bearer " + token);
+
+        executeRequest(context, sdkResponse, new TypeToken<ArrayList<Correlation>>() {
+        }, futureBuilder);
+
+        return sdkResponse;
+    }
+
     public SdkResponse<ArrayList<VariableCategory>> getCategories(Context context, String token) {
         setupIon(context);
 
@@ -289,6 +447,12 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Get variables
+     * @param context Context
+     * @param token OAuth Token
+     * @return SdkResponse with
+     */
     public SdkResponse<ArrayList<Variable>> getVariables(Context context, String token) {
         setupIon(context);
 
@@ -331,6 +495,13 @@ public class QuantimodoApiV2 {
         return sdkResponse;
     }
 
+    /**
+     * Submit a vote for correlation
+     * @param context Context
+     * @param token OAuthToken
+     * @param correlationPost Entity with data about correlation
+     * @return Response without data
+     */
     public SdkResponse<Void> voteCorrelation(Context context,String token,CorrelationPost correlationPost){
         setupIon(context);
 
@@ -341,6 +512,27 @@ public class QuantimodoApiV2 {
                 .setJsonPojoBody(correlationPost);
 
         executeRequest(context,sdkResponse,new TypeToken<Void>(){},futureBuilder);
+
+        return sdkResponse;
+    }
+
+    /**
+     * calls /measurements/request_csv service which schedule a CSV export
+     * containing all user measurements to be emailed to the user within 24 hours.
+     * @param context the current app context
+     * @param token a valid token
+     * @return the id of the task request on the server
+     */
+    public SdkResponse<Integer> requestCSV(Context context,String token){
+        setupIon(context);
+
+        SdkResponse<Integer> sdkResponse = new SdkResponse<>();
+        FutureBuilder futureBuilder = Ion.with(context)
+                .load(mBaseUrl + "api/v2/measurements/request_csv")
+                .setHeader("Authorization", "Bearer " + token)
+                .setBodyParameter("goop", "noop");
+
+        executeRequest(context,sdkResponse, new TypeToken<Integer>(){},futureBuilder);
 
         return sdkResponse;
     }

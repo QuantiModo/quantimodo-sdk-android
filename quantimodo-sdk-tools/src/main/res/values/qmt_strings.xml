@@ -6,7 +6,10 @@
     <string name="sdk_unknown_error">Unknown error</string>
     <string name="oauth_refresh_failed">You need to log in again</string>
 
+    <string name="network_connection_error_message">Poor network connectivity. Please try again later.</string>
+
     <string name="tracking_measurement">Measurement</string>
+    <string name="tracking_measurement_time">Measurement Time</string>
     <string name="tracking_value">Value</string>
     <string name="tracking_date">Date (today)</string>
     <string name="tracking_time">Time (now)</string>
@@ -23,13 +26,15 @@
     <string name="action_settings">Settings</string>
     <string name="header_factors_positive"><![CDATA[Most likely to <b>IMPROVE</b> %s]]></string>
     <string name="header_factors_negative"><![CDATA[Most likely to <b>DEPRESS</b> %s]]></string>
+    <string name="header_factors_common">Top Predictors of Mood</string>
+    <string name="header_factors_yours">Your Top Predictors of Mood</string>
     <string name="toast_requesting">Requesting</string>
     <string name="tracking_fragment_wait_data_load">Wait till data loaded</string>
-    <string name="menu_item_positive_factors">Positive factors</string>
-    <string name="menu_item_negative_factors">Negative factors</string>
-    <string name="tab_positive_factors">Positive Factors</string>
-    <string name="tab_negative_factors">Negative factors</string>
-    <string name="correlation_dialog_title">Vote for factor</string>
+    <string name="menu_item_positive_factors">Positive predictors</string>
+    <string name="menu_item_negative_factors">Negative predictors</string>
+    <string name="tab_positive_factors">Positive predictors</string>
+    <string name="tab_negative_factors">Negative predictors</string>
+    <string name="correlation_dialog_title">Vote for predictor</string>
     <string name="correlation_dialog_negative_down" formatted="false">Voting thumbs down indicates that you disagree that %s decreases
         your %s.
     </string>
@@ -51,7 +56,10 @@
     <string name="qmt_dialog_sync_positive_button">Stop</string>
 
     <string name="tracking_item_no_category">What do you want to track?</string>
-    
+
+    <string name="tracking_item_emotions_title">Emotions</string>
+    <string name="tracking_item_emotions_question">What emotion do you want to track?</string>
+
     <string name="tracking_item_diet_title">Diet</string>
     <string name="tracking_item_diet_question">What did you eat?</string>
 
@@ -64,11 +72,44 @@
     <string name="tracking_item_mood_title">Mood</string>
     <string name="tracking_item_mood_question">Enter a mood</string>
 
-    <string name="tracking_fragment_no_category_title">Track data</string>
+    <string name="tracking_fragment_no_category_title">Track Anything</string>
+    <string name="tracking_fragment_emotions_title">Track emotions</string>
     <string name="tracking_fragment_diet_title">Track diet</string>
     <string name="tracking_fragment_treatments_title">Track treatments</string>
     <string name="tracking_fragment_symptoms_title">Track symptoms</string>
     <string name="tracking_fragment_mood_title">Track mood</string>
 
+    <string name="login_facebook_app_id">225078261031461</string>
 
+    <string name="signin_google_button">Sign in with Google</string>
+    <string name="signin_facebook_button">Sign in with Facebook</string>
+    <string name="signin_moodimodo_button">Sign in with %s</string>
+    <string name="signin_button">Sign in</string>
+    <string name="signin_error">An error occurred while signing in</string>
+    <string name="signin_success">Welcome!</string>
+    <string name="signing_error_google_play">Please install or update Google Play Services or create a ticket at http://help.quantimo.do</string>
+
+    <!--  Walkthrough  -->
+    <string name="walkthrough_content_1">Import your data from other apps and devices with the Import Data page. I\'d recommend starting by adding your zip code in the Weather connector. </string>
+    <string name="walkthrough_content_2">Track treatments, diet, symptoms, emotions and anything else with the various tracking pages.</string>
+    <string name="walkthrough_content_3">Change past measurements or add notes in the History page.</string>
+    <string name="walkthrough_content_4">Once you\'ve accumulated enough data for analysis, you can see the top predictors or your mood and optimal values on the Your Predictors page.</string>
+    <string name="walkthrough_content_5">See the top predictors of everyone\'s mood on the Common Predictors page.</string>
+    <string name="walkthrough_content_6">Help improve our algorithms by down voting the predictors that incorrect or merely coincidental.</string>
+    <string name="walkthrough_content_7">Change notification frequency on the settings page.</string>
+    <string name="walkthrough_skip">Skip Tour</string>
+    <string name="walkthrough_finish">Finish Tour</string>
+
+
+    <!-- Reminders intervals -->
+    <string name="interval_never">Never</string>
+    <string name="interval_hourly">Hourly</string>
+    <string name="interval_everythreehours">Every three hours</string>
+    <string name="interval_twicedaily">Twice daily</string>
+    <string name="interval_daily">Daily</string>
+
+    <string name="reminders_notif_button_track">Track it</string>
+    <string name="reminders_notif_button_snooze">Snooze</string>
+    <string name="reminders_notif_button_edit">Edit</string>
+    <string name="reminders_notif_subtitle">Tap to track it!</string>
 </resources>

@@ -15,15 +15,20 @@ public abstract class QFragment extends Fragment {
     protected SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mSpiceManager.start(activity);
+    public void onResume() {
+        super.onResume();
+        mSpiceManager.start(getActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSpiceManager.shouldStop();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mSpiceManager.shouldStop();
     }
 
     protected SpiceManager getSpiceManager(){

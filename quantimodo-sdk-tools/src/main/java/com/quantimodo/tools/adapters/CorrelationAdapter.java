@@ -2,6 +2,8 @@ package com.quantimodo.tools.adapters;
 
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,7 +17,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 /**
  * Adapter class for positive/negative factor/correlations
@@ -27,12 +28,17 @@ import java.util.HashMap;
  */
 public class CorrelationAdapter extends BaseAdapter {
 
-    @IntDef({POSITIVE, NEGATIVE})
+    @IntDef({TYPE_POSITIVE, TYPE_NEGATIVE, TYPE_ANY})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CorrelationType {
     }
 
-    @IntDef({BUTTON_SHOP, BUTTON_THUMBS_UP, BUTTON_THUMBS_DOWN})
+    @IntDef({PREDICTOR_COMMON, PREDICTOR_PRIVATE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface PredictorType{
+    }
+
+    @IntDef({BUTTON_SHOP, BUTTON_THUMBS_UP, BUTTON_THUMBS_DOWN, BUTTON_ADD})
     @Retention(RetentionPolicy.SOURCE)
     public @interface CorrelationButton {
     }
@@ -45,6 +51,7 @@ public class CorrelationAdapter extends BaseAdapter {
     public static final int BUTTON_SHOP = 0;
     public static final int BUTTON_THUMBS_UP = 1;
     public static final int BUTTON_THUMBS_DOWN = 2;
+    public static final int BUTTON_ADD = 3;
 
     /**
      * Should be implemented by target activity/fragment
@@ -60,8 +67,12 @@ public class CorrelationAdapter extends BaseAdapter {
         void onClick(View view, @CorrelationButton int buttonType, int position, Correlation item);
     }
 
-    public static final int POSITIVE = 0;
-    public static final int NEGATIVE = 1;
+    public static final int TYPE_POSITIVE = 0;
+    public static final int TYPE_NEGATIVE = 1;
+    public static final int TYPE_ANY = 2;
+
+    public static final int PREDICTOR_COMMON = 3;
+    public static final int PREDICTOR_PRIVATE = 4;
 
     public static final int STATE_UP = 1 << 0;
     public static final int STATE_DOWN = 1 << 1;
@@ -69,13 +80,13 @@ public class CorrelationAdapter extends BaseAdapter {
     private static final int DIFF = Integer.MAX_VALUE / 2;
 
     private Context mCtx;
-    private ArrayList<Correlation> mAllItems;
+    private ArrayList<Correlation> mAllItems = new ArrayList<>();
     private ArrayList<Correlation> mPositiveItems = new ArrayList<>();
     private ArrayList<Correlation> mNegativeItems = new ArrayList<>();
     private ArrayList<Correlation> mCurrentItems;
 
     private CorrelationButtonOnClick mButtonListener;
-    private int mType = POSITIVE;
+    private int mType = TYPE_POSITIVE;
 
     private boolean mShowShoppingCart;
 
@@ -111,45 +122,54 @@ public class CorrelationAdapter extends BaseAdapter {
     }
 
     public CorrelationAdapter(Context ctx, ArrayList<Correlation> correlations) {
-        this(ctx, correlations, POSITIVE);
+        this(ctx, correlations, TYPE_POSITIVE);
     }
 
     public CorrelationAdapter(Context ctx, ArrayList<Correlation> correlations, @CorrelationType int type) {
         mCtx = ctx;
         mShowShoppingCart = ctx.getResources().getBoolean(R.bool.show_shopping_card);
         //Sort correlations by correlation coefficient
-        ArrayList<Correlation> allItems = new ArrayList<>(correlations);
-        Collections.sort(allItems, new Comparator<Correlation>() {
-            @Override
-            public int compare(Correlation lhs, Correlation rhs) {
-                if (lhs.getWeight() > rhs.getWeight()) {
-                    return 1;
-                } else if (lhs.getWeight() < rhs.getWeight()) {
-                    return -1;
-                }
-                return 0;
-            }
-        });
+//        ArrayList<Correlation> allItems = new ArrayList<>(correlations);
+//        Collections.sort(allItems, new Comparator<Correlation>() {
+//            @Override
+//            public int compare(Correlation lhs, Correlation rhs) {
+//                if (lhs.getWeight() > rhs.getWeight()) {
+//                    return 1;
+//                } else if (lhs.getWeight() < rhs.getWeight()) {
+//                    return -1;
+//                }
+//                return 0;
+//            }
+//        });
 
+        mAllItems = correlations;
         //Split into positive and negative correlations
-        for (Correlation c : allItems) {
-            if (c.getCorrelationCoefficient() > 0) {
-                mPositiveItems.add(c);
-            } else if (c.getCorrelationCoefficient() < 0) {
-                mNegativeItems.add(c);
-            }
-        }
-        mAllItems = allItems;
-        Collections.reverse(mPositiveItems);
+//        for (Correlation c : allItems) {
+//            mAllItems.add(c);
+//            if (c.getCorrelationCoefficient() > 0) {
+//                mPositiveItems.add(c);
+//            } else if (c.getCorrelationCoefficient() < 0) {
+//                mNegativeItems.add(c);
+//            }
+//        }
+//        mAllItems = allItems;
+//        Collections.reverse(mPositiveItems);
         switchItems(type);
     }
 
     private void switchItems(@CorrelationType int type) {
-        if (type == POSITIVE) {
-            mCurrentItems = mPositiveItems;
-        } else {
-            mCurrentItems = mNegativeItems;
-        }
+        Log.d("CorrelationAdapter", "switchItems: " + type);
+        mCurrentItems = mAllItems;
+//        switch (type){
+//            case TYPE_POSITIVE:
+//                mCurrentItems = mPositiveItems;
+//                return;
+//            case TYPE_NEGATIVE:
+//                mCurrentItems = mNegativeItems;
+//                return;
+//            case TYPE_ANY:
+//                mCurrentItems = mAllItems;
+//        }
     }
 
 
@@ -193,7 +213,7 @@ public class CorrelationAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return mType == POSITIVE ? position : position + DIFF;
+        return mType == TYPE_POSITIVE ? position : position + DIFF;
     }
 
     @Override
@@ -210,6 +230,8 @@ public class CorrelationAdapter extends BaseAdapter {
             vh.imShoppingCart.setOnClickListener(onShoppingCartClick);
             vh.imThumbUp.setOnClickListener(onThumbUpClick);
             vh.imThumbDown.setOnClickListener(onThumbDownClick);
+//            vh.imAdd.setOnClickListener(onAddClick);
+
             convertView.setTag(vh);
         } else {
             vh = (CorrelationViewHolder) convertView.getTag();
@@ -218,6 +240,25 @@ public class CorrelationAdapter extends BaseAdapter {
         Correlation correlation = mCurrentItems.get(position);
         vh.mItemPosition = position;
         vh.tvCorrelationTitle.setText(correlation.getCause());
+        if(TextUtils.isEmpty(correlation.getPredictorExplanation()))
+            vh.tvCorrelationDesc.setVisibility(View.GONE);
+        else {
+            vh.tvCorrelationDesc.setVisibility(View.VISIBLE);
+            vh.tvCorrelationDesc.setText(correlation.getPredictorExplanation());
+        }
+        if(TextUtils.isEmpty(correlation.getValuePredictingHighOutcomeExplanation()))
+            vh.tvCorrelationHigh.setVisibility(View.GONE);
+        else {
+            vh.tvCorrelationHigh.setVisibility(View.VISIBLE);
+            vh.tvCorrelationHigh.setText(correlation.getValuePredictingHighOutcomeExplanation());
+        }
+        if(TextUtils.isEmpty(correlation.getValuePredictingLowOutcomeExplanation()))
+            vh.tvCorrelationLow.setVisibility(View.GONE);
+        else {
+            vh.tvCorrelationLow.setVisibility(View.VISIBLE);
+            vh.tvCorrelationLow.setText(correlation.getValuePredictingLowOutcomeExplanation());
+        }
+
 
         Double value = correlation.getUserVote();
 
@@ -245,7 +286,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private View.OnClickListener onShoppingCartClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent().getParent()).getTag();
             notifyButtonListener(v, BUTTON_SHOP, vh.mItemPosition, mCurrentItems.get(vh.mItemPosition));
         }
     };
@@ -253,7 +294,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private View.OnClickListener onThumbUpClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent().getParent()).getTag();
             Correlation correlation = mCurrentItems.get(vh.mItemPosition);
             if (!checkFlag(correlation.getUserVote(), STATE_UP)) {
                 notifyButtonListener(v, BUTTON_THUMBS_UP, vh.mItemPosition, correlation);
@@ -264,7 +305,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private View.OnClickListener onThumbDownClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent().getParent()).getTag();
             Correlation correlation = mCurrentItems.get(vh.mItemPosition);
             if (!checkFlag(correlation.getUserVote(), STATE_DOWN)) {
                 notifyButtonListener(v, BUTTON_THUMBS_DOWN, vh.mItemPosition, correlation);
@@ -272,20 +313,39 @@ public class CorrelationAdapter extends BaseAdapter {
         }
     };
 
+//    private View.OnClickListener onAddClick = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+//            Correlation correlation = mCurrentItems.get(vh.mItemPosition);
+//            notifyButtonListener(v, BUTTON_ADD, vh.mItemPosition, correlation);
+//
+//        }
+//    };
+
 
     static class CorrelationViewHolder {
         TextView tvCorrelationTitle;
+        TextView tvCorrelationDesc;
+        TextView tvCorrelationHigh;
+        TextView tvCorrelationLow;
+
         ImageView imThumbUp;
         ImageView imThumbDown;
         ImageView imShoppingCart;
+//        ImageView imAdd;
 
         int mItemPosition;
 
         CorrelationViewHolder(View view) {
             tvCorrelationTitle = (TextView) view.findViewById(R.id.tvCorrelationTitle);
+            tvCorrelationDesc = (TextView) view.findViewById(R.id.tvCorrelationDesc);
+            tvCorrelationHigh = (TextView) view.findViewById(R.id.tvCorrelationHigh);
+            tvCorrelationLow = (TextView) view.findViewById(R.id.tvCorrelationLow);
             imThumbUp = (ImageView) view.findViewById(R.id.imThumbUp);
             imThumbDown = (ImageView) view.findViewById(R.id.imThumbDown);
             imShoppingCart = (ImageView) view.findViewById(R.id.imShoppingCart);
+//            imAdd = (ImageView) view.findViewById(R.id.imAdd);
         }
     }
 }
