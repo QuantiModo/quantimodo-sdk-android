@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 import com.quantimodo.tools.receivers.QToolsBootReceiver;
@@ -45,7 +45,8 @@ public class CustomRemindersHelper {
 
     public static final long INTERVAL_THREE_HOURS = 3 * AlarmManager.INTERVAL_HOUR;
 
-    public enum FrecuencyType{
+    public enum FrequencyType {
+        NEVER,
         HOURLY,
         EVERY_THREE_HOURS,
         TWICE_A_DAY,
@@ -54,7 +55,7 @@ public class CustomRemindersHelper {
     }
 
     private static final CustomRemindersHelper INSTANCE = new CustomRemindersHelper();
-    private Activity registeredActivity;
+    private Class registeredActivity;
 
     private CustomRemindersHelper(){
 
@@ -70,15 +71,15 @@ public class CustomRemindersHelper {
      * {@link com.quantimodo.tools.fragments.TrackingFragment} loading the data
      * @param activity the Activity to register
      */
-    public void registerActivity(Activity activity){
+    public void registerActivity(Class activity){
         this.registeredActivity = activity;
     }
 
-    public Activity getRegisteredActivity(){
+    public Class getRegisteredActivity(){
         return registeredActivity;
     }
 
-    public static void setAlarm(Context context, String reminderId,  FrecuencyType frecuencyType) {
+    public static void setAlarm(Context context, String reminderId, FrequencyType frequencyType) {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, CustomRemindersReceiver.class);
         intent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_ALARM, true);
@@ -87,37 +88,48 @@ public class CustomRemindersHelper {
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(reminderId),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        switch(frecuencyType){
+        switch(frequencyType){
             case HOURLY:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                        Testing line:
-//                        10 * 1000, 120 * 1000, alarmIntent);
-                        AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        //Testing line:
+//                        System.currentTimeMillis() + 10 * 1000, 120 * 1000, alarmIntent);
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
+                        AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
             case EVERY_THREE_HOURS:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        INTERVAL_THREE_HOURS, INTERVAL_THREE_HOURS, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        System.currentTimeMillis() + INTERVAL_THREE_HOURS,
+                        INTERVAL_THREE_HOURS,
+                        alarmIntent);
                 break;
             case TWICE_A_DAY:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        AlarmManager.INTERVAL_HALF_DAY, AlarmManager.INTERVAL_HALF_DAY, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HALF_DAY,
+                        AlarmManager.INTERVAL_HALF_DAY,
+                        alarmIntent);
                 break;
             case DAILY:
-                alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, alarmIntent);
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_DAY,
+                        AlarmManager.INTERVAL_DAY,
+                        alarmIntent);
                 break;
             case SNOOZE:
                 //Create a one time reminder to run in one hour as a snooze of a previous reminder
                 //We crete a new intent to not replace the running ones
                 alarmIntent = PendingIntent.getBroadcast(context, (int) new Date().getTime(),
                         intent, PendingIntent.FLAG_ONE_SHOT);
-                alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
                         //Testing line:
 //                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
                         AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
         }
         setBootReceiver(context, true);
+    }
+    public static void setAlarm(Context context, String reminderId) {
+        FrequencyType frequencyType = FrequencyType.values()[getReminder(context, reminderId).frequencyIndex];
+        setAlarm(context, reminderId, frequencyType);
     }
 
     /**
@@ -217,6 +229,22 @@ public class CustomRemindersHelper {
 
     private static SharedPreferences getPreferences(Context context){
         return context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
+
+
+    @NonNull
+    public static String removeTrailingZeros(@NonNull String number){
+        int i;
+        for(i = number.toCharArray().length - 1;i >= 0; i--){
+            char c = number.toCharArray()[i];
+            if(Character.getNumericValue(c) > 0)
+                break;
+            if(c == '.'){
+                i--;
+                break;
+            }
+        }
+        return number.substring(0, i + 1);
     }
 
     public static class Reminder{

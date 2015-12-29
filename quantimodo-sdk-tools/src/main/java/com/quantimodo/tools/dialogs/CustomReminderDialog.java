@@ -159,8 +159,8 @@ public class CustomReminderDialog {
 		StringBuilder builder = new StringBuilder();
 		builder
 				.append("Track ")
-				.append(mReminder.value).append(" ")
-				.append(mReminder.unitName).append(" ")
+				.append(CustomRemindersHelper.removeTrailingZeros(mReminder.value)).append(" ")
+				.append(mReminder.unitName).append(" of ")
 				.append(mReminder.name).append("?");
 
         mTitleTextView.setText(builder.toString());
@@ -260,7 +260,7 @@ public class CustomReminderDialog {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "snooze clicked");
-                CustomRemindersHelper.setAlarm(mContext, mReminder.id, CustomRemindersHelper.FrecuencyType.SNOOZE);
+                CustomRemindersHelper.setAlarm(mContext, mReminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
                 dismiss(mContext);
             }
         });
@@ -269,7 +269,7 @@ public class CustomReminderDialog {
             public void onClick(View v) {
                 Log.i(TAG, "edit clicked");
                 Intent trackIntent = new Intent(mContext,
-                        CustomRemindersHelper.getInstance().getRegisteredActivity().getClass());
+                        CustomRemindersHelper.getInstance().getRegisteredActivity());
                 trackIntent.addFlags(
                         Intent.FLAG_ACTIVITY_CLEAR_TOP |
                                 Intent.FLAG_ACTIVITY_NEW_TASK |

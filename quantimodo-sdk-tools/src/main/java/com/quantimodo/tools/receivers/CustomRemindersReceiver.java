@@ -13,7 +13,6 @@ import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.dialogs.CustomReminderDialog;
-import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
@@ -24,7 +23,6 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-
 /**
  * Broadcast receiver that gets the triggered alarms and display a popup to track custom measurements
  */
@@ -33,6 +31,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
     public static final String EXTRA_REQUEST_REMINDER = "extra_request_reminder";
     public static final String EXTRA_REQUEST_SNOOZE = "extra_request_snooze";
     public static final String EXTRA_REQUEST_EDIT = "extra_request_edit";
+    public static final String EXTRA_REQUEST_POPUP = "extra_request_popup";
     public static final String EXTRA_NOTIFICATION_ID = "extra_notification_id";
 
     @Inject
@@ -85,17 +84,21 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         }
         else if(intent.hasExtra(EXTRA_REQUEST_SNOOZE)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
-            CustomRemindersHelper.setAlarm(context, reminder.id, CustomRemindersHelper.FrecuencyType.SNOOZE);
+            CustomRemindersHelper.setAlarm(context, reminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
             startTracking(context, reminder.name);
         }
+        else if(intent.hasExtra(EXTRA_REQUEST_POPUP)){
+            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
+            CustomReminderDialog.getInstance().show(context, reminder.id);
+        }
     }
 
     private void startTracking(Context context, String varName){
         Intent trackIntent = new Intent(context,
-                CustomRemindersHelper.getInstance().getRegisteredActivity().getClass());
+                CustomRemindersHelper.getInstance().getRegisteredActivity());
         trackIntent.addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TOP |
                         Intent.FLAG_ACTIVITY_NEW_TASK |

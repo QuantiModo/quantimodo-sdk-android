@@ -415,10 +415,10 @@ public class TrackingFragment extends QFragment {
     View.OnTouchListener onRootViewFocusChanged = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int action = motionEvent.getAction();
-            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
-                etVariableName.clearFocus();
-            }
+//            int action = motionEvent.getAction();
+//            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
+//                etVariableName.clearFocus();
+//            }
             return false;
         }
     };
@@ -505,6 +505,7 @@ public class TrackingFragment extends QFragment {
                         addMeasurementCard(false, true, false);
                     }
                     showButtonsCard();
+                    measurementCards.get(0).spMeasurementUnit.setEnabled(true);
                 }
             }, 400);
         }
@@ -882,27 +883,10 @@ public class TrackingFragment extends QFragment {
                         currentHolder.spReminderTime.getSelectedItemPosition() //frequency
                 );
                 CustomRemindersHelper.putReminder(getActivity(), reminder);
-                switch (currentHolder.spReminderTime.getSelectedItemPosition()){
-                    case 0://never
-                        CustomRemindersHelper.cancelAlarm(getActivity(), reminder.id);
-                        break;
-                    case 1://hourly
-                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
-                                CustomRemindersHelper.FrecuencyType.HOURLY);
-                        break;
-                    case 2://every three hours
-                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
-                                CustomRemindersHelper.FrecuencyType.EVERY_THREE_HOURS);
-                        break;
-                    case 3://twice a day
-                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
-                                CustomRemindersHelper.FrecuencyType.TWICE_A_DAY);
-                        break;
-                    case 4://daily
-                        CustomRemindersHelper.setAlarm(getActivity(), reminder.id,
-                                CustomRemindersHelper.FrecuencyType.DAILY);
-                        break;
-                }
+                CustomRemindersHelper.setAlarm(getActivity(), reminder.id);
+            }
+            else{
+                CustomRemindersHelper.cancelAlarm(getActivity(), Long.toString(selectedVariable.getId()));
             }
         }
 
