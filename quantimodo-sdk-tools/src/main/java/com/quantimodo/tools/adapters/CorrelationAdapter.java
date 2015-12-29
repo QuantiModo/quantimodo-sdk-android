@@ -286,7 +286,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private View.OnClickListener onShoppingCartClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent()).getTag();
+            CorrelationViewHolder vh = (CorrelationViewHolder) ((View) v.getParent().getParent()).getTag();
             notifyButtonListener(v, BUTTON_SHOP, vh.mItemPosition, mCurrentItems.get(vh.mItemPosition));
         }
     };

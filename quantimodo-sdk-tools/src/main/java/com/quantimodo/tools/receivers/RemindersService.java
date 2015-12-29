@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -37,8 +38,8 @@ public class RemindersService extends IntentService {
             StringBuilder builder = new StringBuilder();
             builder
                     .append("Track ")
-                    .append(reminder.value).append(" ")
-                    .append(reminder.unitName).append(" ")
+                    .append(CustomRemindersHelper.removeTrailingZeros(reminder.value)).append(" ")
+                    .append(reminder.unitName).append(" of ")
                     .append(reminder.name).append("?");
 
             sendNotification(reminderId, builder.toString());
@@ -77,31 +78,33 @@ public class RemindersService extends IntentService {
         popupIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         popupIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_POPUP, true);
 
-        PendingIntent trackPendingIntent = PendingIntent.getBroadcast(this, 0,
+        PendingIntent trackPendingIntent = PendingIntent.getBroadcast(this,
+                Integer.parseInt(reminderId),
                 trackIntent, PendingIntent.FLAG_ONE_SHOT);
-        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this, 1,
+        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this,
+                Integer.parseInt(reminderId) + 1,
                 snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
-        PendingIntent editPendingIntent = PendingIntent.getBroadcast(this, 2,
+        PendingIntent editPendingIntent = PendingIntent.getBroadcast(this,
+                Integer.parseInt(reminderId) + 2,
                 editIntent, PendingIntent.FLAG_ONE_SHOT);
-        PendingIntent popupPendingIntent= PendingIntent.getBroadcast(this, 3,
+        PendingIntent popupPendingIntent= PendingIntent.getBroadcast(this,
+                Integer.parseInt(reminderId) + 3,
                 popupIntent, PendingIntent.FLAG_ONE_SHOT);
 
         Notification notification = new NotificationCompat.Builder(this)
                 .setContentTitle(title)
                 .setContentText(getString(R.string.reminders_notif_subtitle))
-                .setSmallIcon(R.drawable.clock)
+                .setSmallIcon(R.drawable.ic_alarm_on_white_24dp)
                 .setAutoCancel(true)
                 .setContentIntent(popupPendingIntent)
+                .addAction(new NotificationCompat.Action(0,
+                        getString(R.string.reminders_notif_button_track), trackPendingIntent))
+                .addAction(new NotificationCompat.Action(0,
+                        getString(R.string.reminders_notif_button_snooze), snoozePendingIntent))
+                .addAction(new NotificationCompat.Action(0,
+                        getString(R.string.reminders_notif_button_edit), editPendingIntent))
+                .setColor(getResources().getColor(R.color.card_button))
                 .build();
-
-        if (Build.VERSION.SDK_INT >= 16) {
-            RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custom_reminder);
-            contentView.setTextViewText(R.id.notification_reminder_title, title);
-            contentView.setOnClickPendingIntent(R.id.custom_reminder_track, trackPendingIntent);
-            contentView.setOnClickPendingIntent(R.id.custom_reminder_snooze, snoozePendingIntent);
-            contentView.setOnClickPendingIntent(R.id.custom_reminder_edit, editPendingIntent);
-            notification.bigContentView = contentView;
-        }
 
         notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(Integer.parseInt(reminderId), notification);
