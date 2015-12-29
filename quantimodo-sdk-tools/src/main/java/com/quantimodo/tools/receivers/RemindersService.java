@@ -94,7 +94,7 @@ public class RemindersService extends IntentService {
         Notification notification = new NotificationCompat.Builder(this)
                 .setContentTitle(title)
                 .setContentText(getString(R.string.reminders_notif_subtitle))
-                .setSmallIcon(android.R.drawable.ic_menu_recent_history)
+                .setSmallIcon(R.drawable.ic_alarm_on_white_24dp)
                 .setAutoCancel(true)
                 .setContentIntent(popupPendingIntent)
                 .addAction(new NotificationCompat.Action(0,
