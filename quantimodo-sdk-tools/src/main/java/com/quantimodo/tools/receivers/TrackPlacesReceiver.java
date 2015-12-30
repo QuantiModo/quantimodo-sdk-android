@@ -46,8 +46,6 @@ public class TrackPlacesReceiver extends BroadcastReceiver {
         alarmIntent = PendingIntent.getBroadcast(context, REQUEST_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, AlarmManager.INTERVAL_HOUR, alarmIntent);
 //        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, 60 * 1000, alarmIntent);
-
-        setBootReceiver(context, true);
     }
 
     /**
