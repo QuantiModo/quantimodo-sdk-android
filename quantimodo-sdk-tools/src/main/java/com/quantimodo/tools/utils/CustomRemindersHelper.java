@@ -119,10 +119,10 @@ public class CustomRemindersHelper {
                 //We crete a new intent to not replace the running ones
                 alarmIntent = PendingIntent.getBroadcast(context, (int) new Date().getTime(),
                         intent, PendingIntent.FLAG_ONE_SHOT);
-                alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
+                alarmMgr.set(AlarmManager.RTC,
                         //Testing line:
 //                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
-                        AlarmManager.INTERVAL_HOUR, alarmIntent);
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
         }
         setBootReceiver(context, true);
