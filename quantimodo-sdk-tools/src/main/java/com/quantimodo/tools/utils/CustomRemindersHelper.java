@@ -125,7 +125,6 @@ public class CustomRemindersHelper {
                         AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
         }
-        setBootReceiver(context, true);
     }
     public static void setAlarm(Context context, String reminderId) {
         FrequencyType frequencyType = FrequencyType.values()[getReminder(context, reminderId).frequencyIndex];
@@ -143,29 +142,6 @@ public class CustomRemindersHelper {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.cancel(alarmIntent);
 
-        setBootReceiver(context, false);
-    }
-
-    /**
-     * Enable or disable {@code RemindersBootReceiver} so that it will or not automatically
-     * restart the alarm when the device is rebooted
-     * @param context the curent context
-     * @param setEnabled if true it will enable the {@code RemindersReceiver} when the device boot
-     */
-    private static void setBootReceiver(Context context, boolean setEnabled){
-        ComponentName receiver = new ComponentName(context, QToolsBootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        if(setEnabled){
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
-        else{
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
     }
 
     /**
