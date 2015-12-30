@@ -110,6 +110,12 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
         mType = getArguments().getInt(ARG_TYPE);
         mVariableName = getArguments().getString(ARG_VARIABLE);
         isPublic = getArguments().getBoolean(ARG_PUBLIC, true);
+
+        View v = View.inflate(getActivity(), R.layout.qmt_list_view_header, null);
+        mHeader = (TextView) v.findViewById(R.id.text);
+        mHeader.setText(getHeaderText());
+        getListView().addHeaderView(v);
+
         if(getArguments().getBoolean(ARG_PUBLIC, true)){
             getSpiceManager().execute(
                     new SearchCorrelationsRequest(mVariableName, SdkDefs.CORRELATION_EFFECT).getCachedSpiceRequest(),
@@ -130,20 +136,6 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
                         }
                     });
         }
-
-//        getSpiceManager().execute(new GetUnitsRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetUnitsRequest.GetUnitsResponse>() {
-//            @Override
-//            public void onRequestSuccess(GetUnitsRequest.GetUnitsResponse getUnitsResponse) {
-//                mUnits = getUnitsResponse.units;
-//            }
-//        });
-
-        View v = View.inflate(getActivity(), R.layout.qmt_list_view_header, null);
-//        lnCardsContainer = (FrameLayout) view.findViewById(R.id.listContainer);
-        mHeader = (TextView) v.findViewById(R.id.text);
-        mHeader.setText(getHeaderText());
-
-        getListView().addHeaderView(v);
     }
 
     private void updateData(final ArrayList<Correlation> data){
