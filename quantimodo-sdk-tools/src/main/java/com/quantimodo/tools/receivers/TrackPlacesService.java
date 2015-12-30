@@ -24,6 +24,7 @@ import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.quantimodo.android.sdk.model.Measurement;
 import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
@@ -64,7 +65,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
+        Log.i(TAG, "onStartCommand");
         // The service is starting, due to a call to startService()
         this.startId = startId;
         appSource = intent.getStringExtra(EXTRA_SOURCE);
@@ -73,6 +74,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
     }
     @Override
     public void onDestroy() {
+        Log.i(TAG, "onDestroy");
         mGoogleApiClient.disconnect();
     }
 
@@ -91,7 +93,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d(TAG, "Google places connected event");
+        Log.i(TAG, "Google places connected event");
         com.google.android.gms.common.api.PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
                 .getCurrentPlace(mGoogleApiClient, null);
         result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
@@ -100,7 +102,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                 if (!likelyPlaces.getStatus().isSuccess()) {
                     Log.d(TAG, "Error when getting places");
                     likelyPlaces.release();
-                    mGoogleApiClient.disconnect();
+                    stopSelfResult(startId);
                     return;
                 }
                 final PlaceLikelihood placeLikelihood = likelyPlaces.get(0);
@@ -137,28 +139,28 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                                 else
                                     message = "Error when sending measurement:(!: " + placeName;
                                 Log.d(TAG, message);
+                                stopSelfResult(startId);
                             }
 
                             @Override
-                            public void onSdkException(SdkException ex) {
-                                ex.printStackTrace();
+                            public void onRequestFailure(SpiceException spiceException) {
+                                Log.d(TAG, "onRequestFailure");
+                                spiceException.printStackTrace();
+                                stopSelfResult(startId);
                             }
                         }
                 );
-
-
                 likelyPlaces.release();
-                stopSelfResult(startId);
             }
         });
     }
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d(TAG, "Google places connection suspended event");
+        Log.i(TAG, "Google places connection suspended event");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "Google places connection failed event");
+        Log.i(TAG, "Google places connection failed event");
     }
 }
