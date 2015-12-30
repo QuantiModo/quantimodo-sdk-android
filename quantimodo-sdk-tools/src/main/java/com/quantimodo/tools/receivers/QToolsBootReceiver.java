@@ -19,9 +19,11 @@ public class QToolsBootReceiver extends BroadcastReceiver
 			for(CustomRemindersHelper.Reminder reminder : CustomRemindersHelper.getRemindersList(context)) {
 				CustomRemindersHelper.setAlarm(context, reminder.id);
 			}
-            //start tracking places
-            TrackPlacesReceiver trackPlacesReceiver = new TrackPlacesReceiver();
-            trackPlacesReceiver.setAlarm(context);
+			if(TrackPlacesReceiver.isTrackingOn(context)) {
+				//start tracking places
+				TrackPlacesReceiver trackPlacesReceiver = new TrackPlacesReceiver();
+				trackPlacesReceiver.setAlarm(context);
+			}
 		}
 	}
 }
