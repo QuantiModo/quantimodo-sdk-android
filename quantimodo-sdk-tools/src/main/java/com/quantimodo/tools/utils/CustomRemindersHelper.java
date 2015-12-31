@@ -94,9 +94,9 @@ public class CustomRemindersHelper {
             case HOURLY:
                 alarmMgr.setRepeating(AlarmManager.RTC,
                         //Testing line:
-                        System.currentTimeMillis() + 10 * 1000, 120 * 1000, alarmIntent);
-//                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
-//                        AlarmManager.INTERVAL_HOUR, alarmIntent);
+//                        System.currentTimeMillis() + 10 * 1000, 120 * 1000, alarmIntent);
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
+                        AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
             case EVERY_THREE_HOURS:
                 alarmMgr.setRepeating(AlarmManager.RTC,
@@ -123,8 +123,8 @@ public class CustomRemindersHelper {
                         intent, PendingIntent.FLAG_ONE_SHOT);
                 alarmMgr.set(AlarmManager.RTC,
                         //Testing line:
-//                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
-                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR, alarmIntent);
+                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
+//                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR, alarmIntent);
                 Toast.makeText(context, R.string.reminders_snooze_message, Toast.LENGTH_LONG).show();
                 break;
         }
