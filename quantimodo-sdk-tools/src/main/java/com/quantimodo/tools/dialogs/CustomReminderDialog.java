@@ -1,5 +1,6 @@
 package com.quantimodo.tools.dialogs;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -224,6 +225,11 @@ public class CustomReminderDialog {
 			new Thread(run).start();
 		}
 	}
+
+    public boolean isShowing(){
+        return mMoodDialogShowing;
+    }
+
     private void setListeners(View container){
         container.findViewById(R.id.notification_dialog_track).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +260,7 @@ public class CustomReminderDialog {
                 });
                 thread.start();
                 dismiss(mContext);
+                cancelNotification(mContext);
             }
         });
         container.findViewById(R.id.notification_dialog_snooze).setOnClickListener(new View.OnClickListener() {
@@ -262,6 +269,7 @@ public class CustomReminderDialog {
                 Log.i(TAG, "snooze clicked");
                 CustomRemindersHelper.setAlarm(mContext, mReminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
                 dismiss(mContext);
+                cancelNotification(mContext);
             }
         });
         container.findViewById(R.id.notification_dialog_edit).setOnClickListener(new View.OnClickListener() {
@@ -278,7 +286,14 @@ public class CustomReminderDialog {
                 trackIntent.putExtra(CustomRemindersHelper.EXTRA_VARIABLE_NAME, mReminder.name);
                 mContext.startActivity(trackIntent);
                 dismiss(mContext);
+                cancelNotification(mContext);
             }
         });
     }
+
+	private void cancelNotification(Context context){
+		NotificationManager notifManager = (NotificationManager) context.getSystemService(
+				Context.NOTIFICATION_SERVICE);
+		notifManager.cancel(Integer.parseInt(mReminder.id));
+	}
 }
