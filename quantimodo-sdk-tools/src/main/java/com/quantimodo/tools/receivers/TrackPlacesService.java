@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,6 +35,7 @@ import com.quantimodo.tools.sdk.SdkException;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,8 +101,11 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
         result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
             @Override
             public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                final Context context = mGoogleApiClient.getContext();
                 if (!likelyPlaces.getStatus().isSuccess()) {
-                    Log.d(TAG, "Error when getting places");
+                    Log.d(TAG, "No places found");
+                    Toast.makeText(context.getApplicationContext(),
+                            "No places found", Toast.LENGTH_LONG).show();
                     likelyPlaces.release();
                     stopSelfResult(startId);
                     return;
@@ -111,7 +116,6 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                         placeLikelihood.getLikelihood());
                 Log.i(TAG, message);
                 final String placeName = placeLikelihood.getPlace().getName().toString();
-                final Context context = mGoogleApiClient.getContext();
 
                 final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
                 long timestampSeconds = new Date().getTime() / 1000;
@@ -139,6 +143,9 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                                 else
                                     message = "Error when sending measurement:(!: " + placeName;
                                 Log.d(TAG, message);
+                                sendCrashlyticsLog(message);
+                                Toast.makeText(context.getApplicationContext(),
+                                        message, Toast.LENGTH_LONG).show();
                                 stopSelfResult(startId);
                             }
 
@@ -147,6 +154,9 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                                 Log.d(TAG, "onRequestFailure");
                                 spiceException.printStackTrace();
                                 stopSelfResult(startId);
+                                sendCrashlyticsLog(spiceException.getMessage());
+                                Toast.makeText(context.getApplicationContext(),
+                                        spiceException.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                 );
@@ -162,5 +172,18 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i(TAG, "Google places connection failed event");
+    }
+
+    private void sendCrashlyticsLog(String message){
+        try {
+            //We log payload if we have Crashlytics
+            Class cls = Class.forName("com.crashlytics.android.Crashlytics");
+            Class[] cArg = new Class[1];
+            cArg[0] = String.class;
+            Method method = cls.getMethod("log",cArg);
+            method.invoke(null, message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
