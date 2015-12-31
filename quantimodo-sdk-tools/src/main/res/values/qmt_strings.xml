@@ -112,4 +112,5 @@
     <string name="reminders_notif_button_snooze">Snooze</string>
     <string name="reminders_notif_button_edit">Edit</string>
     <string name="reminders_notif_subtitle">Tap to track it!</string>
+    <string name="reminders_snooze_message">I\'ll remind you again in 1 hour</string>
 </resources>

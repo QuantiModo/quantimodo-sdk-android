@@ -10,7 +10,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
+import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 import com.quantimodo.tools.receivers.QToolsBootReceiver;
 
@@ -92,9 +94,9 @@ public class CustomRemindersHelper {
             case HOURLY:
                 alarmMgr.setRepeating(AlarmManager.RTC,
                         //Testing line:
-//                        System.currentTimeMillis() + 10 * 1000, 120 * 1000, alarmIntent);
-                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
-                        AlarmManager.INTERVAL_HOUR, alarmIntent);
+                        System.currentTimeMillis() + 10 * 1000, 120 * 1000, alarmIntent);
+//                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
+//                        AlarmManager.INTERVAL_HOUR, alarmIntent);
                 break;
             case EVERY_THREE_HOURS:
                 alarmMgr.setRepeating(AlarmManager.RTC,
@@ -123,6 +125,7 @@ public class CustomRemindersHelper {
                         //Testing line:
 //                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
                         System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR, alarmIntent);
+                Toast.makeText(context, R.string.reminders_snooze_message, Toast.LENGTH_LONG).show();
                 break;
         }
         setBootReceiver(context, true);
