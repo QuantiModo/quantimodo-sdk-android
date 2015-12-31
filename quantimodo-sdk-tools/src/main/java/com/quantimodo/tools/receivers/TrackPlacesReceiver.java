@@ -6,9 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.quantimodo.tools.QTools;
+import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 
 import javax.inject.Inject;
@@ -51,7 +53,7 @@ public class TrackPlacesReceiver extends BroadcastReceiver {
 //        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, 60 * 1000, alarmIntent);
 
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        preferences.edit().putBoolean(PREF_TRACK_SETTING, true).apply();
+        preferences.edit().putBoolean(context.getString(R.string.track_places_pref_key), true).apply();
     }
 
     /**
@@ -65,11 +67,11 @@ public class TrackPlacesReceiver extends BroadcastReceiver {
         alarmMgr.cancel(alarmIntent);
 
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        preferences.edit().putBoolean(PREF_TRACK_SETTING, false).apply();
+        preferences.edit().putBoolean(context.getString(R.string.track_places_pref_key), false).apply();
     }
 
     public static boolean isTrackingOn(Context context){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        return preferences.getBoolean(PREF_TRACK_SETTING, false);
+        return preferences.getBoolean(context.getString(R.string.track_places_pref_key), false);
     }
 }
