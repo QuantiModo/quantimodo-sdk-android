@@ -112,5 +112,8 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         NotificationManager notifManager = (NotificationManager) context.getSystemService(
                 Context.NOTIFICATION_SERVICE);
         notifManager.cancel(notifId);
+        //the same time when closing the notification we close the popup if any.
+        if(CustomReminderDialog.getInstance().isShowing())
+            CustomReminderDialog.getInstance().dismiss(context);
     }
 }

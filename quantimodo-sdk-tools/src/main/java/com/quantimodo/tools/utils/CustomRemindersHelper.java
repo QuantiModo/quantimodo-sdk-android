@@ -10,7 +10,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
+import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 import com.quantimodo.tools.receivers.QToolsBootReceiver;
 
@@ -119,10 +121,11 @@ public class CustomRemindersHelper {
                 //We crete a new intent to not replace the running ones
                 alarmIntent = PendingIntent.getBroadcast(context, (int) new Date().getTime(),
                         intent, PendingIntent.FLAG_ONE_SHOT);
-                alarmMgr.set(AlarmManager.ELAPSED_REALTIME,
+                alarmMgr.set(AlarmManager.RTC,
                         //Testing line:
 //                        SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
-                        AlarmManager.INTERVAL_HOUR, alarmIntent);
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR, alarmIntent);
+                Toast.makeText(context, R.string.reminders_snooze_message, Toast.LENGTH_LONG).show();
                 break;
         }
         setBootReceiver(context, true);
