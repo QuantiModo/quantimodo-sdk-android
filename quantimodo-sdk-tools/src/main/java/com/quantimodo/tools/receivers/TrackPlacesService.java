@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
@@ -43,7 +45,8 @@ import java.util.HashMap;
 /**
  * This Service gets the nearby place and send a measurement with the info
  */
-public class TrackPlacesService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class TrackPlacesService extends Service implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,LocationListener {
     private static final String TAG = TrackPlacesService.class.getSimpleName();
     public static final String EXTRA_SOURCE = "extra_source";
 
@@ -60,9 +63,11 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
+                .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
     }
 
     @Override
@@ -77,6 +82,8 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
     @Override
     public void onDestroy() {
         Log.i(TAG, "onDestroy");
+//        LocationServices.FusedLocationApi.removeLocationUpdates(
+//                mGoogleApiClient, this);
         mGoogleApiClient.disconnect();
     }
 
@@ -96,6 +103,18 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Google places connected event");
+        requestGooglePlace();
+//        final LocationRequest mLocationRequestHighAccuracy = LocationRequest
+//                .create().setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+//                .setInterval(0)
+//                .setFastestInterval(0)
+//                .setNumUpdates(1)
+//                .setExpirationTime(60*1000);
+//        LocationServices.FusedLocationApi.requestLocationUpdates(
+//                mGoogleApiClient, mLocationRequestHighAccuracy, this);
+    }
+
+    private void requestGooglePlace(){
         com.google.android.gms.common.api.PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
                 .getCurrentPlace(mGoogleApiClient, null);
         result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
@@ -105,7 +124,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                 if (!likelyPlaces.getStatus().isSuccess()) {
                     Log.d(TAG, "No places found");
                     Toast.makeText(context.getApplicationContext(),
-                            "No places found", Toast.LENGTH_LONG).show();
+                            "Tracker: No places found", Toast.LENGTH_LONG).show();
                     likelyPlaces.release();
                     stopSelfResult(startId);
                     return;
@@ -145,7 +164,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                                 Log.d(TAG, message);
                                 sendCrashlyticsLog(message);
                                 Toast.makeText(context.getApplicationContext(),
-                                        message, Toast.LENGTH_LONG).show();
+                                        "Tracker: "+message, Toast.LENGTH_LONG).show();
                                 stopSelfResult(startId);
                             }
 
@@ -153,10 +172,10 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
                             public void onRequestFailure(SpiceException spiceException) {
                                 Log.d(TAG, "onRequestFailure");
                                 spiceException.printStackTrace();
-                                stopSelfResult(startId);
                                 sendCrashlyticsLog(spiceException.getMessage());
                                 Toast.makeText(context.getApplicationContext(),
-                                        spiceException.getMessage(), Toast.LENGTH_LONG).show();
+                                        "Tracker: "+spiceException.getMessage(), Toast.LENGTH_LONG).show();
+                                stopSelfResult(startId);
                             }
                         }
                 );
@@ -164,6 +183,7 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
             }
         });
     }
+
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "Google places connection suspended event");
@@ -185,5 +205,11 @@ public class TrackPlacesService extends Service implements GoogleApiClient.Conne
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Toast.makeText(this, "Location changed", Toast.LENGTH_SHORT).show();
+        requestGooglePlace();
     }
 }

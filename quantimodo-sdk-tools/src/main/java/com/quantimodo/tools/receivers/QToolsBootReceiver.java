@@ -21,8 +21,8 @@ public class QToolsBootReceiver extends BroadcastReceiver
 			}
 			if(TrackPlacesReceiver.isTrackingOn(context)) {
 				//start tracking places
-				TrackPlacesReceiver trackPlacesReceiver = new TrackPlacesReceiver();
-				trackPlacesReceiver.setAlarm(context);
+//				TrackPlacesReceiver trackPlacesReceiver = new TrackPlacesReceiver();
+//				trackPlacesReceiver.setAlarm(context);
 			}
 		}
 	}

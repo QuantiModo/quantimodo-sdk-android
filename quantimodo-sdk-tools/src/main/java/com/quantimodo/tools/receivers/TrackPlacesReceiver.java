@@ -22,7 +22,7 @@ import javax.inject.Inject;
 public class TrackPlacesReceiver extends BroadcastReceiver {
     private static final String TAG = TrackPlacesReceiver.class.getSimpleName();
     private static final int REQUEST_ID = 217259940;
-    private static final String EXTRA_ALARM = "extra_alarm";
+    public static final String EXTRA_ALARM = "extra_alarm";
     private static final String PREFERENCES_KEY = "tracking_preferences";
     private static final String PREF_TRACK_SETTING = "tracking_setting";
 
@@ -43,32 +43,33 @@ public class TrackPlacesReceiver extends BroadcastReceiver {
         }
     }
 
-    public void setAlarm(Context context) {
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, TrackPlacesReceiver.class);
-        intent.putExtra(EXTRA_ALARM, true);
-
-        alarmIntent = PendingIntent.getBroadcast(context, REQUEST_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmMgr.setInexactRepeating(AlarmManager.RTC, 0, AlarmManager.INTERVAL_HOUR, alarmIntent);
-//        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, 60 * 1000, alarmIntent);
-
-        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        preferences.edit().putBoolean(context.getString(R.string.track_places_pref_key), true).apply();
-    }
+//    public void setAlarm(Context context) {
+//        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(context, TrackPlacesReceiver.class);
+//        intent.putExtra(EXTRA_ALARM, true);
+//
+//        alarmIntent = PendingIntent.getBroadcast(context, REQUEST_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+////        alarmMgr.setInexactRepeating(AlarmManager.RTC, 0, AlarmManager.INTERVAL_HOUR, alarmIntent);
+//        //Testing line
+//        alarmMgr.setInexactRepeating(AlarmManager.RTC, 0, 5 * 60 * 1000, alarmIntent);
+//
+//        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+//        preferences.edit().putBoolean(context.getString(R.string.track_places_pref_key), true).apply();
+//    }
 
     /**
      * Cancels the alarm.
      * @param context current context
      */
-    public void cancelAlarm(Context context) {
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, TrackPlacesReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, REQUEST_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmMgr.cancel(alarmIntent);
-
-        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        preferences.edit().putBoolean(context.getString(R.string.track_places_pref_key), false).apply();
-    }
+//    public void cancelAlarm(Context context) {
+//        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(context, TrackPlacesReceiver.class);
+//        alarmIntent = PendingIntent.getBroadcast(context, REQUEST_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        alarmMgr.cancel(alarmIntent);
+//
+//        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+//        preferences.edit().putBoolean(context.getString(R.string.track_places_pref_key), false).apply();
+//    }
 
     public static boolean isTrackingOn(Context context){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
