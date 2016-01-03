@@ -53,7 +53,20 @@ public class CustomRemindersHelper {
         EVERY_THREE_HOURS,
         TWICE_A_DAY,
         DAILY,
-        SNOOZE
+        SNOOZE;
+
+        @Override
+        public String toString() {
+            switch(this) {
+                case NEVER: return "Never";
+                case HOURLY: return "Hourly";
+                case EVERY_THREE_HOURS: return "Every three hours";
+                case TWICE_A_DAY: return "Twice a day";
+                case DAILY: return "Daily";
+                case SNOOZE: return "Snooze";
+                default: throw new IllegalArgumentException();
+            }
+        }
     }
 
     private static final CustomRemindersHelper INSTANCE = new CustomRemindersHelper();
