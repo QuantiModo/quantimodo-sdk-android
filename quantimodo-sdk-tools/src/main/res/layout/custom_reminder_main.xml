@@ -6,19 +6,24 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
-    <Button
-        android:id="@+id/custom_reminder_add"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:padding="10dp"
         android:layout_gravity="center_horizontal"
-        android:drawablePadding="10dp"
-        android:background="@drawable/card_complete"
-        android:drawableLeft="@drawable/ic_add_alert_black_24dp"
-        android:drawableStart="@drawable/ic_add_alert_black_24dp"
-        android:textColor="@color/card_title"
-        android:text="Add New Reminder"/>
+        android:layout_margin="10dp"
+        android:background="@drawable/card_complete">
+        <Button
+            android:id="@+id/custom_reminder_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawablePadding="10dp"
+            android:background="@drawable/selector"
+            android:drawableLeft="@drawable/ic_add_alert_black_24dp"
+            android:drawableStart="@drawable/ic_add_alert_black_24dp"
+            android:textColor="@color/card_title"
+            android:text="Add New Reminder"/>
+    </FrameLayout>
 
     <ListView android:id="@android:id/list"
         android:layout_width="match_parent"
