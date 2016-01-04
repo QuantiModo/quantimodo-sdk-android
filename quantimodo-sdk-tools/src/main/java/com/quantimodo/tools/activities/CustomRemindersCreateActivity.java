@@ -26,10 +26,12 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.quantimodo.android.sdk.model.Unit;
 import com.quantimodo.android.sdk.model.Variable;
+import com.quantimodo.android.sdk.model.VariableCategory;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
+import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
@@ -52,11 +54,13 @@ public class CustomRemindersCreateActivity extends Activity {
     private ListView lvVariableSuggestions;
     private Spinner unitsSpinner;
     private ProgressBar progressView;
+    private Spinner spVariableCategory;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
     private ArrayList<Variable> suggestedVariables = new ArrayList<>();
     private ArrayList<Unit> mUnits = new ArrayList<>();
+    private ArrayList<VariableCategory> allCategories;
     private Variable selectedVariable;
     private int selectedUnitIndex;
     private int refreshesRunning = 0;
@@ -82,6 +86,7 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     private void initViews(){
+        spVariableCategory = (Spinner) findViewById(R.id.spVariableCategory);
         progressView = (ProgressBar) findViewById(R.id.custom_reminder_progress);
         nameTextView = (TextView) findViewById(R.id.custom_reminder_variable_edit);
         nameTextView.addTextChangedListener(onVariableNameChanged);
@@ -137,7 +142,8 @@ public class CustomRemindersCreateActivity extends Activity {
         Ion.getDefault(this).cancelAll(this);
         progressView.setVisibility(View.VISIBLE);
         refreshesRunning++;
-        getSpiceManager().execute(new GetSuggestedVariablesRequest(search, null),
+        getSpiceManager().execute(new GetSuggestedVariablesRequest(search,
+                        allCategories.get(spVariableCategory.getSelectedItemPosition()).getName()),
                 new DefaultSdkResponseListener<GetSuggestedVariablesRequest.GetSuggestedVariablesResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -152,6 +158,8 @@ public class CustomRemindersCreateActivity extends Activity {
                     progressView.setVisibility(View.GONE);
                 }
                 if(response.variables.size() == 0){
+                    autoCompleteListAdapter.clear();
+                    lvVariableSuggestions.setVisibility(View.GONE);
 //                    getPublicVariables(search);
                 }
                 else {
@@ -189,13 +197,13 @@ public class CustomRemindersCreateActivity extends Activity {
             }
         });
 
-//        getSpiceManager().execute(new GetCategoriesRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetCategoriesRequest.GetCategoriesResponse>() {
-//            @Override
-//            public void onRequestSuccess(GetCategoriesRequest.GetCategoriesResponse getCategoriesResponse) {
-//                allCategories = getCategoriesResponse.categories;
-//                categoriesUpdated();
-//            }
-//        });
+        getSpiceManager().execute(new GetCategoriesRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetCategoriesRequest.GetCategoriesResponse>() {
+            @Override
+            public void onRequestSuccess(GetCategoriesRequest.GetCategoriesResponse getCategoriesResponse) {
+                allCategories = getCategoriesResponse.categories;
+                categoriesUpdated();
+            }
+        });
     }
 
     private void unitsUpdated() {
@@ -207,6 +215,11 @@ public class CustomRemindersCreateActivity extends Activity {
         });
         selectedUnitIndex = 0;
         initUnitPicker();
+    }
+
+    private void categoriesUpdated() {
+        VariableCategorySelectSpinnerAdapter adapter = new VariableCategorySelectSpinnerAdapter(this, allCategories);
+        spVariableCategory.setAdapter(adapter);
     }
 
     private void initUnitPicker() {
