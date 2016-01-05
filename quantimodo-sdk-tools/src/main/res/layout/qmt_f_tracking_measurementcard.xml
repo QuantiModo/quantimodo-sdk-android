@@ -97,6 +97,8 @@
         android:layout_marginRight="12dp"
         android:inputType="none" />
 
+    <!-- Reminders hidden because using dedicated layout,
+    see CustomRemindersActivity and CustomRemindersCreateActivity -->
     <TextView
         android:id="@+id/reminder_title"
         android:layout_width="wrap_content"
@@ -105,7 +107,8 @@
         android:textColor="@color/card_title"
         android:layout_below="@id/spMeasurementTime"
         android:textSize="24sp"
-        android:text="Remind me to track"/>
+        android:text="Remind me to track"
+        android:visibility="gone"/>
 
     <com.quantimodo.tools.views.NDSpinner
         android:id="@+id/spReminderTime"
@@ -113,5 +116,6 @@
         android:layout_height="52dp"
         android:layout_below="@id/reminder_title"
         android:layout_marginRight="12dp"
-        android:inputType="none" />
+        android:inputType="none"
+        android:visibility="gone"/>
 </RelativeLayout>

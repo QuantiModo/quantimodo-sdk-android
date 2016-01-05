@@ -113,16 +113,16 @@ public class MeasurementCardHolder {
         tvMeasurementTimeTitle.setVisibility(View.GONE);
         spMeasurementDate.setVisibility(View.GONE);
         spMeasurementTime.setVisibility(View.GONE);
-        spReminderTime.setVisibility(View.GONE);
-        reminderTitle.setVisibility(View.GONE);
+//        spReminderTime.setVisibility(View.GONE);
+//        reminderTitle.setVisibility(View.GONE);
     }
 
     private void showDateTime(){
         tvMeasurementTimeTitle.setVisibility(View.VISIBLE);
         spMeasurementDate.setVisibility(View.VISIBLE);
         spMeasurementTime.setVisibility(View.VISIBLE);
-        spReminderTime.setVisibility(View.VISIBLE);
-        reminderTitle.setVisibility(View.VISIBLE);
+//        spReminderTime.setVisibility(View.VISIBLE);
+//        reminderTitle.setVisibility(View.VISIBLE);
     }
 
 
