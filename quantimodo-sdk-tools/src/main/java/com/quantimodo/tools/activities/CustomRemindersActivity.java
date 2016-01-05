@@ -4,10 +4,13 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Contacts;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -16,6 +19,7 @@ import android.widget.SimpleAdapter;
 
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
+import com.quantimodo.tools.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +35,7 @@ public class CustomRemindersActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_reminder_main);
-        if(getActionBar() != null)
+        if (getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_title);
         initListView();
         Button addButton = (Button) findViewById(R.id.custom_reminder_add);
@@ -44,15 +48,15 @@ public class CustomRemindersActivity extends ListActivity {
         });
     }
 
-    private void initListView(){
+    private void initListView() {
         // create the mapping list
-        String[] from = new String[] {"title", "frequency"};
-        int[] to = new int[] { R.id.custom_reminder_title_text, R.id.custom_reminder_freq_text };
+        String[] from = new String[]{"title", "frequency"};
+        int[] to = new int[]{R.id.custom_reminder_title_text, R.id.custom_reminder_freq_text};
 
         // prepare the list of all records
         List<HashMap<String, String>> fillMaps = new ArrayList<>();
         reminderList = CustomRemindersHelper.getRemindersList(this);
-        for(CustomRemindersHelper.Reminder reminder : reminderList){
+        for (CustomRemindersHelper.Reminder reminder : reminderList) {
             HashMap<String, String> map = new HashMap<>();
             map.put(from[0], reminder.value + " " + reminder.unitName + " of " + reminder.name);
             map.put(from[1], CustomRemindersHelper.FrequencyType.values()[reminder.frequencyIndex].toString());
@@ -79,7 +83,19 @@ public class CustomRemindersActivity extends ListActivity {
         });
         getListView().setDividerHeight(0);
         getListView().setDivider(null);
+    }
 
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
+                anim.setDuration(350);
+                getListView().setAnimation(anim);
+                getListView().animate();
+            }
+        }, 500);
     }
 }

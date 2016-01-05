@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -61,6 +62,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private ProgressBar progressView;
     private Spinner spVariableCategory;
     private TextView valueTextView;
+    private View mainLayout;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
@@ -104,6 +106,16 @@ public class CustomRemindersCreateActivity extends Activity {
     public void onResume() {
         super.onResume();
         mSpiceManager.start(this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
+                anim.setDuration(350);
+                mainLayout.setAnimation(anim);
+                mainLayout.animate();
+            }
+        }, 500);
     }
 
     @Override
@@ -113,6 +125,7 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     private void initViews(){
+        mainLayout = findViewById(R.id.custom_reminder_main_layout);
         unitsSpinner = (Spinner) findViewById(R.id.reminders_create_units_spinner);
         spVariableCategory = (Spinner) findViewById(R.id.spVariableCategory);
         progressView = (ProgressBar) findViewById(R.id.custom_reminder_progress);
