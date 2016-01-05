@@ -90,6 +90,17 @@ public class CustomRemindersCreateActivity extends Activity {
         extraFrequencyIndex = getIntent().getIntExtra(EXTRA_FREQUENCY_INDEX, 0);
 
         initViews();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
+                anim.setDuration(350);
+                mainLayout.setAnimation(anim);
+                mainLayout.animate();
+            }
+        }, 500);
+
         loadAndInitData();
 
         if(!TextUtils.isEmpty(extraVariableName)){
@@ -106,16 +117,6 @@ public class CustomRemindersCreateActivity extends Activity {
     public void onResume() {
         super.onResume();
         mSpiceManager.start(this);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
-                anim.setDuration(350);
-                mainLayout.setAnimation(anim);
-                mainLayout.animate();
-            }
-        }, 500);
     }
 
     @Override
