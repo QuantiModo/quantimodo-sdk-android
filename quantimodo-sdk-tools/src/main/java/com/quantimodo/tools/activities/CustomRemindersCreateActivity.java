@@ -8,13 +8,13 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -30,7 +30,6 @@ import com.quantimodo.android.sdk.model.Variable;
 import com.quantimodo.android.sdk.model.VariableCategory;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
-import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
@@ -38,6 +37,7 @@ import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.ArrayList;
@@ -45,14 +45,10 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * Activity that displays the form to create a custom reminder
+ * Activity that displays the form to create or edit a custom reminder
  */
 public class CustomRemindersCreateActivity extends Activity {
-    public static final String EXTRA_VARIABLE_NAME = "extra_variable_name";
-    public static final String EXTRA_UNIT_ID = "extra_unit_id";
-    public static final String EXTRA_CATEGORY_NAME = "extra_category_name";
-    public static final String EXTRA_VALUE = "extra_value";
-    public static final String EXTRA_FREQUENCY_INDEX = "extra_freq_index";
+    public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
 
     private SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
 
@@ -63,6 +59,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private Spinner spVariableCategory;
     private TextView valueTextView;
     private View mainLayout;
+    private Button removeButton;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
@@ -72,23 +69,20 @@ public class CustomRemindersCreateActivity extends Activity {
     private Variable selectedVariable;
     private int selectedUnitIndex;
     private int refreshesRunning = 0;
+    private boolean isEditing = false;
 
-    private String extraVariableName;
-    private int extraUnitId;
-    private String extraCategoryName;
-    private String extraValue;
-    private int extraFrequencyIndex;
+    private String reminderId;
+    private CustomRemindersHelper.Reminder mReminder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_reminder_create);
-        extraVariableName = getIntent().getStringExtra(EXTRA_VARIABLE_NAME);
-        extraUnitId = getIntent().getIntExtra(EXTRA_UNIT_ID, -1);
-        extraValue = getIntent().getStringExtra(EXTRA_VALUE);
-        extraCategoryName = getIntent().getStringExtra(EXTRA_CATEGORY_NAME);
-        extraFrequencyIndex = getIntent().getIntExtra(EXTRA_FREQUENCY_INDEX, 0);
-
+        reminderId = getIntent().getStringExtra(EXTRA_REMINDER_ID);
+        if(!TextUtils.isEmpty(reminderId)) {
+            isEditing = true;
+            mReminder = CustomRemindersHelper.getReminder(this, reminderId);
+        }
         initViews();
 
         new Handler().postDelayed(new Runnable() {
@@ -103,12 +97,13 @@ public class CustomRemindersCreateActivity extends Activity {
 
         loadAndInitData();
 
-        if(!TextUtils.isEmpty(extraVariableName)){
+        if(isEditing){
             if(getActionBar() != null)
                 getActionBar().setTitle(R.string.custom_reminders_edit);
             nameTextView.setEnabled(false);
             unitsSpinner.setEnabled(false);
             spVariableCategory.setEnabled(false);
+            removeButton.setText(R.string.custom_reminders_remove);
         } else if(getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_create);
     }
@@ -132,6 +127,8 @@ public class CustomRemindersCreateActivity extends Activity {
         progressView = (ProgressBar) findViewById(R.id.custom_reminder_progress);
         nameTextView = (TextView) findViewById(R.id.custom_reminder_variable_edit);
         nameTextView.addTextChangedListener(onVariableNameChanged);
+        removeButton = (Button) findViewById(R.id.reminders_create_remove_button);
+        valueTextView = (TextView) findViewById(R.id.reminders_create_value_text);
 
         lvVariableSuggestions = (ListView) findViewById(R.id.lvVariableSuggestions);
 
@@ -152,13 +149,10 @@ public class CustomRemindersCreateActivity extends Activity {
                 R.array.mood_interval_entries, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        if(extraFrequencyIndex > 0){
-            spinner.setSelection(extraFrequencyIndex, false);
-        }
 
-        valueTextView = (TextView) findViewById(R.id.reminders_create_value_text);
-        if(!TextUtils.isEmpty(extraValue)){
-            valueTextView.setText(extraValue);
+        if(isEditing){
+            spinner.setSelection(mReminder.frequencyIndex, false);
+            valueTextView.setText(mReminder.value);
         }
 
     }
@@ -198,41 +192,40 @@ public class CustomRemindersCreateActivity extends Activity {
         else filter = null;
         getSpiceManager().execute(new GetSuggestedVariablesRequest(search, filter),
                 new DefaultSdkResponseListener<GetSuggestedVariablesRequest.GetSuggestedVariablesResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                super.onRequestFailure(spiceException);
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        super.onRequestFailure(spiceException);
 //                getPublicVariables(search);
-            }
+                    }
 
-            @Override
-            public void onRequestSuccess(GetSuggestedVariablesRequest.GetSuggestedVariablesResponse response) {
-                refreshesRunning--;
-                if (refreshesRunning <= 0) {
-                    progressView.setVisibility(View.GONE);
-                }
-                if(response.variables.size() == 0){
-                    autoCompleteListAdapter.clear();
-                    lvVariableSuggestions.setVisibility(View.GONE);
+                    @Override
+                    public void onRequestSuccess(GetSuggestedVariablesRequest.GetSuggestedVariablesResponse response) {
+                        refreshesRunning--;
+                        if (refreshesRunning <= 0) {
+                            progressView.setVisibility(View.GONE);
+                        }
+                        if (response.variables.size() == 0) {
+                            autoCompleteListAdapter.clear();
+                            lvVariableSuggestions.setVisibility(View.GONE);
 //                    getPublicVariables(search);
-                }
-                else {
-                    if(!TextUtils.isEmpty(extraVariableName)){
-                        for(Variable variable : response.variables){
-                            if(variable.getName().equals(extraVariableName))
-                                selectedVariable = variable;
+                        } else {
+                            if (isEditing) {
+                                for (Variable variable : response.variables) {
+                                    if (variable.getName().equals(mReminder.name))
+                                        selectedVariable = variable;
+                                }
+                            }
+                            suggestedVariables = response.variables;
+                            autoCompleteListAdapter.clear();
+                            autoCompleteListAdapter.addAll(response.variables);
+                            if (selectedVariable != null && existOnVariables(selectedVariable.getId()) &&
+                                    nameTextView.getText().toString().equals(selectedVariable.getName()))
+                                return;
+                            lvVariableSuggestions.setVisibility(View.VISIBLE);
+//                    openSearchVariable();
                         }
                     }
-                    suggestedVariables = response.variables;
-                    autoCompleteListAdapter.clear();
-                    autoCompleteListAdapter.addAll(response.variables);
-                    if(selectedVariable != null && existOnVariables(selectedVariable.getId()) &&
-                            nameTextView.getText().toString().equals(selectedVariable.getName()))
-                        return;
-                    lvVariableSuggestions.setVisibility(View.VISIBLE);
-//                    openSearchVariable();
-                }
-            }
-        });
+                });
     }
 
     private boolean existOnVariables(long id){
@@ -263,9 +256,9 @@ public class CustomRemindersCreateActivity extends Activity {
                 categoriesUpdated();
             }
         });
-        if(!TextUtils.isEmpty(extraVariableName)){
-            nameTextView.setText(extraVariableName);
-            refreshAutoComplete(extraVariableName);
+        if(isEditing){
+            nameTextView.setText(mReminder.name);
+            refreshAutoComplete(mReminder.name);
         }
     }
 
@@ -276,9 +269,9 @@ public class CustomRemindersCreateActivity extends Activity {
                 return lhs.getName().compareToIgnoreCase(rhs.getName());
             }
         });
-        if(extraUnitId >= 0){
+        if(isEditing){
             for(int i=0; i<mUnits.size(); i++){
-                if(mUnits.get(i).getId() == extraUnitId) selectedUnitIndex = i;
+                if(mUnits.get(i).getId() == mReminder.unitId) selectedUnitIndex = i;
             }
         }
         else selectedUnitIndex = 0;
@@ -288,9 +281,9 @@ public class CustomRemindersCreateActivity extends Activity {
     private void categoriesUpdated() {
         VariableCategorySelectSpinnerAdapter adapter = new VariableCategorySelectSpinnerAdapter(this, allCategories);
         spVariableCategory.setAdapter(adapter);
-        if(!TextUtils.isEmpty(extraCategoryName)) {
+        if(isEditing) {
             for (int i = 0; i < allCategories.size(); i++) {
-                if (extraCategoryName.equals(allCategories.get(i).getName())){
+                if (mReminder.variableCategory.equals(allCategories.get(i).getName())){
                     spVariableCategory.setSelection(i);
                 }
             }
@@ -311,6 +304,22 @@ public class CustomRemindersCreateActivity extends Activity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+    }
+
+    /**
+     * Click listener for Save Button
+     * @param view the Button view
+     */
+    public void onSave(View view){
+
+    }
+
+    /**
+     * Click listener for Remove Button, also used to cancel when creating a reminder
+     * @param view the Button view
+     */
+    public void onRemove(View view){
+
     }
 
     /*

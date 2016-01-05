@@ -2,25 +2,16 @@ package com.quantimodo.tools.activities;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.Contacts;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
-import com.quantimodo.tools.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,12 +85,7 @@ public class CustomRemindersActivity extends ListActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     CustomRemindersHelper.Reminder reminder = reminderList.get(position);
                     Intent intent = new Intent(CustomRemindersActivity.this, CustomRemindersCreateActivity.class);
-                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VARIABLE_NAME, reminder.name);
-                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_CATEGORY_NAME, reminder.variableCategory);
-                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_UNIT_ID, reminder.unitId);
-                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VALUE, reminder.value);
-                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_FREQUENCY_INDEX, reminder.frequencyIndex);
-
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_REMINDER_ID, reminder.id);
                     startActivity(intent);
                 }
             });
