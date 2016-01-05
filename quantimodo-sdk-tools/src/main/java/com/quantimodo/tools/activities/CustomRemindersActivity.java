@@ -57,7 +57,7 @@ public class CustomRemindersActivity extends ListActivity {
         @Override
         protected SimpleAdapter doInBackground(Void... params) {
             // create the mapping list
-            String[] from = new String[]{"title", "frequency"};
+            String[] from = new String[]{"title", "subtitle"};
             int[] to = new int[]{R.id.custom_reminder_title_text, R.id.custom_reminder_freq_text};
 
             // prepare the list of all records
@@ -65,8 +65,9 @@ public class CustomRemindersActivity extends ListActivity {
             reminderList = CustomRemindersHelper.getRemindersList(CustomRemindersActivity.this);
             for (CustomRemindersHelper.Reminder reminder : reminderList) {
                 HashMap<String, String> map = new HashMap<>();
-                map.put(from[0], reminder.value + " " + reminder.unitName + " of " + reminder.name);
-                map.put(from[1], CustomRemindersHelper.FrequencyType.values()[reminder.frequencyIndex].toString());
+                map.put(from[0], reminder.name);
+                map.put(from[1], reminder.value + " " + reminder.unitName + " " +
+                        CustomRemindersHelper.FrequencyType.values()[reminder.frequencyIndex].toString());
                 fillMaps.add(map);
             }
 
