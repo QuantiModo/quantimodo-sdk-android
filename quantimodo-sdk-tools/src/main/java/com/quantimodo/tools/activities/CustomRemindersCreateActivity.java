@@ -1,10 +1,13 @@
 package com.quantimodo.tools.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -60,6 +63,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private TextView valueTextView;
     private View mainLayout;
     private Button removeButton;
+    Spinner frequencySpinner;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
@@ -144,14 +148,24 @@ public class CustomRemindersCreateActivity extends Activity {
         autoCompleteListAdapter = new AutoCompleteListAdapter(this, suggestedVariables);
         lvVariableSuggestions.setAdapter(autoCompleteListAdapter);
 
-        Spinner spinner = (Spinner) findViewById(R.id.reminders_create_freq_spinner);
+        frequencySpinner = (Spinner) findViewById(R.id.reminders_create_freq_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.mood_interval_entries, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        frequencySpinner.setAdapter(adapter);
+        frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView)view).setTextColor(Color.BLACK);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         if(isEditing){
-            spinner.setSelection(mReminder.frequencyIndex, false);
+            frequencySpinner.setSelection(mReminder.frequencyIndex, false);
             valueTextView.setText(mReminder.value);
         }
 
@@ -311,7 +325,39 @@ public class CustomRemindersCreateActivity extends Activity {
      * @param view the Button view
      */
     public void onSave(View view){
+        boolean error = false;
+        if(selectedVariable == null || lvVariableSuggestions.getVisibility() == View.VISIBLE) {
+            nameTextView.setError("You must select one Variable");
+            error = true;
+        }
+        if(TextUtils.isEmpty(valueTextView.getText())){
+            valueTextView.setError("You must specify a Value");
+            error = true;
+        }
+        if(frequencySpinner.getSelectedItemPosition() == 0){
+            TextView spinnerText = (TextView) frequencySpinner.getSelectedView();
+            spinnerText.setError("");
+            spinnerText.setTextColor(Color.RED);
+            spinnerText.setText("You must select a Frequency");
+            error = true;
+        }
+        if(error) return;
 
+        CustomRemindersHelper.Reminder newReminder = new CustomRemindersHelper.Reminder(
+                Long.toString(selectedVariable.getId()),
+                selectedVariable.getName(),
+                allCategories.get(spVariableCategory.getSelectedItemPosition()).getName(),
+                selectedVariable.getCombinationOperation(),
+                valueTextView.getText().toString(),
+                mUnits.get(unitsSpinner.getSelectedItemPosition()).getAbbreviatedName(),
+                mUnits.get(unitsSpinner.getSelectedItemPosition()).getId(),
+                frequencySpinner.getSelectedItemPosition()
+        );
+        CustomRemindersHelper.putReminder(this, newReminder);
+        CustomRemindersHelper.setAlarm(this, newReminder.id);
+        finish();
+        Toast.makeText(getApplicationContext(),R.string.custom_reminder_save_message,
+                Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -319,7 +365,20 @@ public class CustomRemindersCreateActivity extends Activity {
      * @param view the Button view
      */
     public void onRemove(View view){
-
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.custom_reminders_remove_confirmation)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CustomRemindersHelper.removeReminder(CustomRemindersCreateActivity.this,
+                                reminderId);
+                        CustomRemindersCreateActivity.this.finish();
+                        Toast.makeText(getApplicationContext(),
+                                R.string.custom_reminders_remove_message, Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     /*

@@ -104,6 +104,9 @@ public class CustomRemindersHelper {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         switch(frequencyType){
+            case NEVER:
+                cancelAlarm(context, reminderId);
+                break;
             case HOURLY:
                 alarmMgr.setRepeating(AlarmManager.RTC,
                         //Testing line:
@@ -141,47 +144,24 @@ public class CustomRemindersHelper {
                 Toast.makeText(context, R.string.reminders_snooze_message, Toast.LENGTH_LONG).show();
                 break;
         }
-        setBootReceiver(context, true);
     }
+
     public static void setAlarm(Context context, String reminderId) {
         FrequencyType frequencyType = FrequencyType.values()[getReminder(context, reminderId).frequencyIndex];
         setAlarm(context, reminderId, frequencyType);
     }
 
     /**
-     * Cancels the alarm.
+     * Cancels an alarm
+     * @param reminderId the reminder identifier
      * @param context current context
      */
-    public static void cancelAlarm(Context context, String id) {
+    public static void cancelAlarm(Context context, String reminderId) {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, CustomRemindersReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(id),
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(reminderId),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.cancel(alarmIntent);
-
-        setBootReceiver(context, false);
-    }
-
-    /**
-     * Enable or disable {@code RemindersBootReceiver} so that it will or not automatically
-     * restart the alarm when the device is rebooted
-     * @param context the curent context
-     * @param setEnabled if true it will enable the {@code RemindersReceiver} when the device boot
-     */
-    private static void setBootReceiver(Context context, boolean setEnabled){
-        ComponentName receiver = new ComponentName(context, QToolsBootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        if(setEnabled){
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
-        else{
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
     }
 
     /**
@@ -216,6 +196,28 @@ public class CustomRemindersHelper {
         mEdit1.apply();
     }
 
+    public static void removeReminder(Context context, String reminderId){
+        SharedPreferences preferences = getPreferences(context);
+        Reminder reminder = getReminder(context, reminderId);
+        SharedPreferences.Editor mEdit1 = preferences.edit();
+
+        mEdit1.remove("reminder_" + reminder.id + KEY_NAME);
+        mEdit1.remove("reminder_" + reminder.id + KEY_CATEGORY);
+        mEdit1.remove("reminder_" + reminder.id + KEY_COMBINATION_OPERATION);
+        mEdit1.remove("reminder_" + reminder.id + KEY_VALUE);
+        mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
+        mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_ID);
+        mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
+
+        Set<String> remindersSet = new HashSet<String>(
+                preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
+        if(remindersSet.contains(reminder.id)) remindersSet.remove(reminder.id);
+        mEdit1.putStringSet(KEY_REMINDERS_LIST, remindersSet);
+
+        mEdit1.apply();
+        cancelAlarm(context, reminderId);
+    }
+
     public static ArrayList<Reminder> getRemindersList(Context context){
         SharedPreferences preferences = getPreferences(context);
 
@@ -246,7 +248,6 @@ public class CustomRemindersHelper {
     private static SharedPreferences getPreferences(Context context){
         return context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
     }
-
 
     @NonNull
     public static String removeTrailingZeros(@NonNull String number){
