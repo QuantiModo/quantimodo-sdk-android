@@ -33,8 +33,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:minWidth="120dp"
-                android:textColorHint="#B2B2B2"
-                android:textColor="#777777"
                 android:textSize="15sp"
                 android:imeOptions="actionDone"
                 android:inputType="textNoSuggestions" />
@@ -123,6 +121,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <EditText
+                android:id="@+id/reminders_create_value_text"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -168,21 +167,49 @@
                 android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>
-    <FrameLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        android:background="@drawable/card_complete">
-        <Button
-            android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+        <FrameLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:background="@drawable/selector"
-            android:textSize="17sp"
-            android:text="Save"/>
-    </FrameLayout>
+            android:layout_weight="1"
+            android:background="@drawable/card_complete">
+            <Button
+                android:id="@+id/reminders_create_remove_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:background="@drawable/selector"
+                android:textSize="17sp"
+                android:text="Remove"/>
+        </FrameLayout>
+        <Space
+            android:layout_width="15dp"
+            android:layout_height="wrap_content" />
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/card_complete">
+            <Button
+                android:id="@+id/reminders_create_save_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:background="@drawable/selector"
+                android:textSize="17sp"
+                android:text="Save"/>
+        </FrameLayout>
+    </LinearLayout>
 </LinearLayout>
 </ScrollView>

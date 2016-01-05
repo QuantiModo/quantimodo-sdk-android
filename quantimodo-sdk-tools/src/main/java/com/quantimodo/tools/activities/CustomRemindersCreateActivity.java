@@ -47,6 +47,11 @@ import java.util.Comparator;
  * Activity that displays the form to create a custom reminder
  */
 public class CustomRemindersCreateActivity extends Activity {
+    public static final String EXTRA_VARIABLE_NAME = "extra_variable_name";
+    public static final String EXTRA_UNIT_ID = "extra_unit_id";
+    public static final String EXTRA_CATEGORY_NAME = "extra_category_name";
+    public static final String EXTRA_VALUE = "extra_value";
+    public static final String EXTRA_FREQUENCY_INDEX = "extra_freq_index";
 
     private SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
 
@@ -55,6 +60,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private Spinner unitsSpinner;
     private ProgressBar progressView;
     private Spinner spVariableCategory;
+    private TextView valueTextView;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
@@ -65,10 +71,22 @@ public class CustomRemindersCreateActivity extends Activity {
     private int selectedUnitIndex;
     private int refreshesRunning = 0;
 
+    private String extraVariableName;
+    private int extraUnitId;
+    private String extraCategoryName;
+    private String extraValue;
+    private int extraFrequencyIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_reminder_create);
+        extraVariableName = getIntent().getStringExtra(EXTRA_VARIABLE_NAME);
+        extraUnitId = getIntent().getIntExtra(EXTRA_UNIT_ID, -1);
+        extraValue = getIntent().getStringExtra(EXTRA_VALUE);
+        extraCategoryName = getIntent().getStringExtra(EXTRA_CATEGORY_NAME);
+        extraFrequencyIndex = getIntent().getIntExtra(EXTRA_FREQUENCY_INDEX, 0);
+
         initViews();
         loadAndInitData();
     }
@@ -110,8 +128,15 @@ public class CustomRemindersCreateActivity extends Activity {
                 R.array.mood_interval_entries, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        if(extraFrequencyIndex > 0){
+            spinner.setSelection(extraFrequencyIndex, false);
+        }
 
-//        initUnitPicker();
+        valueTextView = (TextView) findViewById(R.id.reminders_create_value_text);
+        if(!TextUtils.isEmpty(extraValue)){
+            valueTextView.setText(extraValue);
+        }
+
     }
 
     private TextWatcher onVariableNameChanged = new TextWatcher() {
@@ -142,8 +167,12 @@ public class CustomRemindersCreateActivity extends Activity {
         Ion.getDefault(this).cancelAll(this);
         progressView.setVisibility(View.VISIBLE);
         refreshesRunning++;
-        getSpiceManager().execute(new GetSuggestedVariablesRequest(search,
-                        allCategories.get(spVariableCategory.getSelectedItemPosition()).getName()),
+        String filter;
+        if(allCategories != null){
+            filter = allCategories.get(spVariableCategory.getSelectedItemPosition()).getName();
+        }
+        else filter = null;
+        getSpiceManager().execute(new GetSuggestedVariablesRequest(search, filter),
                 new DefaultSdkResponseListener<GetSuggestedVariablesRequest.GetSuggestedVariablesResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -163,6 +192,12 @@ public class CustomRemindersCreateActivity extends Activity {
 //                    getPublicVariables(search);
                 }
                 else {
+                    if(!TextUtils.isEmpty(extraVariableName)){
+                        for(Variable variable : response.variables){
+                            if(variable.getName().equals(extraVariableName))
+                                selectedVariable = variable;
+                        }
+                    }
                     suggestedVariables = response.variables;
                     autoCompleteListAdapter.clear();
                     autoCompleteListAdapter.addAll(response.variables);
@@ -204,6 +239,10 @@ public class CustomRemindersCreateActivity extends Activity {
                 categoriesUpdated();
             }
         });
+        if(!TextUtils.isEmpty(extraVariableName)){
+            nameTextView.setText(extraVariableName);
+            refreshAutoComplete(extraVariableName);
+        }
     }
 
     private void unitsUpdated() {
@@ -213,19 +252,32 @@ public class CustomRemindersCreateActivity extends Activity {
                 return lhs.getName().compareToIgnoreCase(rhs.getName());
             }
         });
-        selectedUnitIndex = 0;
+        if(extraUnitId >= 0){
+            for(int i=0; i<mUnits.size(); i++){
+                if(mUnits.get(i).getId() == extraUnitId) selectedUnitIndex = i;
+            }
+        }
+        else selectedUnitIndex = 0;
         initUnitPicker();
     }
 
     private void categoriesUpdated() {
         VariableCategorySelectSpinnerAdapter adapter = new VariableCategorySelectSpinnerAdapter(this, allCategories);
         spVariableCategory.setAdapter(adapter);
+        if(!TextUtils.isEmpty(extraCategoryName)) {
+            for (int i = 0; i < allCategories.size(); i++) {
+                if (extraCategoryName.equals(allCategories.get(i).getName())){
+                    spVariableCategory.setSelection(i);
+                }
+            }
+        }
     }
 
     private void initUnitPicker() {
         unitsSpinner = (Spinner) findViewById(R.id.reminders_create_units_spinner);
         unitAdapter = new UnitSelectSpinnerAdapter(this, mUnits);
         unitsSpinner.setAdapter(unitAdapter);
+        unitsSpinner.setSelection(selectedUnitIndex);
         unitsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
