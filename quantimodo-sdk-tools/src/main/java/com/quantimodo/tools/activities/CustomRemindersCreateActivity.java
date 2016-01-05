@@ -327,18 +327,18 @@ public class CustomRemindersCreateActivity extends Activity {
     public void onSave(View view){
         boolean error = false;
         if(selectedVariable == null || lvVariableSuggestions.getVisibility() == View.VISIBLE) {
-            nameTextView.setError("You must select one Variable");
+            nameTextView.setError(getString(R.string.custom_reminders_error_variable));
             error = true;
         }
         if(TextUtils.isEmpty(valueTextView.getText())){
-            valueTextView.setError("You must specify a Value");
+            valueTextView.setError(getString(R.string.custom_reminders_error_value));
             error = true;
         }
         if(frequencySpinner.getSelectedItemPosition() == 0){
             TextView spinnerText = (TextView) frequencySpinner.getSelectedView();
             spinnerText.setError("");
             spinnerText.setTextColor(Color.RED);
-            spinnerText.setText("You must select a Frequency");
+            spinnerText.setText(getString(R.string.custom_reminders_error_frequency));
             error = true;
         }
         if(error) return;
@@ -365,6 +365,10 @@ public class CustomRemindersCreateActivity extends Activity {
      * @param view the Button view
      */
     public void onRemove(View view){
+        if(!isEditing){
+            finish();
+            return;
+        }
         new AlertDialog.Builder(this)
                 .setMessage(R.string.custom_reminders_remove_confirmation)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

@@ -129,4 +129,7 @@
     <string name="custom_reminders_remove_confirmation">Are you sure you want to delete this Reminder?</string>
     <string name="custom_reminders_remove_message">The Reminder was successfully deleted</string>
     <string name="custom_reminder_save_message">The Reminder was successfully saved</string>
+    <string name="custom_reminders_error_variable">You must select one Variable</string>
+    <string name="custom_reminders_error_value">You must specify a Value</string>
+    <string name="custom_reminders_error_frequency">You must select a Frequency</string>
 </resources>
