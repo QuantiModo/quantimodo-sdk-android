@@ -9,12 +9,12 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:textSize="18sp"
-        android:text="What to track?"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:textSize="18sp"-->
+        <!--android:text="What to track?"/>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,31 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Variable"/>
+            android:fontFamily="sans-serif-light"
+            android:textSize="17sp"
+            android:text="@string/custom_reminders_category"/>
+
+        <Spinner
+            android:id="@+id/spVariableCategory"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textColorHint="#CCCCCC"
+            android:inputType="none"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:translationY="-2dp"
+        android:background="@drawable/card_complete">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="17sp"
+            android:text="@string/custom_reminders_variable"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -50,45 +74,20 @@
                 android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <ListView
         android:id="@+id/lvVariableSuggestions"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="12dp"
+        android:layout_height="290dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/card_complete"
         android:scrollbarStyle="outsideOverlay"
         android:clipToPadding="false"
         android:visibility="gone" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:translationY="-2dp"
-        android:background="@drawable/card_complete">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"/>
-
-        <Spinner
-            android:id="@+id/spVariableCategory"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:textColorHint="#CCCCCC"
-            android:inputType="none"
-            android:layout_marginRight="12dp"
-            />
-
-        </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -104,8 +103,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-light"
                 android:textSize="17sp"
-                android:text="Value"/>
+                android:text="@string/custom_reminders_value"/>
             <Space
                 android:layout_width="10dp"
                 android:layout_height="wrap_content" />
@@ -113,8 +113,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-light"
                 android:textSize="17sp"
-                android:text="Unit"/>
+                android:text="@string/custom_reminders_unit"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -144,28 +145,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
             android:textSize="17sp"
-            android:text="Reminder Frequency"/>
+            android:text="@string/custom_reminders_frequency"/>
 
-        <LinearLayout
+        <Spinner
+            android:id="@+id/reminders_create_freq_spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Spinner
-                android:id="@+id/reminders_create_freq_spinner"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:textSize="15sp" />
-
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="wrap_content" />
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-        </LinearLayout>
+            android:layout_height="48dp"
+            android:textSize="15sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -188,8 +176,9 @@
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
                 android:background="@drawable/selector"
+                android:fontFamily="sans-serif-light"
                 android:textSize="17sp"
-                android:text="Remove"/>
+                android:text="@string/custom_reminders_remove"/>
         </FrameLayout>
         <Space
             android:layout_width="15dp"
@@ -207,8 +196,9 @@
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
                 android:background="@drawable/selector"
+                android:fontFamily="sans-serif-light"
                 android:textSize="17sp"
-                android:text="Save"/>
+                android:text="@string/custom_reminders_save"/>
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

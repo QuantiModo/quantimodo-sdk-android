@@ -89,6 +89,15 @@ public class CustomRemindersCreateActivity extends Activity {
 
         initViews();
         loadAndInitData();
+
+        if(!TextUtils.isEmpty(extraVariableName)){
+            if(getActionBar() != null)
+                getActionBar().setTitle(R.string.custom_reminders_edit);
+            nameTextView.setEnabled(false);
+            unitsSpinner.setEnabled(false);
+            spVariableCategory.setEnabled(false);
+        } else if(getActionBar() != null)
+            getActionBar().setTitle(R.string.custom_reminders_create);
     }
 
     @Override
@@ -104,6 +113,7 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     private void initViews(){
+        unitsSpinner = (Spinner) findViewById(R.id.reminders_create_units_spinner);
         spVariableCategory = (Spinner) findViewById(R.id.spVariableCategory);
         progressView = (ProgressBar) findViewById(R.id.custom_reminder_progress);
         nameTextView = (TextView) findViewById(R.id.custom_reminder_variable_edit);
@@ -274,7 +284,6 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     private void initUnitPicker() {
-        unitsSpinner = (Spinner) findViewById(R.id.reminders_create_units_spinner);
         unitAdapter = new UnitSelectSpinnerAdapter(this, mUnits);
         unitsSpinner.setAdapter(unitAdapter);
         unitsSpinner.setSelection(selectedUnitIndex);

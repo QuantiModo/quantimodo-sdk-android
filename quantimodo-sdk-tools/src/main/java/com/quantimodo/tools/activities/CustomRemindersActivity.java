@@ -31,6 +31,8 @@ public class CustomRemindersActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_reminder_main);
+        if(getActionBar() != null)
+            getActionBar().setTitle(R.string.custom_reminders_title);
         initListView();
         Button addButton = (Button) findViewById(R.id.custom_reminder_add);
         addButton.setOnClickListener(new View.OnClickListener() {

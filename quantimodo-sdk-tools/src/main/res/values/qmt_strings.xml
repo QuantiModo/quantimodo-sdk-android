@@ -113,4 +113,16 @@
     <string name="reminders_notif_button_edit">Edit</string>
     <string name="reminders_notif_subtitle">Tap to track it!</string>
     <string name="reminders_snooze_message">I\'ll remind you again in 1 hour</string>
+
+    <!-- Custom Reminders -->
+    <string name="custom_reminders_title">Custom Reminders</string>
+    <string name="custom_reminders_create">Add a Reminder</string>
+    <string name="custom_reminders_edit">Edit your Reminder</string>
+    <string name="custom_reminders_variable">Variable</string>
+    <string name="custom_reminders_category">Category</string>
+    <string name="custom_reminders_value">Value</string>
+    <string name="custom_reminders_unit">Unit</string>
+    <string name="custom_reminders_frequency">Reminder Frequency</string>
+    <string name="custom_reminders_save">Save</string>
+    <string name="custom_reminders_remove">Remove</string>
 </resources>
