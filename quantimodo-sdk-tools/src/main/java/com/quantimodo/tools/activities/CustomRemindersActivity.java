@@ -10,10 +10,13 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
 
+import com.quantimodo.android.sdk.model.Unit;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,6 +66,16 @@ public class CustomRemindersActivity extends ListActivity {
             // prepare the list of all records
             List<HashMap<String, String>> fillMaps = new ArrayList<>();
             reminderList = CustomRemindersHelper.getRemindersList(CustomRemindersActivity.this);
+
+            //sorting by reminder name
+            Collections.sort(reminderList, new Comparator<CustomRemindersHelper.Reminder>() {
+                @Override
+                public int compare(CustomRemindersHelper.Reminder reminder1,
+                                   CustomRemindersHelper.Reminder reminder2) {
+                    return reminder1.name.compareToIgnoreCase(reminder2.name);
+                }
+            });
+
             for (CustomRemindersHelper.Reminder reminder : reminderList) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put(from[0], reminder.name);
@@ -74,8 +87,6 @@ public class CustomRemindersActivity extends ListActivity {
             // fill in the layout with the map
             return new SimpleAdapter(CustomRemindersActivity.this,
                     fillMaps, R.layout.custom_reminder_item, from, to);
-
-//            return null;
         }
 
         @Override
