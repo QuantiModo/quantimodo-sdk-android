@@ -49,7 +49,8 @@
             android:hint="@string/tracking_value"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:textColorHint="#CCCCCC" />
+            android:textColorHint="#CCCCCC"
+            android:selectAllOnFocus="true"/>
 
 
         <Spinner
