@@ -202,6 +202,7 @@ public class CustomRemindersCreateActivity extends Activity {
         String filter;
         if(allCategories != null){
             filter = allCategories.get(spVariableCategory.getSelectedItemPosition()).getName();
+            if(filter.equals("Misc")) filter = null;
         }
         else filter = null;
         getSpiceManager().execute(new GetSuggestedVariablesRequest(search, filter),
@@ -302,6 +303,17 @@ public class CustomRemindersCreateActivity extends Activity {
                 }
             }
         }
+
+        for(int i=0; i<allCategories.size(); i++){
+            String name = allCategories.get(i).getName().toLowerCase();
+            if(!name.equals("emotions") && !name.equals("foods") && !name.equals("symptoms") &&
+                    !name.equals("treatments")){
+                allCategories.remove(i);
+                i--;
+            }
+        }
+        VariableCategory miscCategory = new VariableCategory("Misc");
+        allCategories.add(miscCategory);
     }
 
     private void initUnitPicker() {
@@ -346,7 +358,7 @@ public class CustomRemindersCreateActivity extends Activity {
         CustomRemindersHelper.Reminder newReminder = new CustomRemindersHelper.Reminder(
                 Long.toString(selectedVariable.getId()),
                 selectedVariable.getName(),
-                allCategories.get(spVariableCategory.getSelectedItemPosition()).getName(),
+                selectedVariable.getCategory(),
                 selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
                 mUnits.get(unitsSpinner.getSelectedItemPosition()).getAbbreviatedName(),
