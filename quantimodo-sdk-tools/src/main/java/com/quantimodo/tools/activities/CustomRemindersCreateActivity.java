@@ -57,7 +57,7 @@ public class CustomRemindersCreateActivity extends Activity {
 
     private TextView nameTextView;
     private ListView lvVariableSuggestions;
-    private Spinner unitsSpinner;
+    private TextView unitsText;
     private ProgressBar progressView;
     private Spinner spVariableCategory;
     private TextView valueTextView;
@@ -105,7 +105,6 @@ public class CustomRemindersCreateActivity extends Activity {
             if(getActionBar() != null)
                 getActionBar().setTitle(R.string.custom_reminders_edit);
             nameTextView.setEnabled(false);
-            unitsSpinner.setEnabled(false);
             spVariableCategory.setEnabled(false);
             removeButton.setText(R.string.custom_reminders_remove);
         } else if(getActionBar() != null)
@@ -126,7 +125,7 @@ public class CustomRemindersCreateActivity extends Activity {
 
     private void initViews(){
         mainLayout = findViewById(R.id.custom_reminder_main_layout);
-        unitsSpinner = (Spinner) findViewById(R.id.reminders_create_units_spinner);
+        unitsText = (TextView) findViewById(R.id.reminders_create_units_text);
         spVariableCategory = (Spinner) findViewById(R.id.spVariableCategory);
         progressView = (ProgressBar) findViewById(R.id.custom_reminder_progress);
         nameTextView = (TextView) findViewById(R.id.custom_reminder_variable_edit);
@@ -141,6 +140,8 @@ public class CustomRemindersCreateActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 nameTextView.setText(suggestedVariables.get(position).getName());
                 selectedVariable = suggestedVariables.get(position);
+                selectUnit(selectedVariable);
+                valueTextView.setText(selectedVariable.getDefaultValue().toString());
                 lvVariableSuggestions.setVisibility(View.GONE);
             }
         });
@@ -225,9 +226,12 @@ public class CustomRemindersCreateActivity extends Activity {
 //                    getPublicVariables(search);
                         } else {
                             if (isEditing) {
-                                for (Variable variable : response.variables) {
-                                    if (variable.getName().equals(mReminder.name))
+                                for (int i=0; i<response.variables.size(); i++) {
+                                    Variable variable = response.variables.get(i);
+                                    if (variable.getName().equals(mReminder.name)) {
                                         selectedVariable = variable;
+                                        selectUnit(selectedVariable);
+                                    }
                                 }
                             }
                             suggestedVariables = response.variables;
@@ -237,10 +241,35 @@ public class CustomRemindersCreateActivity extends Activity {
                                     nameTextView.getText().toString().equals(selectedVariable.getName()))
                                 return;
                             lvVariableSuggestions.setVisibility(View.VISIBLE);
+
 //                    openSearchVariable();
                         }
                     }
                 });
+    }
+
+    private void selectUnit(Variable variable){
+        if(allCategories == null || mUnits == null) return;
+
+        String category = allCategories.get(spVariableCategory.getSelectedItemPosition()).getName();
+        String categoryUnit = "units";
+        if(category.equals("Food")) categoryUnit = "serving";
+        else if(category.equals("Symptoms") || category.equals("Emotions")) categoryUnit = "%";
+        int selectedUnit = -1, defaultUnit = -1;
+        for (int i = 0; i< mUnits.size(); i++){
+            Unit currentUnit = mUnits.get(i);
+            if (categoryUnit.equals(currentUnit.getAbbreviatedName())){
+                defaultUnit = i;
+            }
+            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
+                selectedUnit = i;
+            }
+        }
+
+        int unitIndex = selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
+
+        unitsText.setText(mUnits.get(unitIndex).getName());
+        selectedUnitIndex = unitIndex;
     }
 
     private boolean existOnVariables(long id){
@@ -290,7 +319,7 @@ public class CustomRemindersCreateActivity extends Activity {
             }
         }
         else selectedUnitIndex = 0;
-        initUnitPicker();
+        selectUnit(selectedVariable);
     }
 
     private void categoriesUpdated() {
@@ -314,22 +343,7 @@ public class CustomRemindersCreateActivity extends Activity {
         }
         VariableCategory miscCategory = new VariableCategory("Misc");
         allCategories.add(miscCategory);
-    }
-
-    private void initUnitPicker() {
-        unitAdapter = new UnitSelectSpinnerAdapter(this, mUnits);
-        unitsSpinner.setAdapter(unitAdapter);
-        unitsSpinner.setSelection(selectedUnitIndex);
-        unitsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedUnitIndex = i;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
+        selectUnit(selectedVariable);
     }
 
     /**
@@ -361,8 +375,8 @@ public class CustomRemindersCreateActivity extends Activity {
                 selectedVariable.getCategory(),
                 selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
-                mUnits.get(unitsSpinner.getSelectedItemPosition()).getAbbreviatedName(),
-                mUnits.get(unitsSpinner.getSelectedItemPosition()).getId(),
+                mUnits.get(selectedUnitIndex).getAbbreviatedName(),
+                mUnits.get(selectedUnitIndex).getId(),
                 frequencySpinner.getSelectedItemPosition()
         );
         CustomRemindersHelper.putReminder(this, newReminder);
