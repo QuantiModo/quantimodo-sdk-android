@@ -294,6 +294,15 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     private void categoriesUpdated() {
+        for(int i=0; i<allCategories.size(); i++){
+            String name = allCategories.get(i).getName().toLowerCase();
+            if(!name.equals("emotions") && !name.equals("foods") && !name.equals("symptoms") &&
+                    !name.equals("treatments")){
+                allCategories.remove(i);
+                i--;
+            }
+        }
+
         VariableCategorySelectSpinnerAdapter adapter = new VariableCategorySelectSpinnerAdapter(this, allCategories);
         spVariableCategory.setAdapter(adapter);
         if(isEditing) {
@@ -301,15 +310,6 @@ public class CustomRemindersCreateActivity extends Activity {
                 if (mReminder.variableCategory.equals(allCategories.get(i).getName())){
                     spVariableCategory.setSelection(i);
                 }
-            }
-        }
-
-        for(int i=0; i<allCategories.size(); i++){
-            String name = allCategories.get(i).getName().toLowerCase();
-            if(!name.equals("emotions") && !name.equals("foods") && !name.equals("symptoms") &&
-                    !name.equals("treatments")){
-                allCategories.remove(i);
-                i--;
             }
         }
         VariableCategory miscCategory = new VariableCategory("Misc");
