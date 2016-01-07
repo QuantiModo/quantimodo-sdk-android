@@ -79,7 +79,8 @@ public class CustomRemindersActivity extends ListActivity {
             for (CustomRemindersHelper.Reminder reminder : reminderList) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put(from[0], reminder.name);
-                map.put(from[1], reminder.value + " " + reminder.unitName + " " +
+                map.put(from[1], CustomRemindersHelper.removeTrailingZeros(reminder.value) + " " +
+                        reminder.unitName + " " +
                         CustomRemindersHelper.FrequencyType.values()[reminder.frequencyIndex].toString());
                 fillMaps.add(map);
             }
