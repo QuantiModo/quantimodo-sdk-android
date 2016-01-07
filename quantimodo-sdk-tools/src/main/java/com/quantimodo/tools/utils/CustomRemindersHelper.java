@@ -1,20 +1,15 @@
 package com.quantimodo.tools.utils;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
-import com.quantimodo.tools.receivers.QToolsBootReceiver;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -188,7 +183,7 @@ public class CustomRemindersHelper {
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
         mEdit1.putInt("reminder_" + reminder.id + KEY_FREQUENCY, reminder.frequencyIndex);
 
-        Set<String> remindersSet = new HashSet<String>(
+        Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
         if(!remindersSet.contains(reminder.id)) remindersSet.add(reminder.id);
         mEdit1.putStringSet(KEY_REMINDERS_LIST, remindersSet);
@@ -209,7 +204,7 @@ public class CustomRemindersHelper {
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_ID);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
 
-        Set<String> remindersSet = new HashSet<String>(
+        Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
         if(remindersSet.contains(reminder.id)) remindersSet.remove(reminder.id);
         mEdit1.putStringSet(KEY_REMINDERS_LIST, remindersSet);
@@ -221,7 +216,7 @@ public class CustomRemindersHelper {
     public static ArrayList<Reminder> getRemindersList(Context context){
         SharedPreferences preferences = getPreferences(context);
 
-        Set<String> remindersSet = new HashSet<String>(
+        Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
         ArrayList<Reminder> result = new ArrayList<>();
         for(String id : remindersSet){
