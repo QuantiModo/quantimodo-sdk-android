@@ -252,6 +252,8 @@ public class CustomRemindersHelper {
     @NonNull
     public static String removeTrailingZeros(@NonNull String number){
         int i;
+        if(!number.contains("."))
+            return number;
         for(i = number.toCharArray().length - 1;i >= 0; i--){
             char c = number.toCharArray()[i];
             if(Character.getNumericValue(c) > 0)
