@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.quantimodo.android.sdk.SdkDefs.QUANTIMODO_ADDRESS;
 
@@ -208,8 +209,8 @@ public class QuantimodoApiV2 {
     @NonNull
     private String formatDate(@NonNull final Date date){
         SimpleDateFormat formatter;
-
         formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         return formatter.format(date);
     }
 
