@@ -63,7 +63,8 @@ public class CustomRemindersCreateActivity extends Activity {
     private TextView valueTextView;
     private View mainLayout;
     private Button removeButton;
-    Spinner frequencySpinner;
+    private Spinner frequencySpinner;
+    private View containerLayout2;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
@@ -132,6 +133,7 @@ public class CustomRemindersCreateActivity extends Activity {
         nameTextView.addTextChangedListener(onVariableNameChanged);
         removeButton = (Button) findViewById(R.id.reminders_create_remove_button);
         valueTextView = (TextView) findViewById(R.id.reminders_create_value_text);
+        containerLayout2 = findViewById(R.id.custom_reminder_container_2);
 
         lvVariableSuggestions = (ListView) findViewById(R.id.lvVariableSuggestions);
 
@@ -143,6 +145,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 selectUnit(selectedVariable);
                 valueTextView.setText(selectedVariable.getDefaultValue().toString());
                 lvVariableSuggestions.setVisibility(View.GONE);
+                containerLayout2.setVisibility(View.VISIBLE);
             }
         });
 
@@ -154,7 +157,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 R.array.mood_interval_entries, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         frequencySpinner.setAdapter(adapter);
-        frequencySpinner.setSelection(1); //Daily frequency as default
+        frequencySpinner.setSelection(4); //Daily frequency as default
         frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -333,8 +336,11 @@ public class CustomRemindersCreateActivity extends Activity {
             }
         }
 
+        VariableCategory miscCategory = new VariableCategory("Misc");
+        allCategories.add(miscCategory);
         VariableCategorySelectSpinnerAdapter adapter = new VariableCategorySelectSpinnerAdapter(this, allCategories);
         spVariableCategory.setAdapter(adapter);
+        spVariableCategory.setSelection(allCategories.size() - 1);
         if(isEditing) {
             for (int i = 0; i < allCategories.size(); i++) {
                 if (mReminder.variableCategory.equals(allCategories.get(i).getName())){
@@ -342,8 +348,6 @@ public class CustomRemindersCreateActivity extends Activity {
                 }
             }
         }
-        VariableCategory miscCategory = new VariableCategory("Misc");
-        allCategories.add(miscCategory);
         selectUnit(selectedVariable);
     }
 
