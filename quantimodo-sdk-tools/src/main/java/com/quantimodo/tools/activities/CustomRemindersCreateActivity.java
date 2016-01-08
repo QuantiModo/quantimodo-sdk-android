@@ -154,6 +154,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 R.array.mood_interval_entries, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         frequencySpinner.setAdapter(adapter);
+        frequencySpinner.setSelection(1); //Daily frequency as default
         frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
