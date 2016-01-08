@@ -35,14 +35,7 @@ public class RemindersService extends IntentService {
             String reminderId = intent.getExtras().getString(
                     CustomRemindersHelper.EXTRA_REMINDER_ID);
             CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(this, reminderId);
-            StringBuilder builder = new StringBuilder();
-            builder
-                    .append("Track ")
-                    .append(CustomRemindersHelper.removeTrailingZeros(reminder.value)).append(" ")
-                    .append(reminder.unitName).append(" of ")
-                    .append(reminder.name).append("?");
-
-            sendNotification(reminderId, builder.toString());
+            sendNotification(reminder);
         }
         else
             Log.d(TAG, "onHandleIntent has no extras");
@@ -52,12 +45,12 @@ public class RemindersService extends IntentService {
 
     /**
      * Popup the notification and prepares de action over notifications
-     * @param reminderId the reminder id that will also be used to identify the notification
-     * @param title the title to put on the notification
+     * @param reminder the reminder object to display
      */
-    private void sendNotification(String reminderId, String title) {
+    private void sendNotification(CustomRemindersHelper.Reminder reminder) {
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
+        String reminderId = reminder.id;
 
         Intent snoozeIntent = new Intent(this, CustomRemindersReceiver.class);
         Intent trackIntent = new Intent(this, CustomRemindersReceiver.class);
@@ -91,9 +84,11 @@ public class RemindersService extends IntentService {
                 Integer.parseInt(reminderId) + 3,
                 popupIntent, PendingIntent.FLAG_ONE_SHOT);
 
+        String subtitle = String.format(getString(R.string.reminders_notif_track_subtitle),
+                CustomRemindersHelper.removeTrailingZeros(reminder.value), reminder.unitName);
         Notification notification = new NotificationCompat.Builder(this)
-                .setContentTitle(title)
-                .setContentText(getString(R.string.reminders_notif_subtitle))
+                .setContentTitle(reminder.name)
+                .setContentText(subtitle)
                 .setSmallIcon(R.drawable.ic_alarm_on_white_24dp)
                 .setAutoCancel(true)
                 .setContentIntent(popupPendingIntent)
