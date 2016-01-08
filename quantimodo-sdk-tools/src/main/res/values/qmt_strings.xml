@@ -119,6 +119,7 @@
     <string name="custom_reminders_create">Add a Reminder</string>
     <string name="custom_reminders_edit">Edit your Reminder</string>
     <string name="custom_reminders_variable">Variable</string>
+    <string name="custom_reminders_variable_placeholder">Enter variable name</string>
     <string name="custom_reminders_category">Category</string>
     <string name="custom_reminders_value">Value</string>
     <string name="custom_reminders_unit">Unit</string>
