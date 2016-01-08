@@ -24,6 +24,7 @@ import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.activities.CustomRemindersCreateActivity;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
@@ -276,15 +277,11 @@ public class CustomReminderDialog {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "edit clicked");
-                Intent trackIntent = new Intent(mContext,
-                        CustomRemindersHelper.getInstance().getRegisteredActivity());
-                trackIntent.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                Intent.FLAG_ACTIVITY_NEW_TASK |
-                                Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                trackIntent.putExtra(CustomRemindersHelper.EXTRA_VARIABLE_NAME, mReminder.name);
-                mContext.startActivity(trackIntent);
+				Intent intent = new Intent(mContext, CustomRemindersCreateActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra(CustomRemindersCreateActivity.EXTRA_REMINDER_ID, mReminder.id);
+				mContext.startActivity(intent);
+
                 dismiss(mContext);
                 cancelNotification(mContext);
             }
