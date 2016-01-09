@@ -24,40 +24,37 @@
             android:inputType="none"
             />
     </LinearLayout>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
         android:translationY="-2dp"
-        android:background="@drawable/card_complete">
-        <RelativeLayout
+        android:background="@drawable/shadow_horizontal">
+        <EditText
+            android:id="@+id/custom_reminder_variable_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/custom_reminder_variable_edit"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:minWidth="120dp"
-                android:textSize="15sp"
-                android:textColor="@android:color/black"
-                android:imeOptions="actionDone"
-                android:inputType="textNoSuggestions"
-                android:hint="@string/custom_reminders_variable_placeholder"/>
-            <ProgressBar
-                android:id="@+id/custom_reminder_progress"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                style="?android:attr/progressBarStyleSmall"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
-                android:layout_alignEnd="@id/custom_reminder_variable_edit"
-                android:layout_alignRight="@id/custom_reminder_variable_edit"
-                android:layout_alignTop="@id/custom_reminder_variable_edit"
-                android:layout_alignBottom="@id/custom_reminder_variable_edit"
-                android:visibility="gone" />
-        </RelativeLayout>
-    </LinearLayout>
+            android:layout_height="48dp"
+            android:minWidth="120dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:background="@drawable/card_complete"
+            android:hint="@string/custom_reminders_variable_placeholder"/>
+        <ProgressBar
+            android:id="@+id/custom_reminder_progress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            style="?android:attr/progressBarStyleSmall"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignEnd="@id/custom_reminder_variable_edit"
+            android:layout_alignRight="@id/custom_reminder_variable_edit"
+            android:layout_alignTop="@id/custom_reminder_variable_edit"
+            android:layout_alignBottom="@id/custom_reminder_variable_edit"
+            android:visibility="gone" />
+    </RelativeLayout>
     <Space
         android:layout_width="match_parent"
         android:layout_height="10dp" />
