@@ -3,6 +3,7 @@ package com.quantimodo.tools.utils.tracking;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.PopupMenuCompat;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import com.quantimodo.android.sdk.model.Unit;
 import com.quantimodo.android.sdk.model.Variable;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.activities.CustomRemindersCreateActivity;
 import com.quantimodo.tools.fragments.TrackingFragment;
 import com.quantimodo.tools.utils.ConvertUtils;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
@@ -85,7 +87,7 @@ public class MeasurementCardHolder {
         }
         selectedDate = Calendar.getInstance();
 
-        initOverflowButton(removable);
+        initOverflowButton(removable, Long.toString(variable.getId()));
         initDatePicker();
         initTimePicker();
         initValueEntry(focus);
@@ -103,10 +105,10 @@ public class MeasurementCardHolder {
 
     private void fillSavedData(Variable variable){
         if(variable == null) return;
-        CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
-                context, Long.toString(variable.getId()));
-        //load frequency
-        spReminderTime.setSelection(reminder.frequencyIndex);
+//        CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
+//                context, Long.toString(variable.getId()));
+//        //load frequency
+//        spReminderTime.setSelection(reminder.frequencyIndex);
     }
 
     private void initCategory(TrackingFragment.CategoryDef categoryDef) {
@@ -126,25 +128,11 @@ public class MeasurementCardHolder {
     }
 
 
-    private void initOverflowButton(final boolean removable) {
+    private void initOverflowButton(final boolean removable, final String variableId) {
         // Remove button
-        final ImageButton btOverflow = (ImageButton) measurementCard.findViewById(R.id.btOverflow);
+        final ImageButton btOverflow = (ImageButton) measurementCard.findViewById(R.id.btTime);
+        final ImageButton btReminder = (ImageButton) measurementCard.findViewById(R.id.btReminder);
 
-//        final PopupMenu popupMenu = new PopupMenu(context, btOverflow);
-//        popupMenu.inflate(R.menu.measurement_overflow);
-//        popupMenu.getMenu().getItem(0).setEnabled(removable);
-//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem menuItem) {
-//                int i = menuItem.getItemId();
-//                if (i == R.id.action_remove) {
-//                    remove(removedListener);
-//                }
-//                return false;
-//            }
-//        });
-
-//        btOverflow.setOnTouchListener(PopupMenuCompat.getDragToOpenListener(popupMenu));
         btOverflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +140,18 @@ public class MeasurementCardHolder {
 //                popupMenu.show();
             }
         });
+        btReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(context,
+                        variableId);
+                Intent intent = new Intent(context, CustomRemindersCreateActivity.class);
+                if(reminder != null)
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_REMINDER_ID, reminder.id);
+                context.startActivity(intent);
+            }
+        });
     }
 
     private void initDatePicker() {

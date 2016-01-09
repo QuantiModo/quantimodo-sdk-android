@@ -226,7 +226,14 @@ public class CustomRemindersHelper {
         return result;
     }
 
+    /**
+     * Gets the corresponding reminder if exist
+     * @param context the current context
+     * @param id the reminder id
+     * @return the #Reminder instance of null if not exist
+     */
     public static Reminder getReminder(Context context, String id){
+        if(!existReminder(context, id)) return null;
         SharedPreferences preferences = getPreferences(context);
         return new Reminder(
                 id,
@@ -242,6 +249,17 @@ public class CustomRemindersHelper {
 
     private static SharedPreferences getPreferences(Context context){
         return context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Check if there is a reminder associated with the given id
+     * @param context the current app context
+     * @param id the reminder/Variable id
+     * @return true if the reminder exist for that Variable id, false otherwise
+     */
+    public static boolean existReminder(Context context, String id){
+        SharedPreferences preferences = getPreferences(context);
+        return !preferences.getString("reminder_" + id + KEY_NAME, "").equals("");
     }
 
     @NonNull
