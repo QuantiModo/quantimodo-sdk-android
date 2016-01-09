@@ -89,7 +89,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         }
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
-            startTracking(context, reminder.id);
+            startTracking(context, reminder.name);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_POPUP)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
@@ -97,11 +97,16 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         }
     }
 
-    private void startTracking(Context context, String reminderId){
-        Intent intent = new Intent(context, CustomRemindersCreateActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(CustomRemindersCreateActivity.EXTRA_REMINDER_ID, reminderId);
-        context.startActivity(intent);
+    private void startTracking(Context context, String varName){
+        Intent trackIntent = new Intent(context,
+                CustomRemindersHelper.getInstance().getRegisteredActivity());
+        trackIntent.addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        trackIntent.putExtra(CustomRemindersHelper.EXTRA_VARIABLE_NAME, varName);
+        context.startActivity(trackIntent);
     }
 
     private void cancelNotification(Context context, int notifId){

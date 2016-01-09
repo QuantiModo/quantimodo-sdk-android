@@ -65,6 +65,7 @@ public class CustomRemindersHelper {
     }
 
     private static final CustomRemindersHelper INSTANCE = new CustomRemindersHelper();
+    private Class registeredActivity;
 
     private CustomRemindersHelper(){
 
@@ -72,6 +73,20 @@ public class CustomRemindersHelper {
 
     public static CustomRemindersHelper getInstance(){
         return INSTANCE;
+    }
+
+    /**
+     * Registers the activity that will be use to edit the measurement
+     * This class has to be care of taking the Intent and open the
+     * {@link com.quantimodo.tools.fragments.TrackingFragment} loading the data
+     * @param activity the Activity to register
+     */
+    public void registerActivity(Class activity){
+        this.registeredActivity = activity;
+    }
+
+    public Class getRegisteredActivity(){
+        return registeredActivity;
     }
 
     public static void setAlarm(Context context, String reminderId, FrequencyType frequencyType) {
