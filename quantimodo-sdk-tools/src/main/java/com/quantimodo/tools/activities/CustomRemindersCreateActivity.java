@@ -66,6 +66,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private Spinner frequencySpinner;
     private View containerLayout2;
     private View containerCategories;
+    private View buttonsLayout;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
@@ -140,6 +141,7 @@ public class CustomRemindersCreateActivity extends Activity {
         valueTextView = (TextView) findViewById(R.id.reminders_create_value_text);
         containerLayout2 = findViewById(R.id.custom_reminder_container_2);
         containerCategories = findViewById(R.id.custom_reminder_container_1);
+        buttonsLayout = findViewById(R.id.reminders_create_buttons_layout);
 
         lvVariableSuggestions = (ListView) findViewById(R.id.lvVariableSuggestions);
 
@@ -150,8 +152,21 @@ public class CustomRemindersCreateActivity extends Activity {
                 selectedVariable = suggestedVariables.get(position);
                 selectUnit(selectedVariable);
                 valueTextView.setText(selectedVariable.getDefaultValue().toString());
-                lvVariableSuggestions.setVisibility(View.GONE);
-                containerLayout2.setVisibility(View.VISIBLE);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
+                        anim.setDuration(350);
+                        lvVariableSuggestions.setVisibility(View.GONE);
+                        buttonsLayout.setAnimation(anim);
+                        containerLayout2.setAnimation(anim);
+                        buttonsLayout.animate();
+                        containerLayout2.animate();
+                        buttonsLayout.setVisibility(View.VISIBLE);
+                        containerLayout2.setVisibility(View.VISIBLE);
+                    }
+                }, 300);
             }
         });
 
