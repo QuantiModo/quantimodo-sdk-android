@@ -221,7 +221,6 @@ public class CustomRemindersCreateActivity extends Activity {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         super.onRequestFailure(spiceException);
-//                getPublicVariables(search);
                     }
 
                     @Override
@@ -252,8 +251,6 @@ public class CustomRemindersCreateActivity extends Activity {
                                     nameTextView.getText().toString().equals(selectedVariable.getName()))
                                 return;
                             lvVariableSuggestions.setVisibility(View.VISIBLE);
-
-//                    openSearchVariable();
                         }
                     }
                 });
@@ -305,7 +302,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 unitsUpdated();
             }
         });
-
+        //get the categories just when creating a reminder
         if(!isEditing) {
             getSpiceManager().execute(new GetCategoriesRequest().getCachedSpiceRequest(),
                     new DefaultSdkResponseListener<GetCategoriesRequest.GetCategoriesResponse>() {
@@ -318,7 +315,6 @@ public class CustomRemindersCreateActivity extends Activity {
         }
         else {
             nameTextView.setText(mReminder.name);
-//            refreshAutoComplete(mReminder.name);
         }
     }
 
@@ -329,6 +325,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 return lhs.getName().compareToIgnoreCase(rhs.getName());
             }
         });
+        //if editing the reminder find the unit on the list and fill the label
         if(isEditing){
             for(int i=0; i<mUnits.size(); i++){
                 if(mUnits.get(i).getId() == mReminder.unitId) selectedUnitIndex = i;
@@ -367,12 +364,12 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     /**
-     * Click listener for Save Button
+     * Click listener for Save Button, also validates the dat
      * @param view the Button view
      */
     public void onSave(View view){
         boolean error = false;
-        if(selectedVariable == null || lvVariableSuggestions.getVisibility() == View.VISIBLE) {
+        if(!isEditing && selectedVariable == null || lvVariableSuggestions.getVisibility() == View.VISIBLE) {
             nameTextView.setError(getString(R.string.custom_reminders_error_variable));
             error = true;
         }
@@ -389,14 +386,15 @@ public class CustomRemindersCreateActivity extends Activity {
         }
         if(error) return;
 
+        //when editing the reminder, selectedVariable is always null
         CustomRemindersHelper.Reminder newReminder = new CustomRemindersHelper.Reminder(
-                Long.toString(selectedVariable.getId()),
-                selectedVariable.getName(),
-                selectedVariable.getCategory(),
-                selectedVariable.getCombinationOperation(),
+                isEditing ? mReminder.id : Long.toString(selectedVariable.getId()),
+                isEditing ? mReminder.name : selectedVariable.getName(),
+                isEditing ? mReminder.variableCategory : selectedVariable.getCategory(),
+                isEditing ? mReminder.combinationOperation : selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
-                mUnits.get(selectedUnitIndex).getAbbreviatedName(),
-                mUnits.get(selectedUnitIndex).getId(),
+                isEditing ? mReminder.unitName : mUnits.get(selectedUnitIndex).getAbbreviatedName(),
+                isEditing ? mReminder.unitId : mUnits.get(selectedUnitIndex).getId(),
                 frequencySpinner.getSelectedItemPosition()
         );
         CustomRemindersHelper.putReminder(this, newReminder);
