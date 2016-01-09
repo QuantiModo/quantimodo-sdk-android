@@ -303,6 +303,7 @@ public class MeasurementCardHolder {
         });
 
         if (focus) {
+            etValue.clearFocus();
             etValue.requestFocus();
             InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
