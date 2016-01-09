@@ -111,6 +111,7 @@ public class CustomRemindersCreateActivity extends Activity {
             nameTextView.setEnabled(false);
             spVariableCategory.setEnabled(false);
             removeButton.setText(R.string.custom_reminders_remove);
+            valueTextView.requestFocus();
         } else if(getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_create);
     }
