@@ -133,4 +133,5 @@
     <string name="custom_reminders_error_variable">You must select one Variable</string>
     <string name="custom_reminders_error_value">You must specify a Value</string>
     <string name="custom_reminders_error_frequency">You must select a Frequency</string>
+    <string name="custom_reminders_button_info">Create/Edit a reminder</string>
 </resources>

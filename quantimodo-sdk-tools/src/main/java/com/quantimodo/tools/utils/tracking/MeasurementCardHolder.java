@@ -154,6 +154,13 @@ public class MeasurementCardHolder {
                 context.startActivity(intent);
             }
         });
+        btReminder.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, R.string.custom_reminders_button_info, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     private void initDatePicker() {
