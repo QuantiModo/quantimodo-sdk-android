@@ -23,6 +23,7 @@ public class QmDaoGenerator {
 
     private static Entity addVariable(Schema schema, Entity unit, Entity category) {
         Entity variable = schema.addEntity("Variable");
+        variable.implementsSerializable();
         variable.addLongProperty("id").primaryKey().autoincrement();
         variable.addStringProperty("name").notNull();
         variable.addStringProperty("originalName");
@@ -46,6 +47,7 @@ public class QmDaoGenerator {
 
     private static Entity addUnit(Schema schema, Entity category){
         Entity unit = schema.addEntity("Unit");
+        unit.implementsSerializable();
         unit.addLongProperty("id").primaryKey().autoincrement();
         unit.addStringProperty("name").notNull();
         unit.addDoubleProperty("min");
@@ -58,6 +60,7 @@ public class QmDaoGenerator {
 
     private static Entity addCategory(Schema schema){
         Entity category = schema.addEntity("Category");
+        category.implementsSerializable();
         category.addProperty(PropertyType.Long,"id").primaryKey().autoincrement();
         category.addStringProperty("name").notNull();
         return category;
@@ -65,7 +68,7 @@ public class QmDaoGenerator {
 
     private static void addMeasurement(Schema schema, Entity unit, Entity variable){
         Entity measurement = schema.addEntity("Measurement");
-
+        measurement.implementsSerializable();
         measurement.addLongProperty("id").primaryKey().autoincrement();
         measurement.addDateProperty("timestamp").notNull();
 

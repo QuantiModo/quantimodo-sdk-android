@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Entity mapped to table "UNIT".
  */
-public class Unit {
+public class Unit implements java.io.Serializable {
 
     private Long id;
     /** Not-null value. */

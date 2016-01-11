@@ -11,7 +11,7 @@ import com.quantimodo.android.sdk.model.VariableCategory;
 /**
  * Entity mapped to table "CATEGORY".
  */
-public class Category {
+public class Category implements java.io.Serializable {
 
     private Long id;
     /** Not-null value. */

@@ -11,7 +11,7 @@ import com.quantimodo.android.sdk.model.HistoryMeasurement;
 /**
  * Entity mapped to table "MEASUREMENT".
  */
-public class Measurement {
+public class Measurement implements java.io.Serializable {
 
     private Long id;
     /** Not-null value. */
