@@ -27,7 +27,6 @@ public class CustomRemindersHelper {
     private static final String KEY_COMBINATION_OPERATION = "combination_oepration";
     private static final String KEY_VALUE = "value";
     private static final String KEY_UNIT_NAME = "unit_name";
-    private static final String KEY_UNIT_ID = "unit_id";
     private static final String KEY_FREQUENCY = "frequency_index";
     private static final String KEY_REMINDERS_LIST = "reminders_list";
     /**
@@ -178,8 +177,6 @@ public class CustomRemindersHelper {
         mEdit1.putString("reminder_" + reminder.id + KEY_VALUE, reminder.value);
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
         mEdit1.putString("reminder_" + reminder.id + KEY_UNIT_NAME, reminder.unitName);
-        mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_ID);
-        mEdit1.putInt("reminder_" + reminder.id + KEY_UNIT_ID, reminder.unitId);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
         mEdit1.putInt("reminder_" + reminder.id + KEY_FREQUENCY, reminder.frequencyIndex);
 
@@ -201,7 +198,6 @@ public class CustomRemindersHelper {
         mEdit1.remove("reminder_" + reminder.id + KEY_COMBINATION_OPERATION);
         mEdit1.remove("reminder_" + reminder.id + KEY_VALUE);
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
-        mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_ID);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
 
         Set<String> remindersSet = new HashSet<>(
@@ -242,7 +238,6 @@ public class CustomRemindersHelper {
                 preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
-                preferences.getInt("reminder_" + id + KEY_UNIT_ID, 0),
                 preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0)
         );
     }
@@ -286,18 +281,16 @@ public class CustomRemindersHelper {
         public final String combinationOperation;
         public final String value;
         public final String unitName;
-        public final int unitId;
         public final int frequencyIndex;
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, int unitId, int frequency){
+                        String value, String unitName, int frequency){
             this.id = id;
             this.name = name;
             this.variableCategory = variableCategory;
             this.combinationOperation = combinationOperation;
             this.value = value;
             this.unitName = unitName;
-            this.unitId =unitId;
             this.frequencyIndex = frequency;
         }
     }

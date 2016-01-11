@@ -879,7 +879,6 @@ public class TrackingFragment extends QFragment {
                         selectedVariable.getCombinationOperation(), //combination operation
                         Double.toString(measurement.getValue()), //value
                         measurementSets.get(unit.getAbbreviatedName()).getUnit(), //unit name
-                        unit.getId(), //unit id
                         currentHolder.spReminderTime.getSelectedItemPosition() //frequency
                 );
                 CustomRemindersHelper.putReminder(getActivity(), reminder);

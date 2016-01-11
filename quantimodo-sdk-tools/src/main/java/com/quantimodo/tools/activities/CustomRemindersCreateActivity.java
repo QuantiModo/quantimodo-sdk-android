@@ -51,6 +51,7 @@ import java.util.Comparator;
  * Activity that displays the form to create or edit a custom reminder
  */
 public class CustomRemindersCreateActivity extends Activity {
+    public static final String EXTRA_FLAG_CREATING = "extra_flag_creating";
     public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
 
     private SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
@@ -71,7 +72,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private UnitSelectSpinnerAdapter unitAdapter;
     private ArrayList<Variable> suggestedVariables = new ArrayList<>();
-    private ArrayList<Unit> mUnits = new ArrayList<>();
+//    private ArrayList<Unit> mUnits = new ArrayList<>();
     private ArrayList<VariableCategory> allCategories;
     private Variable selectedVariable;
     private int selectedUnitIndex;
@@ -99,8 +100,10 @@ public class CustomRemindersCreateActivity extends Activity {
                 anim.setDuration(350);
                 mainLayout.setAnimation(anim);
                 mainLayout.animate();
+                mainLayout.setVisibility(View.VISIBLE);
             }
-        }, 500);
+        }, 300);
+
 
         loadAndInitData();
 
@@ -129,6 +132,17 @@ public class CustomRemindersCreateActivity extends Activity {
         mSpiceManager.shouldStop();
     }
 
+    private void loadExtras(){
+        reminderId = getIntent().getStringExtra(EXTRA_REMINDER_ID);
+        if(!TextUtils.isEmpty(reminderId)) {
+            mReminder = CustomRemindersHelper.getReminder(this, reminderId);
+        }
+
+        if(!getIntent().getBooleanExtra(EXTRA_FLAG_CREATING, false)) {
+            isEditing = true;
+        }
+    }
+
     private void initViews(){
         mainLayout = findViewById(R.id.custom_reminder_main_layout);
         unitsText = (TextView) findViewById(R.id.reminders_create_units_text);
@@ -150,8 +164,10 @@ public class CustomRemindersCreateActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 nameTextView.setText(suggestedVariables.get(position).getName());
                 selectedVariable = suggestedVariables.get(position);
-                selectUnit(selectedVariable);
-                valueTextView.setText(selectedVariable.getDefaultValue().toString());
+//                selectUnit(selectedVariable);
+                if(selectedVariable.getDefaultValue() != null)
+                    valueTextView.setText(selectedVariable.getDefaultValue().toString());
+                unitsText.setText(selectedVariable.getUnit());
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -193,6 +209,7 @@ public class CustomRemindersCreateActivity extends Activity {
         if(isEditing){
             frequencySpinner.setSelection(mReminder.frequencyIndex, false);
             valueTextView.setText(mReminder.value);
+            unitsText.setText(mReminder.unitName);
         }
 
     }
@@ -255,7 +272,7 @@ public class CustomRemindersCreateActivity extends Activity {
                                     Variable variable = response.variables.get(i);
                                     if (variable.getName().equals(mReminder.name)) {
                                         selectedVariable = variable;
-                                        selectUnit(selectedVariable);
+//                                        selectUnit(selectedVariable);
                                     }
                                 }
                             }
@@ -271,31 +288,31 @@ public class CustomRemindersCreateActivity extends Activity {
                 });
     }
 
-    private void selectUnit(Variable variable){
-        if(mUnits == null) return;
-        String categoryUnit = null;
-        if(allCategories != null){
-            String category = allCategories.get(spVariableCategory.getSelectedItemPosition()).getName();
-            categoryUnit = "units";
-            if(category.equals("Food")) categoryUnit = "serving";
-            else if(category.equals("Symptoms") || category.equals("Emotions")) categoryUnit = "%";
-        }
-        int selectedUnit = -1, defaultUnit = -1;
-        for (int i = 0; i< mUnits.size(); i++){
-            Unit currentUnit = mUnits.get(i);
-            if (categoryUnit != null && categoryUnit.equals(currentUnit.getAbbreviatedName())){
-                defaultUnit = i;
-            }
-            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
-                selectedUnit = i;
-            }
-        }
-
-        int unitIndex = selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
-
-        unitsText.setText(mUnits.get(unitIndex).getName());
-        selectedUnitIndex = unitIndex;
-    }
+//    private void selectUnit(Variable variable){
+//        if(mUnits == null) return;
+//        String categoryUnit = null;
+//        if(allCategories != null){
+//            String category = allCategories.get(spVariableCategory.getSelectedItemPosition()).getName();
+//            categoryUnit = "units";
+//            if(category.equals("Food")) categoryUnit = "serving";
+//            else if(category.equals("Symptoms") || category.equals("Emotions")) categoryUnit = "%";
+//        }
+//        int selectedUnit = -1, defaultUnit = -1;
+//        for (int i = 0; i< mUnits.size(); i++){
+//            Unit currentUnit = mUnits.get(i);
+//            if (categoryUnit != null && categoryUnit.equals(currentUnit.getAbbreviatedName())){
+//                defaultUnit = i;
+//            }
+//            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
+//                selectedUnit = i;
+//            }
+//        }
+//
+//        int unitIndex = selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
+//
+//        unitsText.setText(mUnits.get(unitIndex).getName());
+//        selectedUnitIndex = unitIndex;
+//    }
 
     private boolean existOnVariables(long id){
         for(Variable var : suggestedVariables){
@@ -310,13 +327,13 @@ public class CustomRemindersCreateActivity extends Activity {
             return;
         }
 
-        getSpiceManager().execute(new GetUnitsRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetUnitsRequest.GetUnitsResponse>() {
-            @Override
-            public void onRequestSuccess(GetUnitsRequest.GetUnitsResponse getUnitsResponse) {
-                mUnits = getUnitsResponse.units;
-                unitsUpdated();
-            }
-        });
+//        getSpiceManager().execute(new GetUnitsRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetUnitsRequest.GetUnitsResponse>() {
+//            @Override
+//            public void onRequestSuccess(GetUnitsRequest.GetUnitsResponse getUnitsResponse) {
+//                mUnits = getUnitsResponse.units;
+//                unitsUpdated();
+//            }
+//        });
         //get the categories just when creating a reminder
         if(!isEditing) {
             getSpiceManager().execute(new GetCategoriesRequest().getCachedSpiceRequest(),
@@ -333,25 +350,25 @@ public class CustomRemindersCreateActivity extends Activity {
         }
     }
 
-    private void unitsUpdated() {
-        Collections.sort(mUnits, new Comparator<Unit>() {
-            @Override
-            public int compare(Unit lhs, Unit rhs) {
-                return lhs.getName().compareToIgnoreCase(rhs.getName());
-            }
-        });
-        //if editing the reminder find the unit on the list and fill the label
-        if(isEditing){
-            for(int i=0; i<mUnits.size(); i++){
-                if(mUnits.get(i).getId() == mReminder.unitId) selectedUnitIndex = i;
-            }
-            unitsText.setText(mUnits.get(selectedUnitIndex).getName());
-        }
-        else {
-            selectedUnitIndex = 0;
-            selectUnit(selectedVariable);
-        }
-    }
+//    private void unitsUpdated() {
+//        Collections.sort(mUnits, new Comparator<Unit>() {
+//            @Override
+//            public int compare(Unit lhs, Unit rhs) {
+//                return lhs.getName().compareToIgnoreCase(rhs.getName());
+//            }
+//        });
+//        //if editing the reminder find the unit on the list and fill the label
+//        if(isEditing){
+//            for(int i=0; i<mUnits.size(); i++){
+//                if(mUnits.get(i).getId() == mReminder.unitId) selectedUnitIndex = i;
+//            }
+//            unitsText.setText(mUnits.get(selectedUnitIndex).getName());
+//        }
+//        else {
+//            selectedUnitIndex = 0;
+//            selectUnit(selectedVariable);
+//        }
+//    }
 
     private void categoriesUpdated() {
         for(int i=0; i<allCategories.size(); i++){
@@ -375,7 +392,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 }
             }
         }
-        selectUnit(selectedVariable);
+//        selectUnit(selectedVariable);
     }
 
     /**
@@ -408,8 +425,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 isEditing ? mReminder.variableCategory : selectedVariable.getCategory(),
                 isEditing ? mReminder.combinationOperation : selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
-                isEditing ? mReminder.unitName : mUnits.get(selectedUnitIndex).getAbbreviatedName(),
-                isEditing ? mReminder.unitId : mUnits.get(selectedUnitIndex).getId(),
+                isEditing ? mReminder.unitName : selectedVariable.getUnit(),
                 frequencySpinner.getSelectedItemPosition()
         );
         CustomRemindersHelper.putReminder(this, newReminder);
