@@ -37,6 +37,7 @@ public class CustomRemindersActivity extends ListActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomRemindersActivity.this, CustomRemindersCreateActivity.class);
+                intent.putExtra(CustomRemindersCreateActivity.EXTRA_FLAG_CREATING, true);
                 startActivity(intent);
             }
         });

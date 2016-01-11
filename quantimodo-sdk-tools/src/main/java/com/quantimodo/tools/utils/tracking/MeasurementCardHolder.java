@@ -5,12 +5,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.widget.PopupMenuCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -87,7 +85,7 @@ public class MeasurementCardHolder {
         }
         selectedDate = Calendar.getInstance();
 
-        initOverflowButton(removable, Long.toString(variable.getId()));
+        initOverflowButton(removable, variable);
         initDatePicker();
         initTimePicker();
         initValueEntry(focus);
@@ -128,7 +126,7 @@ public class MeasurementCardHolder {
     }
 
 
-    private void initOverflowButton(final boolean removable, final String variableId) {
+    private void initOverflowButton(final boolean removable, final Variable variable) {
         // Remove button
         final ImageButton btOverflow = (ImageButton) measurementCard.findViewById(R.id.btTime);
         final ImageButton btReminder = (ImageButton) measurementCard.findViewById(R.id.btReminder);
@@ -143,12 +141,16 @@ public class MeasurementCardHolder {
         btReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(context,
-                        variableId);
+                        Long.toString(variable.getId()));
                 Intent intent = new Intent(context, CustomRemindersCreateActivity.class);
                 if(reminder != null)
                     intent.putExtra(CustomRemindersCreateActivity.EXTRA_REMINDER_ID, reminder.id);
+                else {
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_FLAG_CREATING, true);
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VARIABLE_NAME, variable.getName());
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VARIABLE_ID, variable.getId());
+                }
                 context.startActivity(intent);
             }
         });

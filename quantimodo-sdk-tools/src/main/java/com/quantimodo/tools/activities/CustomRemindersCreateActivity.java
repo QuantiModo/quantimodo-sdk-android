@@ -38,14 +38,11 @@ import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
-import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.utils.ConvertUtils;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Activity that displays the form to create or edit a custom reminder
@@ -53,6 +50,8 @@ import java.util.Comparator;
 public class CustomRemindersCreateActivity extends Activity {
     public static final String EXTRA_FLAG_CREATING = "extra_flag_creating";
     public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
+    public static final String EXTRA_VARIABLE_ID = "extra_variable_id";
+    public static final String EXTRA_VARIABLE_NAME = "extra_variable";
 
     private SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
 
@@ -70,14 +69,12 @@ public class CustomRemindersCreateActivity extends Activity {
     private View buttonsLayout;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
-    private UnitSelectSpinnerAdapter unitAdapter;
     private ArrayList<Variable> suggestedVariables = new ArrayList<>();
-//    private ArrayList<Unit> mUnits = new ArrayList<>();
     private ArrayList<VariableCategory> allCategories;
     private Variable selectedVariable;
-    private int selectedUnitIndex;
     private int refreshesRunning = 0;
     private boolean isEditing = false;
+    private long extraVariableId;
 
     private String reminderId;
     private CustomRemindersHelper.Reminder mReminder;
@@ -86,11 +83,8 @@ public class CustomRemindersCreateActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_reminder_create);
-        reminderId = getIntent().getStringExtra(EXTRA_REMINDER_ID);
-        if(!TextUtils.isEmpty(reminderId)) {
-            isEditing = true;
-            mReminder = CustomRemindersHelper.getReminder(this, reminderId);
-        }
+
+        loadExtras();
         initViews();
 
         new Handler().postDelayed(new Runnable() {
@@ -110,6 +104,7 @@ public class CustomRemindersCreateActivity extends Activity {
         if(isEditing){
             containerCategories.setVisibility(View.GONE);
             containerLayout2.setVisibility(View.VISIBLE);
+            buttonsLayout.setVisibility(View.VISIBLE);
             if(getActionBar() != null)
                 getActionBar().setTitle(R.string.custom_reminders_edit);
             nameTextView.setEnabled(false);
@@ -118,6 +113,12 @@ public class CustomRemindersCreateActivity extends Activity {
             valueTextView.requestFocus();
         } else if(getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_create);
+
+        //load the variable when comes from the tracking view
+        if(getIntent().hasExtra(EXTRA_VARIABLE_NAME)) {
+            String varName = getIntent().getStringExtra(EXTRA_VARIABLE_NAME);
+            nameTextView.setText(varName);
+        }
     }
 
     @Override
@@ -141,6 +142,7 @@ public class CustomRemindersCreateActivity extends Activity {
         if(!getIntent().getBooleanExtra(EXTRA_FLAG_CREATING, false)) {
             isEditing = true;
         }
+        extraVariableId = getIntent().getLongExtra(EXTRA_VARIABLE_ID, -1);
     }
 
     private void initViews(){
@@ -162,27 +164,7 @@ public class CustomRemindersCreateActivity extends Activity {
         lvVariableSuggestions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                nameTextView.setText(suggestedVariables.get(position).getName());
-                selectedVariable = suggestedVariables.get(position);
-//                selectUnit(selectedVariable);
-                if(selectedVariable.getDefaultValue() != null)
-                    valueTextView.setText(selectedVariable.getDefaultValue().toString());
-                unitsText.setText(selectedVariable.getUnit());
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
-                        anim.setDuration(350);
-                        lvVariableSuggestions.setVisibility(View.GONE);
-                        buttonsLayout.setAnimation(anim);
-                        containerLayout2.setAnimation(anim);
-                        buttonsLayout.animate();
-                        containerLayout2.animate();
-                        buttonsLayout.setVisibility(View.VISIBLE);
-                        containerLayout2.setVisibility(View.VISIBLE);
-                    }
-                }, 300);
+                selectVariable(position);
             }
         });
 
@@ -212,6 +194,33 @@ public class CustomRemindersCreateActivity extends Activity {
             unitsText.setText(mReminder.unitName);
         }
 
+    }
+
+    /**
+     * Selects the Variable to use from the suggestedVariables list
+     * @param position position on the list
+     */
+    private void selectVariable(int position){
+        selectedVariable = suggestedVariables.get(position);
+        nameTextView.setText(selectedVariable.getName());
+        if(selectedVariable.getDefaultValue() != null)
+            valueTextView.setText(selectedVariable.getDefaultValue().toString());
+        unitsText.setText(selectedVariable.getUnit());
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
+                anim.setDuration(350);
+                lvVariableSuggestions.setVisibility(View.GONE);
+                buttonsLayout.setAnimation(anim);
+                containerLayout2.setAnimation(anim);
+                buttonsLayout.animate();
+                containerLayout2.animate();
+                buttonsLayout.setVisibility(View.VISIBLE);
+                containerLayout2.setVisibility(View.VISIBLE);
+            }
+        }, 300);
     }
 
     private TextWatcher onVariableNameChanged = new TextWatcher() {
@@ -266,19 +275,25 @@ public class CustomRemindersCreateActivity extends Activity {
                             autoCompleteListAdapter.clear();
                             lvVariableSuggestions.setVisibility(View.GONE);
                         } else {
-                            //if editing try to find the searched variable and select it
-                            if (isEditing) {
-                                for (int i=0; i<response.variables.size(); i++) {
-                                    Variable variable = response.variables.get(i);
-                                    if (variable.getName().equals(mReminder.name)) {
-                                        selectedVariable = variable;
-//                                        selectUnit(selectedVariable);
-                                    }
-                                }
-                            }
                             suggestedVariables = response.variables;
                             autoCompleteListAdapter.clear();
                             autoCompleteListAdapter.addAll(response.variables);
+
+                            //if creating a reminder from existing variable
+                            //try to find the searched variable and select it
+                            if (extraVariableId >= 0) {
+                                for (int i = 0; i < suggestedVariables.size(); i++) {
+                                    Variable variable = suggestedVariables.get(i);
+                                    if (extraVariableId == variable.getId()) {
+                                        selectedVariable = variable;
+                                        selectVariable(i);
+                                        //avoiding recalling this selection because when editing
+                                        //the selected variable name the text watcher fetch data again
+                                        extraVariableId = -1;
+                                    }
+                                }
+                            }
+                            //if we successfully found the Variable, so not showing the suggestions
                             if (selectedVariable != null && existOnVariables(selectedVariable.getId()) &&
                                     nameTextView.getText().toString().equals(selectedVariable.getName()))
                                 return;
@@ -288,32 +303,6 @@ public class CustomRemindersCreateActivity extends Activity {
                 });
     }
 
-//    private void selectUnit(Variable variable){
-//        if(mUnits == null) return;
-//        String categoryUnit = null;
-//        if(allCategories != null){
-//            String category = allCategories.get(spVariableCategory.getSelectedItemPosition()).getName();
-//            categoryUnit = "units";
-//            if(category.equals("Food")) categoryUnit = "serving";
-//            else if(category.equals("Symptoms") || category.equals("Emotions")) categoryUnit = "%";
-//        }
-//        int selectedUnit = -1, defaultUnit = -1;
-//        for (int i = 0; i< mUnits.size(); i++){
-//            Unit currentUnit = mUnits.get(i);
-//            if (categoryUnit != null && categoryUnit.equals(currentUnit.getAbbreviatedName())){
-//                defaultUnit = i;
-//            }
-//            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
-//                selectedUnit = i;
-//            }
-//        }
-//
-//        int unitIndex = selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
-//
-//        unitsText.setText(mUnits.get(unitIndex).getName());
-//        selectedUnitIndex = unitIndex;
-//    }
-
     private boolean existOnVariables(long id){
         for(Variable var : suggestedVariables){
             if(var.getId() == id) return true;
@@ -322,18 +311,11 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     private void loadAndInitData() {
-        if(!QtoolsUtils.hasInternetConnection(this)){
+        if (!QtoolsUtils.hasInternetConnection(this)){
             Toast.makeText(this, R.string.network_connection_error_message, Toast.LENGTH_LONG).show();
             return;
         }
 
-//        getSpiceManager().execute(new GetUnitsRequest().getCachedSpiceRequest(), new DefaultSdkResponseListener<GetUnitsRequest.GetUnitsResponse>() {
-//            @Override
-//            public void onRequestSuccess(GetUnitsRequest.GetUnitsResponse getUnitsResponse) {
-//                mUnits = getUnitsResponse.units;
-//                unitsUpdated();
-//            }
-//        });
         //get the categories just when creating a reminder
         if(!isEditing) {
             getSpiceManager().execute(new GetCategoriesRequest().getCachedSpiceRequest(),
@@ -349,26 +331,6 @@ public class CustomRemindersCreateActivity extends Activity {
             nameTextView.setText(mReminder.name);
         }
     }
-
-//    private void unitsUpdated() {
-//        Collections.sort(mUnits, new Comparator<Unit>() {
-//            @Override
-//            public int compare(Unit lhs, Unit rhs) {
-//                return lhs.getName().compareToIgnoreCase(rhs.getName());
-//            }
-//        });
-//        //if editing the reminder find the unit on the list and fill the label
-//        if(isEditing){
-//            for(int i=0; i<mUnits.size(); i++){
-//                if(mUnits.get(i).getId() == mReminder.unitId) selectedUnitIndex = i;
-//            }
-//            unitsText.setText(mUnits.get(selectedUnitIndex).getName());
-//        }
-//        else {
-//            selectedUnitIndex = 0;
-//            selectUnit(selectedVariable);
-//        }
-//    }
 
     private void categoriesUpdated() {
         for(int i=0; i<allCategories.size(); i++){
