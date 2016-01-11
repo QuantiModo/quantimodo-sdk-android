@@ -21,6 +21,7 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
 
     private final String search;
     private final String category;
+    private final int limit;
 
     private static final Comparator<Variable> COMPARATOR = new Comparator<Variable>() {
         @Override
@@ -42,6 +43,7 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
         super(GetSuggestedVariablesResponse.class);
         this.search = search;
         category = null;
+        this.limit = 5;
     }
 
     /**
@@ -52,6 +54,14 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
         super(GetSuggestedVariablesResponse.class);
         this.search = search;
         this.category = category;
+        this.limit = 5;
+    }
+
+    public GetSuggestedVariablesRequest(String search, String category, int limit) {
+        super(GetSuggestedVariablesResponse.class);
+        this.search = search;
+        this.category = category;
+        this.limit = limit;
     }
 
     @Override
@@ -61,19 +71,15 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
 
         if (search != null && search.length() > 0)     // If there's a search query available we use the QM autocomplete api
         {
-            newVariables = getQmSuggestedVariables(search, 5, false);
+            newVariables = getQmSuggestedVariables(search, limit, false);
         } else                                        // Otherwise we populate the autocomplete with variables from the user's history
         {
-            newVariables = getHistorySuggestedVariables();
+            newVariables = getQmSuggestedVariables("", 10, true);
         }
 
         Collections.sort(newVariables, COMPARATOR);
 
         return new GetSuggestedVariablesResponse(newVariables);
-    }
-
-    private ArrayList<Variable> getHistorySuggestedVariables() throws Exception {
-        return getQmSuggestedVariables("", 10, true);
     }
 
     private ArrayList<Variable> getQmSuggestedVariables(String search, int limit, boolean filtered) throws NoNetworkConnection {

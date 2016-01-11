@@ -251,7 +251,7 @@ public class CustomRemindersCreateActivity extends Activity {
             if(filter.equals("Misc")) filter = null;
         }
         else filter = null;
-        getSpiceManager().execute(new GetSuggestedVariablesRequest(search, filter),
+        getSpiceManager().execute(new GetSuggestedVariablesRequest(search, filter, 10),
                 new DefaultSdkResponseListener<GetSuggestedVariablesRequest.GetSuggestedVariablesResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
