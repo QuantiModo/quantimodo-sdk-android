@@ -292,6 +292,8 @@ public class CustomRemindersCreateActivity extends Activity {
                                     nameTextView.getText().toString().equals(selectedVariable.getName()))
                                 return;
                             lvVariableSuggestions.setVisibility(View.VISIBLE);
+                            buttonsLayout.setVisibility(View.GONE);
+                            containerLayout2.setVisibility(View.GONE);
                         }
                     }
                 });
