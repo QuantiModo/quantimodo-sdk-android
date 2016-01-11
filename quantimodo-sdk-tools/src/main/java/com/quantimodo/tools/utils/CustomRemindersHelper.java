@@ -141,7 +141,9 @@ public class CustomRemindersHelper {
     }
 
     public static void setAlarm(Context context, String reminderId) {
-        FrequencyType frequencyType = FrequencyType.values()[getReminder(context, reminderId).frequencyIndex];
+        Reminder reminder = getReminder(context,reminderId);
+        if(reminder == null) return;
+        FrequencyType frequencyType = FrequencyType.values()[reminder.frequencyIndex];
         setAlarm(context, reminderId, frequencyType);
     }
 
@@ -191,6 +193,7 @@ public class CustomRemindersHelper {
     public static void removeReminder(Context context, String reminderId){
         SharedPreferences preferences = getPreferences(context);
         Reminder reminder = getReminder(context, reminderId);
+        if(reminder == null) return;
         SharedPreferences.Editor mEdit1 = preferences.edit();
 
         mEdit1.remove("reminder_" + reminder.id + KEY_NAME);

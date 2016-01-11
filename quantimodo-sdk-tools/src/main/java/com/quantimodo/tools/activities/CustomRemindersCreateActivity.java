@@ -2,7 +2,6 @@ package com.quantimodo.tools.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,14 +10,11 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -28,7 +24,6 @@ import android.widget.Toast;
 import com.koushikdutta.ion.Ion;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.quantimodo.android.sdk.model.Unit;
 import com.quantimodo.android.sdk.model.Variable;
 import com.quantimodo.android.sdk.model.VariableCategory;
 import com.quantimodo.tools.QTools;
@@ -38,7 +33,6 @@ import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
-import com.quantimodo.tools.utils.ConvertUtils;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
@@ -347,14 +341,6 @@ public class CustomRemindersCreateActivity extends Activity {
         VariableCategorySelectSpinnerAdapter adapter = new VariableCategorySelectSpinnerAdapter(this, allCategories);
         spVariableCategory.setAdapter(adapter);
         spVariableCategory.setSelection(allCategories.size() - 1);
-        if(isEditing) {
-            for (int i = 0; i < allCategories.size(); i++) {
-                if (mReminder.variableCategory.equals(allCategories.get(i).getName())){
-                    spVariableCategory.setSelection(i);
-                }
-            }
-        }
-//        selectUnit(selectedVariable);
     }
 
     /**
@@ -363,6 +349,7 @@ public class CustomRemindersCreateActivity extends Activity {
      */
     public void onSave(View view){
         boolean error = false;
+        //validating the data before saving
         if(!isEditing && selectedVariable == null || lvVariableSuggestions.getVisibility() == View.VISIBLE) {
             nameTextView.setError(getString(R.string.custom_reminders_error_variable));
             error = true;
@@ -398,7 +385,7 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     /**
-     * Click listener for Remove Button, also used to cancel when creating a reminder
+     * Click listener for Remove Button, also used to Cancel when creating a reminder
      * @param view the Button view
      */
     public void onRemove(View view){
@@ -420,48 +407,6 @@ public class CustomRemindersCreateActivity extends Activity {
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
-    }
-
-    /*
-    **  Adapter for unit selection spinners
-    */
-    class UnitSelectSpinnerAdapter extends ArrayAdapter<Unit> {
-        LayoutInflater inflater;
-        int preferredHeight;
-
-        // The view showing the current selection. Public so that it can be modified to update the spinner with a new value
-        public TextView selectedView;
-
-        public UnitSelectSpinnerAdapter(Context context, ArrayList<Unit> units) {
-            //Creating new list, so unitAdapter wouldn't bound to unitsInCategory field
-            super(context, 0, new ArrayList<>(units));
-            this.inflater = LayoutInflater.from(context);
-            this.preferredHeight = ConvertUtils.convertDpToPixel(48, context.getResources());
-
-            selectedView = (TextView) inflater.inflate(android.R.layout.simple_spinner_dropdown_item, null);
-            selectedView.setTextColor(Color.BLACK);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            selectedView.setText(getItem(position).name);
-            return selectedView;
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            LinearLayout view = (LinearLayout) inflater.inflate(R.layout.qmt_f_tracking_measurementsunit, null);
-
-            Unit unit = getItem(position);
-
-            TextView tvUnitReadable = (TextView) view.findViewById(R.id.tvUnitReadable);
-            tvUnitReadable.setText(unit.name);
-
-            TextView tvUnit = (TextView) view.findViewById(R.id.tvUnit);
-            tvUnit.setText(unit.abbreviatedName);
-
-            return view;
-        }
     }
 
     private SpiceManager getSpiceManager(){
