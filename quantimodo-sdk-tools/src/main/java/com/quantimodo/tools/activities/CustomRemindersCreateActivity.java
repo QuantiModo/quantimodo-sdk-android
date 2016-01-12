@@ -46,6 +46,7 @@ public class CustomRemindersCreateActivity extends Activity {
     public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
     public static final String EXTRA_VARIABLE_ID = "extra_variable_id";
     public static final String EXTRA_VARIABLE_NAME = "extra_variable";
+    public static final String EXTRA_CATEGORY = "extra_category";
 
     private SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
 
@@ -112,6 +113,8 @@ public class CustomRemindersCreateActivity extends Activity {
         if(getIntent().hasExtra(EXTRA_VARIABLE_NAME)) {
             String varName = getIntent().getStringExtra(EXTRA_VARIABLE_NAME);
             nameTextView.setText(varName);
+            nameTextView.setEnabled(false);
+            containerCategories.setVisibility(View.GONE);
         }
     }
 
