@@ -814,6 +814,7 @@ public class TrackingFragment extends QFragment {
             }
 
             // Read various variable settings
+            if(spVariableCategory.getSelectedItem() == null) return null;
             String category = ((VariableCategory) spVariableCategory.getSelectedItem()).getName();
             int selectedCombinationOperationId = rgVariableCombinationOperation.getCheckedRadioButtonId();
 
