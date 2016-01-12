@@ -5,11 +5,15 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntDef;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.*;
@@ -386,7 +390,29 @@ public class TrackingFragment extends QFragment {
     private View.OnClickListener onBtSendClick = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            sendMeasurements();
+            if (selectedVariable == null) {
+                final Variable tempVariable = constructVariableFromInput();
+
+                if (tempVariable != null) {
+                    //showing confirmation dialog before creating the variable
+                    String title = String.format(getString(R.string.tracking_create_var_question),
+                            tempVariable.getName(), tempVariable.getCategory(), tempVariable.getUnit());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder
+                            .setMessage(Html.fromHtml(title))
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    selectedVariable = tempVariable;
+                                    sendMeasurements();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null);
+                    builder.create().show();
+                }
+            }
+            else{
+                sendMeasurements();
+            }
         }
     };
 
@@ -837,13 +863,6 @@ public class TrackingFragment extends QFragment {
     */
     private boolean sendMeasurements() {
         final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
-
-        if (selectedVariable == null) {
-            selectedVariable = constructVariableFromInput();
-            if (selectedVariable == null) {
-                return false;
-            }
-        }
 
         for (MeasurementCardHolder currentHolder : measurementCards) {
             Unit unit = currentHolder.selectedUnit;
