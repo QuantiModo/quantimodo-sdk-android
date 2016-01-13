@@ -300,7 +300,7 @@ public class QuantimodoApiV2 {
                 uriBuilder.appendQueryParameter("categoryName", category);
             }
             uriBuilder.appendQueryParameter("includePublic", "true");
-            uriBuilder.appendQueryParameter("manualTracking", "true");
+//            uriBuilder.appendQueryParameter("manualTracking", "true");//enable when working
             FutureBuilder futureBuilder = Ion.with(context)
                     .load(uriBuilder.build().toString())
                     .setHeader("Authorization", "Bearer " + token);
