@@ -148,8 +148,7 @@ public class MeasurementCardHolder {
                     intent.putExtra(CustomRemindersCreateActivity.EXTRA_REMINDER_ID, reminder.id);
                 else {
                     intent.putExtra(CustomRemindersCreateActivity.EXTRA_FLAG_CREATING, true);
-                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VARIABLE_NAME, variable.getName());
-                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VARIABLE_ID, variable.getId());
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VARIABLE, variable);
                 }
                 context.startActivity(intent);
             }

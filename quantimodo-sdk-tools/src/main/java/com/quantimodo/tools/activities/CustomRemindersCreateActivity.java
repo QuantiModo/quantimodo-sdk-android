@@ -44,9 +44,7 @@ import java.util.ArrayList;
 public class CustomRemindersCreateActivity extends Activity {
     public static final String EXTRA_FLAG_CREATING = "extra_flag_creating";
     public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
-    public static final String EXTRA_VARIABLE_ID = "extra_variable_id";
-    public static final String EXTRA_VARIABLE_NAME = "extra_variable";
-    public static final String EXTRA_CATEGORY = "extra_category";
+    public static final String EXTRA_VARIABLE = "extra_variable";
 
     private SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
 
@@ -69,7 +67,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private Variable selectedVariable;
     private int refreshesRunning = 0;
     private boolean isEditing = false;
-    private long extraVariableId;
+    private boolean avoidSearch = false;
 
     private String reminderId;
     private CustomRemindersHelper.Reminder mReminder;
@@ -109,12 +107,12 @@ public class CustomRemindersCreateActivity extends Activity {
         } else if(getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_create);
 
-        //load the variable when comes from the tracking view
-        if(getIntent().hasExtra(EXTRA_VARIABLE_NAME)) {
-            String varName = getIntent().getStringExtra(EXTRA_VARIABLE_NAME);
-            nameTextView.setText(varName);
+        //this is true when the Variable was passed via intent
+        if(selectedVariable != null){
+            avoidSearch = true;
             nameTextView.setEnabled(false);
             containerCategories.setVisibility(View.GONE);
+            loadSelectVariable();
         }
     }
 
@@ -135,11 +133,10 @@ public class CustomRemindersCreateActivity extends Activity {
         if(!TextUtils.isEmpty(reminderId)) {
             mReminder = CustomRemindersHelper.getReminder(this, reminderId);
         }
-
         if(!getIntent().getBooleanExtra(EXTRA_FLAG_CREATING, false)) {
             isEditing = true;
         }
-        extraVariableId = getIntent().getLongExtra(EXTRA_VARIABLE_ID, -1);
+        selectedVariable = (Variable) getIntent().getSerializableExtra(EXTRA_VARIABLE);
     }
 
     private void initViews(){
@@ -220,6 +217,28 @@ public class CustomRemindersCreateActivity extends Activity {
         }, 300);
     }
 
+    private void loadSelectVariable(){
+        nameTextView.setText(selectedVariable.getName());
+        if(selectedVariable.getDefaultValue() != null)
+            valueTextView.setText(selectedVariable.getDefaultValue().toString());
+        unitsText.setText(selectedVariable.getUnit());
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ScaleAnimation anim = new ScaleAnimation(1, 1, 0, 1);
+                anim.setDuration(350);
+                lvVariableSuggestions.setVisibility(View.GONE);
+                buttonsLayout.setAnimation(anim);
+                containerLayout2.setAnimation(anim);
+                buttonsLayout.animate();
+                containerLayout2.animate();
+                buttonsLayout.setVisibility(View.VISIBLE);
+                containerLayout2.setVisibility(View.VISIBLE);
+            }
+        }, 300);
+    }
+
     private TextWatcher onVariableNameChanged = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -236,7 +255,8 @@ public class CustomRemindersCreateActivity extends Activity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (nameTextView != null && search.equals(nameTextView.getText().toString())) {
+                    if (!avoidSearch && nameTextView != null &&
+                            search.equals(nameTextView.getText().toString())) {
                         refreshAutoComplete(search);
                     }
                 }
@@ -276,20 +296,6 @@ public class CustomRemindersCreateActivity extends Activity {
                             autoCompleteListAdapter.clear();
                             autoCompleteListAdapter.addAll(response.variables);
 
-                            //if creating a reminder from existing variable
-                            //try to find the searched variable and select it
-                            if (extraVariableId >= 0) {
-                                for (int i = 0; i < suggestedVariables.size(); i++) {
-                                    Variable variable = suggestedVariables.get(i);
-                                    if (extraVariableId == variable.getId()) {
-                                        selectedVariable = variable;
-                                        selectVariable(i);
-                                        //avoiding recalling this selection because when editing
-                                        //the selected variable name the text watcher fetch data again
-                                        extraVariableId = -1;
-                                    }
-                                }
-                            }
                             //if we successfully found the Variable, so not showing the suggestions
                             if (selectedVariable != null && existOnVariables(selectedVariable.getId()) &&
                                     nameTextView.getText().toString().equals(selectedVariable.getName()))
