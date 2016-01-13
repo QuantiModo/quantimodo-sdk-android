@@ -85,7 +85,8 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
     private ArrayList<Variable> getQmSuggestedVariables(String search, int limit, boolean filtered) throws NoNetworkConnection {
         SdkResponse<ArrayList<Variable>> variableSdkResponse;
         if (filtered) {
-            variableSdkResponse = getClient().searchVariables(getCtx(), getToken(), search, limit, 0, prefs.getApplicationSource(), category);
+            variableSdkResponse = getClient().searchVariables(getCtx(), getToken(), search, limit, 0,
+                    prefs.getApplicationSource(), category, false);
         } else {
             variableSdkResponse = getClient().searchVariables(getCtx(), getToken(), search, limit, 0, null, category);
         }
