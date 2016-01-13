@@ -158,7 +158,10 @@ public class CustomRemindersCreateActivity extends Activity {
         lvVariableSuggestions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //we avoid search just to prevent loading the list when editing the search box
+                avoidSearch = true;
                 selectVariable(position);
+                avoidSearch = false;
             }
         });
 
@@ -251,16 +254,18 @@ public class CustomRemindersCreateActivity extends Activity {
         @Override
         public void afterTextChanged(Editable editable) {
             final String search = editable.toString();
-            // Only update if the text didn't change in the past 500ms
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (!avoidSearch && nameTextView != null &&
-                            search.equals(nameTextView.getText().toString())) {
-                        refreshAutoComplete(search);
+            if(!avoidSearch) {
+                // Only update if the text didn't change in the past 500ms
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (nameTextView != null &&
+                                search.equals(nameTextView.getText().toString())) {
+                            refreshAutoComplete(search);
+                        }
                     }
-                }
-            }, 500);
+                }, 500);
+            }
         }
     };
 
