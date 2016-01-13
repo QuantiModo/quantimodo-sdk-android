@@ -1,20 +1,15 @@
 package com.quantimodo.tools.utils;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
-import com.quantimodo.tools.receivers.QToolsBootReceiver;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +27,6 @@ public class CustomRemindersHelper {
     private static final String KEY_COMBINATION_OPERATION = "combination_oepration";
     private static final String KEY_VALUE = "value";
     private static final String KEY_UNIT_NAME = "unit_name";
-    private static final String KEY_UNIT_ID = "unit_id";
     private static final String KEY_FREQUENCY = "frequency_index";
     private static final String KEY_REMINDERS_LIST = "reminders_list";
     /**
@@ -53,7 +47,20 @@ public class CustomRemindersHelper {
         EVERY_THREE_HOURS,
         TWICE_A_DAY,
         DAILY,
-        SNOOZE
+        SNOOZE;
+
+        @Override
+        public String toString() {
+            switch(this) {
+                case NEVER: return "Never";
+                case HOURLY: return "Hourly";
+                case EVERY_THREE_HOURS: return "Every three hours";
+                case TWICE_A_DAY: return "Twice a day";
+                case DAILY: return "Daily";
+                case SNOOZE: return "Snooze";
+                default: throw new IllegalArgumentException();
+            }
+        }
     }
 
     private static final CustomRemindersHelper INSTANCE = new CustomRemindersHelper();
@@ -91,6 +98,9 @@ public class CustomRemindersHelper {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         switch(frequencyType){
+            case NEVER:
+                cancelAlarm(context, reminderId);
+                break;
             case HOURLY:
                 alarmMgr.setRepeating(AlarmManager.RTC,
                         //Testing line:
@@ -128,47 +138,26 @@ public class CustomRemindersHelper {
                 Toast.makeText(context, R.string.reminders_snooze_message, Toast.LENGTH_LONG).show();
                 break;
         }
-        setBootReceiver(context, true);
     }
+
     public static void setAlarm(Context context, String reminderId) {
-        FrequencyType frequencyType = FrequencyType.values()[getReminder(context, reminderId).frequencyIndex];
+        Reminder reminder = getReminder(context,reminderId);
+        if(reminder == null) return;
+        FrequencyType frequencyType = FrequencyType.values()[reminder.frequencyIndex];
         setAlarm(context, reminderId, frequencyType);
     }
 
     /**
-     * Cancels the alarm.
+     * Cancels an alarm
+     * @param reminderId the reminder identifier
      * @param context current context
      */
-    public static void cancelAlarm(Context context, String id) {
+    public static void cancelAlarm(Context context, String reminderId) {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, CustomRemindersReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(id),
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(reminderId),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.cancel(alarmIntent);
-
-        setBootReceiver(context, false);
-    }
-
-    /**
-     * Enable or disable {@code RemindersBootReceiver} so that it will or not automatically
-     * restart the alarm when the device is rebooted
-     * @param context the curent context
-     * @param setEnabled if true it will enable the {@code RemindersReceiver} when the device boot
-     */
-    private static void setBootReceiver(Context context, boolean setEnabled){
-        ComponentName receiver = new ComponentName(context, QToolsBootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        if(setEnabled){
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
-        else{
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
     }
 
     /**
@@ -190,12 +179,10 @@ public class CustomRemindersHelper {
         mEdit1.putString("reminder_" + reminder.id + KEY_VALUE, reminder.value);
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
         mEdit1.putString("reminder_" + reminder.id + KEY_UNIT_NAME, reminder.unitName);
-        mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_ID);
-        mEdit1.putInt("reminder_" + reminder.id + KEY_UNIT_ID, reminder.unitId);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
         mEdit1.putInt("reminder_" + reminder.id + KEY_FREQUENCY, reminder.frequencyIndex);
 
-        Set<String> remindersSet = new HashSet<String>(
+        Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
         if(!remindersSet.contains(reminder.id)) remindersSet.add(reminder.id);
         mEdit1.putStringSet(KEY_REMINDERS_LIST, remindersSet);
@@ -203,10 +190,32 @@ public class CustomRemindersHelper {
         mEdit1.apply();
     }
 
+    public static void removeReminder(Context context, String reminderId){
+        SharedPreferences preferences = getPreferences(context);
+        Reminder reminder = getReminder(context, reminderId);
+        if(reminder == null) return;
+        SharedPreferences.Editor mEdit1 = preferences.edit();
+
+        mEdit1.remove("reminder_" + reminder.id + KEY_NAME);
+        mEdit1.remove("reminder_" + reminder.id + KEY_CATEGORY);
+        mEdit1.remove("reminder_" + reminder.id + KEY_COMBINATION_OPERATION);
+        mEdit1.remove("reminder_" + reminder.id + KEY_VALUE);
+        mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
+        mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
+
+        Set<String> remindersSet = new HashSet<>(
+                preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
+        if(remindersSet.contains(reminder.id)) remindersSet.remove(reminder.id);
+        mEdit1.putStringSet(KEY_REMINDERS_LIST, remindersSet);
+
+        mEdit1.apply();
+        cancelAlarm(context, reminderId);
+    }
+
     public static ArrayList<Reminder> getRemindersList(Context context){
         SharedPreferences preferences = getPreferences(context);
 
-        Set<String> remindersSet = new HashSet<String>(
+        Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
         ArrayList<Reminder> result = new ArrayList<>();
         for(String id : remindersSet){
@@ -216,7 +225,14 @@ public class CustomRemindersHelper {
         return result;
     }
 
+    /**
+     * Gets the corresponding reminder if exist
+     * @param context the current context
+     * @param id the reminder id
+     * @return the #Reminder instance of null if not exist
+     */
     public static Reminder getReminder(Context context, String id){
+        if(!existReminder(context, id)) return null;
         SharedPreferences preferences = getPreferences(context);
         return new Reminder(
                 id,
@@ -225,7 +241,6 @@ public class CustomRemindersHelper {
                 preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
-                preferences.getInt("reminder_" + id + KEY_UNIT_ID, 0),
                 preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0)
         );
     }
@@ -234,10 +249,22 @@ public class CustomRemindersHelper {
         return context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
     }
 
+    /**
+     * Check if there is a reminder associated with the given id
+     * @param context the current app context
+     * @param id the reminder/Variable id
+     * @return true if the reminder exist for that Variable id, false otherwise
+     */
+    public static boolean existReminder(Context context, String id){
+        SharedPreferences preferences = getPreferences(context);
+        return !preferences.getString("reminder_" + id + KEY_NAME, "").equals("");
+    }
 
     @NonNull
     public static String removeTrailingZeros(@NonNull String number){
         int i;
+        if(!number.contains("."))
+            return number;
         for(i = number.toCharArray().length - 1;i >= 0; i--){
             char c = number.toCharArray()[i];
             if(Character.getNumericValue(c) > 0)
@@ -257,18 +284,16 @@ public class CustomRemindersHelper {
         public final String combinationOperation;
         public final String value;
         public final String unitName;
-        public final int unitId;
         public final int frequencyIndex;
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, int unitId, int frequency){
+                        String value, String unitName, int frequency){
             this.id = id;
             this.name = name;
             this.variableCategory = variableCategory;
             this.combinationOperation = combinationOperation;
             this.value = value;
             this.unitName = unitName;
-            this.unitId =unitId;
             this.frequencyIndex = frequency;
         }
     }

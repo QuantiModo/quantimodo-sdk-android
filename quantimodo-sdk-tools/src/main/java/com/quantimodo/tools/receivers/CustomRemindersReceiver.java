@@ -12,6 +12,7 @@ import com.quantimodo.android.sdk.model.Measurement;
 import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.activities.CustomRemindersCreateActivity;
 import com.quantimodo.tools.dialogs.CustomReminderDialog;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;

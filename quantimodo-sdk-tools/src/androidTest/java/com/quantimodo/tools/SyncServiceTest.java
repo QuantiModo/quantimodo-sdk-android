@@ -110,7 +110,7 @@ public class SyncServiceTest {
 
         Web.WebInteraction wi = Web.onWebView(withId(R.id.web));
 
-        Thread.sleep(3000);
+        Thread.sleep(5 * 1000);
 
         wi
                 .withElement(findElement(NAME, "user_login")).perform(webKeys(TestHelper.TEST_USERNAME))
@@ -118,13 +118,13 @@ public class SyncServiceTest {
                 .withElement(findElement(CLASS_NAME, "btn-primary")).perform(webClick());
 
         //Wait sometime until page is loaded
-        Thread.sleep(5000);
+        Thread.sleep(15 * 1000);
         Log.d("WebAuthActivityTest", "content: " + wi.toString());
         String text = wi.withElement(findElement(ID,"request-heading")).perform(getText()).get().toString();
         assertTrue(text.contains("would like to"));
         wi.withElement(findElement(ID,"button-approve")).perform(webClick());
 
-        Thread.sleep(5000);
+        Thread.sleep(15 * 1000);
     }
 
 }

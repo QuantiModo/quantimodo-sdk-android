@@ -37,7 +37,7 @@ android {
             BASE_PATH = '"'+props['quantimodoApiUrl']+'"'
         } else {
             System.getenv("quantimodoApiUrl") == null ? 'null' : System.getenv("quantimodoApiUrl")
-            BASE_PATH = System.getenv("quantimodoApiUrl") == null ? 'null' : System.getenv("quantimodoApiUrl");
+            BASE_PATH = System.getenv("quantimodoApiUrl") == null ? 'null' : '"'+System.getenv("quantimodoApiUrl")+'"';
         }
 
         debug {

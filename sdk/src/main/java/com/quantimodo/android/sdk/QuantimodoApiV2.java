@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.quantimodo.android.sdk.SdkDefs.QUANTIMODO_ADDRESS;
 
@@ -208,8 +209,8 @@ public class QuantimodoApiV2 {
     @NonNull
     private String formatDate(@NonNull final Date date){
         SimpleDateFormat formatter;
-
         formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         return formatter.format(date);
     }
 
@@ -262,9 +263,8 @@ public class QuantimodoApiV2 {
 
         return sdkResponse;
     }
-
     /**
-     * Search for variables
+     * Search for variables, as default includes the public ones on the search
      * @param context Context
      * @param token OAuth token
      * @param search Search string
@@ -274,7 +274,26 @@ public class QuantimodoApiV2 {
      * @param category variable category
      * @return SdkResponse with ArrayList of Variable
      */
-    public SdkResponse<ArrayList<Variable>> searchVariables(Context context, String token, String search, int limit, int offset, String source, String category) {
+    public SdkResponse<ArrayList<Variable>> searchVariables(
+            Context context, String token, String search, int limit, int offset, String source,
+            String category) {
+        return searchVariables(context, token, search, limit, offset, source, category, true);
+    }
+    /**
+     * Search for variables
+     * @param context Context
+     * @param token OAuth token
+     * @param search Search string
+     * @param limit size of response
+     * @param offset offset of response
+     * @param source source name, which is name of application that submitted measurement
+     * @param category variable category
+     * @param includePublics filter that includes or not the public variables for the request
+     * @return SdkResponse with ArrayList of Variable
+     */
+    public SdkResponse<ArrayList<Variable>> searchVariables(
+            Context context, String token, String search, int limit, int offset, String source,
+            String category, boolean includePublics) {
         setupIon(context);
 
         if (search == null) {
@@ -298,7 +317,10 @@ public class QuantimodoApiV2 {
             if (category != null) {
                 uriBuilder.appendQueryParameter("categoryName", category);
             }
-
+            if(includePublics) {
+                uriBuilder.appendQueryParameter("includePublic", "true");
+            }
+//            uriBuilder.appendQueryParameter("manualTracking", "true");//enable when working
             FutureBuilder futureBuilder = Ion.with(context)
                     .load(uriBuilder.build().toString())
                     .setHeader("Authorization", "Bearer " + token);
