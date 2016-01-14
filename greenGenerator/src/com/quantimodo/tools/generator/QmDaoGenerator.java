@@ -25,7 +25,7 @@ public class QmDaoGenerator {
         Entity variable = schema.addEntity("Variable");
         variable.implementsSerializable();
         variable.addLongProperty("id").primaryKey().autoincrement();
-        variable.addStringProperty("name").notNull();
+        variable.addStringProperty("name").unique().notNull();
         variable.addStringProperty("originalName");
 
         Property vp = variable.addLongProperty("parentVariable").getProperty();
@@ -54,7 +54,7 @@ public class QmDaoGenerator {
         unit.addDoubleProperty("max");
 
         unit.addStringProperty("category");
-        unit.addStringProperty("abbr");
+        unit.addStringProperty("abbr").notNull().unique();
         return unit;
     }
 
@@ -70,10 +70,17 @@ public class QmDaoGenerator {
         Entity measurement = schema.addEntity("Measurement");
         measurement.implementsSerializable();
         measurement.addLongProperty("id").primaryKey().autoincrement();
-        measurement.addDateProperty("timestamp").notNull();
+        Property timestamp = measurement.addDateProperty("timestamp").notNull().getProperty();
 
         Property vm = measurement.addLongProperty("variableId").getProperty();
         measurement.addToOne(variable,vm,"variable");
+
+        Index index = new Index();
+        index.makeUnique();
+        index.setName("pk");
+        index.addProperty(timestamp);
+        index.addProperty(vm);
+        measurement.addIndex(index);
 
         Property vu = measurement.addLongProperty("unitId").getProperty();
         measurement.addToOne(unit,vu,"unit");

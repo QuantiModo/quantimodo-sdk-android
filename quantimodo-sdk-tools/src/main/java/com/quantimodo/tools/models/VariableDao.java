@@ -55,7 +55,7 @@ public class VariableDao extends AbstractDao<Variable, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"VARIABLE\" (" + //
                 "\"ID\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"NAME\" TEXT NOT NULL ," + // 1: name
+                "\"NAME\" TEXT NOT NULL UNIQUE ," + // 1: name
                 "\"ORIGINAL_NAME\" TEXT," + // 2: originalName
                 "\"PARENT_VARIABLE\" INTEGER," + // 3: parentVariable
                 "\"UNIT_ID\" INTEGER," + // 4: unitId

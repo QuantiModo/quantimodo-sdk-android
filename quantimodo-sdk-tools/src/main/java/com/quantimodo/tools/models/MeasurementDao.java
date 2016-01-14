@@ -60,6 +60,9 @@ public class MeasurementDao extends AbstractDao<Measurement, Long> {
                 "\"SOURCE\" TEXT," + // 5: source
                 "\"NEED_UPDATE\" INTEGER," + // 6: needUpdate
                 "\"NOTE\" TEXT);"); // 7: note
+        // Add Indexes
+        db.execSQL("CREATE UNIQUE INDEX " + constraint + "pk ON MEASUREMENT" +
+                " (\"TIMESTAMP\",\"VARIABLE_ID\");");
     }
 
     /** Drops the underlying database table. */
