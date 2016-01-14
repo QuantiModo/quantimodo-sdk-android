@@ -24,6 +24,7 @@ public class Unit {
     public static final String COMBINE_SUM = SdkDefs.COMBINE_SUM;
     public static final String COMBINE_MEAN = SdkDefs.COMBINE_MEAN;
 
+    private final int id;
     @Deprecated
     public final String name;
     @Deprecated
@@ -37,7 +38,9 @@ public class Unit {
     @Deprecated
     public final ArrayList<ConversionStep> conversionSteps;
 
-    public Unit(String name, String abbreviatedName, String category, String minimum, String maximum, ArrayList<ConversionStep> conversionSteps) {
+    public Unit(int id, String name, String abbreviatedName, String category, String minimum,
+                String maximum, ArrayList<ConversionStep> conversionSteps) {
+        this.id = id;
         this.name = name;
         this.abbreviatedName = abbreviatedName;
         this.category = category;
@@ -68,5 +71,9 @@ public class Unit {
 
     public ArrayList<ConversionStep> getConversionSteps() {
         return conversionSteps;
+    }
+
+    public int getId() {
+        return id;
     }
 }

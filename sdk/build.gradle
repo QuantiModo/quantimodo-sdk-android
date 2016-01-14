@@ -19,16 +19,34 @@ android {
 //        applicationId "com.quantimodo.android.sdk"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 104
-        versionName "2.2"
+        versionCode 230
+        versionName "2.3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
 
     buildTypes {
+        def STRING = "String"
+        def APP_BASE_PATH_NAME = "APP_BASE_PATH"
+        def quantimodoSDKFile = file('quantimodoSDK.properties')
+        def BASE_PATH
+
+        if (quantimodoSDKFile.exists()) {
+            def Properties props = new Properties()
+            props.load(new FileInputStream(quantimodoSDKFile))
+            BASE_PATH = '"'+props['quantimodoApiUrl']+'"'
+        } else {
+            System.getenv("quantimodoApiUrl") == null ? 'null' : System.getenv("quantimodoApiUrl")
+            BASE_PATH = System.getenv("quantimodoApiUrl") == null ? 'null' : '"'+System.getenv("quantimodoApiUrl")+'"';
+        }
+
+        debug {
+            buildConfigField STRING, APP_BASE_PATH_NAME, BASE_PATH
+        }
         release {
 //            runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField STRING, APP_BASE_PATH_NAME, BASE_PATH
         }
     }
 

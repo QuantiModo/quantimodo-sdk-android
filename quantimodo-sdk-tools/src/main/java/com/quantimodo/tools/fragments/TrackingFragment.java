@@ -5,14 +5,15 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntDef;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.*;
@@ -24,7 +25,6 @@ import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
-import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
@@ -33,6 +33,8 @@ import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.CustomRemindersHelper;
+import com.quantimodo.tools.utils.QtoolsUtils;
 import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 import com.quantimodo.tools.views.ScrollViewExt;
@@ -70,6 +72,9 @@ public class TrackingFragment extends QFragment {
     Spinner spVariableCategory;
     RadioGroup rgVariableCombinationOperation;
 
+    /**
+     * Linear layout that contains the bottom buttons, when editing or creating a new measurement
+     */
     LinearLayout lnButtons;
 
     @Inject
@@ -152,7 +157,7 @@ public class TrackingFragment extends QFragment {
             new CategoryDef("Treatments",1d,"units", R.string.tracking_item_treatments_question, Variable.COMBINE_SUM,R.string.tracking_fragment_treatments_title),
             new CategoryDef("Symptoms",1d,"%", R.string.tracking_item_symptoms_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_symptoms_title),
             new CategoryDef("Mood",0d,"serving", R.string.tracking_item_mood_question, Variable.COMBINE_MEAN,R.string.tracking_fragment_mood_title),
-            new CategoryDef("Mood",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
+            new CategoryDef("Emotions",1d,"%", R.string.tracking_item_emotions_question, Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
     };
 
     public static final int TYPE_ALL = 0;
@@ -180,38 +185,26 @@ public class TrackingFragment extends QFragment {
     // All measurement cards currently visible
     ArrayList<MeasurementCardHolder> measurementCards = new ArrayList<>();
 
+    private String mSearchText = null;
+
     /**
      * Creates new TrackingFragment
      * @param type category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
      * @return new instance of TrackingFragment
      */
     public static TrackingFragment newInstance(int type){
+        return newInstance(type, "");
+    }
+
+    public static TrackingFragment newInstance(int type, String searchText){
         TrackingFragment fragment = new TrackingFragment();
 
         Bundle args = new Bundle();
         args.putInt(KEY_TYPE, type);
+        args.putString(KEY_SEARCH, searchText);
 
         fragment.setArguments(args);
         return fragment;
-    }
-
-    /**
-     * Creates new TrackingFragment
-     * @param categoryDef category definition see {@link com.quantimodo.tools.fragments.TrackingFragment.CategoryDef CategoryDef} for more info
-     * @return new instance of TrackingFragment
-     */
-    public static TrackingFragment newInstance(CategoryDef categoryDef, String defaultSearch){
-        TrackingFragment fragment = new TrackingFragment();
-
-        Bundle args = new Bundle();
-        args.putSerializable(KEY_CATEGORY, categoryDef);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static TrackingFragment newInstance(CategoryDef categoryDef){
-        return newInstance(categoryDef, null);
     }
 
     @Override
@@ -227,6 +220,7 @@ public class TrackingFragment extends QFragment {
         mType = TYPE_ALL;
         if (getArguments() != null){
             mType = getArguments().getInt(KEY_TYPE,TYPE_ALL);
+            mSearchText = getArguments().getString(KEY_SEARCH, "");
         }
         mCategoryDef = mCategoryFilter[mType];
 
@@ -264,9 +258,9 @@ public class TrackingFragment extends QFragment {
         etVariableName.setHint(mCategoryDef.hintId);
 
         view.findViewById(R.id.btSend).setOnClickListener(onBtSendClick);
-        View v = view.findViewById(R.id.btAddMeasurement);
-        v.setOnClickListener(onBtAddMeasurmentsClick);
-        v.setOnLongClickListener(onBtAddMeasurmentLongClick);
+//        View v = view.findViewById(R.id.btAddMeasurement);
+//        v.setOnClickListener(onBtAddMeasurmentsClick);
+//        v.setOnLongClickListener(onBtAddMeasurmentLongClick);
 
         lvVariableSuggestions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -369,14 +363,7 @@ public class TrackingFragment extends QFragment {
     }
 
     private void loadAndInitData() {
-        //checking network connection
-        ConnectivityManager cm =
-                (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if(!isConnected){
+        if(!QtoolsUtils.hasInternetConnection(getActivity())){
             Toast.makeText(getActivity(), R.string.network_connection_error_message, Toast.LENGTH_LONG).show();
             return;
         }
@@ -396,14 +383,36 @@ public class TrackingFragment extends QFragment {
                 categoriesUpdated();
             }
         });
-
-        refreshAutoComplete("");
+        if(!TextUtils.isEmpty(mSearchText)) refreshAutoComplete(mSearchText);
+        else refreshAutoComplete("");
     }
 
     private View.OnClickListener onBtSendClick = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            sendMeasurements();
+            if (selectedVariable == null) {
+                final Variable tempVariable = constructVariableFromInput();
+
+                if (tempVariable != null) {
+                    //showing confirmation dialog before creating the variable
+                    String title = String.format(getString(R.string.tracking_create_var_question),
+                            tempVariable.getName(), tempVariable.getCategory(), tempVariable.getUnit());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder
+                            .setMessage(Html.fromHtml(title))
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    selectedVariable = tempVariable;
+                                    sendMeasurements();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null);
+                    builder.create().show();
+                }
+            }
+            else{
+                sendMeasurements();
+            }
         }
     };
 
@@ -411,6 +420,9 @@ public class TrackingFragment extends QFragment {
         @Override
         public void onClick(View v) {
             addMeasurementCard(true, true, true);
+            if(!measurementCards.get(0).spMeasurementUnit.isEnabled()){
+                measurementCards.get(measurementCards.size() - 1).spMeasurementUnit.setEnabled(false);
+            }
         }
     };
 
@@ -429,10 +441,10 @@ public class TrackingFragment extends QFragment {
     View.OnTouchListener onRootViewFocusChanged = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            int action = motionEvent.getAction();
-            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
-                etVariableName.clearFocus();
-            }
+//            int action = motionEvent.getAction();
+//            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
+//                etVariableName.clearFocus();
+//            }
             return false;
         }
     };
@@ -490,12 +502,20 @@ public class TrackingFragment extends QFragment {
         return selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
     }
 
-    void onVariableClick(AdapterView<?> adapterView, View view, int position, long l) {
+    /**
+     * Method to call when an item on the list was clicked
+     * @param parent The AdapterView where the click happened.
+     * @param view The view within the AdapterView that was clicked (this
+     *            will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id The row id of the item that was clicked.
+     */
+    void onVariableClick(AdapterView<?> parent, View view, int position, long id) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
             return;
         }
-
+        //when pressed Add Variable
         if (suggestedVariables == null || position >= suggestedVariables.size()) {
             selectedVariable = null;
             // Delay showing the cards for a bit so that the animations all run smoothly
@@ -511,9 +531,12 @@ public class TrackingFragment extends QFragment {
                         addMeasurementCard(false, true, false);
                     }
                     showButtonsCard();
+                    measurementCards.get(0).spMeasurementUnit.setEnabled(true);
                 }
             }, 400);
-        } else {
+        }
+        //When selected a variable so opens the cards to edit it
+        else {
             selectedVariable = suggestedVariables.get(position);
             etVariableName.setText(selectedVariable.getName());
 
@@ -526,7 +549,13 @@ public class TrackingFragment extends QFragment {
                     if (measurementCards.size() == 0) {
                         addMeasurementCard(false, true, true);
                     }
+                    else{
+                        measurementCards.get(0).init(false, true, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+                                selectedVariable.getDefaultValue(), selectedVariable);
+                    }
                     showButtonsCard();
+                    //when editing a variable the unit spinner is disabled by default
+                    measurementCards.get(0).spMeasurementUnit.setEnabled(false);
                 }
             }, 400);
         }
@@ -645,6 +674,7 @@ public class TrackingFragment extends QFragment {
                             pbAutoCompleteLoading.setVisibility(View.GONE);
                         }
                     }
+                    openSearchVariable();
                 }
             }
         });
@@ -652,7 +682,7 @@ public class TrackingFragment extends QFragment {
 
     private void getPublicVariables(final String search){
         getSpiceManager().execute(
-                new GetPublicSuggestedVariablesRequest(search),
+                new GetPublicSuggestedVariablesRequest(search,mCategoryDef.filter),
                 new DefaultSdkResponseListener<GetPublicSuggestedVariablesRequest.Response>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -674,32 +704,44 @@ public class TrackingFragment extends QFragment {
                         pbAutoCompleteLoading.setVisibility(View.GONE);
                     }
                 }
+                openSearchVariable();
             }
         });
     }
 
+    /**
+     * Opens the variable that was previously setted, using {@link #mSearchText}
+     */
+    private void openSearchVariable(){
+        if(mSearchText == null) return;
+        for(int i = 0; i < suggestedVariables.size(); i++){
+            Variable variable = suggestedVariables.get(i);
+            if(variable.getName().equals(mSearchText)) onVariableClick(null, null, i, 0);
+        }
+        mSearchText = null;
+    }
 
-    /*
-    **  Shows the button row at the bottom of the screen
-    */
+    /**
+     * Shows the button row at the bottom of the screen
+     */
     private void showButtonsCard() {
         if (lnButtons.getVisibility() != View.VISIBLE) {
             ViewUtils.expandView(lnButtons, null);
         }
     }
 
-    /*
-    **  Shows the button row at the bottom of the screen
-    */
+    /**
+     * Shows the button row at the bottom of the screen
+     */
     private void hideButtonsCard() {
         if (lnButtons.getVisibility() == View.VISIBLE) {
             ViewUtils.collapseView(lnButtons, null);
         }
     }
 
-    /*
-    **  Shows the card the user uses to input a new variable
-    */
+    /**
+     * Shows the card the user uses to input a new variable
+     */
     private void showAddVariableCard() {
         if (lnAddVariableContainer.getVisibility() != View.VISIBLE) {
             ViewUtils.expandView(lnAddVariableContainer, null);
@@ -740,13 +782,17 @@ public class TrackingFragment extends QFragment {
         }
     }
 
-    /*
-    **  Adds a new measurement card
-    */
-    private void addMeasurementCard(boolean removable, boolean animate, boolean focus) {
+    /**
+     * Adds a new measurement card to create a new variable or edit it
+     * @param removable if removable
+     * @param animate if animate to open it
+     * @param focus to give the focus to the view
+     * @return the created card, null when data is still loading
+     */
+    private MeasurementCardHolder addMeasurementCard(boolean removable, boolean animate, boolean focus) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
-            return;
+            return null;
         }
 
         final MeasurementCardHolder measurementCardHolder = new MeasurementCardHolder(this.getActivity());
@@ -767,11 +813,13 @@ public class TrackingFragment extends QFragment {
         lnCardsContainer.addView(measurementCardHolder.measurementCard, lnCardsContainer.getChildCount() - 1);
 
         Double defaultValue = selectedVariable == null ? null : selectedVariable.getDefaultValue();
-        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex,mCategoryDef,defaultValue);
+        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+                defaultValue, selectedVariable);
 
         if (animate) {
             ViewUtils.expandView(measurementCardHolder.measurementCard, null);
         }
+        return measurementCardHolder;
     }
 
     /*
@@ -792,6 +840,7 @@ public class TrackingFragment extends QFragment {
             }
 
             // Read various variable settings
+            if(spVariableCategory.getSelectedItem() == null) return null;
             String category = ((VariableCategory) spVariableCategory.getSelectedItem()).getName();
             int selectedCombinationOperationId = rgVariableCombinationOperation.getCheckedRadioButtonId();
 
@@ -814,13 +863,6 @@ public class TrackingFragment extends QFragment {
     */
     private boolean sendMeasurements() {
         final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
-
-        if (selectedVariable == null) {
-            selectedVariable = constructVariableFromInput();
-            if (selectedVariable == null) {
-                return false;
-            }
-        }
 
         for (MeasurementCardHolder currentHolder : measurementCards) {
             Unit unit = currentHolder.selectedUnit;
@@ -847,6 +889,23 @@ public class TrackingFragment extends QFragment {
                 measurementSets.put(unit.getAbbreviatedName(), newSet);
             } else {
                 measurementSets.get(unit.getAbbreviatedName()).getMeasurements().add(measurement);
+            }
+            //Saving the custom reminder
+            if(currentHolder.spReminderTime.getSelectedItemPosition() != 0) {
+                CustomRemindersHelper.Reminder reminder = new CustomRemindersHelper.Reminder(
+                        Long.toString(selectedVariable.getId()),//id
+                        selectedVariable.getName(),//name
+                        selectedVariable.getCategory(), //variable category
+                        selectedVariable.getCombinationOperation(), //combination operation
+                        Double.toString(measurement.getValue()), //value
+                        measurementSets.get(unit.getAbbreviatedName()).getUnit(), //unit name
+                        currentHolder.spReminderTime.getSelectedItemPosition() //frequency
+                );
+                CustomRemindersHelper.putReminder(getActivity(), reminder);
+                CustomRemindersHelper.setAlarm(getActivity(), reminder.id);
+            }
+            else{
+                CustomRemindersHelper.cancelAlarm(getActivity(), Long.toString(selectedVariable.getId()));
             }
         }
 

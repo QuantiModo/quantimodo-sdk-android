@@ -3,23 +3,25 @@ package com.quantimodo.tools.utils.tracking;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.widget.PopupMenuCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.quantimodo.android.sdk.model.Unit;
+import com.quantimodo.android.sdk.model.Variable;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.activities.CustomRemindersCreateActivity;
 import com.quantimodo.tools.fragments.TrackingFragment;
 import com.quantimodo.tools.utils.ConvertUtils;
+import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.views.NDSpinner;
 
@@ -35,11 +37,14 @@ public class MeasurementCardHolder {
 
     // Views
     public final View measurementCard;
+    public final TextView tvMeasurementTimeTitle;
     public final NDSpinner spMeasurementTime;
     public final NDSpinner spMeasurementDate;
     public final Spinner spMeasurementUnit;
     public final EditText etValue;
     public final EditText etNote;
+    public final NDSpinner spReminderTime;
+    private final TextView reminderTitle;
 
     public UnitSelectSpinnerAdapter unitAdapter;
 
@@ -54,17 +59,21 @@ public class MeasurementCardHolder {
 
     public MeasurementCardHolder(Context context) {
         measurementCard = LayoutInflater.from(context).inflate(R.layout.qmt_f_tracking_measurementcard, null);
+        tvMeasurementTimeTitle = (TextView) measurementCard.findViewById(R.id.tvMeasurementsTimeTitle);
         spMeasurementDate = (NDSpinner) measurementCard.findViewById(R.id.spMeasurementDate);
         spMeasurementUnit = (Spinner) measurementCard.findViewById(R.id.spMeasurementUnit);
         etValue = (EditText) measurementCard.findViewById(R.id.etMeasurementValue);
         etNote = (EditText) measurementCard.findViewById(R.id.etNote);
         spMeasurementTime = (NDSpinner) measurementCard.findViewById(R.id.spMeasurementTime);
+        spReminderTime = (NDSpinner) measurementCard.findViewById(R.id.spReminderTime);
+        reminderTitle = (TextView) measurementCard.findViewById(R.id.reminder_title);
 
         this.context = context;
     }
 
     public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
-                     int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef,Double defaultValue) {
+                     int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef,
+                     Double defaultValue, Variable variable) {
         this.allUnits = allUnits;
         this.defaultUnitIndex = defaultUnitIndex;
 
@@ -76,60 +85,81 @@ public class MeasurementCardHolder {
         }
         selectedDate = Calendar.getInstance();
 
-        initOverflowButton(removable);
+        initOverflowButton(removable, variable);
         initDatePicker();
         initTimePicker();
         initValueEntry(focus);
         initUnitPicker();
+        initReminderTime();
 
         initCategory(categoryDef);
+        fillSavedData(variable);
     }
 
     public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
                      int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef) {
-        init(removable, focus, allUnits, defaultUnitIndex, categoryDef,null);
+        init(removable, focus, allUnits, defaultUnitIndex, categoryDef, null, null);
+    }
+
+    private void fillSavedData(Variable variable){
+        if(variable == null) return;
+//        CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
+//                context, Long.toString(variable.getId()));
+//        //load frequency
+//        spReminderTime.setSelection(reminder.frequencyIndex);
     }
 
     private void initCategory(TrackingFragment.CategoryDef categoryDef) {
-        if (categoryDef.getFilter() != null && !categoryDef.getFilter().isEmpty()){
-            spMeasurementDate.setVisibility(View.GONE);
-            spMeasurementTime.setVisibility(View.GONE);
-        }
+        tvMeasurementTimeTitle.setVisibility(View.GONE);
+        spMeasurementDate.setVisibility(View.GONE);
+        spMeasurementTime.setVisibility(View.GONE);
+//        spReminderTime.setVisibility(View.GONE);
+//        reminderTitle.setVisibility(View.GONE);
     }
 
     private void showDateTime(){
+        tvMeasurementTimeTitle.setVisibility(View.VISIBLE);
         spMeasurementDate.setVisibility(View.VISIBLE);
         spMeasurementTime.setVisibility(View.VISIBLE);
+//        spReminderTime.setVisibility(View.VISIBLE);
+//        reminderTitle.setVisibility(View.VISIBLE);
     }
 
 
-    private void initOverflowButton(final boolean removable) {
+    private void initOverflowButton(final boolean removable, final Variable variable) {
         // Remove button
-        final ImageButton btOverflow = (ImageButton) measurementCard.findViewById(R.id.btOverflow);
+        final ImageButton btOverflow = (ImageButton) measurementCard.findViewById(R.id.btTime);
+        final ImageButton btReminder = (ImageButton) measurementCard.findViewById(R.id.btReminder);
 
-        final PopupMenu popupMenu = new PopupMenu(context, btOverflow);
-        popupMenu.inflate(R.menu.measurement_overflow);
-        popupMenu.getMenu().getItem(0).setEnabled(removable);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                int i = menuItem.getItemId();
-                if (i == R.id.action_remove) {
-                    remove(removedListener);
-                }
-                return false;
-            }
-        });
-
-        btOverflow.setOnTouchListener(PopupMenuCompat.getDragToOpenListener(popupMenu));
         btOverflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDateTime();
-                popupMenu.show();
+//                popupMenu.show();
             }
         });
-
+        btReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(context,
+                        Long.toString(variable.getId()));
+                Intent intent = new Intent(context, CustomRemindersCreateActivity.class);
+                if(reminder != null)
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_REMINDER_ID, reminder.id);
+                else {
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_FLAG_CREATING, true);
+                    intent.putExtra(CustomRemindersCreateActivity.EXTRA_VARIABLE, variable);
+                }
+                context.startActivity(intent);
+            }
+        });
+        btReminder.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, R.string.custom_reminders_button_info, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     private void initDatePicker() {
@@ -280,6 +310,7 @@ public class MeasurementCardHolder {
         });
 
         if (focus) {
+            etValue.clearFocus();
             etValue.requestFocus();
             InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -294,13 +325,20 @@ public class MeasurementCardHolder {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedUnit = allUnits.get(i);
-                Log.i(ToolsPrefs.DEBUG_TAG,"Selected unit: " + selectedUnit.abbreviatedName);
+                Log.i(ToolsPrefs.DEBUG_TAG, "Selected unit: " + selectedUnit.abbreviatedName);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+    }
+
+    private void initReminderTime(){
+        final List<String> timeOptions = Arrays.asList(context.getResources().getStringArray(R.array.mood_interval_entries));
+        final ArrayAdapter<String> timeSpinnerAdapter = new ArrayAdapter<String>(context, R.layout.qmt_v_simple_spinner_item, timeOptions);
+
+        spReminderTime.setAdapter(timeSpinnerAdapter);
     }
 
     public void setOnRemovedListener(OnMeasurementCardRemovedListener listener) {

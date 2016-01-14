@@ -135,6 +135,7 @@ public class Unit implements java.io.Serializable {
     // KEEP METHODS - put your custom methods here
     public static Unit fromWsUnit(com.quantimodo.android.sdk.model.Unit unit){
         Unit u = new Unit();
+        u.setId((long) unit.getId());
         u.setName(unit.getName());
         u.setMin(Double.valueOf(unit.getMinimum()));
         u.setMax(Double.valueOf(unit.getMaximum()));
@@ -145,6 +146,7 @@ public class Unit implements java.io.Serializable {
 
     public com.quantimodo.android.sdk.model.Unit toUnit(){
         return new com.quantimodo.android.sdk.model.Unit(
+                getId().intValue(),
                 getName(),
                 getName(),
                 getCategory(),

@@ -32,7 +32,7 @@ public class QuantimodoApiV2Test extends AndroidTestCase{
     }
 
     public void testGetMeasurmentHistory() throws Exception {
-        SdkResponse<ArrayList<Variable>> varResponse = instance.searchVariables(getContext(),token,"*",1,0,null,null);
+        SdkResponse<ArrayList<Variable>> varResponse = instance.searchVariables(getContext(),token,"*",1,0,null,null, false);
 
         SdkResponse<ArrayList<HistoryMeasurement>> response = instance.getMeasurmentHistory(getContext(), token, null, null, varResponse.getData().get(0).name, null, null);
         assertTrue(response.isSuccessful());

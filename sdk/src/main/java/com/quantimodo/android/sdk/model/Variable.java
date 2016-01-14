@@ -19,12 +19,15 @@ package com.quantimodo.android.sdk.model;
 }
 */
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 import com.quantimodo.android.sdk.SdkDefs;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Variable {
+public class Variable implements Serializable {
     public static final String COMBINE_SUM = SdkDefs.COMBINE_SUM;
     public static final String COMBINE_MEAN = SdkDefs.COMBINE_MEAN;
 
@@ -131,9 +134,9 @@ public class Variable {
     public String getTargetUnit(){
         if (lastUnit != null && !lastUnit.isEmpty()){
             return lastUnit;
-        } else {
-            return mostCommonUnit;
         }
+        else if(!TextUtils.isEmpty(unit)) return unit;
+        else return mostCommonUnit;
     }
 
     public Double getDefaultValue(){

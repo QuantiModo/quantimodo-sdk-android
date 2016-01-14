@@ -24,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 230
+        versionName "2.3.0"
         testInstrumentationRunner "com.quantimodo.sdk.testing.utils.TestRunner"
         testHandleProfiling true
         testFunctionalTest true
@@ -43,7 +43,7 @@ android {
             logger.warn("Couldn't find quantimodo.properties, trying to get from env properties, communication with QuantiModo may not work")
             resValue "string", "quantimodo_client", System.getenv("quantimodoClient") == null ? "NONE" : System.getenv("quantimodoClient")
             resValue "string", "quantimodo_secret", System.getenv("quantimodoSecret") == null ? "NONE" : System.getenv("quantimodoSecret")
-            buildConfigField 'String', 'API_HOST' , System.getenv("quantimodoApiUrl") == null ? 'null' : System.getenv("quantimodoApiUrl")
+            buildConfigField 'String', 'API_HOST' , System.getenv("quantimodoApiUrl") == null ? 'null' : '"'+System.getenv("quantimodoApiUrl")+'"'
         }
         resValue "bool", "show_shopping_card", "true"
     }
@@ -67,6 +67,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
     }
 }
 
@@ -76,6 +77,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
 
     compile project(':sdk')
+    compile project(':swagger')
 
     //RoboSpice  https://github.com/stephanenicolas/robospice
     compile 'com.octo.android.robospice:robospice:1.4.14'

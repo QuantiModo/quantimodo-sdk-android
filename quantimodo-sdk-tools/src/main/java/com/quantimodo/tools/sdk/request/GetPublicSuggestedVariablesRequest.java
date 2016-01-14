@@ -18,6 +18,7 @@ import javax.inject.Inject;
 public class GetPublicSuggestedVariablesRequest extends SdkRequest<GetPublicSuggestedVariablesRequest.Response> {
 
     private String search;
+    private String categoryName;
 
     private static final Comparator<Variable> COMPARATOR = new Comparator<Variable>() {
         @Override
@@ -35,25 +36,26 @@ public class GetPublicSuggestedVariablesRequest extends SdkRequest<GetPublicSugg
     /**
      * @param search search string for variable
      */
-    public GetPublicSuggestedVariablesRequest(String search) {
+    public GetPublicSuggestedVariablesRequest(String search, String categoryName) {
         super(Response.class);
         this.search = search;
+        this.categoryName = categoryName;
     }
 
     @Override
     public Response loadDataFromNetwork() throws Exception {
         final ArrayList<Variable> newVariables;
         if (search == null && search.length() == 0) search = "";
-        newVariables = getQmSuggestedVariables(search, 5);
+        newVariables = getQmSuggestedVariables(search, 5, categoryName);
         Collections.sort(newVariables, COMPARATOR);
 
         return new Response(newVariables);
     }
 
-    private ArrayList<Variable> getQmSuggestedVariables(String search, int limit) throws Exception {
+    private ArrayList<Variable> getQmSuggestedVariables(String search, int limit, String categoryName) throws Exception {
         SdkResponse<ArrayList<Variable>> variableSdkResponse;
         variableSdkResponse = getClient()
-                .searchPublicVariables(getCtx(), getToken(), search, limit, 0);
+                .searchPublicVariables(getCtx(), getToken(), search, limit, 0, categoryName);
 
         try {
             checkResponse(variableSdkResponse);
