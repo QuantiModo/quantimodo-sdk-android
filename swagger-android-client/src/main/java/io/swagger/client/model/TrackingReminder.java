@@ -11,38 +11,49 @@ public class TrackingReminder  {
   
   @SerializedName("id")
   private Integer id = null;
-  @SerializedName("client_id")
+  @SerializedName("clientId")
   private String clientId = null;
-  @SerializedName("user_id")
+  @SerializedName("userId")
   private Integer userId = null;
-  @SerializedName("variable_id")
+  @SerializedName("variableId")
   private Integer variableId = null;
-  @SerializedName("default_value")
+  @SerializedName("defaultValue")
   private Float defaultValue = null;
-  @SerializedName("reminder_start_time")
+  @SerializedName("reminderStartTime")
   private String reminderStartTime = null;
-  @SerializedName("reminder_end_time")
+  @SerializedName("reminderEndTime")
   private String reminderEndTime = null;
-  @SerializedName("reminder_sound")
+  @SerializedName("reminderSound")
   private String reminderSound = null;
-  @SerializedName("reminder_frequency")
+  @SerializedName("reminderFrequency")
   private Integer reminderFrequency = null;
-  @SerializedName("pop_up")
+  @SerializedName("popUp")
   private Boolean popUp = null;
   @SerializedName("sms")
   private Boolean sms = null;
   @SerializedName("email")
   private Boolean email = null;
-  @SerializedName("notification_bar")
+  @SerializedName("notificationBar")
   private Boolean notificationBar = null;
-  @SerializedName("last_reminded")
+  @SerializedName("lastReminded")
   private Date lastReminded = null;
-  @SerializedName("last_tracked")
+  @SerializedName("lastTracked")
   private Date lastTracked = null;
-  @SerializedName("created_at")
+  @SerializedName("createdAt")
   private Date createdAt = null;
-  @SerializedName("updated_at")
+  @SerializedName("updatedAt")
   private Date updatedAt = null;
+  @SerializedName("variableName")
+  private String variableName = null;
+  @SerializedName("variableCategoryName")
+  private String variableCategoryName = null;
+  @SerializedName("abbreviatedUnitName")
+  private String abbreviatedUnitName = null;
+  public enum CombininationOperationEnum {
+     MEAN,  SUM, 
+  };
+  @SerializedName("combininationOperation")
+  private CombininationOperationEnum combininationOperation = null;
 
   
   /**
@@ -249,6 +260,54 @@ public class TrackingReminder  {
   }
 
   
+  /**
+   * Name of the variable to be used when sending measurements
+   **/
+  @ApiModelProperty(value = "Name of the variable to be used when sending measurements")
+  public String getVariableName() {
+    return variableName;
+  }
+  public void setVariableName(String variableName) {
+    this.variableName = variableName;
+  }
+
+  
+  /**
+   * Name of the variable category to be used when sending measurements
+   **/
+  @ApiModelProperty(value = "Name of the variable category to be used when sending measurements")
+  public String getVariableCategoryName() {
+    return variableCategoryName;
+  }
+  public void setVariableCategoryName(String variableCategoryName) {
+    this.variableCategoryName = variableCategoryName;
+  }
+
+  
+  /**
+   * Abbreviated name of the unit to be used when sending measurements
+   **/
+  @ApiModelProperty(value = "Abbreviated name of the unit to be used when sending measurements")
+  public String getAbbreviatedUnitName() {
+    return abbreviatedUnitName;
+  }
+  public void setAbbreviatedUnitName(String abbreviatedUnitName) {
+    this.abbreviatedUnitName = abbreviatedUnitName;
+  }
+
+  
+  /**
+   * The way multiple measurements are aggregated over time
+   **/
+  @ApiModelProperty(value = "The way multiple measurements are aggregated over time")
+  public CombininationOperationEnum getCombininationOperation() {
+    return combininationOperation;
+  }
+  public void setCombininationOperation(CombininationOperationEnum combininationOperation) {
+    this.combininationOperation = combininationOperation;
+  }
+
+  
 
   @Override
   public String toString()  {
@@ -272,6 +331,10 @@ public class TrackingReminder  {
     sb.append("  lastTracked: ").append(lastTracked).append("\n");
     sb.append("  createdAt: ").append(createdAt).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
+    sb.append("  variableName: ").append(variableName).append("\n");
+    sb.append("  variableCategoryName: ").append(variableCategoryName).append("\n");
+    sb.append("  abbreviatedUnitName: ").append(abbreviatedUnitName).append("\n");
+    sb.append("  combininationOperation: ").append(combininationOperation).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
