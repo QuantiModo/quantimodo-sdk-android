@@ -180,7 +180,7 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
 
     private void buttonVote(Correlation correlation, int state){
         SharedPreferences prefs = getActivity().getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_PRIVATE);
-        if (!!prefs.getBoolean(ToolsPrefs.PREF_SHOW_CORRELATION_CONFIRM,false)) {
+        if (prefs.getBoolean(ToolsPrefs.PREF_SHOW_CORRELATION_CONFIRM, true)) {
             CorrelationConfirmDialog dialog = CorrelationConfirmDialog.createDialog(correlation, mType, state);
             dialog.setTargetFragment(this, 1);
             dialog.show(getFragmentManager(), null);
@@ -208,42 +208,8 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
     }
 
     private void addMeasurementCard(boolean removable, boolean animate, boolean focus, Correlation item) {
-//        if (mUnits == null) {
-//            Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
         TrackingFragment fragment = TrackingFragment.newInstance(TrackingFragment.TYPE_ALL);
-
         getFragmentManager().beginTransaction().addToBackStack(null).add(fragment, null).commit();
-/*
-        getListView().setVisibility(View.GONE);
-
-        final MeasurementCardHolder measurementCardHolder = new MeasurementCardHolder(this.getActivity());
-        measurementCardHolder.setOnRemovedListener(new MeasurementCardHolder.OnMeasurementCardRemovedListener() {
-            @Override
-            public void onMeasurementCardRemoved(MeasurementCardHolder measurementCardHolder) {
-                measurementCards.remove(measurementCardHolder);
-                lnCardsContainer.removeView(measurementCardHolder.measurementCard);
-            }
-        });
-        measurementCards.add(measurementCardHolder);
-
-        // Set marginTop programatically, it's not picked up properly otherwise.
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin));
-        measurementCardHolder.measurementCard.setLayoutParams(layoutParams);
-
-        lnCardsContainer.addView(measurementCardHolder.measurementCard, 0);
-
-//        Double defaultValue = selectedVariable == null ? null : selectedVariable.getDefaultValue();
-
-        measurementCardHolder.init(removable, focus, mUnits, 0, mCategoryDef, 0);
-
-        if (animate) {
-            ViewUtils.expandView(measurementCardHolder.measurementCard, null);
-        }
-        */
     }
 
 }

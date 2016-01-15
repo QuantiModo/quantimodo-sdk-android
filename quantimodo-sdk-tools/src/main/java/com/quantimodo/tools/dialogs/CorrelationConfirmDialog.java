@@ -42,7 +42,7 @@ public class CorrelationConfirmDialog extends DialogFragment{
         return dialog;
     }
 
-    private CheckBox checkBox;
+//    private CheckBox checkBox;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class CorrelationConfirmDialog extends DialogFragment{
         TextView message = (TextView) view.findViewById(R.id.dialogMessage);
         message.setText(msg);
 
-        checkBox = (CheckBox) view.findViewById(R.id.dialogCheckbox);
+//        checkBox = (CheckBox) view.findViewById(R.id.dialogCheckbox);
 
 
 
@@ -105,9 +105,9 @@ public class CorrelationConfirmDialog extends DialogFragment{
     }
 
     private void onConfirm(Correlation correlation,int state){
-        SharedPreferences prefs = getActivity().getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_PRIVATE);
-        prefs.edit().putBoolean(ToolsPrefs.PREF_SHOW_CORRELATION_CONFIRM,checkBox.isChecked()).apply();
-        checkBox = null;
+//        SharedPreferences prefs = getActivity().getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_PRIVATE);
+//        prefs.edit().putBoolean(ToolsPrefs.PREF_SHOW_CORRELATION_CONFIRM,checkBox.isChecked()).apply();
+//        checkBox = null;
 
         Fragment target = getTargetFragment();
         if (target != null && target instanceof DialogListener){
