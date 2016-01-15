@@ -1,6 +1,6 @@
 package io.swagger.client.model;
 
-import io.swagger.client.model.AggregatedCorrelation;
+import io.swagger.client.model.TrackingReminder;
 import java.util.*;
 
 import io.swagger.annotations.*;
@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class InlineResponse200  {
   
   @SerializedName("data")
-  private List<AggregatedCorrelation> data = null;
+  private List<TrackingReminder> data = null;
   @SerializedName("success")
   private Boolean success = null;
 
@@ -19,10 +19,10 @@ public class InlineResponse200  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public List<AggregatedCorrelation> getData() {
+  public List<TrackingReminder> getData() {
     return data;
   }
-  public void setData(List<AggregatedCorrelation> data) {
+  public void setData(List<TrackingReminder> data) {
     this.data = data;
   }
 

@@ -1,6 +1,7 @@
 package io.swagger.client.model;
 
-import java.util.Date;
+import io.swagger.client.model.ConversionStep;
+import java.util.*;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -9,56 +10,27 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class Unit  {
   
-  @SerializedName("id")
-  private Integer id = null;
-  @SerializedName("client_id")
-  private String clientId = null;
   @SerializedName("name")
   private String name = null;
-  @SerializedName("abbreviated_name")
+  @SerializedName("abbreviatedName")
   private String abbreviatedName = null;
-  @SerializedName("category_id")
-  private Integer categoryId = null;
-  @SerializedName("minimum_value")
-  private Float minimumValue = null;
-  @SerializedName("maximum_value")
-  private Float maximumValue = null;
-  @SerializedName("updated")
-  private Integer updated = null;
-  @SerializedName("default_unit_id")
-  private Integer defaultUnitId = null;
-  @SerializedName("multiply")
-  private Float multiply = null;
-  @SerializedName("add")
-  private Float add = null;
-  @SerializedName("created_at")
-  private Date createdAt = null;
-  @SerializedName("updated_at")
-  private Date updatedAt = null;
-
-  
-  /**
-   * id
-   **/
-  @ApiModelProperty(value = "id")
-  public Integer getId() {
-    return id;
-  }
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  
-  /**
-   * client_id
-   **/
-  @ApiModelProperty(value = "client_id")
-  public String getClientId() {
-    return clientId;
-  }
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
-  }
+  public enum CategoryEnum {
+     Distance,  Duration,  Energy,  Frequency,  Miscellany,  Pressure,  Proportion,  Rating,  Temperature,  Volume,  Weight, 
+  };
+  @SerializedName("category")
+  private CategoryEnum category = null;
+  public enum MinimumEnum {
+     -Infinity, 
+  };
+  @SerializedName("minimum")
+  private MinimumEnum minimum = null;
+  public enum MaximumEnum {
+     Infinity, 
+  };
+  @SerializedName("maximum")
+  private MaximumEnum maximum = null;
+  @SerializedName("conversionSteps")
+  private List<ConversionStep> conversionSteps = null;
 
   
   /**
@@ -86,110 +58,50 @@ public class Unit  {
 
   
   /**
-   * Unit category ID
+   * Unit category
    **/
-  @ApiModelProperty(required = true, value = "Unit category ID")
-  public Integer getCategoryId() {
-    return categoryId;
+  @ApiModelProperty(required = true, value = "Unit category")
+  public CategoryEnum getCategory() {
+    return category;
   }
-  public void setCategoryId(Integer categoryId) {
-    this.categoryId = categoryId;
+  public void setCategory(CategoryEnum category) {
+    this.category = category;
   }
 
   
   /**
-   * Minimum value permitted for this unit
+   * Unit minimum value
    **/
-  @ApiModelProperty(value = "Minimum value permitted for this unit")
-  public Float getMinimumValue() {
-    return minimumValue;
+  @ApiModelProperty(required = true, value = "Unit minimum value")
+  public MinimumEnum getMinimum() {
+    return minimum;
   }
-  public void setMinimumValue(Float minimumValue) {
-    this.minimumValue = minimumValue;
+  public void setMinimum(MinimumEnum minimum) {
+    this.minimum = minimum;
   }
 
   
   /**
-   * Maximum value permitted for this unit
+   * Unit maximum value
    **/
-  @ApiModelProperty(value = "Maximum value permitted for this unit")
-  public Float getMaximumValue() {
-    return maximumValue;
+  @ApiModelProperty(required = true, value = "Unit maximum value")
+  public MaximumEnum getMaximum() {
+    return maximum;
   }
-  public void setMaximumValue(Float maximumValue) {
-    this.maximumValue = maximumValue;
+  public void setMaximum(MaximumEnum maximum) {
+    this.maximum = maximum;
   }
 
   
   /**
-   * updated
+   * Conversion steps list
    **/
-  @ApiModelProperty(value = "updated")
-  public Integer getUpdated() {
-    return updated;
+  @ApiModelProperty(required = true, value = "Conversion steps list")
+  public List<ConversionStep> getConversionSteps() {
+    return conversionSteps;
   }
-  public void setUpdated(Integer updated) {
-    this.updated = updated;
-  }
-
-  
-  /**
-   * ID of default unit for this units category
-   **/
-  @ApiModelProperty(value = "ID of default unit for this units category")
-  public Integer getDefaultUnitId() {
-    return defaultUnitId;
-  }
-  public void setDefaultUnitId(Integer defaultUnitId) {
-    this.defaultUnitId = defaultUnitId;
-  }
-
-  
-  /**
-   * Value multiplied to convert to default unit in this unit category
-   **/
-  @ApiModelProperty(value = "Value multiplied to convert to default unit in this unit category")
-  public Float getMultiply() {
-    return multiply;
-  }
-  public void setMultiply(Float multiply) {
-    this.multiply = multiply;
-  }
-
-  
-  /**
-   * Value which should be added to convert to default unit
-   **/
-  @ApiModelProperty(value = "Value which should be added to convert to default unit")
-  public Float getAdd() {
-    return add;
-  }
-  public void setAdd(Float add) {
-    this.add = add;
-  }
-
-  
-  /**
-   * When the record was first created. Use ISO 8601 datetime format
-   **/
-  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
-  public Date getCreatedAt() {
-    return createdAt;
-  }
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  
-  /**
-   * When the record in the database was last updated. Use ISO 8601 datetime format
-   **/
-  @ApiModelProperty(value = "When the record in the database was last updated. Use ISO 8601 datetime format")
-  public Date getUpdatedAt() {
-    return updatedAt;
-  }
-  public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
+  public void setConversionSteps(List<ConversionStep> conversionSteps) {
+    this.conversionSteps = conversionSteps;
   }
 
   
@@ -199,19 +111,12 @@ public class Unit  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Unit {\n");
     
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  clientId: ").append(clientId).append("\n");
     sb.append("  name: ").append(name).append("\n");
     sb.append("  abbreviatedName: ").append(abbreviatedName).append("\n");
-    sb.append("  categoryId: ").append(categoryId).append("\n");
-    sb.append("  minimumValue: ").append(minimumValue).append("\n");
-    sb.append("  maximumValue: ").append(maximumValue).append("\n");
-    sb.append("  updated: ").append(updated).append("\n");
-    sb.append("  defaultUnitId: ").append(defaultUnitId).append("\n");
-    sb.append("  multiply: ").append(multiply).append("\n");
-    sb.append("  add: ").append(add).append("\n");
-    sb.append("  createdAt: ").append(createdAt).append("\n");
-    sb.append("  updatedAt: ").append(updatedAt).append("\n");
+    sb.append("  category: ").append(category).append("\n");
+    sb.append("  minimum: ").append(minimum).append("\n");
+    sb.append("  maximum: ").append(maximum).append("\n");
+    sb.append("  conversionSteps: ").append(conversionSteps).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

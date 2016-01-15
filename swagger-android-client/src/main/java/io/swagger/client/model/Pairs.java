@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class UnitCategory  {
+public class Pairs  {
   
   @SerializedName("name")
   private String name = null;
@@ -28,7 +28,7 @@ public class UnitCategory  {
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UnitCategory {\n");
+    sb.append("class Pairs {\n");
     
     sb.append("  name: ").append(name).append("\n");
     sb.append("}\n");
