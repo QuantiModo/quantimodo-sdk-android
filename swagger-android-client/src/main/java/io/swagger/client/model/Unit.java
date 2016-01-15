@@ -20,7 +20,7 @@ public class Unit  {
   @SerializedName("category")
   private CategoryEnum category = null;
   public enum MinimumEnum {
-     -Infinity, 
+     Minus_Infinity,
   };
   @SerializedName("minimum")
   private MinimumEnum minimum = null;
