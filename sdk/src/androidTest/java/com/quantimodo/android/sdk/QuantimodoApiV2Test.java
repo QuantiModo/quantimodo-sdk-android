@@ -55,7 +55,8 @@ public class QuantimodoApiV2Test extends AndroidTestCase{
     }
 
     public void testSearchVariables() throws Exception {
-        SdkResponse<ArrayList<Variable>> response = instance.searchVariables(getContext(), token, "*", 1, 0, null, null);
+        SdkResponse<ArrayList<Variable>> response = instance.searchVariables(getContext(), token,
+                "*", 1, 0, null, null, false);
         assertTrue(response.isSuccessful());
         assertNotNull(response.getData());
         assertTrue(response.getData().size() == 1);
