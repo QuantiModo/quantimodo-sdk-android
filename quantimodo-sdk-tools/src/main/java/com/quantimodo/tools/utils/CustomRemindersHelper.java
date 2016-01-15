@@ -28,6 +28,7 @@ public class CustomRemindersHelper {
     private static final String KEY_VALUE = "value";
     private static final String KEY_UNIT_NAME = "unit_name";
     private static final String KEY_FREQUENCY = "frequency_index";
+    private static final String KEY_UPDATE = "need_update";
     private static final String KEY_REMINDERS_LIST = "reminders_list";
     /**
      * Extra used to broadcast the alarm when triggered
@@ -181,6 +182,8 @@ public class CustomRemindersHelper {
         mEdit1.putString("reminder_" + reminder.id + KEY_UNIT_NAME, reminder.unitName);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
         mEdit1.putInt("reminder_" + reminder.id + KEY_FREQUENCY, reminder.frequencyIndex);
+        mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
+        mEdit1.putBoolean("reminder_" + reminder.id + KEY_UPDATE, reminder.needUpdate);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -202,6 +205,7 @@ public class CustomRemindersHelper {
         mEdit1.remove("reminder_" + reminder.id + KEY_VALUE);
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
+        mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -241,7 +245,8 @@ public class CustomRemindersHelper {
                 preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
-                preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0)
+                preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0),
+                preferences.getBoolean("reminder_" + id +KEY_VALUE, true)
         );
     }
 
@@ -285,9 +290,15 @@ public class CustomRemindersHelper {
         public final String value;
         public final String unitName;
         public final int frequencyIndex;
+        public final boolean needUpdate;
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
                         String value, String unitName, int frequency){
+            this(id, name, variableCategory, combinationOperation, value, unitName, frequency, true);
+        }
+
+        public Reminder(String id, String name, String variableCategory, String combinationOperation,
+                        String value, String unitName, int frequency, boolean needUpdate){
             this.id = id;
             this.name = name;
             this.variableCategory = variableCategory;
@@ -295,6 +306,7 @@ public class CustomRemindersHelper {
             this.value = value;
             this.unitName = unitName;
             this.frequencyIndex = frequency;
+            this.needUpdate = needUpdate;
         }
     }
 }
