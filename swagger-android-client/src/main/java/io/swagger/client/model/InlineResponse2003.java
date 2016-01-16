@@ -1,7 +1,5 @@
 package io.swagger.client.model;
 
-import io.swagger.client.model.CommonVariableRelationship;
-import java.util.*;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class InlineResponse2003  {
   
   @SerializedName("data")
-  private List<CommonVariableRelationship> data = null;
+  private String data = null;
   @SerializedName("success")
   private Boolean success = null;
 
@@ -19,10 +17,10 @@ public class InlineResponse2003  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public List<CommonVariableRelationship> getData() {
+  public String getData() {
     return data;
   }
-  public void setData(List<CommonVariableRelationship> data) {
+  public void setData(String data) {
     this.data = data;
   }
 
