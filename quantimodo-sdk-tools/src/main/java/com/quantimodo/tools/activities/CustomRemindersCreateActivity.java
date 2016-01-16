@@ -271,7 +271,7 @@ public class CustomRemindersCreateActivity extends Activity {
         String filter;
         if(allCategories != null){
             filter = allCategories.get(spVariableCategory.getSelectedItemPosition()).getName();
-            if(filter.equals("Misc")) filter = null;
+            if(filter.equals("Anything")) filter = null;
         }
         else filter = null;
         getSpiceManager().execute(new GetSuggestedVariablesRequest(search, filter, 10),
@@ -348,8 +348,8 @@ public class CustomRemindersCreateActivity extends Activity {
             }
         }
 
-        VariableCategory miscCategory = new VariableCategory("Misc");
-        allCategories.add(miscCategory);
+        VariableCategory anyCategory = new VariableCategory("Anything");
+        allCategories.add(anyCategory);
         VariableCategorySelectSpinnerAdapter adapter = new VariableCategorySelectSpinnerAdapter(this, allCategories);
         spVariableCategory.setAdapter(adapter);
         spVariableCategory.setSelection(allCategories.size() - 1);
