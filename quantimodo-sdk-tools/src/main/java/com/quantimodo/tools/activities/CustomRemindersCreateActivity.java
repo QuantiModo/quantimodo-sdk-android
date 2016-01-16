@@ -340,8 +340,9 @@ public class CustomRemindersCreateActivity extends Activity {
     private void categoriesUpdated() {
         for(int i=0; i<allCategories.size(); i++){
             String name = allCategories.get(i).getName().toLowerCase();
+            //if not matching one of these, remove it because is not used.
             if(!name.equals("emotions") && !name.equals("foods") && !name.equals("symptoms") &&
-                    !name.equals("treatments")){
+                    !name.equals("treatments") && !name.equals("physical activity")){
                 allCategories.remove(i);
                 i--;
             }
