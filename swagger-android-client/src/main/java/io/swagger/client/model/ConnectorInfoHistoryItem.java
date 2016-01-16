@@ -14,7 +14,7 @@ public class ConnectorInfoHistoryItem  {
   private Boolean success = null;
   @SerializedName("message")
   private String message = null;
-  @SerializedName("created_at")
+  @SerializedName("createdAt")
   private String createdAt = null;
 
   
