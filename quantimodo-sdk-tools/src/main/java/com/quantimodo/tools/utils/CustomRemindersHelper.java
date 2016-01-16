@@ -246,7 +246,7 @@ public class CustomRemindersHelper {
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
                 preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0),
-                preferences.getBoolean("reminder_" + id +KEY_VALUE, true)
+                preferences.getBoolean("reminder_" + id +KEY_UPDATE, true)
         );
     }
 
