@@ -279,7 +279,7 @@ public class CorrelationsApi {
    * @param variableName Effect variable name
    * @param organizationToken Organization access token
    * @param accessToken User&#39;s OAuth2 access token
-   * @param includePublic Include bublic correlations, Can be \&quot;1\&quot; or empty.
+   * @param includePublic Include public correlations, Can be \&quot;1\&quot; or empty.
    * @return List<Correlation>
    */
   public List<Correlation>  v1OrganizationsOrganizationIdUsersUserIdVariablesVariableNameCausesGet (Integer organizationId, Integer userId, String variableName, String organizationToken, String accessToken, String includePublic) throws ApiException {
@@ -321,7 +321,7 @@ public class CorrelationsApi {
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "organization_token", organizationToken));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "include_public", includePublic));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "includePublic", includePublic));
     
 
     
@@ -364,7 +364,7 @@ public class CorrelationsApi {
    * @param variableName Cause variable name
    * @param organizationToken Organization access token
    * @param accessToken User&#39;s OAuth2 access token
-   * @param includePublic Include bublic correlations, Can be \&quot;1\&quot; or empty.
+   * @param includePublic Include public correlations, Can be \&quot;1\&quot; or empty.
    * @return List<CommonResponse>
    */
   public List<CommonResponse>  v1OrganizationsOrganizationIdUsersUserIdVariablesVariableNameEffectsGet (Integer organizationId, Integer userId, String variableName, String organizationToken, String accessToken, String includePublic) throws ApiException {
