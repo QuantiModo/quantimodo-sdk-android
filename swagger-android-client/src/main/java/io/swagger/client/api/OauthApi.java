@@ -42,7 +42,7 @@ public class OauthApi {
    * Authorize
    * Ask the user if they want to allow a client&#39;s application to submit or obtain data from their QM account. It will redirect the user to the url provided by the client application with the code as a query parameter or error in case of an error.
    * @param clientId This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do.
-   * @param clientSecret This is the secret for your obtained client_id. QuantiModo uses this to validate that only your application uses the client_id.
+   * @param clientSecret This is the secret for your obtained clientId. QuantiModo uses this to validate that only your application uses the clientId.
    * @param responseType If the value is code, launches a Basic flow, requiring a POST to the token endpoint to obtain the tokens. If the value is token id_token or id_token token, launches an Implicit flow, requiring the use of Javascript at the redirect URI to retrieve tokens from the URI #fragment.
    * @param scope Scopes include basic, readmeasurements, and writemeasurements. The \&quot;basic\&quot; scope allows you to read user info (displayname, email, etc). The \&quot;readmeasurements\&quot; scope allows one to read a user&#39;s data. The \&quot;writemeasurements\&quot; scope allows you to write user data. Separate multiple scopes by a space.
    * @param redirectUri The redirect URI is the URL within your client application that will receive the OAuth2 credentials.
@@ -84,7 +84,7 @@ public class OauthApi {
     Map<String, String> formParams = new HashMap<String, String>();
 
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "clientId", clientId));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "client_secret", clientSecret));
     
@@ -133,7 +133,7 @@ public class OauthApi {
    * Access Token
    * Client provides authorization token obtained from /api/v1/oauth2/authorize to this endpoint and receives an access token. Access token can then be used to query different API endpoints of QuantiModo.
    * @param clientId This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do.
-   * @param clientSecret This is the secret for your obtained client_id. QuantiModo uses this to validate that only your application uses the client_id.
+   * @param clientSecret This is the secret for your obtained clientId. QuantiModo uses this to validate that only your application uses the clientId.
    * @param grantType Grant Type can be &#39;authorization_code&#39; or &#39;refresh_token&#39;
    * @param responseType If the value is code, launches a Basic flow, requiring a POST to the token endpoint to obtain the tokens. If the value is token id_token or id_token token, launches an Implicit flow, requiring the use of Javascript at the redirect URI to retrieve tokens from the URI #fragment.
    * @param scope Scopes include basic, readmeasurements, and writemeasurements. The \&quot;basic\&quot; scope allows you to read user info (displayname, email, etc). The \&quot;readmeasurements\&quot; scope allows one to read a user&#39;s data. The \&quot;writemeasurements\&quot; scope allows you to write user data. Separate multiple scopes by a space.
@@ -171,7 +171,7 @@ public class OauthApi {
     Map<String, String> formParams = new HashMap<String, String>();
 
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "clientId", clientId));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "client_secret", clientSecret));
     

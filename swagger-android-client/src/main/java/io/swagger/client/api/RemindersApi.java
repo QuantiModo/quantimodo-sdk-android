@@ -80,27 +80,27 @@ public class RemindersApi {
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "clientId", clientId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "user_id", userId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "userId", userId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "variable_id", variableId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "variableId", variableId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "pop_up", popUp));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "popUp", popUp));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "sms", sms));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "email", email));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "notification_bar", notificationBar));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "notificationBar", notificationBar));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_reminded", lastReminded));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastReminded", lastReminded));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_tracked", lastTracked));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastTracked", lastTracked));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "created_at", createdAt));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "createdAt", createdAt));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "updated_at", updatedAt));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "updatedAt", updatedAt));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
     
@@ -297,27 +297,27 @@ public class RemindersApi {
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "client_id", clientId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "clientId", clientId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "user_id", userId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "userId", userId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "variable_id", variableId));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "variableId", variableId));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "pop_up", popUp));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "popUp", popUp));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "sms", sms));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "email", email));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "notification_bar", notificationBar));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "notificationBar", notificationBar));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_reminded", lastReminded));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastReminded", lastReminded));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_tracked", lastTracked));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "lastTracked", lastTracked));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "created_at", createdAt));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "createdAt", createdAt));
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "updated_at", updatedAt));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "updatedAt", updatedAt));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
     

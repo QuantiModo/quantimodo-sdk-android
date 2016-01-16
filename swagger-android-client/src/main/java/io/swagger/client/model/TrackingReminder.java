@@ -69,9 +69,9 @@ public class TrackingReminder  {
 
   
   /**
-   * client_id
+   * clientId
    **/
-  @ApiModelProperty(value = "client_id")
+  @ApiModelProperty(value = "clientId")
   public String getClientId() {
     return clientId;
   }
