@@ -84,7 +84,7 @@ public class TrackingFragment extends QFragment {
     private static final String KEY_CATEGORY = "category";
     private static final String KEY_SEARCH = "search";
 
-    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS, TYPE_EMOTIONS})
+    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS, TYPE_EMOTIONS, TYPE_PHYSICAL})
     @Retention(RetentionPolicy.SOURCE)
     public @interface TrackingType{}
 
@@ -174,6 +174,7 @@ public class TrackingFragment extends QFragment {
     public static final int TYPE_SYMPTOMS = 3;
     public static final int TYPE_MOOD = 4;
     public static final int TYPE_EMOTIONS = 5;
+    public static final int TYPE_PHYSICAL = 6;
 
     private CategoryDef mCategoryDef;
     private int mType;
