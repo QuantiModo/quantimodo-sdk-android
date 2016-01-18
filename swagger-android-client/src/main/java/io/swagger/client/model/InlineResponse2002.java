@@ -1,5 +1,6 @@
 package io.swagger.client.model;
 
+import io.swagger.client.model.Measurement;
 
 import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class InlineResponse2002  {
   
   @SerializedName("data")
-  private String data = null;
+  private Measurement data = null;
   @SerializedName("success")
   private Boolean success = null;
 
@@ -17,10 +18,10 @@ public class InlineResponse2002  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public String getData() {
+  public Measurement getData() {
     return data;
   }
-  public void setData(String data) {
+  public void setData(Measurement data) {
     this.data = data;
   }
 

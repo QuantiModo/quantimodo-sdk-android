@@ -6,16 +6,16 @@ import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class UnitCategory  {
+public class MeasurementSource  {
   
   @SerializedName("name")
   private String name = null;
 
   
   /**
-   * Category name
+   * Name of the application or device.
    **/
-  @ApiModelProperty(required = true, value = "Category name")
+  @ApiModelProperty(required = true, value = "Name of the application or device.")
   public String getName() {
     return name;
   }
@@ -28,7 +28,7 @@ public class UnitCategory  {
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UnitCategory {\n");
+    sb.append("class MeasurementSource {\n");
     
     sb.append("  name: ").append(name).append("\n");
     sb.append("}\n");

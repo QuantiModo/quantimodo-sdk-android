@@ -73,6 +73,9 @@
     <string name="tracking_item_mood_title">Mood</string>
     <string name="tracking_item_mood_question">Enter a mood</string>
 
+    <string name="tracking_item_physical_title">Physical Activity</string>
+    <string name="tracking_item_physical_question">Enter a physical activity</string>
+
     <string name="tracking_fragment_no_category_title">Track Anything</string>
     <string name="tracking_fragment_emotions_title">Track emotions</string>
     <string name="tracking_fragment_diet_title">Track diet</string>

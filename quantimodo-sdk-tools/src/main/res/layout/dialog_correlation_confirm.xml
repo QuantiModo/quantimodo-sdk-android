@@ -14,11 +14,11 @@
             android:layout_marginBottom="5dp"
             />
 
-    <CheckBox
-            android:id="@+id/dialogCheckbox"
-            android:layout_marginLeft="15dp"
-            android:text="@string/correlation_dialog_dont_show_again"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <!--<CheckBox-->
+            <!--android:id="@+id/dialogCheckbox"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:text="@string/correlation_dialog_dont_show_again"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
 
 </LinearLayout>
