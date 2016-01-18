@@ -19,16 +19,10 @@ public class Unit  {
   };
   @SerializedName("category")
   private CategoryEnum category = null;
-  public enum MinimumEnum {
-     Minus_Infinity,
-  };
-  @SerializedName("minimum")
-  private MinimumEnum minimum = null;
-  public enum MaximumEnum {
-     Infinity, 
-  };
-  @SerializedName("maximum")
-  private MaximumEnum maximum = null;
+  @SerializedName("minimumValue")
+  private Double minimumValue = null;
+  @SerializedName("maximumValue")
+  private Double maximumValue = null;
   @SerializedName("conversionSteps")
   private List<ConversionStep> conversionSteps = null;
 
@@ -70,26 +64,26 @@ public class Unit  {
 
   
   /**
-   * Unit minimum value
+   * The smallest acceptable value for measurements using this unit
    **/
-  @ApiModelProperty(required = true, value = "Unit minimum value")
-  public MinimumEnum getMinimum() {
-    return minimum;
+  @ApiModelProperty(value = "The smallest acceptable value for measurements using this unit")
+  public Double getMinimumValue() {
+    return minimumValue;
   }
-  public void setMinimum(MinimumEnum minimum) {
-    this.minimum = minimum;
+  public void setMinimumValue(Double minimumValue) {
+    this.minimumValue = minimumValue;
   }
 
   
   /**
-   * Unit maximum value
+   * The largest acceptable value for measurements using this unit
    **/
-  @ApiModelProperty(required = true, value = "Unit maximum value")
-  public MaximumEnum getMaximum() {
-    return maximum;
+  @ApiModelProperty(value = "The largest acceptable value for measurements using this unit")
+  public Double getMaximumValue() {
+    return maximumValue;
   }
-  public void setMaximum(MaximumEnum maximum) {
-    this.maximum = maximum;
+  public void setMaximumValue(Double maximumValue) {
+    this.maximumValue = maximumValue;
   }
 
   
@@ -114,8 +108,8 @@ public class Unit  {
     sb.append("  name: ").append(name).append("\n");
     sb.append("  abbreviatedName: ").append(abbreviatedName).append("\n");
     sb.append("  category: ").append(category).append("\n");
-    sb.append("  minimum: ").append(minimum).append("\n");
-    sb.append("  maximum: ").append(maximum).append("\n");
+    sb.append("  minimumValue: ").append(minimumValue).append("\n");
+    sb.append("  maximumValue: ").append(maximumValue).append("\n");
     sb.append("  conversionSteps: ").append(conversionSteps).append("\n");
     sb.append("}\n");
     return sb.toString();

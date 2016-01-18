@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class ConnectorInfoHistoryItem  {
   
-  @SerializedName("number_of_measurements")
+  @SerializedName("numberOfMeasurements")
   private Integer numberOfMeasurements = null;
   @SerializedName("success")
   private Boolean success = null;

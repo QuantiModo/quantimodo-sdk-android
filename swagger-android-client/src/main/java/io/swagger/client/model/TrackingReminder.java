@@ -39,8 +39,16 @@ public class TrackingReminder  {
   private Date lastReminded = null;
   @SerializedName("lastTracked")
   private Date lastTracked = null;
-  @SerializedName("createdAt")
-  private Date createdAt = null;
+  @SerializedName("firstDailyReminderTime")
+  private String firstDailyReminderTime = null;
+  @SerializedName("secondDailyReminderTime")
+  private String secondDailyReminderTime = null;
+  @SerializedName("thirdDailyReminderTime")
+  private String thirdDailyReminderTime = null;
+  @SerializedName("startTrackingDate")
+  private Date startTrackingDate = null;
+  @SerializedName("stopTrackingDate")
+  private Date stopTrackingDate = null;
   @SerializedName("updatedAt")
   private Date updatedAt = null;
   @SerializedName("variableName")
@@ -237,14 +245,62 @@ public class TrackingReminder  {
 
   
   /**
-   * When the record was first created. Use ISO 8601 datetime format
+   * Specific first time of day that the user should be reminded to track in HH:MM:SS format
    **/
-  @ApiModelProperty(value = "When the record was first created. Use ISO 8601 datetime format")
-  public Date getCreatedAt() {
-    return createdAt;
+  @ApiModelProperty(value = "Specific first time of day that the user should be reminded to track in HH:MM:SS format")
+  public String getFirstDailyReminderTime() {
+    return firstDailyReminderTime;
   }
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
+  public void setFirstDailyReminderTime(String firstDailyReminderTime) {
+    this.firstDailyReminderTime = firstDailyReminderTime;
+  }
+
+  
+  /**
+   * Specific second time of day that the user should be reminded to track in HH:MM:SS format
+   **/
+  @ApiModelProperty(value = "Specific second time of day that the user should be reminded to track in HH:MM:SS format")
+  public String getSecondDailyReminderTime() {
+    return secondDailyReminderTime;
+  }
+  public void setSecondDailyReminderTime(String secondDailyReminderTime) {
+    this.secondDailyReminderTime = secondDailyReminderTime;
+  }
+
+  
+  /**
+   * Specific third time of day that the user should be reminded to track in HH:MM:SS format
+   **/
+  @ApiModelProperty(value = "Specific third time of day that the user should be reminded to track in HH:MM:SS format")
+  public String getThirdDailyReminderTime() {
+    return thirdDailyReminderTime;
+  }
+  public void setThirdDailyReminderTime(String thirdDailyReminderTime) {
+    this.thirdDailyReminderTime = thirdDailyReminderTime;
+  }
+
+  
+  /**
+   * Earliest date on which the user should be reminded to track in YYYY-MM-DD format
+   **/
+  @ApiModelProperty(value = "Earliest date on which the user should be reminded to track in YYYY-MM-DD format")
+  public Date getStartTrackingDate() {
+    return startTrackingDate;
+  }
+  public void setStartTrackingDate(Date startTrackingDate) {
+    this.startTrackingDate = startTrackingDate;
+  }
+
+  
+  /**
+   * Latest date on which the user should be reminded to track in YYYY-MM-DD format
+   **/
+  @ApiModelProperty(value = "Latest date on which the user should be reminded to track in YYYY-MM-DD format")
+  public Date getStopTrackingDate() {
+    return stopTrackingDate;
+  }
+  public void setStopTrackingDate(Date stopTrackingDate) {
+    this.stopTrackingDate = stopTrackingDate;
   }
 
   
@@ -329,7 +385,11 @@ public class TrackingReminder  {
     sb.append("  notificationBar: ").append(notificationBar).append("\n");
     sb.append("  lastReminded: ").append(lastReminded).append("\n");
     sb.append("  lastTracked: ").append(lastTracked).append("\n");
-    sb.append("  createdAt: ").append(createdAt).append("\n");
+    sb.append("  firstDailyReminderTime: ").append(firstDailyReminderTime).append("\n");
+    sb.append("  secondDailyReminderTime: ").append(secondDailyReminderTime).append("\n");
+    sb.append("  thirdDailyReminderTime: ").append(thirdDailyReminderTime).append("\n");
+    sb.append("  startTrackingDate: ").append(startTrackingDate).append("\n");
+    sb.append("  stopTrackingDate: ").append(stopTrackingDate).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
     sb.append("  variableName: ").append(variableName).append("\n");
     sb.append("  variableCategoryName: ").append(variableCategoryName).append("\n");

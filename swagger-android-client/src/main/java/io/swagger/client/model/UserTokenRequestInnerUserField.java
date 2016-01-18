@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class UserTokenRequestInnerUserField  {
   
-  @SerializedName("_id")
+  @SerializedName("id")
   private Integer id = null;
 
   
