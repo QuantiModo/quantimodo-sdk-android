@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Entity mapped to table "UNIT".
  */
-public class Unit {
+public class Unit implements java.io.Serializable {
 
     private Long id;
     /** Not-null value. */
@@ -21,6 +21,7 @@ public class Unit {
     private Double min;
     private Double max;
     private String category;
+    /** Not-null value. */
     private String abbr;
 
     /** Used to resolve relations */
@@ -97,10 +98,12 @@ public class Unit {
         this.category = category;
     }
 
+    /** Not-null value. */
     public String getAbbr() {
         return abbr;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setAbbr(String abbr) {
         this.abbr = abbr;
     }

@@ -11,7 +11,7 @@ import com.quantimodo.android.sdk.model.HistoryMeasurement;
 /**
  * Entity mapped to table "MEASUREMENT".
  */
-public class Measurement {
+public class Measurement implements java.io.Serializable {
 
     private Long id;
     /** Not-null value. */
@@ -20,6 +20,8 @@ public class Measurement {
     private Long unitId;
     private double value;
     private String source;
+    private Boolean needUpdate;
+    private String note;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -44,13 +46,15 @@ public class Measurement {
         this.id = id;
     }
 
-    public Measurement(Long id, java.util.Date timestamp, Long variableId, Long unitId, double value, String source) {
+    public Measurement(Long id, java.util.Date timestamp, Long variableId, Long unitId, double value, String source, Boolean needUpdate, String note) {
         this.id = id;
         this.timestamp = timestamp;
         this.variableId = variableId;
         this.unitId = unitId;
         this.value = value;
         this.source = source;
+        this.needUpdate = needUpdate;
+        this.note = note;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -107,6 +111,22 @@ public class Measurement {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public Boolean getNeedUpdate() {
+        return needUpdate;
+    }
+
+    public void setNeedUpdate(Boolean needUpdate) {
+        this.needUpdate = needUpdate;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     /** To-one relationship, resolved on first access. */
@@ -189,6 +209,7 @@ public class Measurement {
         m.setSource(measurement.getSource());
         m.setTimestamp(measurement.getTimestamp());
         m.setValue(measurement.getValue());
+        m.setNote(measurement.getNote());
         //Unit ?
         //Variable ?
 
@@ -202,7 +223,8 @@ public class Measurement {
                 getVariable().getName(),
                 getTimestamp(),
                 getValue(),
-                getUnit().getName()
+                getUnit().getName(),
+                getNote()
         );
     }
     public static int safeLongToInt(long l) {
@@ -212,5 +234,6 @@ public class Measurement {
         }
         return (int) l;
     }
+    // KEEP METHODS END
 
 }

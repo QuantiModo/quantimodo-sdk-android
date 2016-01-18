@@ -7,7 +7,7 @@ import java.io.File;
 public class QmDaoGenerator {
 
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1002, "com.quantimodo.tools.models");
+        Schema schema = new Schema(1003, "com.quantimodo.tools.models");
         schema.enableKeepSectionsByDefault();
         schema.enableActiveEntitiesByDefault();
 
@@ -23,8 +23,9 @@ public class QmDaoGenerator {
 
     private static Entity addVariable(Schema schema, Entity unit, Entity category) {
         Entity variable = schema.addEntity("Variable");
+        variable.implementsSerializable();
         variable.addLongProperty("id").primaryKey().autoincrement();
-        variable.addStringProperty("name").notNull();
+        variable.addStringProperty("name").unique().notNull();
         variable.addStringProperty("originalName");
 
         Property vp = variable.addLongProperty("parentVariable").getProperty();
@@ -46,18 +47,20 @@ public class QmDaoGenerator {
 
     private static Entity addUnit(Schema schema, Entity category){
         Entity unit = schema.addEntity("Unit");
+        unit.implementsSerializable();
         unit.addLongProperty("id").primaryKey().autoincrement();
         unit.addStringProperty("name").notNull();
         unit.addDoubleProperty("min");
         unit.addDoubleProperty("max");
 
         unit.addStringProperty("category");
-        unit.addStringProperty("abbr");
+        unit.addStringProperty("abbr").notNull().unique();
         return unit;
     }
 
     private static Entity addCategory(Schema schema){
         Entity category = schema.addEntity("Category");
+        category.implementsSerializable();
         category.addProperty(PropertyType.Long,"id").primaryKey().autoincrement();
         category.addStringProperty("name").notNull();
         return category;
@@ -65,18 +68,27 @@ public class QmDaoGenerator {
 
     private static void addMeasurement(Schema schema, Entity unit, Entity variable){
         Entity measurement = schema.addEntity("Measurement");
-
+        measurement.implementsSerializable();
         measurement.addLongProperty("id").primaryKey().autoincrement();
-        measurement.addDateProperty("timestamp").notNull();
+        Property timestamp = measurement.addDateProperty("timestamp").notNull().getProperty();
 
         Property vm = measurement.addLongProperty("variableId").getProperty();
         measurement.addToOne(variable,vm,"variable");
+
+        Index index = new Index();
+        index.makeUnique();
+        index.setName("pk");
+        index.addProperty(timestamp);
+        index.addProperty(vm);
+        measurement.addIndex(index);
 
         Property vu = measurement.addLongProperty("unitId").getProperty();
         measurement.addToOne(unit,vu,"unit");
 
         measurement.addDoubleProperty("value").notNull();
         measurement.addStringProperty("source");
+        measurement.addBooleanProperty("needUpdate");
+        measurement.addStringProperty("note");
     }
 
 }
