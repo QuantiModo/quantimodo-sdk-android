@@ -11,7 +11,7 @@ import java.util.Comparator;
 import javax.inject.Inject;
 
 /**
- * Get pubñic suggested variables from search box
+ * Get public suggested variables from search box
  * Would sort them by latest measurement time DESC
  * If now search string is provided, would search for Variables with source equals current application source
  */

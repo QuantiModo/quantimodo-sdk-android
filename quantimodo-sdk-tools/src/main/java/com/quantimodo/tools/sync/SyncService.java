@@ -45,11 +45,13 @@ public abstract class SyncService extends IntentService {
     public static final String TYPE_REQUEST_CLOSE = "rClose";
     public static final String SYNC_FROM_SCRATCH_KEY = "syncFromScratch";
     public static final String LAST_SUCCESFULL_SYNC_KEY = "lastSuccessfulMoodSync";
+    public static final String LAST_SUCCESFULL_SEND_KEY = "lastSuccessfulMoodSend";
     public static final String LAST_META_SYNC = "lastMetaSync";
     public static final long DEFAULT_META_SYNC_TIMEOUT = 3600 * 24; //1 day
     private static final int FOREGROUND_ID = 1345;
 
     protected long lastSuccessfulMoodSync;
+    protected long lastSuccessfulMoodSent;
     protected SharedPreferences mSharePrefs;
 
     private Notification.Builder mBuilder;
@@ -104,6 +106,7 @@ public abstract class SyncService extends IntentService {
         QTools.getInstance().register(this);
         mSharePrefs = getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_PRIVATE);
         lastSuccessfulMoodSync = mSharePrefs.getLong(LAST_SUCCESFULL_SYNC_KEY, 0);
+        lastSuccessfulMoodSent = mSharePrefs.getLong(LAST_SUCCESFULL_SEND_KEY,0);
         setIntentRedelivery(false);
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
@@ -251,9 +254,9 @@ public abstract class SyncService extends IntentService {
      */
     protected boolean beforeSync(Bundle bundle) throws Exception{
 
+        SharedPreferences sp = getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_MULTI_PROCESS);
         if(bundle.getBoolean(SYNC_FROM_SCRATCH_KEY,false)){
             Log.i(DEBUG_TAG,"Syncing from scratch");
-            SharedPreferences sp = getSharedPreferences(ToolsPrefs.QUANTIMODO_PREF_KEY, Context.MODE_MULTI_PROCESS);
             sp.edit().remove(ToolsPrefs.PREF_SYNC_FROM)
                     .remove(LAST_SUCCESFULL_SYNC_KEY)
                     .apply();

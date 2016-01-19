@@ -52,7 +52,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
                 "\"MIN\" REAL," + // 2: min
                 "\"MAX\" REAL," + // 3: max
                 "\"CATEGORY\" TEXT," + // 4: category
-                "\"ABBR\" TEXT);"); // 5: abbr
+                "\"ABBR\" TEXT NOT NULL UNIQUE );"); // 5: abbr
     }
 
     /** Drops the underlying database table. */
@@ -86,11 +86,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
         if (category != null) {
             stmt.bindString(5, category);
         }
- 
-        String abbr = entity.getAbbr();
-        if (abbr != null) {
-            stmt.bindString(6, abbr);
-        }
+        stmt.bindString(6, entity.getAbbr());
     }
 
     @Override
@@ -114,7 +110,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // min
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // max
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // category
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // abbr
+            cursor.getString(offset + 5) // abbr
         );
         return entity;
     }
@@ -127,7 +123,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
         entity.setMin(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
         entity.setMax(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
         entity.setCategory(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setAbbr(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setAbbr(cursor.getString(offset + 5));
      }
     
     /** @inheritdoc */

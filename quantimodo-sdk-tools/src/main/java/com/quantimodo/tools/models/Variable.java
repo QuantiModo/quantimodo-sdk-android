@@ -11,7 +11,7 @@ import com.quantimodo.android.sdk.SdkDefs;
 /**
  * Entity mapped to table "VARIABLE".
  */
-public class Variable {
+public class Variable implements java.io.Serializable {
 
     private Long id;
     /** Not-null value. */
