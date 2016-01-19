@@ -107,8 +107,24 @@ public class JsonUtil {
       return new TypeToken<List<TrackingReminderDelete>>(){}.getType();
     }
     
+    if ("TrackingReminderPendingSkip".equalsIgnoreCase(className)) {
+      return new TypeToken<List<TrackingReminderPendingSkip>>(){}.getType();
+    }
+    
+    if ("TrackingReminderPendingSnooze".equalsIgnoreCase(className)) {
+      return new TypeToken<List<TrackingReminderPendingSnooze>>(){}.getType();
+    }
+    
+    if ("TrackingReminderPendingTrack".equalsIgnoreCase(className)) {
+      return new TypeToken<List<TrackingReminderPendingTrack>>(){}.getType();
+    }
+    
     if ("TrackingReminder".equalsIgnoreCase(className)) {
       return new TypeToken<List<TrackingReminder>>(){}.getType();
+    }
+    
+    if ("TrackingReminderPending".equalsIgnoreCase(className)) {
+      return new TypeToken<List<TrackingReminderPending>>(){}.getType();
     }
     
     if ("Unit".equalsIgnoreCase(className)) {
@@ -185,6 +201,10 @@ public class JsonUtil {
     
     if ("InlineResponse2003".equalsIgnoreCase(className)) {
       return new TypeToken<List<InlineResponse2003>>(){}.getType();
+    }
+    
+    if ("InlineResponse2004".equalsIgnoreCase(className)) {
+      return new TypeToken<List<InlineResponse2004>>(){}.getType();
     }
     
     return new TypeToken<List<Object>>(){}.getType();
@@ -265,8 +285,24 @@ public class JsonUtil {
       return new TypeToken<TrackingReminderDelete>(){}.getType();
     }
     
+    if ("TrackingReminderPendingSkip".equalsIgnoreCase(className)) {
+      return new TypeToken<TrackingReminderPendingSkip>(){}.getType();
+    }
+    
+    if ("TrackingReminderPendingSnooze".equalsIgnoreCase(className)) {
+      return new TypeToken<TrackingReminderPendingSnooze>(){}.getType();
+    }
+    
+    if ("TrackingReminderPendingTrack".equalsIgnoreCase(className)) {
+      return new TypeToken<TrackingReminderPendingTrack>(){}.getType();
+    }
+    
     if ("TrackingReminder".equalsIgnoreCase(className)) {
       return new TypeToken<TrackingReminder>(){}.getType();
+    }
+    
+    if ("TrackingReminderPending".equalsIgnoreCase(className)) {
+      return new TypeToken<TrackingReminderPending>(){}.getType();
     }
     
     if ("Unit".equalsIgnoreCase(className)) {
@@ -343,6 +379,10 @@ public class JsonUtil {
     
     if ("InlineResponse2003".equalsIgnoreCase(className)) {
       return new TypeToken<InlineResponse2003>(){}.getType();
+    }
+    
+    if ("InlineResponse2004".equalsIgnoreCase(className)) {
+      return new TypeToken<InlineResponse2004>(){}.getType();
     }
     
     return new TypeToken<Object>(){}.getType();

@@ -13,8 +13,8 @@ import io.swagger.client.model.MeasurementSource;
 import io.swagger.client.model.Measurement;
 import io.swagger.client.model.MeasurementSet;
 import io.swagger.client.model.MeasurementRange;
-import io.swagger.client.model.InlineResponse2002;
 import io.swagger.client.model.InlineResponse2003;
+import io.swagger.client.model.InlineResponse2004;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -169,8 +169,8 @@ public class MeasurementsApi {
    * @param lastUpdated The time that this measurement was created or last updated in the format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
    * @param unit The unit you want the measurements returned in
    * @param startTime The lower limit of measurements returned (Epoch)
-   * @param createdAt The time the measurement record was created in the format YYYY-MM-DDThh:mm:ss
-   * @param updatedAt The time the measurement record was last changed in the format YYYY-MM-DDThh:mm:ss
+   * @param createdAt The time the measurement record was first created in the format YYYY-MM-DDThh:mm:ss. Time zone should be UTC and not local.
+   * @param updatedAt The time the measurement record was last changed in the format YYYY-MM-DDThh:mm:ss. Time zone should be UTC and not local.
    * @param endTime The upper limit of measurements returned (Epoch)
    * @param groupingWidth The time (in seconds) over which measurements are grouped together
    * @param groupingTimezone The time (in seconds) over which measurements are grouped together
@@ -471,9 +471,9 @@ public class MeasurementsApi {
    * Get Measurement
    * @param id id of Measurement
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse2002
+   * @return InlineResponse2003
    */
-  public InlineResponse2002  v2MeasurementsIdGet (Integer id, String accessToken) throws ApiException {
+  public InlineResponse2003  v2MeasurementsIdGet (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -518,7 +518,7 @@ public class MeasurementsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse2002) ApiInvoker.deserialize(response, "", InlineResponse2002.class);
+        return (InlineResponse2003) ApiInvoker.deserialize(response, "", InlineResponse2003.class);
       }
       else {
         return null;
@@ -534,9 +534,9 @@ public class MeasurementsApi {
    * @param id id of Measurement
    * @param accessToken User&#39;s OAuth2 access token
    * @param body Measurement that should be updated
-   * @return InlineResponse2003
+   * @return InlineResponse2004
    */
-  public InlineResponse2003  v2MeasurementsIdPut (Integer id, String accessToken, Measurement body) throws ApiException {
+  public InlineResponse2004  v2MeasurementsIdPut (Integer id, String accessToken, Measurement body) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'id' is set
@@ -581,7 +581,7 @@ public class MeasurementsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse2003) ApiInvoker.deserialize(response, "", InlineResponse2003.class);
+        return (InlineResponse2004) ApiInvoker.deserialize(response, "", InlineResponse2004.class);
       }
       else {
         return null;
@@ -596,9 +596,9 @@ public class MeasurementsApi {
    * Delete Measurement
    * @param id id of Measurement
    * @param accessToken User&#39;s OAuth2 access token
-   * @return InlineResponse2003
+   * @return InlineResponse2004
    */
-  public InlineResponse2003  v2MeasurementsIdDelete (Integer id, String accessToken) throws ApiException {
+  public InlineResponse2004  v2MeasurementsIdDelete (Integer id, String accessToken) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -643,7 +643,7 @@ public class MeasurementsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse2003) ApiInvoker.deserialize(response, "", InlineResponse2003.class);
+        return (InlineResponse2004) ApiInvoker.deserialize(response, "", InlineResponse2004.class);
       }
       else {
         return null;
