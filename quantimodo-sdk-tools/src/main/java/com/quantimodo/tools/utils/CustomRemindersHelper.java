@@ -22,6 +22,7 @@ import java.util.Set;
 public class CustomRemindersHelper {
     private static final String TAG = CustomRemindersHelper.class.getSimpleName();
     private static final String PREFERENCES_KEY = "custom_reminders_preferences";
+    private static final String KEY_REMOTE_ID = "remote_id";
     private static final String KEY_NAME = "name";
     private static final String KEY_CATEGORY = "category";
     private static final String KEY_COMBINATION_OPERATION = "combination_oepration";
@@ -170,6 +171,8 @@ public class CustomRemindersHelper {
         SharedPreferences preferences = getPreferences(context);
         SharedPreferences.Editor mEdit1 = preferences.edit();
 
+        mEdit1.remove("reminder_" + reminder.id + KEY_REMOTE_ID);
+        mEdit1.putInt("reminder_" + reminder.id + KEY_REMOTE_ID, reminder.remoteId);
         mEdit1.remove("reminder_" + reminder.id + KEY_NAME);
         mEdit1.putString("reminder_" + reminder.id + KEY_NAME, reminder.name);
         mEdit1.remove("reminder_" + reminder.id + KEY_CATEGORY);
@@ -199,6 +202,7 @@ public class CustomRemindersHelper {
         if(reminder == null) return;
         SharedPreferences.Editor mEdit1 = preferences.edit();
 
+        mEdit1.remove("reminder_" + reminder.id + KEY_REMOTE_ID);
         mEdit1.remove("reminder_" + reminder.id + KEY_NAME);
         mEdit1.remove("reminder_" + reminder.id + KEY_CATEGORY);
         mEdit1.remove("reminder_" + reminder.id + KEY_COMBINATION_OPERATION);
@@ -240,13 +244,14 @@ public class CustomRemindersHelper {
         SharedPreferences preferences = getPreferences(context);
         return new Reminder(
                 id,
+                preferences.getInt("reminder_" + id + KEY_REMOTE_ID, -1),
                 preferences.getString("reminder_" + id + KEY_NAME, ""),
                 preferences.getString("reminder_" + id + KEY_CATEGORY, ""),
                 preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
                 preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0),
-                preferences.getBoolean("reminder_" + id +KEY_UPDATE, true)
+                preferences.getBoolean("reminder_" + id + KEY_UPDATE, true)
         );
     }
 
@@ -283,6 +288,7 @@ public class CustomRemindersHelper {
     }
 
     public static class Reminder{
+        public final int remoteId;
         public final String id;
         public final String name;
         public final String variableCategory;
@@ -294,12 +300,17 @@ public class CustomRemindersHelper {
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
                         String value, String unitName, int frequency){
-            this(id, name, variableCategory, combinationOperation, value, unitName, frequency, true);
+            this(id, -1, name, variableCategory, combinationOperation, value, unitName, frequency, true);
         }
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
+                        String value, String unitName, int frequency, boolean needUpdate) {
+            this(id, -1, name, variableCategory, combinationOperation, value, unitName, frequency, needUpdate);
+        }
+        public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
                         String value, String unitName, int frequency, boolean needUpdate){
             this.id = id;
+            this.remoteId = remoteId;
             this.name = name;
             this.variableCategory = variableCategory;
             this.combinationOperation = combinationOperation;
