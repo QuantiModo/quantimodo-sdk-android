@@ -138,4 +138,8 @@
     <string name="custom_reminders_error_value">You must specify a Value</string>
     <string name="custom_reminders_error_frequency">You must select a Frequency</string>
     <string name="custom_reminders_button_info">Create/Edit a reminder</string>
+
+    <!-- Error strings -->
+    <string name="error_no_connection">Please connect to Internet to perform this action.</string>
+    <string name="error_try_again">A problem occurred, please try again later</string>
 </resources>

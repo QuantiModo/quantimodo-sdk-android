@@ -30,13 +30,21 @@ import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
+import com.quantimodo.tools.sdk.request.NoNetworkConnection;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import io.swagger.client.ApiException;
+import io.swagger.client.api.RemindersApi;
+import io.swagger.client.model.TrackingReminderDelete;
 
 /**
  * Activity that displays the form to create or edit a custom reminder
@@ -72,9 +80,14 @@ public class CustomRemindersCreateActivity extends Activity {
     private String reminderId;
     private CustomRemindersHelper.Reminder mReminder;
 
+    @Inject
+    AuthHelper authHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        QTools.getInstance().inject(this);
+
         setContentView(R.layout.custom_reminder_create);
 
         loadExtras();
@@ -415,16 +428,76 @@ public class CustomRemindersCreateActivity extends Activity {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CustomRemindersHelper.removeReminder(CustomRemindersCreateActivity.this,
-                                reminderId);
-                        CustomRemindersCreateActivity.this.finish();
-                        Toast.makeText(getApplicationContext(),
-                                R.string.custom_reminders_remove_message, Toast.LENGTH_LONG).show();
+                        deletReminder();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
+
+    private void deletReminder(){
+        if (!QtoolsUtils.hasInternetConnection(this)) {
+            Toast.makeText(
+                    getApplicationContext(),
+                    R.string.error_no_connection,
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                RemindersApi api = new RemindersApi();
+                try {
+                    CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
+                            getApplicationContext(), reminderId);
+                    if(reminder == null){
+                        showErrorMessage();
+                        return;
+                    }
+                    TrackingReminderDelete body = new TrackingReminderDelete();
+                    body.setId(reminder.remoteId);
+                    boolean succeed = api.v1TrackingRemindersDeletePost(body,
+                            authHelper.getAuthTokenWithRefresh()).getSuccess();
+                    if (succeed) {
+                        deleteLocally();
+                    }
+                    else{
+                        showErrorMessage();
+                    }
+                } catch (NoNetworkConnection e) {
+                    showErrorMessage();
+                    e.printStackTrace();
+                } catch (ApiException apiException) {
+                    apiException.printStackTrace();
+                    if (apiException.getMessage().toLowerCase().contains("not found") ||
+                            apiException.getMessage().toLowerCase().contains("unauthorized")) {
+                        deleteLocally();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void showErrorMessage(){
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(
+                        getApplicationContext(),
+                        R.string.error_try_again,
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+    }
+
+    private void deleteLocally(){
+        CustomRemindersHelper.removeReminder(CustomRemindersCreateActivity.this,
+                reminderId);
+        CustomRemindersCreateActivity.this.finish();
+        Toast.makeText(getApplicationContext(),
+                R.string.custom_reminders_remove_message, Toast.LENGTH_LONG).show();}
 
     private SpiceManager getSpiceManager(){
         return mSpiceManager;
