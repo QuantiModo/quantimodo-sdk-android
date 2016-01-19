@@ -54,7 +54,7 @@ public class RemindersApi {
    * @param sort Sort by given field. If the field is prefixed with &#39;-&#39;, it will sort in descending order.
    * @return InlineResponse200
    */
-  public InlineResponse200  v1TrackingRemindersGet (String accessToken, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
+  public List<TrackingReminder>  v1TrackingRemindersGet (String accessToken, String createdAt, String updatedAt, Integer limit, Integer offset, String sort) throws ApiException {
     Object postBody = null;
     
 
@@ -104,7 +104,7 @@ public class RemindersApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
-        return (InlineResponse200) ApiInvoker.deserialize(response, "", InlineResponse200.class);
+        return (List<TrackingReminder>) ApiInvoker.deserialize(response, "array", TrackingReminder.class);
       }
       else {
         return null;
