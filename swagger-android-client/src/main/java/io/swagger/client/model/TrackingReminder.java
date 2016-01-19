@@ -57,11 +57,11 @@ public class TrackingReminder  {
   private String variableCategoryName = null;
   @SerializedName("abbreviatedUnitName")
   private String abbreviatedUnitName = null;
-  public enum CombininationOperationEnum {
+  public enum CombinationOperationEnum {
      MEAN,  SUM, 
   };
-  @SerializedName("combininationOperation")
-  private CombininationOperationEnum combininationOperation = null;
+  @SerializedName("combinationOperation")
+  private CombinationOperationEnum combinationOperation = null;
 
   
   /**
@@ -356,11 +356,11 @@ public class TrackingReminder  {
    * The way multiple measurements are aggregated over time
    **/
   @ApiModelProperty(value = "The way multiple measurements are aggregated over time")
-  public CombininationOperationEnum getCombininationOperation() {
-    return combininationOperation;
+  public CombinationOperationEnum getCombinationOperation() {
+    return combinationOperation;
   }
-  public void setCombininationOperation(CombininationOperationEnum combininationOperation) {
-    this.combininationOperation = combininationOperation;
+  public void setCombinationOperation(CombinationOperationEnum combinationOperation) {
+    this.combinationOperation = combinationOperation;
   }
 
   
@@ -394,7 +394,7 @@ public class TrackingReminder  {
     sb.append("  variableName: ").append(variableName).append("\n");
     sb.append("  variableCategoryName: ").append(variableCategoryName).append("\n");
     sb.append("  abbreviatedUnitName: ").append(abbreviatedUnitName).append("\n");
-    sb.append("  combininationOperation: ").append(combininationOperation).append("\n");
+    sb.append("  combinationOperation: ").append(combinationOperation).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
