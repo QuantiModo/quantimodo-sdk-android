@@ -11,7 +11,7 @@ public class UserTokenRequest  {
   
   @SerializedName("user")
   private UserTokenRequestInnerUserField user = null;
-  @SerializedName("organization_access_token")
+  @SerializedName("organizationAccessToken")
   private String organizationAccessToken = null;
 
   

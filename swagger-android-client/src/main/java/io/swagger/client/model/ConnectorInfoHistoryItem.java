@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 @ApiModel(description = "")
 public class ConnectorInfoHistoryItem  {
   
-  @SerializedName("number_of_measurements")
+  @SerializedName("numberOfMeasurements")
   private Integer numberOfMeasurements = null;
   @SerializedName("success")
   private Boolean success = null;
@@ -55,9 +55,9 @@ public class ConnectorInfoHistoryItem  {
 
   
   /**
-   * Date and time of the update
+   * Date and time of the update in UTC time zone
    **/
-  @ApiModelProperty(required = true, value = "Date and time of the update")
+  @ApiModelProperty(required = true, value = "Date and time of the update in UTC time zone")
   public String getCreatedAt() {
     return createdAt;
   }
