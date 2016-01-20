@@ -400,12 +400,14 @@ public class CustomRemindersCreateActivity extends Activity {
         //when editing the reminder, selectedVariable is always null
         CustomRemindersHelper.Reminder newReminder = new CustomRemindersHelper.Reminder(
                 isEditing ? mReminder.id : Long.toString(selectedVariable.getId()),
+                isEditing ? mReminder.remoteId : -1,
                 isEditing ? mReminder.name : selectedVariable.getName(),
                 isEditing ? mReminder.variableCategory : selectedVariable.getCategory(),
                 isEditing ? mReminder.combinationOperation : selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
                 isEditing ? mReminder.unitName : selectedVariable.getUnit(),
-                frequencySpinner.getSelectedItemPosition()
+                frequencySpinner.getSelectedItemPosition(),
+                isEditing
         );
         CustomRemindersHelper.putReminder(this, newReminder);
         CustomRemindersHelper.setAlarm(this, newReminder.id);
