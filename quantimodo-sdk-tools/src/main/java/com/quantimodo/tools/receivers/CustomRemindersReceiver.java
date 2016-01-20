@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.octo.android.robospice.SpiceManager;
@@ -12,9 +13,10 @@ import com.quantimodo.android.sdk.model.Measurement;
 import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.ToolsPrefs;
-import com.quantimodo.tools.activities.CustomRemindersCreateActivity;
 import com.quantimodo.tools.dialogs.CustomReminderDialog;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
+import com.quantimodo.tools.sdk.request.NoNetworkConnection;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 
@@ -28,6 +30,7 @@ import javax.inject.Inject;
  * Broadcast receiver that gets the triggered alarms and display a popup to track custom measurements
  */
 public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
+    private static final String TAG = CustomRemindersReceiver.class.getSimpleName();
     public static final String EXTRA_REQUEST_ALARM = "extra_request_alarm";
     public static final String EXTRA_REQUEST_REMINDER = "extra_request_reminder";
     public static final String EXTRA_REQUEST_SNOOZE = "extra_request_snooze";
@@ -38,12 +41,19 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
     @Inject
     ToolsPrefs mPrefs;
 
+    @Inject
+    AuthHelper authHelper;
+
     @Override
     public void onReceive(final Context context, Intent intent) {
         QTools.getInstance().inject(this);
         Bundle extras = intent.getExtras();
         final CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
                 context, extras.getString(CustomRemindersHelper.EXTRA_REMINDER_ID, ""));
+        if(reminder == null){
+            Log.d(TAG, "Reminder loaded null!, there is nothing to do");
+            return;
+        }
         if(intent.hasExtra(EXTRA_REQUEST_ALARM)) {
             Intent service = new Intent(context, RemindersService.class);
             //shows the popup dialog
@@ -57,39 +67,49 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
 
             //when it's a custom reminder we need to directly send the measurement
-            Thread thread = new Thread(new Runnable(){
-                @Override
-                public void run() {
-                    final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
-                    long timestampSeconds = new Date().getTime() / 1000;
-
-                    Measurement measurement = new Measurement(timestampSeconds, Float.parseFloat(reminder.value));
-                    MeasurementSet newSet = new MeasurementSet(
-                            reminder.name, null, reminder.variableCategory, reminder.unitName,
-                            reminder.combinationOperation, mPrefs.getApplicationSource());
-                    newSet.getMeasurements().add(measurement);
-                    measurementSets.put(reminder.unitName, newSet);
-
-                    SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
-                    mSpiceManager.start(context.getApplicationContext());
-                    mSpiceManager.execute(new SendMeasurementsRequest(null, new ArrayList<>(measurementSets.values())),
-                            new DefaultSdkResponseListener<Boolean>() {
-                                @Override
-                                public void onRequestSuccess(Boolean aBoolean) {
-                                    Toast.makeText(context, "Tracked!", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                }
-            });
-            thread.start();
+//            Thread thread = new Thread(new Runnable(){
+//                @Override
+//                public void run() {
+//                    final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
+//                    long timestampSeconds = new Date().getTime() / 1000;
+//
+//                    Measurement measurement = new Measurement(timestampSeconds, Float.parseFloat(reminder.value));
+//                    MeasurementSet newSet = new MeasurementSet(
+//                            reminder.name, null, reminder.variableCategory, reminder.unitName,
+//                            reminder.combinationOperation, mPrefs.getApplicationSource());
+//                    newSet.getMeasurements().add(measurement);
+//                    measurementSets.put(reminder.unitName, newSet);
+//
+//                    SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
+//                    mSpiceManager.start(context.getApplicationContext());
+//                    mSpiceManager.execute(new SendMeasurementsRequest(null, new ArrayList<>(measurementSets.values())),
+//                            new DefaultSdkResponseListener<Boolean>() {
+//                                @Override
+//                                public void onRequestSuccess(Boolean aBoolean) {
+//                                    Toast.makeText(context, "Tracked!", Toast.LENGTH_LONG).show();
+//                                }
+//                            });
+//                }
+//            });
+//            thread.start();
+            try {
+                CustomRemindersHelper.postRemoteTrack(reminder.remoteId, authHelper.getAuthTokenWithRefresh());
+            } catch (NoNetworkConnection noNetworkConnection) {
+                noNetworkConnection.printStackTrace();
+            }
         }
         else if(intent.hasExtra(EXTRA_REQUEST_SNOOZE)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
             CustomRemindersHelper.setAlarm(context, reminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
+            try {
+                CustomRemindersHelper.postRemoteSnooze(reminder.remoteId, authHelper.getAuthTokenWithRefresh());
+            } catch (NoNetworkConnection noNetworkConnection) {
+                noNetworkConnection.printStackTrace();
+            }
         }
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
-            startTracking(context, reminder.name);
+            openEditActivity(context, reminder.name);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_POPUP)){
             cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
@@ -97,7 +117,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         }
     }
 
-    private void startTracking(Context context, String varName){
+    private void openEditActivity(Context context, String varName){
         Intent trackIntent = new Intent(context,
                 CustomRemindersHelper.getInstance().getRegisteredActivity());
         trackIntent.addFlags(
