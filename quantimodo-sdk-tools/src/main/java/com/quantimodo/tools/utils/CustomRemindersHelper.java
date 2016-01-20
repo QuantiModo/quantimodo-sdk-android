@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.quantimodo.tools.R;
@@ -15,6 +16,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import io.swagger.client.ApiException;
+import io.swagger.client.api.RemindersApi;
+import io.swagger.client.model.TrackingReminderPending;
+import io.swagger.client.model.TrackingReminderPendingSkip;
+import io.swagger.client.model.TrackingReminderPendingSnooze;
+import io.swagger.client.model.TrackingReminderPendingTrack;
 
 /**
  * This class saves the custom reminders as preferences
@@ -268,6 +276,51 @@ public class CustomRemindersHelper {
     public static boolean existReminder(Context context, String id){
         SharedPreferences preferences = getPreferences(context);
         return !preferences.getString("reminder_" + id + KEY_NAME, "").equals("");
+    }
+
+    public static void postRemoteSnooze(final int reminderRemoteId, final String token){
+        RemindersApi api = new RemindersApi();
+        TrackingReminderPendingSnooze body = new TrackingReminderPendingSnooze();
+        body.setId(reminderRemoteId);
+        try {
+            if(api.v1TrackingRemindersPendingSnoozePost(body, token).getSuccess()){
+                Log.d(TAG, "postRemoteSnooze succeed!");
+            }else{
+                Log.d(TAG, "postRemoteSnooze failed :(!");
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void postRemoteTrack(final int reminderRemoteId, final String token){
+        RemindersApi api = new RemindersApi();
+        TrackingReminderPendingTrack body = new TrackingReminderPendingTrack();
+        body.setId(reminderRemoteId);
+        try {
+            if(api.v1TrackingRemindersPendingTrackPost(body, token).getSuccess()){
+                Log.d(TAG, "postRemoteTrack succeed!");
+            }else{
+                Log.d(TAG, "postRemoteTrack failed :(!");
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void postRemoteSkip(final int reminderRemoteId, final String token){
+        RemindersApi api = new RemindersApi();
+        TrackingReminderPendingSkip body = new TrackingReminderPendingSkip();
+        body.setId(reminderRemoteId);
+        try {
+            if(api.v1TrackingRemindersPendingSkipPost(body, token).getSuccess()){
+                Log.d(TAG, "postRemoteSkip succeed!");
+            }else{
+                Log.d(TAG, "postRemoteSkip failed :(!");
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @NonNull
