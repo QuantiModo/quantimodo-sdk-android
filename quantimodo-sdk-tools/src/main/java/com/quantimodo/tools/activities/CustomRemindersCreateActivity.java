@@ -35,6 +35,7 @@ import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
 import com.quantimodo.tools.sdk.request.NoNetworkConnection;
+import com.quantimodo.tools.sync.SyncHelper;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
@@ -407,10 +408,11 @@ public class CustomRemindersCreateActivity extends Activity {
                 valueTextView.getText().toString(),
                 isEditing ? mReminder.unitName : selectedVariable.getUnit(),
                 frequencySpinner.getSelectedItemPosition(),
-                isEditing
+                true
         );
         CustomRemindersHelper.putReminder(this, newReminder);
         CustomRemindersHelper.setAlarm(this, newReminder.id);
+        SyncHelper.invokeSync(this);
         finish();
         Toast.makeText(getApplicationContext(),R.string.custom_reminder_save_message,
                 Toast.LENGTH_LONG).show();

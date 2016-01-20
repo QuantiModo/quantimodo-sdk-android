@@ -356,10 +356,6 @@ public class CustomRemindersHelper {
             this(id, -1, name, variableCategory, combinationOperation, value, unitName, frequency, true);
         }
 
-        public Reminder(String id, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, int frequency, boolean needUpdate) {
-            this(id, -1, name, variableCategory, combinationOperation, value, unitName, frequency, needUpdate);
-        }
         public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
                         String value, String unitName, int frequency, boolean needUpdate){
             this.id = id;
