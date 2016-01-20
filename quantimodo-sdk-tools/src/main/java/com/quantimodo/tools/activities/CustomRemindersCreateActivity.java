@@ -430,14 +430,14 @@ public class CustomRemindersCreateActivity extends Activity {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deletReminder();
+                        deleteReminder();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
-    private void deletReminder(){
+    private void deleteReminder(){
         if (!QtoolsUtils.hasInternetConnection(this)) {
             Toast.makeText(
                     getApplicationContext(),
