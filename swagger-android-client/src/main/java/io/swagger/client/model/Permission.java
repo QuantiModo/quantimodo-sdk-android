@@ -12,13 +12,13 @@ public class Permission  {
   private Integer target = null;
   @SerializedName("variableName")
   private String variableName = null;
-  @SerializedName("min_timestamp")
+  @SerializedName("minTimestamp")
   private Integer minTimestamp = null;
-  @SerializedName("max_timestamp")
+  @SerializedName("maxTimestamp")
   private Integer maxTimestamp = null;
-  @SerializedName("min_time_of_day")
+  @SerializedName("minTimeOfDay")
   private Integer minTimeOfDay = null;
-  @SerializedName("max_time_of_day")
+  @SerializedName("maxTimeOfDay")
   private Integer maxTimeOfDay = null;
   @SerializedName("week")
   private String week = null;

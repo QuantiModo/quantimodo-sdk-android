@@ -6,16 +6,16 @@ import com.google.gson.annotations.SerializedName;
 
 
 @ApiModel(description = "")
-public class UserTokenRequestInnerUserField  {
+public class TrackingReminderPendingSnooze  {
   
   @SerializedName("id")
   private Integer id = null;
 
   
   /**
-   * WordPress user ID
+   * Id of the pending reminder to be snoozed
    **/
-  @ApiModelProperty(value = "WordPress user ID")
+  @ApiModelProperty(required = true, value = "Id of the pending reminder to be snoozed")
   public Integer getId() {
     return id;
   }
@@ -28,7 +28,7 @@ public class UserTokenRequestInnerUserField  {
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserTokenRequestInnerUserField {\n");
+    sb.append("class TrackingReminderPendingSnooze {\n");
     
     sb.append("  id: ").append(id).append("\n");
     sb.append("}\n");
