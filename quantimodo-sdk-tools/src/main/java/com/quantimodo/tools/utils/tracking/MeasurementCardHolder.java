@@ -19,6 +19,7 @@ import com.quantimodo.android.sdk.model.Variable;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.activities.CustomRemindersCreateActivity;
+import com.quantimodo.tools.adapters.UnitSpinnerAdapter;
 import com.quantimodo.tools.fragments.TrackingFragment;
 import com.quantimodo.tools.utils.ConvertUtils;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
@@ -46,7 +47,7 @@ public class MeasurementCardHolder {
     public final NDSpinner spReminderTime;
     private final TextView reminderTitle;
 
-    public UnitSelectSpinnerAdapter unitAdapter;
+    public UnitSpinnerAdapter unitAdapter;
 
     private ArrayList<Unit> allUnits;
     private int defaultUnitIndex;
@@ -318,7 +319,7 @@ public class MeasurementCardHolder {
     }
 
     private void initUnitPicker() {
-        unitAdapter = new UnitSelectSpinnerAdapter(context, allUnits);
+        unitAdapter = new UnitSpinnerAdapter(context, allUnits);
         spMeasurementUnit.setAdapter(unitAdapter);
         spMeasurementUnit.setSelection(defaultUnitIndex);
         spMeasurementUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -362,47 +363,5 @@ public class MeasurementCardHolder {
             public void onAnimationRepeat(Animation animation) {
             }
         });
-    }
-
-    /*
-    **  Adapter for unit selection spinners
-    */
-    class UnitSelectSpinnerAdapter extends ArrayAdapter<Unit> {
-        LayoutInflater inflater;
-        int preferredHeight;
-
-        // The view showing the current selection. Public so that it can be modified to update the spinner with a new value
-        public TextView selectedView;
-
-        public UnitSelectSpinnerAdapter(Context context, ArrayList<Unit> units) {
-            //Creating new list, so unitAdapter wouldn't bound to unitsInCategory field
-            super(context, 0, new ArrayList<>(units));
-            this.inflater = LayoutInflater.from(context);
-            this.preferredHeight = ConvertUtils.convertDpToPixel(48, context.getResources());
-
-            selectedView = (TextView) inflater.inflate(android.R.layout.simple_spinner_dropdown_item, null);
-            selectedView.setTextColor(Color.BLACK);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            selectedView.setText(getItem(position).name);
-            return selectedView;
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            LinearLayout view = (LinearLayout) inflater.inflate(R.layout.qmt_f_tracking_measurementsunit, null);
-
-            Unit unit = getItem(position);
-
-            TextView tvUnitReadable = (TextView) view.findViewById(R.id.tvUnitReadable);
-            tvUnitReadable.setText(unit.name);
-
-            TextView tvUnit = (TextView) view.findViewById(R.id.tvUnit);
-            tvUnit.setText(unit.abbreviatedName);
-
-            return view;
-        }
     }
 }
