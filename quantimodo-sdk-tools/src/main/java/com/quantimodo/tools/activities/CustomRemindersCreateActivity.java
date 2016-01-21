@@ -499,9 +499,15 @@ public class CustomRemindersCreateActivity extends Activity {
     private void deleteLocally(){
         CustomRemindersHelper.removeReminder(CustomRemindersCreateActivity.this,
                 reminderId);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(),
+                        R.string.custom_reminders_remove_message, Toast.LENGTH_LONG).show();
+            }
+        });
         CustomRemindersCreateActivity.this.finish();
-        Toast.makeText(getApplicationContext(),
-                R.string.custom_reminders_remove_message, Toast.LENGTH_LONG).show();}
+    }
 
     private SpiceManager getSpiceManager(){
         return mSpiceManager;
