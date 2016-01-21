@@ -36,18 +36,11 @@
     <string name="menu_item_negative_factors">Negative predictors</string>
     <string name="tab_positive_factors">Positive predictors</string>
     <string name="tab_negative_factors">Negative predictors</string>
-    <string name="correlation_dialog_title">Vote for predictor</string>
-    <string name="correlation_dialog_negative_down" formatted="false">Voting thumbs down indicates that you disagree that %s decreases
-        your %s.
-    </string>
-    <string name="correlation_dialog_negative_up" formatted="false">Voting thumbs up indicates that you agree that %s decreases your %s.
-    </string>
-    <string name="correlation_dialog_positive_down" formatted="false">Voting thumbs up indicates that it seems likely that %s increases
-        your %s.
-    </string>
-    <string name="correlation_dialog_positive_up" formatted="false">Voting thumbs down indicates that you disagree that %s increases your
-        %s.
-    </string>
+    <string name="correlation_dialog_title">Causal Plausibility Vote</string>
+    <string formatted="false" name="correlation_dialog_negative_down">Do you AGREE that %s could influence %s?</string>
+    <string formatted="false" name="correlation_dialog_negative_up">Do you AGREE that %s could influence %s?</string>
+    <string formatted="false" name="correlation_dialog_positive_down">Do you DISAGREE that %s could influence %s?</string>
+    <string formatted="false" name="correlation_dialog_positive_up">Do you DISAGREE that %s could influence %s?</string>
     <string name="correlation_dialog_button_positive_disagree">Disagree</string>
     <string name="correlation_dialog_button_positive_agree">Agree</string>
     <string name="correlation_dialog_button_negative">Cancel</string>
