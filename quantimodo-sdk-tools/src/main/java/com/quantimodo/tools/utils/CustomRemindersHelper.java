@@ -279,48 +279,69 @@ public class CustomRemindersHelper {
     }
 
     public static void postRemoteSnooze(final int reminderRemoteId, final String token){
-        RemindersApi api = new RemindersApi();
-        TrackingReminderPendingSnooze body = new TrackingReminderPendingSnooze();
-        body.setId(reminderRemoteId);
-        try {
-            if(api.v1TrackingRemindersPendingSnoozePost(body, token).getSuccess()){
-                Log.d(TAG, "postRemoteSnooze succeed!");
-            }else{
-                Log.d(TAG, "postRemoteSnooze failed :(!");
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        //TODO: uncomment when getting pending id
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                RemindersApi api = new RemindersApi();
+//                TrackingReminderPendingSnooze body = new TrackingReminderPendingSnooze();
+//                body.setId(reminderRemoteId);
+//                try {
+//                    if (api.v1TrackingRemindersPendingSnoozePost(body, token).getSuccess()) {
+//                        Log.d(TAG, "postRemoteSnooze succeed!");
+//                    } else {
+//                        Log.d(TAG, "postRemoteSnooze failed :(!");
+//                    }
+//                } catch (ApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.start();
     }
 
     public static void postRemoteTrack(final int reminderRemoteId, final String token){
-        RemindersApi api = new RemindersApi();
-        TrackingReminderPendingTrack body = new TrackingReminderPendingTrack();
-        body.setId(reminderRemoteId);
-        try {
-            if(api.v1TrackingRemindersPendingTrackPost(body, token).getSuccess()){
-                Log.d(TAG, "postRemoteTrack succeed!");
-            }else{
-                Log.d(TAG, "postRemoteTrack failed :(!");
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        //TODO: uncomment when getting pending id
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    RemindersApi api = new RemindersApi();
+//                    TrackingReminderPendingTrack body = new TrackingReminderPendingTrack();
+//                    body.setId(reminderRemoteId);
+//                    if (api.v1TrackingRemindersPendingTrackPost(body, token).getSuccess()) {
+//                        Log.d(TAG, "postRemoteTrack succeed!");
+//                    } else {
+//                        Log.d(TAG, "postRemoteTrack failed :(!");
+//                    }
+//                } catch (ApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.start();
     }
 
     public static void postRemoteSkip(final int reminderRemoteId, final String token){
-        RemindersApi api = new RemindersApi();
-        TrackingReminderPendingSkip body = new TrackingReminderPendingSkip();
-        body.setId(reminderRemoteId);
-        try {
-            if(api.v1TrackingRemindersPendingSkipPost(body, token).getSuccess()){
-                Log.d(TAG, "postRemoteSkip succeed!");
-            }else{
-                Log.d(TAG, "postRemoteSkip failed :(!");
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+        //TODO: uncomment when getting pending id
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                RemindersApi api = new RemindersApi();
+//                TrackingReminderPendingSkip body = new TrackingReminderPendingSkip();
+//                body.setId(reminderRemoteId);
+//                try {
+//                    if (api.v1TrackingRemindersPendingSkipPost(body, token).getSuccess()) {
+//                        Log.d(TAG, "postRemoteSkip succeed!");
+//                    } else {
+//                        Log.d(TAG, "postRemoteSkip failed :(!");
+//                    }
+//                } catch (ApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.start();
     }
 
     @NonNull
