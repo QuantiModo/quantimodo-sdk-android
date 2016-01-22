@@ -12,6 +12,8 @@ import java.util.*;
 import io.swagger.client.model.MeasurementSource;
 import io.swagger.client.model.Measurement;
 import io.swagger.client.model.MeasurementSet;
+import io.swagger.client.model.MeasurementDelete;
+import io.swagger.client.model.CommonResponse;
 import io.swagger.client.model.MeasurementRange;
 import io.swagger.client.model.InlineResponse2003;
 import io.swagger.client.model.InlineResponse2004;
@@ -398,6 +400,65 @@ public class MeasurementsApi {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (Measurement) ApiInvoker.deserialize(response, "", Measurement.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      throw ex;
+    }
+  }
+  
+  /**
+   * Delete a measurement
+   * Delete a previously submitted measurement
+   * @param measurement to delete The startTime and variableId of the measurement to be deleted.
+   * @return CommonResponse
+   */
+  public CommonResponse  v1MeasurementsDeletePost (MeasurementDelete measurement to delete) throws ApiException {
+    Object postBody = measurement to delete;
+    
+    // verify the required parameter 'measurement to delete' is set
+    if (measurement to delete == null) {
+       throw new ApiException(400, "Missing the required parameter 'measurement to delete' when calling v1MeasurementsDeletePost");
+    }
+    
+
+    // create path and map variables
+    String path = "/v1/measurements/delete".replaceAll("\\{format\\}","json");
+
+    // query params
+    List<Pair> queryParams = new ArrayList<Pair>();
+    // header params
+    Map<String, String> headerParams = new HashMap<String, String>();
+    // form params
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    
+
+    
+
+    String[] contentTypes = {
+      "application/json"
+    };
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+      
+
+      HttpEntity httpEntity = builder.build();
+      postBody = httpEntity;
+    } else {
+      // normal form params
+      
+    }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (CommonResponse) ApiInvoker.deserialize(response, "", CommonResponse.class);
       }
       else {
         return null;

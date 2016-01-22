@@ -11,6 +11,7 @@ import java.util.*;
 
 import io.swagger.client.model.CommonResponse;
 import io.swagger.client.model.PostVote;
+import io.swagger.client.model.VoteDelete;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -105,21 +106,15 @@ public class VotesApi {
   /**
    * Delete vote
    * Delete previously posted vote
-   * @param cause Cause variable name
-   * @param effect Effect variable name
+   * @param vote to delete The startTime and variableId of the measurement to be deleted.
    * @return CommonResponse
    */
-  public CommonResponse  v1VotesDeletePost (String cause, String effect) throws ApiException {
-    Object postBody = null;
+  public CommonResponse  v1VotesDeletePost (VoteDelete vote to delete) throws ApiException {
+    Object postBody = vote to delete;
     
-    // verify the required parameter 'cause' is set
-    if (cause == null) {
-       throw new ApiException(400, "Missing the required parameter 'cause' when calling v1VotesDeletePost");
-    }
-    
-    // verify the required parameter 'effect' is set
-    if (effect == null) {
-       throw new ApiException(400, "Missing the required parameter 'effect' when calling v1VotesDeletePost");
+    // verify the required parameter 'vote to delete' is set
+    if (vote to delete == null) {
+       throw new ApiException(400, "Missing the required parameter 'vote to delete' when calling v1VotesDeletePost");
     }
     
 
@@ -133,10 +128,6 @@ public class VotesApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "cause", cause));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "effect", effect));
     
 
     
