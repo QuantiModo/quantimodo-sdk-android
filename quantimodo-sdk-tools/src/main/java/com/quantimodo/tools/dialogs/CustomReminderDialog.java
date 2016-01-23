@@ -24,7 +24,9 @@ import com.quantimodo.android.sdk.model.MeasurementSet;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
+import com.quantimodo.tools.sdk.request.NoNetworkConnection;
 import com.quantimodo.tools.sdk.request.SendMeasurementsRequest;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 
@@ -38,6 +40,9 @@ public class CustomReminderDialog {
 
     @Inject
     ToolsPrefs mPrefs;
+
+	@Inject
+	AuthHelper mAuthHelper;
 
     private static final String TAG = CustomReminderDialog.class.getSimpleName();
 
@@ -234,31 +239,37 @@ public class CustomReminderDialog {
         container.findViewById(R.id.notification_dialog_track).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(new Runnable(){
-                    @Override
-                    public void run() {
-                        final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
-                        long timestampSeconds = new Date().getTime() / 1000;
-
-                        Measurement measurement = new Measurement(timestampSeconds, Float.parseFloat(mReminder.value));
-                        MeasurementSet newSet = new MeasurementSet(
-                                mReminder.name, null, mReminder.variableCategory, mReminder.unitName,
-                                mReminder.combinationOperation, mPrefs.getApplicationSource());
-                        newSet.getMeasurements().add(measurement);
-                        measurementSets.put(mReminder.unitName, newSet);
-
-                        SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
-                        mSpiceManager.start(mContext.getApplicationContext());
-                        mSpiceManager.execute(new SendMeasurementsRequest(null, new ArrayList<>(measurementSets.values())),
-                                new DefaultSdkResponseListener<Boolean>() {
-                                    @Override
-                                    public void onRequestSuccess(Boolean aBoolean) {
-                                        Toast.makeText(mContext, "Tracked!", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                    }
-                });
-                thread.start();
+//                Thread thread = new Thread(new Runnable(){
+//                    @Override
+//                    public void run() {
+//                        final HashMap<String, MeasurementSet> measurementSets = new HashMap<>();
+//                        long timestampSeconds = new Date().getTime() / 1000;
+//
+//                        Measurement measurement = new Measurement(timestampSeconds, Float.parseFloat(mReminder.value));
+//                        MeasurementSet newSet = new MeasurementSet(
+//                                mReminder.name, null, mReminder.variableCategory, mReminder.unitName,
+//                                mReminder.combinationOperation, mPrefs.getApplicationSource());
+//                        newSet.getMeasurements().add(measurement);
+//                        measurementSets.put(mReminder.unitName, newSet);
+//
+//                        SpiceManager mSpiceManager = new SpiceManager(QTools.getInstance().getServiceClass());
+//                        mSpiceManager.start(mContext.getApplicationContext());
+//                        mSpiceManager.execute(new SendMeasurementsRequest(null, new ArrayList<>(measurementSets.values())),
+//                                new DefaultSdkResponseListener<Boolean>() {
+//                                    @Override
+//                                    public void onRequestSuccess(Boolean aBoolean) {
+//                                        Toast.makeText(mContext, "Tracked!", Toast.LENGTH_LONG).show();
+//                                    }
+//                                });
+//                    }
+//                });
+//                thread.start();
+                try {
+                    CustomRemindersHelper.postRemoteTrack(mReminder.remoteId,
+                            mAuthHelper.getAuthTokenWithRefresh());
+                } catch (NoNetworkConnection noNetworkConnection) {
+                    noNetworkConnection.printStackTrace();
+                }
                 dismiss(mContext);
                 cancelNotification(mContext);
             }
@@ -270,6 +281,12 @@ public class CustomReminderDialog {
                 CustomRemindersHelper.setAlarm(mContext, mReminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
                 dismiss(mContext);
                 cancelNotification(mContext);
+				try {
+					CustomRemindersHelper.postRemoteSnooze(mReminder.remoteId,
+                            mAuthHelper.getAuthTokenWithRefresh());
+				} catch (NoNetworkConnection noNetworkConnection) {
+					noNetworkConnection.printStackTrace();
+				}
             }
         });
         container.findViewById(R.id.notification_dialog_edit).setOnClickListener(new View.OnClickListener() {
