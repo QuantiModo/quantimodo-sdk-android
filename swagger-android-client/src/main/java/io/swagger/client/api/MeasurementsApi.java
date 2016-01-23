@@ -415,7 +415,7 @@ public class MeasurementsApi {
    * @param body The startTime and variableId of the measurement to be deleted.
    * @return CommonResponse
    */
-  public CommonResponse  v1MeasurementsDeletePost (MeasurementDelete body) throws ApiException {
+  public CommonResponse  v1MeasurementsDeletePost (MeasurementDelete body, String accessToken) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'body' is set
@@ -434,6 +434,7 @@ public class MeasurementsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     
 
     
