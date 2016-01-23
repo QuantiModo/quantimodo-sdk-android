@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class GetCategoriesRequest extends SdkRequest<GetCategoriesRequest.GetCategoriesResponse> {
 
+    private static boolean LAST_UPDATED = false;
+
     @Inject
     DaoSession mDaoSession;
 
@@ -26,7 +28,7 @@ public class GetCategoriesRequest extends SdkRequest<GetCategoriesRequest.GetCat
     public GetCategoriesResponse loadDataFromNetwork() throws Exception {
         List<Category> categories = mDaoSession.getCategoryDao().loadAll();
         ArrayList<VariableCategory> result = new ArrayList<>();
-        if (categories.size() > 0){
+        if (categories.size() > 0 && LAST_UPDATED){
             for (Category c : categories) {
                 result.add(c.toVariableCategory());
             }
@@ -38,13 +40,14 @@ public class GetCategoriesRequest extends SdkRequest<GetCategoriesRequest.GetCat
                 categories.add(Category.fromVariableCategory(vc));
             }
             mDaoSession.getCategoryDao().insertOrReplaceInTx(categories);
+            LAST_UPDATED = true;
         }
         return new GetCategoriesResponse(result);
     }
 
     @Override
     protected long getCacheTime() {
-        return 0; //0 Moved to database cache
+        return 1; //0 Moved to database cache
     }
 
     @Override

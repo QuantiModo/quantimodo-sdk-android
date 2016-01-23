@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class GetUnitsRequest extends SdkRequest<GetUnitsRequest.GetUnitsResponse> {
 
+    private static boolean LAST_UPDATED = false;
+
     @Inject
     DaoSession mSession;
 
@@ -25,7 +27,7 @@ public class GetUnitsRequest extends SdkRequest<GetUnitsRequest.GetUnitsResponse
     public GetUnitsResponse loadDataFromNetwork() throws Exception {
         List<com.quantimodo.tools.models.Unit> units = mSession.getUnitDao().loadAll();
         ArrayList<Unit> result = new ArrayList<>();
-        if (units.size() > 0){
+        if (units.size() > 0 && LAST_UPDATED){
             for (com.quantimodo.tools.models.Unit u : units){
                 result.add(u.toUnit());
             }
@@ -37,6 +39,7 @@ public class GetUnitsRequest extends SdkRequest<GetUnitsRequest.GetUnitsResponse
                 units.add(com.quantimodo.tools.models.Unit.fromWsUnit(u));
             }
             mSession.getUnitDao().insertOrReplaceInTx(units);
+            LAST_UPDATED = true;
         }
 
         return new GetUnitsResponse(result);
@@ -44,7 +47,7 @@ public class GetUnitsRequest extends SdkRequest<GetUnitsRequest.GetUnitsResponse
 
     @Override
     protected long getCacheTime() {
-        return 0; //0 moved to database cache
+        return 1; //0 moved to database cache
     }
 
     @Override
