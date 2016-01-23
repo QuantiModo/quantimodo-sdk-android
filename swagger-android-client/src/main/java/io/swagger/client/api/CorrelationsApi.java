@@ -14,6 +14,7 @@ import io.swagger.client.model.JsonErrorResponse;
 import io.swagger.client.model.PostCorrelation;
 import io.swagger.client.model.CommonResponse;
 import io.swagger.client.model.PostVote;
+import io.swagger.client.model.VoteDelete;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -759,7 +760,7 @@ public class CorrelationsApi {
   /**
    * Post or update vote
    * This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
-   * @param body Provides vote data
+   * @param body Contains the cause variable, effect variable, and vote value.
    * @param accessToken User&#39;s OAuth2 access token
    * @return CommonResponse
    */
@@ -821,21 +822,15 @@ public class CorrelationsApi {
   /**
    * Delete vote
    * Delete previously posted vote
-   * @param cause Cause variable name
-   * @param effect Effect variable name
+   * @param body The cause and effect variable names for the predictor vote to be deleted.
    * @return CommonResponse
    */
-  public CommonResponse  v1VotesDeletePost (String cause, String effect) throws ApiException {
-    Object postBody = null;
+  public CommonResponse  v1VotesDeletePost (VoteDelete body) throws ApiException {
+    Object postBody = body;
     
-    // verify the required parameter 'cause' is set
-    if (cause == null) {
-       throw new ApiException(400, "Missing the required parameter 'cause' when calling v1VotesDeletePost");
-    }
-    
-    // verify the required parameter 'effect' is set
-    if (effect == null) {
-       throw new ApiException(400, "Missing the required parameter 'effect' when calling v1VotesDeletePost");
+    // verify the required parameter 'body' is set
+    if (body == null) {
+       throw new ApiException(400, "Missing the required parameter 'body' when calling v1VotesDeletePost");
     }
     
 
@@ -849,10 +844,6 @@ public class CorrelationsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "cause", cause));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "effect", effect));
     
 
     
