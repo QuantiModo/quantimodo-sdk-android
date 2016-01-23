@@ -300,6 +300,7 @@ public class CustomRemindersCreateActivity extends Activity {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         super.onRequestFailure(spiceException);
+                        spiceException.printStackTrace();
                     }
 
                     @Override
@@ -351,6 +352,14 @@ public class CustomRemindersCreateActivity extends Activity {
                     allCategories = getCategoriesResponse.categories;
                     categoriesUpdated();
                 }
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    super.onRequestFailure(spiceException);
+                    spiceException.printStackTrace();
+                    Toast.makeText(CustomRemindersCreateActivity.this,
+                            R.string.network_connection_error_message, Toast.LENGTH_LONG).show();
+                }
+
             });
         }
         else {
