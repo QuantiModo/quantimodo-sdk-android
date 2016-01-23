@@ -79,6 +79,10 @@ public class JsonUtil {
       return new TypeToken<List<Measurement>>(){}.getType();
     }
     
+    if ("MeasurementDelete".equalsIgnoreCase(className)) {
+      return new TypeToken<List<MeasurementDelete>>(){}.getType();
+    }
+    
     if ("MeasurementRange".equalsIgnoreCase(className)) {
       return new TypeToken<List<MeasurementRange>>(){}.getType();
     }
@@ -187,6 +191,10 @@ public class JsonUtil {
       return new TypeToken<List<VariablesNew>>(){}.getType();
     }
     
+    if ("VoteDelete".equalsIgnoreCase(className)) {
+      return new TypeToken<List<VoteDelete>>(){}.getType();
+    }
+    
     if ("InlineResponse200".equalsIgnoreCase(className)) {
       return new TypeToken<List<InlineResponse200>>(){}.getType();
     }
@@ -255,6 +263,10 @@ public class JsonUtil {
     
     if ("Measurement".equalsIgnoreCase(className)) {
       return new TypeToken<Measurement>(){}.getType();
+    }
+    
+    if ("MeasurementDelete".equalsIgnoreCase(className)) {
+      return new TypeToken<MeasurementDelete>(){}.getType();
     }
     
     if ("MeasurementRange".equalsIgnoreCase(className)) {
@@ -363,6 +375,10 @@ public class JsonUtil {
     
     if ("VariablesNew".equalsIgnoreCase(className)) {
       return new TypeToken<VariablesNew>(){}.getType();
+    }
+    
+    if ("VoteDelete".equalsIgnoreCase(className)) {
+      return new TypeToken<VoteDelete>(){}.getType();
     }
     
     if ("InlineResponse200".equalsIgnoreCase(className)) {

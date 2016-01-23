@@ -43,7 +43,7 @@ public class TagsApi {
   /**
    * Post or update vote
    * This endpoint allows users to tag foods with their ingredients.  This information will then be used to infer the user intake of the different ingredients by just entering the foods. The inferred intake levels will then be used to determine the effects of different nutrients on the user during analysis.
-   * @param body Provides vote data
+   * @param body Contains the new user tag data
    * @param accessToken User&#39;s OAuth2 access token
    * @return CommonResponse
    */

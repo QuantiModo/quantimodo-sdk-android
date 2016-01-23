@@ -379,16 +379,16 @@ public class VariablesApi {
   /**
    * Create Variables
    * Allows the client to create a new variable in the `variables` table.
-   * @param variableName Original name for the variable.
+   * @param body Original name for the variable.
    * @param accessToken User&#39;s OAuth2 access token
    * @return void
    */
-  public void  v1VariablesPost (VariablesNew variableName, String accessToken) throws ApiException {
-    Object postBody = variableName;
+  public void  v1VariablesPost (VariablesNew body, String accessToken) throws ApiException {
+    Object postBody = body;
     
-    // verify the required parameter 'variableName' is set
-    if (variableName == null) {
-       throw new ApiException(400, "Missing the required parameter 'variableName' when calling v1VariablesPost");
+    // verify the required parameter 'body' is set
+    if (body == null) {
+       throw new ApiException(400, "Missing the required parameter 'body' when calling v1VariablesPost");
     }
     
 
