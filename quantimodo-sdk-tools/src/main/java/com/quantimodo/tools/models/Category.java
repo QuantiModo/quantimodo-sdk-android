@@ -91,6 +91,7 @@ public class Category implements java.io.Serializable {
     public static Category fromVariableCategory(VariableCategory vc){
         Category category = new Category();
         category.setName(vc.getName());
+        category.setId((long)vc.getName().hashCode());
         return category;
     }
 
