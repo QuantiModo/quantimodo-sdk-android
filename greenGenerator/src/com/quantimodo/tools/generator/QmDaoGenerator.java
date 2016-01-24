@@ -7,7 +7,7 @@ import java.io.File;
 public class QmDaoGenerator {
 
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1003, "com.quantimodo.tools.models");
+        Schema schema = new Schema(1004, "com.quantimodo.tools.models");
         schema.enableKeepSectionsByDefault();
         schema.enableActiveEntitiesByDefault();
 
@@ -62,7 +62,7 @@ public class QmDaoGenerator {
         Entity category = schema.addEntity("Category");
         category.implementsSerializable();
         category.addProperty(PropertyType.Long,"id").primaryKey().autoincrement();
-        category.addStringProperty("name").notNull();
+        category.addStringProperty("name").notNull().unique();
         return category;
     }
 
