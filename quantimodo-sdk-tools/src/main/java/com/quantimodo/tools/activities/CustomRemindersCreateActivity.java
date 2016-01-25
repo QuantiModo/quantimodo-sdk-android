@@ -2,6 +2,7 @@ package com.quantimodo.tools.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,13 +31,22 @@ import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
 import com.quantimodo.tools.sdk.request.GetSuggestedVariablesRequest;
+import com.quantimodo.tools.sdk.request.NoNetworkConnection;
+import com.quantimodo.tools.sync.SyncHelper;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import io.swagger.client.ApiException;
+import io.swagger.client.api.RemindersApi;
+import io.swagger.client.model.TrackingReminderDelete;
 
 /**
  * Activity that displays the form to create or edit a custom reminder
@@ -60,6 +70,7 @@ public class CustomRemindersCreateActivity extends Activity {
     private View containerLayout2;
     private View containerCategories;
     private View buttonsLayout;
+    private ProgressDialog mProgress;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private ArrayList<Variable> suggestedVariables = new ArrayList<>();
@@ -72,9 +83,14 @@ public class CustomRemindersCreateActivity extends Activity {
     private String reminderId;
     private CustomRemindersHelper.Reminder mReminder;
 
+    @Inject
+    AuthHelper authHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        QTools.getInstance().inject(this);
+
         setContentView(R.layout.custom_reminder_create);
 
         loadExtras();
@@ -158,7 +174,10 @@ public class CustomRemindersCreateActivity extends Activity {
         lvVariableSuggestions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //we avoid search just to prevent loading the list when editing the search box
+                avoidSearch = true;
                 selectVariable(position);
+                avoidSearch = false;
             }
         });
 
@@ -251,16 +270,18 @@ public class CustomRemindersCreateActivity extends Activity {
         @Override
         public void afterTextChanged(Editable editable) {
             final String search = editable.toString();
-            // Only update if the text didn't change in the past 500ms
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (!avoidSearch && nameTextView != null &&
-                            search.equals(nameTextView.getText().toString())) {
-                        refreshAutoComplete(search);
+            if(!avoidSearch) {
+                // Only update if the text didn't change in the past 500ms
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (nameTextView != null &&
+                                search.equals(nameTextView.getText().toString())) {
+                            refreshAutoComplete(search);
+                        }
                     }
-                }
-            }, 500);
+                }, 500);
+            }
         }
     };
 
@@ -382,15 +403,18 @@ public class CustomRemindersCreateActivity extends Activity {
         //when editing the reminder, selectedVariable is always null
         CustomRemindersHelper.Reminder newReminder = new CustomRemindersHelper.Reminder(
                 isEditing ? mReminder.id : Long.toString(selectedVariable.getId()),
+                isEditing ? mReminder.remoteId : -1,
                 isEditing ? mReminder.name : selectedVariable.getName(),
                 isEditing ? mReminder.variableCategory : selectedVariable.getCategory(),
                 isEditing ? mReminder.combinationOperation : selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
                 isEditing ? mReminder.unitName : selectedVariable.getUnit(),
-                frequencySpinner.getSelectedItemPosition()
+                frequencySpinner.getSelectedItemPosition(),
+                true
         );
         CustomRemindersHelper.putReminder(this, newReminder);
         CustomRemindersHelper.setAlarm(this, newReminder.id);
+        SyncHelper.invokeSync(this);
         finish();
         Toast.makeText(getApplicationContext(),R.string.custom_reminder_save_message,
                 Toast.LENGTH_LONG).show();
@@ -410,15 +434,90 @@ public class CustomRemindersCreateActivity extends Activity {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CustomRemindersHelper.removeReminder(CustomRemindersCreateActivity.this,
-                                reminderId);
-                        CustomRemindersCreateActivity.this.finish();
-                        Toast.makeText(getApplicationContext(),
-                                R.string.custom_reminders_remove_message, Toast.LENGTH_LONG).show();
+                        deleteReminder();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
+    }
+
+    private void deleteReminder(){
+        if (!QtoolsUtils.hasInternetConnection(this)) {
+            Toast.makeText(
+                    getApplicationContext(),
+                    R.string.error_no_connection,
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+        mProgress = new ProgressDialog(this);
+        mProgress.setIndeterminate(true);
+        mProgress.setMessage(getString(R.string.please_wait_message));
+        mProgress.show();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                RemindersApi api = new RemindersApi();
+                try {
+                    CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(
+                            getApplicationContext(), reminderId);
+                    if(reminder == null){
+                        showErrorMessage();
+                        return;
+                    }
+                    TrackingReminderDelete body = new TrackingReminderDelete();
+                    body.setId(reminder.remoteId);
+                    boolean succeed = api.v1TrackingRemindersDeletePost(body,
+                            authHelper.getAuthTokenWithRefresh()).getSuccess();
+                    if (succeed) {
+                        deleteLocally();
+                    }
+                    else{
+                        showErrorMessage();
+                    }
+                } catch (NoNetworkConnection e) {
+                    showErrorMessage();
+                    e.printStackTrace();
+                } catch (ApiException apiException) {
+                    apiException.printStackTrace();
+                    if (apiException.getMessage().toLowerCase().contains("not found") ||
+                            apiException.getMessage().toLowerCase().contains("unauthorized")) {
+                        deleteLocally();
+                    }
+                    else{
+                        showErrorMessage();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void showErrorMessage(){
+        if(mProgress != null && mProgress.isShowing()) mProgress.dismiss();
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(
+                        getApplicationContext(),
+                        R.string.error_try_again,
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+    }
+
+    private void deleteLocally(){
+        if(mProgress != null && mProgress.isShowing()) mProgress.dismiss();
+        CustomRemindersHelper.removeReminder(CustomRemindersCreateActivity.this,
+                reminderId);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(),
+                        R.string.custom_reminders_remove_message, Toast.LENGTH_LONG).show();
+            }
+        });
+        CustomRemindersCreateActivity.this.finish();
     }
 
     private SpiceManager getSpiceManager(){

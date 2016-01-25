@@ -136,12 +136,12 @@ public class MeasurementCardHolder {
             @Override
             public void onClick(View view) {
                 showDateTime();
-//                popupMenu.show();
             }
         });
         btReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(variable == null) return;
                 CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(context,
                         Long.toString(variable.getId()));
                 Intent intent = new Intent(context, CustomRemindersCreateActivity.class);

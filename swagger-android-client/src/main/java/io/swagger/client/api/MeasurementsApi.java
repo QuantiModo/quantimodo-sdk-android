@@ -12,6 +12,8 @@ import java.util.*;
 import io.swagger.client.model.MeasurementSource;
 import io.swagger.client.model.Measurement;
 import io.swagger.client.model.MeasurementSet;
+import io.swagger.client.model.MeasurementDelete;
+import io.swagger.client.model.CommonResponse;
 import io.swagger.client.model.MeasurementRange;
 import io.swagger.client.model.InlineResponse2003;
 import io.swagger.client.model.InlineResponse2004;
@@ -100,16 +102,16 @@ public class MeasurementsApi {
   /**
    * Add a data source
    * Add a life-tracking app or device to the QuantiModo list of data sources.
-   * @param name An array of names of data sources you want to add.
+   * @param body An array of names of data sources you want to add.
    * @param accessToken User&#39;s OAuth2 access token
    * @return void
    */
-  public void  v1MeasurementSourcesPost (MeasurementSource name, String accessToken) throws ApiException {
-    Object postBody = name;
+  public void  v1MeasurementSourcesPost (MeasurementSource body, String accessToken) throws ApiException {
+    Object postBody = body;
     
-    // verify the required parameter 'name' is set
-    if (name == null) {
-       throw new ApiException(400, "Missing the required parameter 'name' when calling v1MeasurementSourcesPost");
+    // verify the required parameter 'body' is set
+    if (body == null) {
+       throw new ApiException(400, "Missing the required parameter 'body' when calling v1MeasurementSourcesPost");
     }
     
 
@@ -260,16 +262,16 @@ public class MeasurementsApi {
   /**
    * Post a new set or update existing measurements to the database
    * You can submit or update multiple measurements in a \&quot;measurements\&quot; sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\&quot;measurements\&quot;:[{\&quot;startTime\&quot;:1439389320,\&quot;value\&quot;:\&quot;3\&quot;}, {\&quot;startTime\&quot;:1439389319,\&quot;value\&quot;:\&quot;2\&quot;}],\&quot;name\&quot;:\&quot;Acne (out of 5)\&quot;,\&quot;source\&quot;:\&quot;QuantiModo\&quot;,\&quot;category\&quot;:\&quot;Symptoms\&quot;,\&quot;combinationOperation\&quot;:\&quot;MEAN\&quot;,\&quot;unit\&quot;:\&quot;/5\&quot;}]
-   * @param measurements An array of measurements you want to insert.
+   * @param body An array of measurements you want to insert.
    * @param accessToken User&#39;s OAuth2 access token
    * @return void
    */
-  public void  v1MeasurementsPost (MeasurementSet measurements, String accessToken) throws ApiException {
-    Object postBody = measurements;
+  public void  v1MeasurementsPost (MeasurementSet body, String accessToken) throws ApiException {
+    Object postBody = body;
     
-    // verify the required parameter 'measurements' is set
-    if (measurements == null) {
-       throw new ApiException(400, "Missing the required parameter 'measurements' when calling v1MeasurementsPost");
+    // verify the required parameter 'body' is set
+    if (body == null) {
+       throw new ApiException(400, "Missing the required parameter 'body' when calling v1MeasurementsPost");
     }
     
 
@@ -398,6 +400,66 @@ public class MeasurementsApi {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
       if(response != null){
         return (Measurement) ApiInvoker.deserialize(response, "", Measurement.class);
+      }
+      else {
+        return null;
+      }
+    } catch (ApiException ex) {
+      throw ex;
+    }
+  }
+  
+  /**
+   * Delete a measurement
+   * Delete a previously submitted measurement
+   * @param body The startTime and variableId of the measurement to be deleted.
+   * @return CommonResponse
+   */
+  public CommonResponse  v1MeasurementsDeletePost (MeasurementDelete body, String accessToken) throws ApiException {
+    Object postBody = body;
+    
+    // verify the required parameter 'body' is set
+    if (body == null) {
+       throw new ApiException(400, "Missing the required parameter 'body' when calling v1MeasurementsDeletePost");
+    }
+    
+
+    // create path and map variables
+    String path = "/v1/measurements/delete".replaceAll("\\{format\\}","json");
+
+    // query params
+    List<Pair> queryParams = new ArrayList<Pair>();
+    // header params
+    Map<String, String> headerParams = new HashMap<String, String>();
+    // form params
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
+    
+
+    
+
+    String[] contentTypes = {
+      "application/json"
+    };
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if (contentType.startsWith("multipart/form-data")) {
+      // file uploading
+      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+      
+
+      HttpEntity httpEntity = builder.build();
+      postBody = httpEntity;
+    } else {
+      // normal form params
+      
+    }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      if(response != null){
+        return (CommonResponse) ApiInvoker.deserialize(response, "", CommonResponse.class);
       }
       else {
         return null;

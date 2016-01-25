@@ -23,10 +23,6 @@ public class TrackingReminderPending  {
   private Date pendingReminderTime = null;
   @SerializedName("defaultValue")
   private Float defaultValue = null;
-  @SerializedName("reminderStartTime")
-  private String reminderStartTime = null;
-  @SerializedName("reminderEndTime")
-  private String reminderEndTime = null;
   @SerializedName("reminderSound")
   private String reminderSound = null;
   @SerializedName("popUp")
@@ -133,30 +129,6 @@ public class TrackingReminderPending  {
   }
   public void setDefaultValue(Float defaultValue) {
     this.defaultValue = defaultValue;
-  }
-
-  
-  /**
-   * Earliest time of day at which reminders should appear
-   **/
-  @ApiModelProperty(value = "Earliest time of day at which reminders should appear")
-  public String getReminderStartTime() {
-    return reminderStartTime;
-  }
-  public void setReminderStartTime(String reminderStartTime) {
-    this.reminderStartTime = reminderStartTime;
-  }
-
-  
-  /**
-   * Latest time of day at which reminders should appear
-   **/
-  @ApiModelProperty(value = "Latest time of day at which reminders should appear")
-  public String getReminderEndTime() {
-    return reminderEndTime;
-  }
-  public void setReminderEndTime(String reminderEndTime) {
-    this.reminderEndTime = reminderEndTime;
   }
 
   
@@ -293,8 +265,6 @@ public class TrackingReminderPending  {
     sb.append("  variableId: ").append(variableId).append("\n");
     sb.append("  pendingReminderTime: ").append(pendingReminderTime).append("\n");
     sb.append("  defaultValue: ").append(defaultValue).append("\n");
-    sb.append("  reminderStartTime: ").append(reminderStartTime).append("\n");
-    sb.append("  reminderEndTime: ").append(reminderEndTime).append("\n");
     sb.append("  reminderSound: ").append(reminderSound).append("\n");
     sb.append("  popUp: ").append(popUp).append("\n");
     sb.append("  sms: ").append(sms).append("\n");

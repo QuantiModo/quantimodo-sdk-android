@@ -44,7 +44,7 @@ public class CategoryDao extends AbstractDao<Category, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CATEGORY\" (" + //
                 "\"ID\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"NAME\" TEXT NOT NULL );"); // 1: name
+                "\"NAME\" TEXT NOT NULL UNIQUE );"); // 1: name
     }
 
     /** Drops the underlying database table. */

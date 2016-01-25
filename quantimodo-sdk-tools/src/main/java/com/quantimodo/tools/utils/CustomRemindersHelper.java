@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.quantimodo.tools.R;
@@ -16,18 +17,27 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import io.swagger.client.ApiException;
+import io.swagger.client.api.RemindersApi;
+import io.swagger.client.model.TrackingReminderPending;
+import io.swagger.client.model.TrackingReminderPendingSkip;
+import io.swagger.client.model.TrackingReminderPendingSnooze;
+import io.swagger.client.model.TrackingReminderPendingTrack;
+
 /**
  * This class saves the custom reminders as preferences
  */
 public class CustomRemindersHelper {
     private static final String TAG = CustomRemindersHelper.class.getSimpleName();
     private static final String PREFERENCES_KEY = "custom_reminders_preferences";
+    private static final String KEY_REMOTE_ID = "remote_id";
     private static final String KEY_NAME = "name";
     private static final String KEY_CATEGORY = "category";
     private static final String KEY_COMBINATION_OPERATION = "combination_oepration";
     private static final String KEY_VALUE = "value";
     private static final String KEY_UNIT_NAME = "unit_name";
     private static final String KEY_FREQUENCY = "frequency_index";
+    private static final String KEY_UPDATE = "need_update";
     private static final String KEY_REMINDERS_LIST = "reminders_list";
     /**
      * Extra used to broadcast the alarm when triggered
@@ -169,6 +179,8 @@ public class CustomRemindersHelper {
         SharedPreferences preferences = getPreferences(context);
         SharedPreferences.Editor mEdit1 = preferences.edit();
 
+        mEdit1.remove("reminder_" + reminder.id + KEY_REMOTE_ID);
+        mEdit1.putInt("reminder_" + reminder.id + KEY_REMOTE_ID, reminder.remoteId);
         mEdit1.remove("reminder_" + reminder.id + KEY_NAME);
         mEdit1.putString("reminder_" + reminder.id + KEY_NAME, reminder.name);
         mEdit1.remove("reminder_" + reminder.id + KEY_CATEGORY);
@@ -181,6 +193,8 @@ public class CustomRemindersHelper {
         mEdit1.putString("reminder_" + reminder.id + KEY_UNIT_NAME, reminder.unitName);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
         mEdit1.putInt("reminder_" + reminder.id + KEY_FREQUENCY, reminder.frequencyIndex);
+        mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
+        mEdit1.putBoolean("reminder_" + reminder.id + KEY_UPDATE, reminder.needUpdate);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -196,12 +210,14 @@ public class CustomRemindersHelper {
         if(reminder == null) return;
         SharedPreferences.Editor mEdit1 = preferences.edit();
 
+        mEdit1.remove("reminder_" + reminder.id + KEY_REMOTE_ID);
         mEdit1.remove("reminder_" + reminder.id + KEY_NAME);
         mEdit1.remove("reminder_" + reminder.id + KEY_CATEGORY);
         mEdit1.remove("reminder_" + reminder.id + KEY_COMBINATION_OPERATION);
         mEdit1.remove("reminder_" + reminder.id + KEY_VALUE);
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
+        mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -236,12 +252,14 @@ public class CustomRemindersHelper {
         SharedPreferences preferences = getPreferences(context);
         return new Reminder(
                 id,
+                preferences.getInt("reminder_" + id + KEY_REMOTE_ID, -1),
                 preferences.getString("reminder_" + id + KEY_NAME, ""),
                 preferences.getString("reminder_" + id + KEY_CATEGORY, ""),
                 preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
-                preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0)
+                preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0),
+                preferences.getBoolean("reminder_" + id + KEY_UPDATE, true)
         );
     }
 
@@ -258,6 +276,72 @@ public class CustomRemindersHelper {
     public static boolean existReminder(Context context, String id){
         SharedPreferences preferences = getPreferences(context);
         return !preferences.getString("reminder_" + id + KEY_NAME, "").equals("");
+    }
+
+    public static void postRemoteSnooze(final int reminderRemoteId, final String token){
+        //TODO: uncomment when getting pending id
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                RemindersApi api = new RemindersApi();
+//                TrackingReminderPendingSnooze body = new TrackingReminderPendingSnooze();
+//                body.setId(reminderRemoteId);
+//                try {
+//                    if (api.v1TrackingRemindersPendingSnoozePost(body, token).getSuccess()) {
+//                        Log.d(TAG, "postRemoteSnooze succeed!");
+//                    } else {
+//                        Log.d(TAG, "postRemoteSnooze failed :(!");
+//                    }
+//                } catch (ApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.start();
+    }
+
+    public static void postRemoteTrack(final int reminderRemoteId, final String token){
+        //TODO: uncomment when getting pending id
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    RemindersApi api = new RemindersApi();
+//                    TrackingReminderPendingTrack body = new TrackingReminderPendingTrack();
+//                    body.setId(reminderRemoteId);
+//                    if (api.v1TrackingRemindersPendingTrackPost(body, token).getSuccess()) {
+//                        Log.d(TAG, "postRemoteTrack succeed!");
+//                    } else {
+//                        Log.d(TAG, "postRemoteTrack failed :(!");
+//                    }
+//                } catch (ApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.start();
+    }
+
+    public static void postRemoteSkip(final int reminderRemoteId, final String token){
+        //TODO: uncomment when getting pending id
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                RemindersApi api = new RemindersApi();
+//                TrackingReminderPendingSkip body = new TrackingReminderPendingSkip();
+//                body.setId(reminderRemoteId);
+//                try {
+//                    if (api.v1TrackingRemindersPendingSkipPost(body, token).getSuccess()) {
+//                        Log.d(TAG, "postRemoteSkip succeed!");
+//                    } else {
+//                        Log.d(TAG, "postRemoteSkip failed :(!");
+//                    }
+//                } catch (ApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.start();
     }
 
     @NonNull
@@ -278,6 +362,7 @@ public class CustomRemindersHelper {
     }
 
     public static class Reminder{
+        public final int remoteId;
         public final String id;
         public final String name;
         public final String variableCategory;
@@ -285,16 +370,24 @@ public class CustomRemindersHelper {
         public final String value;
         public final String unitName;
         public final int frequencyIndex;
+        public final boolean needUpdate;
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
                         String value, String unitName, int frequency){
+            this(id, -1, name, variableCategory, combinationOperation, value, unitName, frequency, true);
+        }
+
+        public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
+                        String value, String unitName, int frequency, boolean needUpdate){
             this.id = id;
+            this.remoteId = remoteId;
             this.name = name;
             this.variableCategory = variableCategory;
             this.combinationOperation = combinationOperation;
             this.value = value;
             this.unitName = unitName;
             this.frequencyIndex = frequency;
+            this.needUpdate = needUpdate;
         }
     }
 }
