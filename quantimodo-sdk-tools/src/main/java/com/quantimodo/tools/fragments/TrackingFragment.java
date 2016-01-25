@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.support.annotation.IntDef;
 import android.text.Editable;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.*;
@@ -25,6 +24,7 @@ import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.AutoCompleteListAdapter;
+import com.quantimodo.tools.adapters.UnitSpinnerAdapter;
 import com.quantimodo.tools.adapters.VariableCategorySelectSpinnerAdapter;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
 import com.quantimodo.tools.sdk.request.GetCategoriesRequest;
@@ -39,7 +39,6 @@ import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 import com.quantimodo.tools.views.ScrollViewExt;
 
-
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.lang.annotation.Retention;
@@ -53,9 +52,6 @@ import java.util.HashMap;
  * Used to show/search/submit measurements and variables
  * Require network access and user auth in Quantimodo
  *
- * Hosting activity should implement FragmentAdderListener {@link FragmentAdderListener FragmentAdderListener}, because
- * this fragment need to show other fragments
- *
  * Search can be narrowed to one category, check {@link #newInstance(int) newInstance(int)} method for more details
  */
 public class TrackingFragment extends QFragment {
@@ -67,11 +63,13 @@ public class TrackingFragment extends QFragment {
     ScrollViewExt svCardsContainer;
     View vwVariableNameShadow;
 
-    RelativeLayout lnAddVariableContainer;
+    View lnAddVariableContainer;
     EditText etVariableNameNew;
     Spinner spVariableCategory;
+    Spinner spVariableUnits;
     RadioGroup rgVariableCombinationOperation;
 
+    UnitSpinnerAdapter unitAdapter;
     /**
      * Linear layout that contains the bottom buttons, when editing or creating a new measurement
      */
@@ -249,17 +247,11 @@ public class TrackingFragment extends QFragment {
         svCardsContainer = (ScrollViewExt) view.findViewById(R.id.svCardsContainer);
         vwVariableNameShadow = view.findViewById(R.id.vwVariableNameShadow);
 
-        lnAddVariableContainer = (RelativeLayout) view.findViewById(R.id.lnAddVariableContainer);
-        lnAddVariableContainer.findViewById(R.id.btOverflow).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                spVariableCategory.setVisibility(View.VISIBLE);
-                rgVariableCombinationOperation.setVisibility(View.VISIBLE);
-            }
-        });
+        lnAddVariableContainer = view.findViewById(R.id.lnAddVariableContainer);
 
         etVariableNameNew = (EditText) view.findViewById(R.id.etVariableNameNew);
         spVariableCategory = (Spinner) view.findViewById(R.id.spVariableCategory);
+        spVariableUnits = (Spinner) view.findViewById(R.id.spVariableUnit);
         rgVariableCombinationOperation = (RadioGroup) view.findViewById(R.id.rgVariableCombinationOperation);
 
         lnButtons = (LinearLayout) view.findViewById(R.id.lnButtonContainer);
@@ -582,6 +574,18 @@ public class TrackingFragment extends QFragment {
             }
         });
         selectedDefaultUnitIndex = 0;
+        unitAdapter = new UnitSpinnerAdapter(getActivity(), mUnits);
+        spVariableUnits.setAdapter(unitAdapter);
+        spVariableUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedDefaultUnitIndex = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 
     private void categoriesUpdated() {
@@ -591,7 +595,6 @@ public class TrackingFragment extends QFragment {
             int position = adapter.getPosition(mCategoryDef.getFilter());
             if (position != -1){
                 spVariableCategory.setSelection(position);
-                spVariableCategory.setVisibility(View.GONE);
             }
         }
     }
@@ -762,9 +765,6 @@ public class TrackingFragment extends QFragment {
                     rgVariableCombinationOperation.check(R.id.rbVariableCombinationOperationAverage);
                 }
 
-                rgVariableCombinationOperation.setVisibility(View.GONE);
-
-
                 int position = -1;
                 if (spVariableCategory.getAdapter() != null) {
                     position = ((VariableCategorySelectSpinnerAdapter) spVariableCategory.getAdapter()).getPosition(mCategoryDef.getFilter());
@@ -772,11 +772,7 @@ public class TrackingFragment extends QFragment {
 
                 if (position > -1) {
                     spVariableCategory.setSelection(position);
-                    spVariableCategory.setVisibility(View.GONE);
                 }
-
-            } else {
-                spVariableCategory.setVisibility(View.VISIBLE);
             }
             etVariableNameNew.requestFocus();
         }
