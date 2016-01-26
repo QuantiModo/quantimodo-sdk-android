@@ -72,7 +72,7 @@ public class MeasurementCardHolder {
         this.context = context;
     }
 
-    public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
+    public void init(boolean removable, ArrayList<Unit> allUnits,
                      int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef,
                      Double defaultValue, Variable variable) {
         this.allUnits = allUnits;
@@ -89,7 +89,7 @@ public class MeasurementCardHolder {
         initOverflowButton(removable, variable);
         initDatePicker();
         initTimePicker();
-        initValueEntry(focus);
+        initValueEntry();
         initUnitPicker();
         initReminderTime();
 
@@ -97,9 +97,9 @@ public class MeasurementCardHolder {
         fillSavedData(variable);
     }
 
-    public void init(boolean removable, boolean focus, ArrayList<Unit> allUnits,
+    public void init(boolean removable, ArrayList<Unit> allUnits,
                      int defaultUnitIndex,TrackingFragment.CategoryDef categoryDef) {
-        init(removable, focus, allUnits, defaultUnitIndex, categoryDef, null, null);
+        init(removable, allUnits, defaultUnitIndex, categoryDef, null, null);
     }
 
     private void fillSavedData(Variable variable){
@@ -280,7 +280,7 @@ public class MeasurementCardHolder {
         });
     }
 
-    private void initValueEntry(boolean focus) {
+    private void initValueEntry() {
         if (!Double.isNaN(selectedValue)){
             etValue.setText(String.format("%.1f",selectedValue));
         }
@@ -310,12 +310,12 @@ public class MeasurementCardHolder {
             }
         });
 
-        if (focus) {
-            etValue.clearFocus();
-            etValue.requestFocus();
-            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        }
+        etValue.clearFocus();
+        etValue.requestFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//            if(!inputMethodManager.showisActive())
+//                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        inputMethodManager.showSoftInput(etValue, InputMethodManager.SHOW_IMPLICIT);
     }
 
     private void initUnitPicker() {
