@@ -522,9 +522,8 @@ public class TrackingFragment extends QFragment {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    showAddVariableCard();
-
                     selectedDefaultUnitIndex = selectDefaultUnitIndex(null);
+                    showAddVariableCard();
 
                     etVariableNameNew.setText(etVariableName.getText().toString());
                     if (measurementCards.size() == 0) {
@@ -773,6 +772,7 @@ public class TrackingFragment extends QFragment {
                     spVariableCategory.setSelection(position);
                 }
             }
+            spVariableUnits.setSelection(selectedDefaultUnitIndex);
             etVariableNameNew.requestFocus();
         }
     }
