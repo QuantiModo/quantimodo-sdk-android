@@ -397,7 +397,7 @@ public class TrackingFragment extends QFragment {
                 if (tempVariable != null) {
                     //showing confirmation dialog before creating the variable
                     String title = String.format(getString(R.string.tracking_create_var_question),
-                            tempVariable.getName(), tempVariable.getCategory(), tempVariable.getUnit());
+                            tempVariable.getName(), tempVariable.getCategory(), tempVariable.getDefaultAbbreviatedUnitName());
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder
                             .setMessage(Html.fromHtml(title))
@@ -489,18 +489,17 @@ public class TrackingFragment extends QFragment {
     };
 
     private int selectDefaultUnitIndex(Variable variable){
-        int selectedUnit = -1, defaultUnit = -1;
+        int selectedUnit = -1, defaultUnit = 0;
         for (int i = 0; i< mUnits.size(); i++){
-            Unit currentUnit = mUnits.get(i);
-            if (mCategoryDef.defaultUnit.equals(currentUnit.getAbbreviatedName())){
+            String unitName = mUnits.get(i).getAbbreviatedName();
+            if (mCategoryDef.defaultUnit.equals(unitName)){
                 defaultUnit = i;
             }
-            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
+            if (variable != null && unitName.equals(variable.getDefaultAbbreviatedUnitName())){
                 selectedUnit = i;
             }
         }
-
-        return selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
+        return selectedUnit == -1 ? defaultUnit : selectedUnit;
     }
 
     /**
