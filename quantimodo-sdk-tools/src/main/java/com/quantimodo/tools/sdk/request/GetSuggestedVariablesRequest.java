@@ -54,7 +54,7 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
         super(GetSuggestedVariablesResponse.class);
         this.search = search;
         this.category = category;
-        this.limit = 5;
+        this.limit = 10;
     }
 
     public GetSuggestedVariablesRequest(String search, String category, int limit) {
