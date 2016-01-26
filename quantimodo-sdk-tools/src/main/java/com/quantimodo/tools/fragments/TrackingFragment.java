@@ -420,7 +420,7 @@ public class TrackingFragment extends QFragment {
     private View.OnClickListener onBtAddMeasurmentsClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            addMeasurementCard(true, true, true);
+            addMeasurementCard(true, true);
             if(!measurementCards.get(0).spMeasurementUnit.isEnabled()){
                 measurementCards.get(measurementCards.size() - 1).spMeasurementUnit.setEnabled(false);
             }
@@ -527,7 +527,7 @@ public class TrackingFragment extends QFragment {
 
                     etVariableNameNew.setText(etVariableName.getText().toString());
                     if (measurementCards.size() == 0) {
-                        addMeasurementCard(false, true, false);
+                        addMeasurementCard(false, true);
                     }
                     showButtonsCard();
                     measurementCards.get(0).spMeasurementUnit.setEnabled(true);
@@ -546,10 +546,10 @@ public class TrackingFragment extends QFragment {
                 public void run() {
                     hideAddVariableCard();
                     if (measurementCards.size() == 0) {
-                        addMeasurementCard(false, true, true);
+                        addMeasurementCard(false, true);
                     }
                     else{
-                        measurementCards.get(0).init(false, true, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+                        measurementCards.get(0).init(false, mUnits, selectedDefaultUnitIndex, mCategoryDef,
                                 selectedVariable.getDefaultValue(), selectedVariable);
                     }
                     showButtonsCard();
@@ -790,10 +790,9 @@ public class TrackingFragment extends QFragment {
      * Adds a new measurement card to create a new variable or edit it
      * @param removable if removable
      * @param animate if animate to open it
-     * @param focus to give the focus to the view
      * @return the created card, null when data is still loading
      */
-    private MeasurementCardHolder addMeasurementCard(boolean removable, boolean animate, boolean focus) {
+    private MeasurementCardHolder addMeasurementCard(boolean removable, boolean animate) {
         if (mUnits == null) {
             Toast.makeText(getActivity(), R.string.tracking_fragment_wait_data_load, Toast.LENGTH_SHORT).show();
             return null;
@@ -817,7 +816,7 @@ public class TrackingFragment extends QFragment {
         lnCardsContainer.addView(measurementCardHolder.measurementCard, lnCardsContainer.getChildCount() - 1);
 
         Double defaultValue = selectedVariable == null ? null : selectedVariable.getDefaultValue();
-        measurementCardHolder.init(removable, focus, mUnits, selectedDefaultUnitIndex, mCategoryDef,
+        measurementCardHolder.init(removable, mUnits, selectedDefaultUnitIndex, mCategoryDef,
                 defaultValue, selectedVariable);
 
         if (animate) {
