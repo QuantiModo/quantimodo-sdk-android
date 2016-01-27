@@ -21,3 +21,4 @@ local.properties
 #Personal Files
 maven.properties
 quantimodo.properties
+quantimodo-sdk-tools/testing.properties
