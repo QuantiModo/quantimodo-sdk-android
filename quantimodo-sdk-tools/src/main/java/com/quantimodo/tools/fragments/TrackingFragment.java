@@ -489,17 +489,30 @@ public class TrackingFragment extends QFragment {
     };
 
     private int selectDefaultUnitIndex(Variable variable){
-        int selectedUnit = -1, defaultUnit = 0;
+
+        int variableDefaultUnitIndex = -1;
+
+        if(variable != null) {
+            for (int i = 0; i < mUnits.size(); i++) {
+                String abbreviatedUnitName = mUnits.get(i).getAbbreviatedName();
+                if (abbreviatedUnitName.equals(variable.getDefaultAbbreviatedUnitName())) {
+                     variableDefaultUnitIndex = i;
+                    return variableDefaultUnitIndex;
+                }
+            }
+        }
+
+        int variableCategoryDefaultUnitIndex = -1;
+
         for (int i = 0; i< mUnits.size(); i++){
             String abbreviatedUnitName = mUnits.get(i).getAbbreviatedName();
             if (mCategoryDef.defaultAbbreviatedUnitName.equals(abbreviatedUnitName)){
-                defaultUnit = i;
-            }
-            if (variable != null && abbreviatedUnitName.equals(variable.getDefaultAbbreviatedUnitName())){
-                selectedUnit = i;
+                variableCategoryDefaultUnitIndex = i;
+                return variableCategoryDefaultUnitIndex;
             }
         }
-        return selectedUnit == -1 ? defaultUnit : selectedUnit;
+
+        return -1;
     }
 
     /**
