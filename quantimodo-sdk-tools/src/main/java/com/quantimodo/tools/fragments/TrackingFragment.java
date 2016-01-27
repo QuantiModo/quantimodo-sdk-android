@@ -512,7 +512,7 @@ public class TrackingFragment extends QFragment {
             }
         }
 
-        return -1;
+        return 0;
     }
 
     /**
