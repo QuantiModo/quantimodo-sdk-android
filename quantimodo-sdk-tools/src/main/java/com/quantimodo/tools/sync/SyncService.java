@@ -289,9 +289,9 @@ public abstract class SyncService extends IntentService {
         return null;
     }
 
-    protected Unit getUnitForName(ArrayList<Unit> units, String name){
+    protected Unit getUnitForAbbreviatedName(ArrayList<Unit> units, String abbreviatedName){
         for (Unit u : units){
-            if (u.getAbbreviatedName().equals(name)){
+            if (u.getAbbreviatedName().equals(abbreviatedName)){
                 return u;
             }
         }
@@ -350,7 +350,7 @@ public abstract class SyncService extends IntentService {
             ArrayList<com.quantimodo.tools.models.Variable> vars = new ArrayList<>();
             for (Variable v : variablesResponse.getData()){
                 com.quantimodo.tools.models.Variable tv = com.quantimodo.tools.models.Variable.fromVariable(v);
-                tv.setUnit(getUnitForName(units,v.getTargetUnit()));
+                tv.setUnit(getUnitForAbbreviatedName(units, v.getDefaultAbbreviatedUnitName()));
                 tv.setCategory(getCategoryForName(categories,v.getCategory()));
                 vars.add(tv);
             }
