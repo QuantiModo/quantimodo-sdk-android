@@ -218,7 +218,7 @@ public class CustomRemindersCreateActivity extends Activity {
         nameTextView.setText(selectedVariable.getName());
         if(selectedVariable.getDefaultValue() != null)
             valueTextView.setText(selectedVariable.getDefaultValue().toString());
-        unitsText.setText(selectedVariable.getUnit());
+        unitsText.setText(selectedVariable.getDefaultAbbreviatedUnitName());
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -240,7 +240,7 @@ public class CustomRemindersCreateActivity extends Activity {
         nameTextView.setText(selectedVariable.getName());
         if(selectedVariable.getDefaultValue() != null)
             valueTextView.setText(selectedVariable.getDefaultValue().toString());
-        unitsText.setText(selectedVariable.getUnit());
+        unitsText.setText(selectedVariable.getDefaultAbbreviatedUnitName());
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -417,7 +417,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 isEditing ? mReminder.variableCategory : selectedVariable.getCategory(),
                 isEditing ? mReminder.combinationOperation : selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
-                isEditing ? mReminder.unitName : selectedVariable.getUnit(),
+                isEditing ? mReminder.unitName : selectedVariable.getDefaultAbbreviatedUnitName(),
                 frequencySpinner.getSelectedItemPosition(),
                 true
         );

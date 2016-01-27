@@ -108,7 +108,7 @@ public class TrackingFragment extends QFragment {
     public static class CategoryDef implements Serializable{
         final String filter;
         final Double defaultValue;
-        final String defaultUnit;
+        final String defaultAbbreviatedUnitName;
         final int hintId;
         final int titleId;
         final String combineType;
@@ -116,15 +116,15 @@ public class TrackingFragment extends QFragment {
         /**
          * @param filter Category name
          * @param defaultValue Default value
-         * @param defaultUnit Default unit
+         * @param defaultAbbreviatedUnitName Default unit
          * @param hintId hint resource
          * @param combineType combineType should be {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_SUM} or {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_MEAN}
          * @param titleId title for action bar
          */
-        public CategoryDef(String filter, Double defaultValue, String defaultUnit, int hintId, String combineType,int titleId) {
+        public CategoryDef(String filter, Double defaultValue, String defaultAbbreviatedUnitName, int hintId, String combineType,int titleId) {
             this.filter = filter;
             this.defaultValue = defaultValue;
-            this.defaultUnit = defaultUnit;
+            this.defaultAbbreviatedUnitName = defaultAbbreviatedUnitName;
             this.hintId = hintId;
             this.combineType = combineType;
             this.titleId = titleId;
@@ -139,8 +139,8 @@ public class TrackingFragment extends QFragment {
             return defaultValue;
         }
 
-        public String getDefaultUnit() {
-            return defaultUnit;
+        public String getDefaultAbbreviatedUnitName() {
+            return defaultAbbreviatedUnitName;
         }
 
         public int getHintId() {
@@ -397,7 +397,7 @@ public class TrackingFragment extends QFragment {
                 if (tempVariable != null) {
                     //showing confirmation dialog before creating the variable
                     String title = String.format(getString(R.string.tracking_create_var_question),
-                            tempVariable.getName(), tempVariable.getCategory(), tempVariable.getUnit());
+                            tempVariable.getName(), tempVariable.getCategory(), tempVariable.getDefaultAbbreviatedUnitName());
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder
                             .setMessage(Html.fromHtml(title))
@@ -489,18 +489,30 @@ public class TrackingFragment extends QFragment {
     };
 
     private int selectDefaultUnitIndex(Variable variable){
-        int selectedUnit = -1, defaultUnit = -1;
-        for (int i = 0; i< mUnits.size(); i++){
-            Unit currentUnit = mUnits.get(i);
-            if (mCategoryDef.defaultUnit.equals(currentUnit.getAbbreviatedName())){
-                defaultUnit = i;
-            }
-            if (variable != null && currentUnit.getAbbreviatedName().equals(variable.getTargetUnit())){
-                selectedUnit = i;
+
+        int variableDefaultUnitIndex = -1;
+
+        if(variable != null) {
+            for (int i = 0; i < mUnits.size(); i++) {
+                String abbreviatedUnitName = mUnits.get(i).getAbbreviatedName();
+                if (abbreviatedUnitName.equals(variable.getDefaultAbbreviatedUnitName())) {
+                     variableDefaultUnitIndex = i;
+                    return variableDefaultUnitIndex;
+                }
             }
         }
 
-        return selectedUnit == -1 ? (defaultUnit == -1 ? 0 : defaultUnit) : selectedUnit;
+        int variableCategoryDefaultUnitIndex = -1;
+
+        for (int i = 0; i< mUnits.size(); i++){
+            String abbreviatedUnitName = mUnits.get(i).getAbbreviatedName();
+            if (mCategoryDef.defaultAbbreviatedUnitName.equals(abbreviatedUnitName)){
+                variableCategoryDefaultUnitIndex = i;
+                return variableCategoryDefaultUnitIndex;
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -523,9 +535,8 @@ public class TrackingFragment extends QFragment {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    showAddVariableCard();
-
                     selectedDefaultUnitIndex = selectDefaultUnitIndex(null);
+                    showAddVariableCard();
 
                     etVariableNameNew.setText(etVariableName.getText().toString());
                     if (measurementCards.size() == 0) {
@@ -774,6 +785,7 @@ public class TrackingFragment extends QFragment {
                     spVariableCategory.setSelection(position);
                 }
             }
+            spVariableUnits.setSelection(selectedDefaultUnitIndex);
             etVariableNameNew.requestFocus();
         }
     }

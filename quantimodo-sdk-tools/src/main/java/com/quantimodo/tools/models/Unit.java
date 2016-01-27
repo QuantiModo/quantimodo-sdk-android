@@ -99,7 +99,7 @@ public class Unit implements java.io.Serializable {
     }
 
     /** Not-null value. */
-    public String getAbbr() {
+    public String getAbbreviatedName() {
         return abbr;
     }
 
@@ -148,7 +148,7 @@ public class Unit implements java.io.Serializable {
         return new com.quantimodo.android.sdk.model.Unit(
                 getId().intValue(),
                 getName(),
-                getName(),
+                getAbbreviatedName(),
                 getCategory(),
                 String.format("%.2f",getMin()),
                 String.format("%.2f", getMax()),
