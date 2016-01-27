@@ -86,7 +86,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
         if (category != null) {
             stmt.bindString(5, category);
         }
-        stmt.bindString(6, entity.getAbbr());
+        stmt.bindString(6, entity.getAbbreviatedName());
     }
 
     @Override

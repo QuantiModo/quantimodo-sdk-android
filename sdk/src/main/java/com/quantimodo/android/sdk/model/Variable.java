@@ -44,7 +44,7 @@ public class Variable implements Serializable {
 
     @Deprecated
     @SerializedName("abbreviatedUnitName")
-    public final String abbreviatedUnitName;
+    public final String defaultAbbreviatedUnitName;
     @Deprecated
     public final String combinationOperation;
 
@@ -59,13 +59,13 @@ public class Variable implements Serializable {
     private String lastUnit;
     private Double lastValue;
 
-    public Variable(long id, String originalName, String parent, String category, String abbreviatedUnitName, String combinationOperation) {
+    public Variable(long id, String originalName, String parent, String category, String defaultAbbreviatedUnitName, String combinationOperation) {
         this.id = id;
         this.name = originalName;
         this.originalName = originalName;
         this.parent = parent;
         this.category = category;
-        this.abbreviatedUnitName = abbreviatedUnitName;
+        this.defaultAbbreviatedUnitName = defaultAbbreviatedUnitName;
         if (combinationOperation.equals(COMBINE_SUM) || combinationOperation.equals(COMBINE_MEAN)) {
             this.combinationOperation = combinationOperation;
         } else {
@@ -73,13 +73,13 @@ public class Variable implements Serializable {
         }
     }
 
-    public Variable(long id, String name, String originalName, String parent, String category, String abbreviatedUnitName, String combinationOperation) {
+    public Variable(long id, String name, String originalName, String parent, String category, String defaultAbbreviatedUnitName, String combinationOperation) {
         this.id = id;
         this.name = name;
         this.originalName = originalName;
         this.parent = parent;
         this.category = category;
-        this.abbreviatedUnitName = abbreviatedUnitName;
+        this.defaultAbbreviatedUnitName = defaultAbbreviatedUnitName;
         if (combinationOperation.equals(COMBINE_SUM) || combinationOperation.equals(COMBINE_MEAN)) {
             this.combinationOperation = combinationOperation;
         } else {
@@ -108,7 +108,7 @@ public class Variable implements Serializable {
     }
 
     public String getDefaultAbbreviatedUnitName() {
-        return abbreviatedUnitName;
+        return defaultAbbreviatedUnitName;
     }
 
     public String getCombinationOperation() {
@@ -135,7 +135,7 @@ public class Variable implements Serializable {
         if (lastUnit != null && !lastUnit.isEmpty()){
             return lastUnit;
         }
-        else if(!TextUtils.isEmpty(abbreviatedUnitName)) return abbreviatedUnitName;
+        else if(!TextUtils.isEmpty(defaultAbbreviatedUnitName)) return defaultAbbreviatedUnitName;
         else return mostCommonUnit;
     }
 

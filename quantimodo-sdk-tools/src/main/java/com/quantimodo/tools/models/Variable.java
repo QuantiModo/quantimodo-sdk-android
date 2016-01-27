@@ -295,7 +295,7 @@ public class Variable implements java.io.Serializable {
                 getOriginalName(),
                 getParent() != null ? getParent().getName() : null,
                 getCategory().getName(),
-                getUnit().getAbbr(),
+                getUnit().getAbbreviatedName(),
                 CombinationType.values()[getCombOperation()].getValue()
         );
     }

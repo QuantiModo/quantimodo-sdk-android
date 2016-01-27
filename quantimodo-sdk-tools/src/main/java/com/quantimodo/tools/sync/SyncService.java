@@ -291,7 +291,7 @@ public abstract class SyncService extends IntentService {
 
     protected Unit getUnitForName(ArrayList<Unit> units, String name){
         for (Unit u : units){
-            if (u.getAbbr().equals(name)){
+            if (u.getAbbreviatedName().equals(name)){
                 return u;
             }
         }

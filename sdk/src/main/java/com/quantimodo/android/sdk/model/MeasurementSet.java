@@ -32,7 +32,7 @@ public class MeasurementSet {
         this.name = variable.originalName;
         this.parent = variable.parent;
         this.category = variable.category;
-        this.unit = variable.abbreviatedUnitName;
+        this.unit = variable.defaultAbbreviatedUnitName;
         this.combinationOperation = variable.combinationOperation;
         this.source = source;
     }
@@ -43,7 +43,7 @@ public class MeasurementSet {
         this.name = variable.originalName;
         this.parent = variable.parent;
         this.category = variable.category;
-        this.unit = variable.abbreviatedUnitName;
+        this.unit = variable.defaultAbbreviatedUnitName;
         this.combinationOperation = variable.combinationOperation;
         this.source = source;
     }

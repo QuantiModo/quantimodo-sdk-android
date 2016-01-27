@@ -108,7 +108,7 @@ public class TrackingFragment extends QFragment {
     public static class CategoryDef implements Serializable{
         final String filter;
         final Double defaultValue;
-        final String defaultUnit;
+        final String defaultAbbreviatedUnitName;
         final int hintId;
         final int titleId;
         final String combineType;
@@ -116,15 +116,15 @@ public class TrackingFragment extends QFragment {
         /**
          * @param filter Category name
          * @param defaultValue Default value
-         * @param defaultUnit Default unit
+         * @param defaultAbbreviatedUnitName Default unit
          * @param hintId hint resource
          * @param combineType combineType should be {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_SUM} or {@link com.quantimodo.android.sdk.SdkDefs#COMBINE_MEAN}
          * @param titleId title for action bar
          */
-        public CategoryDef(String filter, Double defaultValue, String defaultUnit, int hintId, String combineType,int titleId) {
+        public CategoryDef(String filter, Double defaultValue, String defaultAbbreviatedUnitName, int hintId, String combineType,int titleId) {
             this.filter = filter;
             this.defaultValue = defaultValue;
-            this.defaultUnit = defaultUnit;
+            this.defaultAbbreviatedUnitName = defaultAbbreviatedUnitName;
             this.hintId = hintId;
             this.combineType = combineType;
             this.titleId = titleId;
@@ -139,8 +139,8 @@ public class TrackingFragment extends QFragment {
             return defaultValue;
         }
 
-        public String getDefaultUnit() {
-            return defaultUnit;
+        public String getDefaultAbbreviatedUnitName() {
+            return defaultAbbreviatedUnitName;
         }
 
         public int getHintId() {
@@ -492,7 +492,7 @@ public class TrackingFragment extends QFragment {
         int selectedUnit = -1, defaultUnit = 0;
         for (int i = 0; i< mUnits.size(); i++){
             String unitName = mUnits.get(i).getAbbreviatedName();
-            if (mCategoryDef.defaultUnit.equals(unitName)){
+            if (mCategoryDef.defaultAbbreviatedUnitName.equals(unitName)){
                 defaultUnit = i;
             }
             if (variable != null && unitName.equals(variable.getDefaultAbbreviatedUnitName())){
