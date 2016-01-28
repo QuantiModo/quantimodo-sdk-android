@@ -131,14 +131,6 @@ public class Variable implements Serializable {
         this.latestMeasurementTime = latestMeasurementTime;
     }
 
-    public String getTargetUnit(){
-        if (lastUnit != null && !lastUnit.isEmpty()){
-            return lastUnit;
-        }
-        else if(!TextUtils.isEmpty(defaultAbbreviatedUnitName)) return defaultAbbreviatedUnitName;
-        else return mostCommonUnit;
-    }
-
     public Double getDefaultValue(){
         if (lastValue != null){
             return lastValue;
