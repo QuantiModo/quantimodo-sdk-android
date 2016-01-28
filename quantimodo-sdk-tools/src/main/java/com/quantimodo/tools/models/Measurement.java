@@ -236,8 +236,8 @@ public class Measurement implements java.io.Serializable {
         m.setTimestamp(measurement.getTimestamp());
         m.setValue(measurement.getValue());
         m.setNote(measurement.getNote());
-        //Unit ?
-        //Variable ?
+        m.setUnitName(measurement.getUnit());
+        m.setVariableName(measurement.getVariable());
 
         return m;
     }
