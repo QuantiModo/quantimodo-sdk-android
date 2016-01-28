@@ -34,6 +34,8 @@ public class MeasurementDao extends AbstractDao<Measurement, Long> {
         public final static Property Source = new Property(5, String.class, "source", false, "SOURCE");
         public final static Property NeedUpdate = new Property(6, Boolean.class, "needUpdate", false, "NEED_UPDATE");
         public final static Property Note = new Property(7, String.class, "note", false, "NOTE");
+        public final static Property VariableName = new Property(8, String.class, "variableName", false, "VARIABLE_NAME");
+        public final static Property UnitName = new Property(9, String.class, "unitName", false, "UNIT_NAME");
     };
 
     private DaoSession daoSession;
@@ -59,10 +61,12 @@ public class MeasurementDao extends AbstractDao<Measurement, Long> {
                 "\"VALUE\" REAL NOT NULL ," + // 4: value
                 "\"SOURCE\" TEXT," + // 5: source
                 "\"NEED_UPDATE\" INTEGER," + // 6: needUpdate
-                "\"NOTE\" TEXT);"); // 7: note
+                "\"NOTE\" TEXT," + // 7: note
+                "\"VARIABLE_NAME\" TEXT NOT NULL ," + // 8: variableName
+                "\"UNIT_NAME\" TEXT NOT NULL );"); // 9: unitName
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "pk ON MEASUREMENT" +
-                " (\"TIMESTAMP\",\"VARIABLE_ID\");");
+                " (\"TIMESTAMP\",\"VARIABLE_NAME\");");
     }
 
     /** Drops the underlying database table. */
@@ -107,6 +111,8 @@ public class MeasurementDao extends AbstractDao<Measurement, Long> {
         if (note != null) {
             stmt.bindString(8, note);
         }
+        stmt.bindString(9, entity.getVariableName());
+        stmt.bindString(10, entity.getUnitName());
     }
 
     @Override
@@ -132,7 +138,9 @@ public class MeasurementDao extends AbstractDao<Measurement, Long> {
             cursor.getDouble(offset + 4), // value
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // source
             cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // needUpdate
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // note
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // note
+            cursor.getString(offset + 8), // variableName
+            cursor.getString(offset + 9) // unitName
         );
         return entity;
     }
@@ -148,6 +156,8 @@ public class MeasurementDao extends AbstractDao<Measurement, Long> {
         entity.setSource(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setNeedUpdate(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
         entity.setNote(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setVariableName(cursor.getString(offset + 8));
+        entity.setUnitName(cursor.getString(offset + 9));
      }
     
     /** @inheritdoc */

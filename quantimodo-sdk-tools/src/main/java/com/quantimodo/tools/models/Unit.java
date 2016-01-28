@@ -22,7 +22,7 @@ public class Unit implements java.io.Serializable {
     private Double max;
     private String category;
     /** Not-null value. */
-    private String abbr;
+    private String abbreviatedName;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -41,13 +41,13 @@ public class Unit implements java.io.Serializable {
         this.id = id;
     }
 
-    public Unit(Long id, String name, Double min, Double max, String category, String abbr) {
+    public Unit(Long id, String name, Double min, Double max, String category, String abbreviatedName) {
         this.id = id;
         this.name = name;
         this.min = min;
         this.max = max;
         this.category = category;
-        this.abbr = abbr;
+        this.abbreviatedName = abbreviatedName;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -100,12 +100,12 @@ public class Unit implements java.io.Serializable {
 
     /** Not-null value. */
     public String getAbbreviatedName() {
-        return abbr;
+        return abbreviatedName;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setAbbr(String abbr) {
-        this.abbr = abbr;
+    public void setAbbreviatedName(String abbreviatedName) {
+        this.abbreviatedName = abbreviatedName;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
@@ -140,7 +140,7 @@ public class Unit implements java.io.Serializable {
         u.setMin(Double.valueOf(unit.getMinimum()));
         u.setMax(Double.valueOf(unit.getMaximum()));
         u.setCategory(unit.getCategory());
-        u.setAbbr(unit.getAbbreviatedName());
+        u.setAbbreviatedName(unit.getAbbreviatedName());
         return u;
     }
 

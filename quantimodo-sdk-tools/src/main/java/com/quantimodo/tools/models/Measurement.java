@@ -22,6 +22,10 @@ public class Measurement implements java.io.Serializable {
     private String source;
     private Boolean needUpdate;
     private String note;
+    /** Not-null value. */
+    private String variableName;
+    /** Not-null value. */
+    private String unitName;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -46,7 +50,7 @@ public class Measurement implements java.io.Serializable {
         this.id = id;
     }
 
-    public Measurement(Long id, java.util.Date timestamp, Long variableId, Long unitId, double value, String source, Boolean needUpdate, String note) {
+    public Measurement(Long id, java.util.Date timestamp, Long variableId, Long unitId, double value, String source, Boolean needUpdate, String note, String variableName, String unitName) {
         this.id = id;
         this.timestamp = timestamp;
         this.variableId = variableId;
@@ -55,6 +59,8 @@ public class Measurement implements java.io.Serializable {
         this.source = source;
         this.needUpdate = needUpdate;
         this.note = note;
+        this.variableName = variableName;
+        this.unitName = unitName;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -127,6 +133,26 @@ public class Measurement implements java.io.Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    /** Not-null value. */
+    public String getVariableName() {
+        return variableName;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
+    /** Not-null value. */
+    public String getUnitName() {
+        return unitName;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
     }
 
     /** To-one relationship, resolved on first access. */

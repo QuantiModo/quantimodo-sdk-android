@@ -7,7 +7,7 @@ import java.io.File;
 public class QmDaoGenerator {
 
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1005, "com.quantimodo.tools.models");
+        Schema schema = new Schema(1006, "com.quantimodo.tools.models");
         schema.enableKeepSectionsByDefault();
         schema.enableActiveEntitiesByDefault();
 
@@ -54,7 +54,7 @@ public class QmDaoGenerator {
         unit.addDoubleProperty("max");
 
         unit.addStringProperty("category");
-        unit.addStringProperty("abbr").notNull().unique();
+        unit.addStringProperty("abbreviatedName").columnName("ABBR").notNull().unique();
         return unit;
     }
 
@@ -75,12 +75,7 @@ public class QmDaoGenerator {
         Property vm = measurement.addLongProperty("variableId").getProperty();
         measurement.addToOne(variable,vm,"variable");
 
-        Index index = new Index();
-        index.makeUnique();
-        index.setName("pk");
-        index.addProperty(timestamp);
-        index.addProperty(vm);
-        measurement.addIndex(index);
+
 
         Property vu = measurement.addLongProperty("unitId").getProperty();
         measurement.addToOne(unit,vu,"unit");
@@ -89,6 +84,15 @@ public class QmDaoGenerator {
         measurement.addStringProperty("source");
         measurement.addBooleanProperty("needUpdate");
         measurement.addStringProperty("note");
+        vm =  measurement.addStringProperty("variableName").notNull().getProperty();
+        measurement.addStringProperty("unitName").notNull();
+
+        Index index = new Index();
+        index.makeUnique();
+        index.setName("pk");
+        index.addProperty(timestamp);
+        index.addProperty(vm);
+        measurement.addIndex(index);
     }
 
 }

@@ -28,7 +28,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
         public final static Property Min = new Property(2, Double.class, "min", false, "MIN");
         public final static Property Max = new Property(3, Double.class, "max", false, "MAX");
         public final static Property Category = new Property(4, String.class, "category", false, "CATEGORY");
-        public final static Property Abbr = new Property(5, String.class, "abbr", false, "ABBR");
+        public final static Property AbbreviatedName = new Property(5, String.class, "abbreviatedName", false, "ABBR");
     };
 
     private DaoSession daoSession;
@@ -52,7 +52,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
                 "\"MIN\" REAL," + // 2: min
                 "\"MAX\" REAL," + // 3: max
                 "\"CATEGORY\" TEXT," + // 4: category
-                "\"ABBR\" TEXT NOT NULL UNIQUE );"); // 5: abbr
+                "\"ABBR\" TEXT NOT NULL UNIQUE );"); // 5: abbreviatedName
     }
 
     /** Drops the underlying database table. */
@@ -110,7 +110,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // min
             cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // max
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // category
-            cursor.getString(offset + 5) // abbr
+            cursor.getString(offset + 5) // abbreviatedName
         );
         return entity;
     }
@@ -123,7 +123,7 @@ public class UnitDao extends AbstractDao<Unit, Long> {
         entity.setMin(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
         entity.setMax(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
         entity.setCategory(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setAbbr(cursor.getString(offset + 5));
+        entity.setAbbreviatedName(cursor.getString(offset + 5));
      }
     
     /** @inheritdoc */
