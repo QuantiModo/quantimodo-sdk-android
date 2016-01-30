@@ -915,7 +915,7 @@ public class TrackingFragment extends QFragment {
                         selectedVariable.getCombinationOperation(), //combination operation
                         Double.toString(measurement.getValue()), //value
                         measurementSets.get(unit.getAbbreviatedName()).getUnit(), //unit name
-                        currentHolder.spReminderTime.getSelectedItemPosition() //frequency
+                        getFrequencyFromItemPosition(currentHolder.spReminderTime.getSelectedItemPosition()) //frequency
                 );
                 CustomRemindersHelper.putReminder(getActivity(), reminder);
                 CustomRemindersHelper.setAlarm(getActivity(), reminder.id);
@@ -936,7 +936,27 @@ public class TrackingFragment extends QFragment {
         return true;
     }
 
-
+    private CustomRemindersHelper.FrequencyType getFrequencyFromItemPosition(int position){
+        String string = getResources().getStringArray(R.array.mood_interval_entries)[position];
+        if(string.equals(getString(R.string.interval_once_day)) ||
+                string.equals(getString(R.string.interval_daily))){
+            return CustomRemindersHelper.FrequencyType.DAILY;
+        }
+        else if(string.equals(getString(R.string.interval_twice_day)) ||
+                string.equals(getString(R.string.interval_twicedaily))){
+            return CustomRemindersHelper.FrequencyType.TWICE_A_DAY;
+        }
+        else if(string.equals(getString(R.string.interval_three_times_day))) {
+            return CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY;
+        }
+        else if(string.equals(getString(R.string.interval_hourly))){
+            return CustomRemindersHelper.FrequencyType.HOURLY;
+        }
+        else if(string.equals(getString(R.string.interval_everythreehours))){
+            return CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS;
+        }
+        return CustomRemindersHelper.FrequencyType.NEVER;
+    }
 
     /*
     **  Clean all input fields, reset the fragment to its original state as much as possible

@@ -506,7 +506,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 isEditing ? mReminder.combinationOperation : selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
                 isEditing ? mReminder.unitName : selectedVariable.getDefaultAbbreviatedUnitName(),
-                frequencySpinner.getSelectedItemPosition(),
+                getFrequencyFromItemPosition(frequencySpinner.getSelectedItemPosition()),
                 true
         );
         CustomRemindersHelper.putReminder(this, newReminder);
@@ -515,6 +515,28 @@ public class CustomRemindersCreateActivity extends Activity {
         finish();
         Toast.makeText(getApplicationContext(),R.string.custom_reminder_save_message,
                 Toast.LENGTH_LONG).show();
+    }
+
+    private CustomRemindersHelper.FrequencyType getFrequencyFromItemPosition(int position){
+        String string = getResources().getStringArray(R.array.reminders_interval_entries)[position];
+        if(string.equals(getString(R.string.interval_once_day)) ||
+                string.equals(getString(R.string.interval_daily))){
+            return CustomRemindersHelper.FrequencyType.DAILY;
+        }
+        else if(string.equals(getString(R.string.interval_twice_day)) ||
+                string.equals(getString(R.string.interval_twicedaily))){
+            return CustomRemindersHelper.FrequencyType.TWICE_A_DAY;
+        }
+        else if(string.equals(getString(R.string.interval_three_times_day))) {
+            return CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY;
+        }
+        else if(string.equals(getString(R.string.interval_hourly))){
+            return CustomRemindersHelper.FrequencyType.HOURLY;
+        }
+        else if(string.equals(getString(R.string.interval_everythreehours))){
+            return CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS;
+        }
+        return CustomRemindersHelper.FrequencyType.NEVER;
     }
 
     /**
