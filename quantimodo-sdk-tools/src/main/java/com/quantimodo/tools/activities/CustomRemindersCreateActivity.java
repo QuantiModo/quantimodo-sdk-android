@@ -2,24 +2,32 @@ package com.quantimodo.tools.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.koushikdutta.ion.Ion;
@@ -41,6 +49,7 @@ import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -71,6 +80,9 @@ public class CustomRemindersCreateActivity extends Activity {
     private View containerCategories;
     private View buttonsLayout;
     private ProgressDialog mProgress;
+    private Button mInterval1;
+    private Button mInterval2;
+    private Button mInterval3;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private ArrayList<Variable> suggestedVariables = new ArrayList<>();
@@ -79,6 +91,9 @@ public class CustomRemindersCreateActivity extends Activity {
     private int refreshesRunning = 0;
     private boolean isEditing = false;
     private boolean avoidSearch = false;
+    private Calendar mCalendarInterval1 = Calendar.getInstance();
+    private Calendar mCalendarInterval2 = Calendar.getInstance();
+    private Calendar mCalendarInterval3 = Calendar.getInstance();
 
     private String reminderId;
     private CustomRemindersHelper.Reminder mReminder;
@@ -183,23 +198,7 @@ public class CustomRemindersCreateActivity extends Activity {
 
         autoCompleteListAdapter = new AutoCompleteListAdapter(this, suggestedVariables);
         lvVariableSuggestions.setAdapter(autoCompleteListAdapter);
-
-        frequencySpinner = (Spinner) findViewById(R.id.reminders_create_freq_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.mood_interval_entries, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        frequencySpinner.setAdapter(adapter);
-        frequencySpinner.setSelection(4); //Daily frequency as default
-        frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView)view).setTextColor(Color.BLACK);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        initIntervalsViews();
 
         if(isEditing){
             frequencySpinner.setSelection(mReminder.frequencyIndex, false);
@@ -208,6 +207,95 @@ public class CustomRemindersCreateActivity extends Activity {
         }
 
     }
+
+    private void initIntervalsViews(){
+        mCalendarInterval1.set(Calendar.HOUR_OF_DAY, 8);
+        mCalendarInterval1.set(Calendar.MINUTE, 0);
+        mCalendarInterval2.set(Calendar.HOUR_OF_DAY, 16);
+        mCalendarInterval2.set(Calendar.MINUTE, 0);
+        mCalendarInterval3.set(Calendar.HOUR_OF_DAY, 24);
+        mCalendarInterval3.set(Calendar.MINUTE, 0);
+
+        mInterval1 = (Button) findViewById(R.id.reminders_create_interval_1);
+        mInterval2 = (Button) findViewById(R.id.reminders_create_interval_2);
+        mInterval3 = (Button) findViewById(R.id.reminders_create_interval_3);
+        mInterval1.setOnClickListener(onTimesClick);
+        mInterval2.setOnClickListener(onTimesClick);
+        mInterval3.setOnClickListener(onTimesClick);
+        frequencySpinner = (Spinner) findViewById(R.id.reminders_create_freq_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.reminders_interval_entries, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        frequencySpinner.setAdapter(adapter);
+        frequencySpinner.setSelection(0); //Daily frequency as default
+        frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView)view).setTextColor(Color.BLACK);
+                mInterval1.setVisibility(View.GONE);
+                mInterval2.setVisibility(View.GONE);
+                mInterval3.setVisibility(View.GONE);
+                if(position == 0){
+                    mInterval1.setVisibility(View.VISIBLE);
+                }
+                else if(position == 1){
+                    mInterval1.setVisibility(View.VISIBLE);
+                    mInterval2.setVisibility(View.VISIBLE);
+                }
+                else if(position == 2){
+                    mInterval1.setVisibility(View.VISIBLE);
+                    mInterval2.setVisibility(View.VISIBLE);
+                    mInterval3.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    View.OnClickListener onTimesClick = new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+            Calendar calendarTemp = Calendar.getInstance();
+            if(view == mInterval1){
+                calendarTemp = mCalendarInterval1;
+            } else if(view == mInterval2){
+                calendarTemp = mCalendarInterval2;
+            } else if(view == mInterval3){
+                calendarTemp = mCalendarInterval3;
+            }
+            final Calendar calendar = calendarTemp;
+            new TimePickerDialog(
+                    CustomRemindersCreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker pickerView, int hourOfDay, int minute) {
+                    String format = "%s:%s %s";
+                    String pmAm;
+                    String hour;
+                    String stringMinute;
+                    if(hourOfDay > 11){
+                        pmAm = "PM";
+                        hour = Integer.toString(hourOfDay - 12);
+                    }
+                    else{
+                        pmAm = "AM";
+                        hour = Integer.toString(hourOfDay);
+                    }
+                    if(hour.equals("0")) hour = "12";
+
+                    stringMinute = Integer.toString(minute);
+                    if(minute < 10)
+                        stringMinute = "0" + stringMinute;
+                    ((Button) view).setText(String.format(format, hour, stringMinute, pmAm));
+
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    calendar.set(Calendar.MINUTE, minute);
+                }
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
+        }
+    };
 
     /**
      * Selects the Variable to use from the suggestedVariables list
@@ -531,5 +619,25 @@ public class CustomRemindersCreateActivity extends Activity {
 
     private SpiceManager getSpiceManager(){
         return mSpiceManager;
+    }
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+        }
     }
 }
