@@ -57,7 +57,8 @@ public class CustomRemindersHelper {
         EVERY_THREE_HOURS,
         TWICE_A_DAY,
         DAILY,
-        SNOOZE;
+        SNOOZE,
+        THREE_TIMES_A_DAY;
 
         @Override
         public String toString() {
@@ -66,8 +67,9 @@ public class CustomRemindersHelper {
                 case HOURLY: return "Hourly";
                 case EVERY_THREE_HOURS: return "Every three hours";
                 case TWICE_A_DAY: return "Twice a day";
-                case DAILY: return "Daily";
+                case DAILY: return "Once a day";
                 case SNOOZE: return "Snooze";
+                case THREE_TIMES_A_DAY: return "Three times a day";
                 default: throw new IllegalArgumentException();
             }
         }
@@ -258,7 +260,7 @@ public class CustomRemindersHelper {
                 preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
-                preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0),
+                FrequencyType.values()[preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0)],
                 preferences.getBoolean("reminder_" + id + KEY_UPDATE, true)
         );
     }
@@ -373,12 +375,12 @@ public class CustomRemindersHelper {
         public final boolean needUpdate;
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, int frequency){
+                        String value, String unitName, FrequencyType frequency){
             this(id, -1, name, variableCategory, combinationOperation, value, unitName, frequency, true);
         }
 
         public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, int frequency, boolean needUpdate){
+                        String value, String unitName, FrequencyType frequency, boolean needUpdate){
             this.id = id;
             this.remoteId = remoteId;
             this.name = name;
@@ -386,7 +388,7 @@ public class CustomRemindersHelper {
             this.combinationOperation = combinationOperation;
             this.value = value;
             this.unitName = unitName;
-            this.frequencyIndex = frequency;
+            this.frequencyIndex = frequency.ordinal();
             this.needUpdate = needUpdate;
         }
     }
