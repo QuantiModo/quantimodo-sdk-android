@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -371,6 +372,9 @@ public class CustomRemindersHelper {
         public final String combinationOperation;
         public final String value;
         public final String unitName;
+        /**
+         * The FrequencyType corresponding ordinal index
+         */
         public final int frequencyIndex;
         public final boolean needUpdate;
 
@@ -390,6 +394,10 @@ public class CustomRemindersHelper {
             this.unitName = unitName;
             this.frequencyIndex = frequency.ordinal();
             this.needUpdate = needUpdate;
+        }
+
+        public String getFrequencyString(){
+            return FrequencyType.values()[this.frequencyIndex].toString();
         }
     }
 }
