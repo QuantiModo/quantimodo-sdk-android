@@ -2,27 +2,21 @@ package com.quantimodo.tools.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -135,6 +129,19 @@ public class CustomRemindersCreateActivity extends Activity {
             spVariableCategory.setEnabled(false);
             removeButton.setText(R.string.custom_reminders_remove);
             valueTextView.requestFocus();
+            mCalendarInterval1.setTimeInMillis(mReminder.time1);
+            mCalendarInterval2.setTimeInMillis(mReminder.time2);
+            mCalendarInterval3.setTimeInMillis(mReminder.time3);
+            int hour = mCalendarInterval1.get(Calendar.HOUR_OF_DAY);
+            int minute = mCalendarInterval1.get(Calendar.MINUTE);
+            setTime(mCalendarInterval1, mInterval1, hour, minute);
+            hour = mCalendarInterval2.get(Calendar.HOUR_OF_DAY);
+            minute = mCalendarInterval2.get(Calendar.MINUTE);
+            setTime(mCalendarInterval2, mInterval2, hour, minute);
+            hour = mCalendarInterval3.get(Calendar.HOUR_OF_DAY);
+            minute = mCalendarInterval3.get(Calendar.MINUTE);
+            setTime(mCalendarInterval3, mInterval3, hour, minute);
+
         } else if(getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_create);
 
@@ -201,7 +208,7 @@ public class CustomRemindersCreateActivity extends Activity {
         initIntervalsViews();
 
         if(isEditing){
-            frequencySpinner.setSelection(mReminder.frequencyIndex, false);
+            frequencySpinner.setSelection(getListIndexFromFrequencyIndex(mReminder.frequencyIndex), false);
             valueTextView.setText(mReminder.value);
             unitsText.setText(mReminder.unitName);
         }
@@ -209,6 +216,7 @@ public class CustomRemindersCreateActivity extends Activity {
     }
 
     private void initIntervalsViews(){
+        //loading default timings
         mCalendarInterval1.set(Calendar.HOUR_OF_DAY, 8);
         mCalendarInterval1.set(Calendar.MINUTE, 0);
         mCalendarInterval2.set(Calendar.HOUR_OF_DAY, 16);
@@ -271,31 +279,35 @@ public class CustomRemindersCreateActivity extends Activity {
                     CustomRemindersCreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker pickerView, int hourOfDay, int minute) {
-                    String format = "%s:%s %s";
-                    String pmAm;
-                    String hour;
-                    String stringMinute;
-                    if(hourOfDay > 11){
-                        pmAm = "PM";
-                        hour = Integer.toString(hourOfDay - 12);
-                    }
-                    else{
-                        pmAm = "AM";
-                        hour = Integer.toString(hourOfDay);
-                    }
-                    if(hour.equals("0")) hour = "12";
-
-                    stringMinute = Integer.toString(minute);
-                    if(minute < 10)
-                        stringMinute = "0" + stringMinute;
-                    ((Button) view).setText(String.format(format, hour, stringMinute, pmAm));
-
-                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    calendar.set(Calendar.MINUTE, minute);
+                    setTime(calendar, (Button)view, hourOfDay, minute);
                 }
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
         }
     };
+
+    private void setTime(Calendar calendar, Button button, int hourOfDay, int minute){
+        String format = "%s:%s %s";
+        String pmAm;
+        String hour;
+        String stringMinute;
+        if(hourOfDay > 11){
+            pmAm = "PM";
+            hour = Integer.toString(hourOfDay - 12);
+        }
+        else{
+            pmAm = "AM";
+            hour = Integer.toString(hourOfDay);
+        }
+        if(hour.equals("0")) hour = "12";
+
+        stringMinute = Integer.toString(minute);
+        if(minute < 10)
+            stringMinute = "0" + stringMinute;
+        button.setText(String.format(format, hour, stringMinute, pmAm));
+
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+    }
 
     /**
      * Selects the Variable to use from the suggestedVariables list
@@ -507,7 +519,10 @@ public class CustomRemindersCreateActivity extends Activity {
                 valueTextView.getText().toString(),
                 isEditing ? mReminder.unitName : selectedVariable.getDefaultAbbreviatedUnitName(),
                 getFrequencyFromItemPosition(frequencySpinner.getSelectedItemPosition()),
-                true
+                true,
+                mCalendarInterval1.getTimeInMillis(),
+                mCalendarInterval2.getTimeInMillis(),
+                mCalendarInterval3.getTimeInMillis()
         );
         CustomRemindersHelper.putReminder(this, newReminder);
         CustomRemindersHelper.setAlarm(this, newReminder.id);
@@ -537,6 +552,37 @@ public class CustomRemindersCreateActivity extends Activity {
             return CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS;
         }
         return CustomRemindersHelper.FrequencyType.NEVER;
+    }
+
+    private int getListIndexFromFrequencyIndex(int frequencyIndex){
+        String[] items = getResources().getStringArray(R.array.reminders_interval_entries);
+        CustomRemindersHelper.FrequencyType type = CustomRemindersHelper.FrequencyType.values()[frequencyIndex];
+        for(int i=0; i<items.length; i++){
+            String string = items[i];
+            if(type.equals(CustomRemindersHelper.FrequencyType.DAILY) &&
+                    (string.equals(getString(R.string.interval_once_day)) ||
+                    string.equals(getString(R.string.interval_daily)))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.TWICE_A_DAY) &&
+                    (string.equals(getString(R.string.interval_twice_day)) ||
+                    string.equals(getString(R.string.interval_twicedaily)))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY) &&
+                    string.equals(getString(R.string.interval_three_times_day))) {
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.HOURLY) &&
+                    string.equals(getString(R.string.interval_hourly))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS) &&
+                    string.equals(getString(R.string.interval_everythreehours))){
+                return i;
+            }
+        }
+        return items.length - 1;
     }
 
     /**
@@ -641,25 +687,5 @@ public class CustomRemindersCreateActivity extends Activity {
 
     private SpiceManager getSpiceManager(){
         return mSpiceManager;
-    }
-
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
-        }
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
-        }
     }
 }

@@ -14,6 +14,7 @@ import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class CustomRemindersHelper {
     private static final String KEY_FREQUENCY = "frequency_index";
     private static final String KEY_UPDATE = "need_update";
     private static final String KEY_REMINDERS_LIST = "reminders_list";
+    private static final String KEY_TIME1 = "time1";
+    private static final String KEY_TIME2 = "time2";
+    private static final String KEY_TIME3 = "time3";
     /**
      * Extra used to broadcast the alarm when triggered
      */
@@ -198,6 +202,12 @@ public class CustomRemindersHelper {
         mEdit1.putInt("reminder_" + reminder.id + KEY_FREQUENCY, reminder.frequencyIndex);
         mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
         mEdit1.putBoolean("reminder_" + reminder.id + KEY_UPDATE, reminder.needUpdate);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME1);
+        mEdit1.putLong("reminder_" + reminder.id + KEY_TIME1, reminder.time1);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME2);
+        mEdit1.putLong("reminder_" + reminder.id + KEY_TIME2, reminder.time2);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME3);
+        mEdit1.putLong("reminder_" + reminder.id + KEY_TIME3, reminder.time3);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -221,6 +231,9 @@ public class CustomRemindersHelper {
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
         mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME1);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME2);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME3);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -262,7 +275,10 @@ public class CustomRemindersHelper {
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
                 FrequencyType.values()[preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0)],
-                preferences.getBoolean("reminder_" + id + KEY_UPDATE, true)
+                preferences.getBoolean("reminder_" + id + KEY_UPDATE, true),
+                preferences.getLong("reminder_" + id + KEY_TIME1, 0),
+                preferences.getLong("reminder_" + id + KEY_TIME2, 0),
+                preferences.getLong("reminder_" + id + KEY_TIME3, 0)
         );
     }
 
@@ -377,6 +393,9 @@ public class CustomRemindersHelper {
          */
         public final int frequencyIndex;
         public final boolean needUpdate;
+        public final long time1;
+        public final long time2;
+        public final long time3;
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
                         String value, String unitName, FrequencyType frequency){
@@ -384,7 +403,13 @@ public class CustomRemindersHelper {
         }
 
         public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, FrequencyType frequency, boolean needUpdate){
+                        String value, String unitName, FrequencyType frequency, boolean needUpdate) {
+            this(id, remoteId, name, variableCategory, combinationOperation, value, unitName, frequency,
+                    needUpdate, new Date().getTime(), new Date().getTime(), new Date().getTime());
+        }
+        public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
+                String value, String unitName, FrequencyType frequency, boolean needUpdate,
+                        final long time1, final long time2, final long time3){
             this.id = id;
             this.remoteId = remoteId;
             this.name = name;
@@ -394,6 +419,9 @@ public class CustomRemindersHelper {
             this.unitName = unitName;
             this.frequencyIndex = frequency.ordinal();
             this.needUpdate = needUpdate;
+            this.time1 = time1;
+            this.time2 = time2;
+            this.time3 = time3;
         }
 
         public String getFrequencyString(){
