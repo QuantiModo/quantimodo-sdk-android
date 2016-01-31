@@ -5,26 +5,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import io.swagger.client.ApiException;
-import io.swagger.client.api.RemindersApi;
-import io.swagger.client.model.TrackingReminderPending;
-import io.swagger.client.model.TrackingReminderPendingSkip;
-import io.swagger.client.model.TrackingReminderPendingSnooze;
-import io.swagger.client.model.TrackingReminderPendingTrack;
 
 /**
  * This class saves the custom reminders as preferences
@@ -405,7 +395,7 @@ public class CustomRemindersHelper {
         public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
                         String value, String unitName, FrequencyType frequency, boolean needUpdate) {
             this(id, remoteId, name, variableCategory, combinationOperation, value, unitName, frequency,
-                    needUpdate, new Date().getTime(), new Date().getTime(), new Date().getTime());
+                    needUpdate, 0, 0, 0);
         }
         public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
                 String value, String unitName, FrequencyType frequency, boolean needUpdate,

@@ -134,13 +134,13 @@ public class CustomRemindersCreateActivity extends Activity {
             mCalendarInterval3.setTimeInMillis(mReminder.time3);
             int hour = mCalendarInterval1.get(Calendar.HOUR_OF_DAY);
             int minute = mCalendarInterval1.get(Calendar.MINUTE);
-            setTime(mCalendarInterval1, mInterval1, hour, minute);
+            setTime(mInterval1, hour, minute);
             hour = mCalendarInterval2.get(Calendar.HOUR_OF_DAY);
             minute = mCalendarInterval2.get(Calendar.MINUTE);
-            setTime(mCalendarInterval2, mInterval2, hour, minute);
+            setTime(mInterval2, hour, minute);
             hour = mCalendarInterval3.get(Calendar.HOUR_OF_DAY);
             minute = mCalendarInterval3.get(Calendar.MINUTE);
-            setTime(mCalendarInterval3, mInterval3, hour, minute);
+            setTime(mInterval3, hour, minute);
 
         } else if(getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_create);
@@ -217,12 +217,9 @@ public class CustomRemindersCreateActivity extends Activity {
 
     private void initIntervalsViews(){
         //loading default timings
-        mCalendarInterval1.set(Calendar.HOUR_OF_DAY, 8);
-        mCalendarInterval1.set(Calendar.MINUTE, 0);
-        mCalendarInterval2.set(Calendar.HOUR_OF_DAY, 16);
-        mCalendarInterval2.set(Calendar.MINUTE, 0);
-        mCalendarInterval3.set(Calendar.HOUR_OF_DAY, 24);
-        mCalendarInterval3.set(Calendar.MINUTE, 0);
+        mCalendarInterval1.set(0,0,0,0,0,0);
+        mCalendarInterval2.set(0,0,0,0,0,0);
+        mCalendarInterval3.set(0,0,0,0,0,0);
 
         mInterval1 = (Button) findViewById(R.id.reminders_create_interval_1);
         mInterval2 = (Button) findViewById(R.id.reminders_create_interval_2);
@@ -267,25 +264,35 @@ public class CustomRemindersCreateActivity extends Activity {
         @Override
         public void onClick(final View view) {
             Calendar calendarTemp = Calendar.getInstance();
+            calendarTemp.set(Calendar.MINUTE, 0);
             if(view == mInterval1){
-                calendarTemp = mCalendarInterval1;
+                if(mCalendarInterval1.getTimeInMillis() == 0)
+                    calendarTemp.set(Calendar.HOUR_OF_DAY, 8);
+                else
+                    calendarTemp = mCalendarInterval1;
             } else if(view == mInterval2){
-                calendarTemp = mCalendarInterval2;
+                if(mCalendarInterval2.getTimeInMillis() == 0)
+                    calendarTemp.set(Calendar.HOUR_OF_DAY, 16);
+                else
+                    calendarTemp = mCalendarInterval2;
             } else if(view == mInterval3){
-                calendarTemp = mCalendarInterval3;
+                if(mCalendarInterval3.getTimeInMillis() == 0)
+                    calendarTemp.set(Calendar.HOUR_OF_DAY, 24);
+                else
+                    calendarTemp = mCalendarInterval3;
             }
-            final Calendar calendar = calendarTemp;
+
             new TimePickerDialog(
                     CustomRemindersCreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker pickerView, int hourOfDay, int minute) {
-                    setTime(calendar, (Button)view, hourOfDay, minute);
+                    setTime((Button)view, hourOfDay, minute);
                 }
-            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
+            }, calendarTemp.get(Calendar.HOUR_OF_DAY), calendarTemp.get(Calendar.MINUTE), false).show();
         }
     };
 
-    private void setTime(Calendar calendar, Button button, int hourOfDay, int minute){
+    private void setTime(Button button, int hourOfDay, int minute){
         String format = "%s:%s %s";
         String pmAm;
         String hour;
@@ -305,8 +312,12 @@ public class CustomRemindersCreateActivity extends Activity {
             stringMinute = "0" + stringMinute;
         button.setText(String.format(format, hour, stringMinute, pmAm));
 
-        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        calendar.set(Calendar.MINUTE, minute);
+        if(button == mInterval1)
+            mCalendarInterval1.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        else if(button == mInterval2)
+            mCalendarInterval2.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        else if(button == mInterval3)
+            mCalendarInterval3.set(Calendar.HOUR_OF_DAY, hourOfDay);
     }
 
     /**
