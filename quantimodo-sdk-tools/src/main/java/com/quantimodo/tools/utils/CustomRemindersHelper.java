@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +40,7 @@ public class CustomRemindersHelper {
      * Extra used to broadcast the alarm when triggered
      */
     public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
+    public static final String EXTRA_SPECIFIC_ID = "extra_specific_id";
     /**
      * Extra used to send the variable name to the Activity that will open a
      * view to edit it
@@ -152,6 +155,34 @@ public class CustomRemindersHelper {
         if(reminder == null) return;
         FrequencyType frequencyType = FrequencyType.values()[reminder.frequencyIndex];
         setAlarm(context, reminderId, frequencyType);
+    }
+
+    public static void setSpecificAlarm(Context context, String reminderId, int alarmIndex, int hourOfDay,
+                                        int minutes){
+        int specificId = Integer.parseInt(reminderId) + alarmIndex;
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, CustomRemindersReceiver.class);
+        intent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_ALARM, true);
+        intent.putExtra(EXTRA_REMINDER_ID, reminderId);
+        intent.putExtra(EXTRA_SPECIFIC_ID, specificId);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, specificId,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minutes);
+        long currentTime = System.currentTimeMillis();
+        if(calendar.getTimeInMillis() - currentTime < 0){
+            //the reminder was set for tomorrow
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        Log.d("RemindersHelper", new Date(calendar.getTimeInMillis()).toString());
+        alarmMgr.setRepeating(AlarmManager.RTC,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                alarmIntent);
     }
 
     /**
