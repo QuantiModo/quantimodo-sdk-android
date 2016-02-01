@@ -236,18 +236,16 @@ public class CustomRemindersCreateActivity extends Activity {
         frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView)view).setTextColor(Color.BLACK);
+                ((TextView) view).setTextColor(Color.BLACK);
                 mInterval1.setVisibility(View.GONE);
                 mInterval2.setVisibility(View.GONE);
                 mInterval3.setVisibility(View.GONE);
-                if(position == 0){
+                if (position == 0) {
                     mInterval1.setVisibility(View.VISIBLE);
-                }
-                else if(position == 1){
+                } else if (position == 1) {
                     mInterval1.setVisibility(View.VISIBLE);
                     mInterval2.setVisibility(View.VISIBLE);
-                }
-                else if(position == 2){
+                } else if (position == 2) {
                     mInterval1.setVisibility(View.VISIBLE);
                     mInterval2.setVisibility(View.VISIBLE);
                     mInterval3.setVisibility(View.VISIBLE);
@@ -312,12 +310,18 @@ public class CustomRemindersCreateActivity extends Activity {
             stringMinute = "0" + stringMinute;
         button.setText(String.format(format, hour, stringMinute, pmAm));
 
-        if(button == mInterval1)
+        if(button == mInterval1) {
             mCalendarInterval1.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        else if(button == mInterval2)
+            mCalendarInterval1.set(Calendar.MINUTE, minute);
+        }
+        else if(button == mInterval2) {
             mCalendarInterval2.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        else if(button == mInterval3)
+            mCalendarInterval2.set(Calendar.MINUTE, minute);
+        }
+        else if(button == mInterval3) {
             mCalendarInterval3.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            mCalendarInterval3.set(Calendar.MINUTE, minute);
+        }
     }
 
     /**
@@ -511,7 +515,8 @@ public class CustomRemindersCreateActivity extends Activity {
             valueTextView.setError(getString(R.string.custom_reminders_error_value));
             error = true;
         }
-        if(frequencySpinner.getSelectedItemPosition() == 0){
+        int never = getListIndexFromFrequencyIndex(CustomRemindersHelper.FrequencyType.NEVER.ordinal());
+        if(frequencySpinner.getSelectedItemPosition() == never){
             TextView spinnerText = (TextView) frequencySpinner.getSelectedView();
             spinnerText.setError("");
             spinnerText.setTextColor(Color.RED);
@@ -536,7 +541,30 @@ public class CustomRemindersCreateActivity extends Activity {
                 mCalendarInterval3.getTimeInMillis()
         );
         CustomRemindersHelper.putReminder(this, newReminder);
-        CustomRemindersHelper.setAlarm(this, newReminder.id);
+        if(newReminder.frequencyIndex == CustomRemindersHelper.FrequencyType.DAILY.ordinal()){
+            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 0,
+                    mCalendarInterval1.get(Calendar.HOUR_OF_DAY), mCalendarInterval1.get(Calendar.MINUTE));
+        }
+        else if(newReminder.frequencyIndex == CustomRemindersHelper.FrequencyType.TWICE_A_DAY.ordinal()){
+            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 0,
+                    mCalendarInterval1.get(Calendar.HOUR_OF_DAY), mCalendarInterval1.get(Calendar.MINUTE));
+            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 1,
+                    mCalendarInterval2.get(Calendar.HOUR_OF_DAY), mCalendarInterval2.get(Calendar.MINUTE));
+        }
+        else if(newReminder.frequencyIndex == CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY.ordinal()){
+            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 0,
+                    mCalendarInterval1.get(Calendar.HOUR_OF_DAY), mCalendarInterval1.get(Calendar.MINUTE));
+            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 1,
+                    mCalendarInterval2.get(Calendar.HOUR_OF_DAY), mCalendarInterval2.get(Calendar.MINUTE));
+            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 2,
+                    mCalendarInterval3.get(Calendar.HOUR_OF_DAY), mCalendarInterval3.get(Calendar.MINUTE));
+        }
+        else if(newReminder.frequencyIndex != CustomRemindersHelper.FrequencyType.NEVER.ordinal()) {
+            CustomRemindersHelper.setAlarm(this, newReminder.id);
+        }
+        else{
+            CustomRemindersHelper.cancelAlarm(this, newReminder.id);
+        }
         SyncHelper.invokeSync(this);
         finish();
         Toast.makeText(getApplicationContext(),R.string.custom_reminder_save_message,
@@ -592,8 +620,12 @@ public class CustomRemindersCreateActivity extends Activity {
                     string.equals(getString(R.string.interval_everythreehours))){
                 return i;
             }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.NEVER) &&
+                    string.equals(getString(R.string.interval_never))){
+                return i;
+            }
         }
-        return items.length - 1;
+        return -1;
     }
 
     /**
