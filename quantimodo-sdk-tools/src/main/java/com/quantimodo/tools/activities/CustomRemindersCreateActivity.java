@@ -541,30 +541,7 @@ public class CustomRemindersCreateActivity extends Activity {
                 mCalendarInterval3.getTimeInMillis()
         );
         CustomRemindersHelper.putReminder(this, newReminder);
-        if(newReminder.frequencyIndex == CustomRemindersHelper.FrequencyType.DAILY.ordinal()){
-            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 0,
-                    mCalendarInterval1.get(Calendar.HOUR_OF_DAY), mCalendarInterval1.get(Calendar.MINUTE));
-        }
-        else if(newReminder.frequencyIndex == CustomRemindersHelper.FrequencyType.TWICE_A_DAY.ordinal()){
-            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 0,
-                    mCalendarInterval1.get(Calendar.HOUR_OF_DAY), mCalendarInterval1.get(Calendar.MINUTE));
-            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 1,
-                    mCalendarInterval2.get(Calendar.HOUR_OF_DAY), mCalendarInterval2.get(Calendar.MINUTE));
-        }
-        else if(newReminder.frequencyIndex == CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY.ordinal()){
-            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 0,
-                    mCalendarInterval1.get(Calendar.HOUR_OF_DAY), mCalendarInterval1.get(Calendar.MINUTE));
-            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 1,
-                    mCalendarInterval2.get(Calendar.HOUR_OF_DAY), mCalendarInterval2.get(Calendar.MINUTE));
-            CustomRemindersHelper.setSpecificAlarm(this, newReminder.id, 2,
-                    mCalendarInterval3.get(Calendar.HOUR_OF_DAY), mCalendarInterval3.get(Calendar.MINUTE));
-        }
-        else if(newReminder.frequencyIndex != CustomRemindersHelper.FrequencyType.NEVER.ordinal()) {
-            CustomRemindersHelper.setAlarm(this, newReminder.id);
-        }
-        else{
-            CustomRemindersHelper.cancelAlarm(this, newReminder.id);
-        }
+        CustomRemindersHelper.startAlarms(this, newReminder.id);
         SyncHelper.invokeSync(this);
         finish();
         Toast.makeText(getApplicationContext(),R.string.custom_reminder_save_message,

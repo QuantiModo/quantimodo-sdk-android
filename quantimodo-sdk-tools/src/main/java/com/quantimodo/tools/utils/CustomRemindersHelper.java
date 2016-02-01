@@ -238,6 +238,47 @@ public class CustomRemindersHelper {
         mEdit1.apply();
     }
 
+    public static void startAlarms(Context context, String reminderId){
+        Reminder reminder = getReminder(context, reminderId);
+        Calendar calendarInterval1 = Calendar.getInstance();
+        calendarInterval1.setTimeInMillis(reminder.time1);
+        Calendar calendarInterval2 = Calendar.getInstance();
+        calendarInterval2.setTimeInMillis(reminder.time2);
+        Calendar calendarInterval3 = Calendar.getInstance();
+        calendarInterval3.setTimeInMillis(reminder.time3);
+        if(reminder.time1 > 0 && reminder.frequencyIndex == FrequencyType.DAILY.ordinal()){
+            setSpecificAlarm(context, reminder.id, 0,
+                    calendarInterval1.get(Calendar.HOUR_OF_DAY), calendarInterval1.get(Calendar.MINUTE));
+        }
+        else if(reminder.time1 > 0 && reminder.time2 > 0 &&
+                reminder.frequencyIndex == FrequencyType.TWICE_A_DAY.ordinal()){
+            setSpecificAlarm(context, reminder.id, 0,
+                    calendarInterval1.get(Calendar.HOUR_OF_DAY), calendarInterval1.get(Calendar.MINUTE));
+            setSpecificAlarm(context, reminder.id, 1,
+                    calendarInterval2.get(Calendar.HOUR_OF_DAY), calendarInterval2.get(Calendar.MINUTE));
+        }
+        else if(reminder.time1 > 0 && reminder.time2 > 0 && reminder.time3 > 0 &&
+                reminder.frequencyIndex == CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY.ordinal()){
+            setSpecificAlarm(context, reminder.id, 0,
+                    calendarInterval1.get(Calendar.HOUR_OF_DAY), calendarInterval1.get(Calendar.MINUTE));
+            setSpecificAlarm(context, reminder.id, 1,
+                    calendarInterval2.get(Calendar.HOUR_OF_DAY), calendarInterval2.get(Calendar.MINUTE));
+            setSpecificAlarm(context, reminder.id, 2,
+                    calendarInterval3.get(Calendar.HOUR_OF_DAY), calendarInterval3.get(Calendar.MINUTE));
+        }
+        else if(reminder.frequencyIndex != FrequencyType.NEVER.ordinal()) {
+            setAlarm(context, reminder.id);
+        }
+        else{
+            cancelAlarm(context, reminder.id);
+        }
+    }
+
+    /**
+     * Remove the specified reminder and also cancel any started alarm
+     * @param context the current context
+     * @param reminderId the reminder identifier
+     */
     public static void removeReminder(Context context, String reminderId){
         SharedPreferences preferences = getPreferences(context);
         Reminder reminder = getReminder(context, reminderId);
