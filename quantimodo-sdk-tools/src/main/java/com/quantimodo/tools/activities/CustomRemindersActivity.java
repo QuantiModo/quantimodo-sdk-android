@@ -82,7 +82,7 @@ public class CustomRemindersActivity extends ListActivity {
                 map.put(from[0], reminder.name);
                 map.put(from[1], CustomRemindersHelper.removeTrailingZeros(reminder.value) + " " +
                         reminder.unitName + " " +
-                        CustomRemindersHelper.FrequencyType.values()[reminder.frequencyIndex].toString());
+                        reminder.getFrequencyString());
                 fillMaps.add(map);
             }
 

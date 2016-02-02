@@ -15,6 +15,8 @@ import android.widget.RemoteViews;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 
+import java.util.Random;
+
 /**
  * This {@code IntentService} does the app's actual work.
  * {@code SampleAlarmReceiver} (a {@code WakefulBroadcastReceiver}) holds a
@@ -34,8 +36,9 @@ public class RemindersService extends IntentService {
         if(intent.hasExtra(CustomRemindersHelper.EXTRA_REMINDER_ID)){
             String reminderId = intent.getExtras().getString(
                     CustomRemindersHelper.EXTRA_REMINDER_ID);
+            int specificId = intent.getExtras().getInt(CustomRemindersHelper.EXTRA_SPECIFIC_ID);
             CustomRemindersHelper.Reminder reminder = CustomRemindersHelper.getReminder(this, reminderId);
-            sendNotification(reminder);
+            sendNotification(reminder, specificId);
         }
         else
             Log.d(TAG, "onHandleIntent has no extras");
@@ -47,7 +50,7 @@ public class RemindersService extends IntentService {
      * Popup the notification and prepares de action over notifications
      * @param reminder the reminder object to display
      */
-    private void sendNotification(CustomRemindersHelper.Reminder reminder) {
+    private void sendNotification(CustomRemindersHelper.Reminder reminder, int specificId) {
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         String reminderId = reminder.id;
@@ -58,30 +61,31 @@ public class RemindersService extends IntentService {
         Intent popupIntent = new Intent(this, CustomRemindersReceiver.class);
 
 
-        snoozeIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        snoozeIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, specificId);
         snoozeIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         snoozeIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_SNOOZE, true);
-        trackIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        trackIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, specificId);
         trackIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         trackIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_REMINDER, true);
-        editIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        editIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, specificId);
         editIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         editIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_EDIT, true);
-        popupIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, reminderId);
+        popupIntent.putExtra(CustomRemindersReceiver.EXTRA_NOTIFICATION_ID, specificId);
         popupIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         popupIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_POPUP, true);
 
+        Random rnd = new Random();
         PendingIntent trackPendingIntent = PendingIntent.getBroadcast(this,
-                Integer.parseInt(reminderId),
+                rnd.nextInt(1000),
                 trackIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this,
-                Integer.parseInt(reminderId) + 1,
+                rnd.nextInt(10000)-1000,//the subtraction is to avoid repeated numbers
                 snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent editPendingIntent = PendingIntent.getBroadcast(this,
-                Integer.parseInt(reminderId) + 2,
+                rnd.nextInt(100000)-10000,
                 editIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent popupPendingIntent= PendingIntent.getBroadcast(this,
-                Integer.parseInt(reminderId) + 3,
+                rnd.nextInt(1000000)-100000,
                 popupIntent, PendingIntent.FLAG_ONE_SHOT);
 
         String subtitle = String.format(getString(R.string.reminders_notif_track_subtitle),
@@ -102,6 +106,6 @@ public class RemindersService extends IntentService {
                 .build();
 
         notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(Integer.parseInt(reminderId), notification);
+        notificationManager.notify(specificId, notification);
     }
 }

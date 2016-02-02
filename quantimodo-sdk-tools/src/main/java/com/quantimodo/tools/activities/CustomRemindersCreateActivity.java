@@ -3,6 +3,7 @@ package com.quantimodo.tools.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.koushikdutta.ion.Ion;
@@ -41,6 +43,7 @@ import com.quantimodo.tools.utils.CustomRemindersHelper;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -71,6 +74,9 @@ public class CustomRemindersCreateActivity extends Activity {
     private View containerCategories;
     private View buttonsLayout;
     private ProgressDialog mProgress;
+    private Button mInterval1;
+    private Button mInterval2;
+    private Button mInterval3;
 
     private AutoCompleteListAdapter autoCompleteListAdapter;
     private ArrayList<Variable> suggestedVariables = new ArrayList<>();
@@ -79,6 +85,9 @@ public class CustomRemindersCreateActivity extends Activity {
     private int refreshesRunning = 0;
     private boolean isEditing = false;
     private boolean avoidSearch = false;
+    private Calendar mCalendarInterval1 = Calendar.getInstance();
+    private Calendar mCalendarInterval2 = Calendar.getInstance();
+    private Calendar mCalendarInterval3 = Calendar.getInstance();
 
     private String reminderId;
     private CustomRemindersHelper.Reminder mReminder;
@@ -120,6 +129,19 @@ public class CustomRemindersCreateActivity extends Activity {
             spVariableCategory.setEnabled(false);
             removeButton.setText(R.string.custom_reminders_remove);
             valueTextView.requestFocus();
+            mCalendarInterval1.setTimeInMillis(mReminder.time1);
+            mCalendarInterval2.setTimeInMillis(mReminder.time2);
+            mCalendarInterval3.setTimeInMillis(mReminder.time3);
+            int hour = mCalendarInterval1.get(Calendar.HOUR_OF_DAY);
+            int minute = mCalendarInterval1.get(Calendar.MINUTE);
+            setTime(mInterval1, hour, minute);
+            hour = mCalendarInterval2.get(Calendar.HOUR_OF_DAY);
+            minute = mCalendarInterval2.get(Calendar.MINUTE);
+            setTime(mInterval2, hour, minute);
+            hour = mCalendarInterval3.get(Calendar.HOUR_OF_DAY);
+            minute = mCalendarInterval3.get(Calendar.MINUTE);
+            setTime(mInterval3, hour, minute);
+
         } else if(getActionBar() != null)
             getActionBar().setTitle(R.string.custom_reminders_create);
 
@@ -183,30 +205,123 @@ public class CustomRemindersCreateActivity extends Activity {
 
         autoCompleteListAdapter = new AutoCompleteListAdapter(this, suggestedVariables);
         lvVariableSuggestions.setAdapter(autoCompleteListAdapter);
+        initIntervalsViews();
 
+        if(isEditing){
+            frequencySpinner.setSelection(getListIndexFromFrequencyIndex(mReminder.frequencyIndex), false);
+            valueTextView.setText(mReminder.value);
+            unitsText.setText(mReminder.unitName);
+        }
+
+    }
+
+    private void initIntervalsViews(){
+        //loading default timings
+        mCalendarInterval1.set(0,0,0,0,0,0);
+        mCalendarInterval2.set(0,0,0,0,0,0);
+        mCalendarInterval3.set(0,0,0,0,0,0);
+
+        mInterval1 = (Button) findViewById(R.id.reminders_create_interval_1);
+        mInterval2 = (Button) findViewById(R.id.reminders_create_interval_2);
+        mInterval3 = (Button) findViewById(R.id.reminders_create_interval_3);
+        mInterval1.setOnClickListener(onTimesClick);
+        mInterval2.setOnClickListener(onTimesClick);
+        mInterval3.setOnClickListener(onTimesClick);
         frequencySpinner = (Spinner) findViewById(R.id.reminders_create_freq_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.mood_interval_entries, android.R.layout.simple_spinner_item);
+                R.array.reminders_interval_entries, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         frequencySpinner.setAdapter(adapter);
-        frequencySpinner.setSelection(4); //Daily frequency as default
+        frequencySpinner.setSelection(0); //Daily frequency as default
         frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView)view).setTextColor(Color.BLACK);
+                ((TextView) view).setTextColor(Color.BLACK);
+                mInterval1.setVisibility(View.GONE);
+                mInterval2.setVisibility(View.GONE);
+                mInterval3.setVisibility(View.GONE);
+                if (position == 0) {
+                    mInterval1.setVisibility(View.VISIBLE);
+                } else if (position == 1) {
+                    mInterval1.setVisibility(View.VISIBLE);
+                    mInterval2.setVisibility(View.VISIBLE);
+                } else if (position == 2) {
+                    mInterval1.setVisibility(View.VISIBLE);
+                    mInterval2.setVisibility(View.VISIBLE);
+                    mInterval3.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
 
-        if(isEditing){
-            frequencySpinner.setSelection(mReminder.frequencyIndex, false);
-            valueTextView.setText(mReminder.value);
-            unitsText.setText(mReminder.unitName);
+    View.OnClickListener onTimesClick = new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+            Calendar calendarTemp = Calendar.getInstance();
+            calendarTemp.set(Calendar.MINUTE, 0);
+            if(view == mInterval1){
+                if(mCalendarInterval1.getTimeInMillis() == 0)
+                    calendarTemp.set(Calendar.HOUR_OF_DAY, 8);
+                else
+                    calendarTemp = mCalendarInterval1;
+            } else if(view == mInterval2){
+                if(mCalendarInterval2.getTimeInMillis() == 0)
+                    calendarTemp.set(Calendar.HOUR_OF_DAY, 16);
+                else
+                    calendarTemp = mCalendarInterval2;
+            } else if(view == mInterval3){
+                if(mCalendarInterval3.getTimeInMillis() == 0)
+                    calendarTemp.set(Calendar.HOUR_OF_DAY, 24);
+                else
+                    calendarTemp = mCalendarInterval3;
+            }
+
+            new TimePickerDialog(
+                    CustomRemindersCreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker pickerView, int hourOfDay, int minute) {
+                    setTime((Button)view, hourOfDay, minute);
+                }
+            }, calendarTemp.get(Calendar.HOUR_OF_DAY), calendarTemp.get(Calendar.MINUTE), false).show();
         }
+    };
 
+    private void setTime(Button button, int hourOfDay, int minute){
+        String format = "%s:%s %s";
+        String pmAm;
+        String hour;
+        String stringMinute;
+        if(hourOfDay > 11){
+            pmAm = "PM";
+            hour = Integer.toString(hourOfDay - 12);
+        }
+        else{
+            pmAm = "AM";
+            hour = Integer.toString(hourOfDay);
+        }
+        if(hour.equals("0")) hour = "12";
+
+        stringMinute = Integer.toString(minute);
+        if(minute < 10)
+            stringMinute = "0" + stringMinute;
+        button.setText(String.format(format, hour, stringMinute, pmAm));
+
+        if(button == mInterval1) {
+            mCalendarInterval1.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            mCalendarInterval1.set(Calendar.MINUTE, minute);
+        }
+        else if(button == mInterval2) {
+            mCalendarInterval2.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            mCalendarInterval2.set(Calendar.MINUTE, minute);
+        }
+        else if(button == mInterval3) {
+            mCalendarInterval3.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            mCalendarInterval3.set(Calendar.MINUTE, minute);
+        }
     }
 
     /**
@@ -400,7 +515,8 @@ public class CustomRemindersCreateActivity extends Activity {
             valueTextView.setError(getString(R.string.custom_reminders_error_value));
             error = true;
         }
-        if(frequencySpinner.getSelectedItemPosition() == 0){
+        int never = getListIndexFromFrequencyIndex(CustomRemindersHelper.FrequencyType.NEVER.ordinal());
+        if(frequencySpinner.getSelectedItemPosition() == never){
             TextView spinnerText = (TextView) frequencySpinner.getSelectedView();
             spinnerText.setError("");
             spinnerText.setTextColor(Color.RED);
@@ -418,15 +534,75 @@ public class CustomRemindersCreateActivity extends Activity {
                 isEditing ? mReminder.combinationOperation : selectedVariable.getCombinationOperation(),
                 valueTextView.getText().toString(),
                 isEditing ? mReminder.unitName : selectedVariable.getDefaultAbbreviatedUnitName(),
-                frequencySpinner.getSelectedItemPosition(),
-                true
+                getFrequencyFromItemPosition(frequencySpinner.getSelectedItemPosition()),
+                true,
+                mCalendarInterval1.getTimeInMillis(),
+                mCalendarInterval2.getTimeInMillis(),
+                mCalendarInterval3.getTimeInMillis()
         );
         CustomRemindersHelper.putReminder(this, newReminder);
-        CustomRemindersHelper.setAlarm(this, newReminder.id);
+        CustomRemindersHelper.startAlarms(this, newReminder.id);
         SyncHelper.invokeSync(this);
         finish();
         Toast.makeText(getApplicationContext(),R.string.custom_reminder_save_message,
                 Toast.LENGTH_LONG).show();
+    }
+
+    private CustomRemindersHelper.FrequencyType getFrequencyFromItemPosition(int position){
+        String string = getResources().getStringArray(R.array.reminders_interval_entries)[position];
+        if(string.equals(getString(R.string.interval_once_day)) ||
+                string.equals(getString(R.string.interval_daily))){
+            return CustomRemindersHelper.FrequencyType.DAILY;
+        }
+        else if(string.equals(getString(R.string.interval_twice_day)) ||
+                string.equals(getString(R.string.interval_twicedaily))){
+            return CustomRemindersHelper.FrequencyType.TWICE_A_DAY;
+        }
+        else if(string.equals(getString(R.string.interval_three_times_day))) {
+            return CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY;
+        }
+        else if(string.equals(getString(R.string.interval_hourly))){
+            return CustomRemindersHelper.FrequencyType.HOURLY;
+        }
+        else if(string.equals(getString(R.string.interval_everythreehours))){
+            return CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS;
+        }
+        return CustomRemindersHelper.FrequencyType.NEVER;
+    }
+
+    private int getListIndexFromFrequencyIndex(int frequencyIndex){
+        String[] items = getResources().getStringArray(R.array.reminders_interval_entries);
+        CustomRemindersHelper.FrequencyType type = CustomRemindersHelper.FrequencyType.values()[frequencyIndex];
+        for(int i=0; i<items.length; i++){
+            String string = items[i];
+            if(type.equals(CustomRemindersHelper.FrequencyType.DAILY) &&
+                    (string.equals(getString(R.string.interval_once_day)) ||
+                    string.equals(getString(R.string.interval_daily)))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.TWICE_A_DAY) &&
+                    (string.equals(getString(R.string.interval_twice_day)) ||
+                    string.equals(getString(R.string.interval_twicedaily)))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY) &&
+                    string.equals(getString(R.string.interval_three_times_day))) {
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.HOURLY) &&
+                    string.equals(getString(R.string.interval_hourly))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS) &&
+                    string.equals(getString(R.string.interval_everythreehours))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.NEVER) &&
+                    string.equals(getString(R.string.interval_never))){
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

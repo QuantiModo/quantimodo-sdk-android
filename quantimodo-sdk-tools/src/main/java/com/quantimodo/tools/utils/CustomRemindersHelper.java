@@ -13,16 +13,10 @@ import com.quantimodo.tools.R;
 import com.quantimodo.tools.receivers.CustomRemindersReceiver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import io.swagger.client.ApiException;
-import io.swagger.client.api.RemindersApi;
-import io.swagger.client.model.TrackingReminderPending;
-import io.swagger.client.model.TrackingReminderPendingSkip;
-import io.swagger.client.model.TrackingReminderPendingSnooze;
-import io.swagger.client.model.TrackingReminderPendingTrack;
 
 /**
  * This class saves the custom reminders as preferences
@@ -39,10 +33,14 @@ public class CustomRemindersHelper {
     private static final String KEY_FREQUENCY = "frequency_index";
     private static final String KEY_UPDATE = "need_update";
     private static final String KEY_REMINDERS_LIST = "reminders_list";
+    private static final String KEY_TIME1 = "time1";
+    private static final String KEY_TIME2 = "time2";
+    private static final String KEY_TIME3 = "time3";
     /**
      * Extra used to broadcast the alarm when triggered
      */
     public static final String EXTRA_REMINDER_ID = "extra_reminder_id";
+    public static final String EXTRA_SPECIFIC_ID = "extra_specific_id";
     /**
      * Extra used to send the variable name to the Activity that will open a
      * view to edit it
@@ -57,7 +55,8 @@ public class CustomRemindersHelper {
         EVERY_THREE_HOURS,
         TWICE_A_DAY,
         DAILY,
-        SNOOZE;
+        SNOOZE,
+        THREE_TIMES_A_DAY;
 
         @Override
         public String toString() {
@@ -66,8 +65,9 @@ public class CustomRemindersHelper {
                 case HOURLY: return "Hourly";
                 case EVERY_THREE_HOURS: return "Every three hours";
                 case TWICE_A_DAY: return "Twice a day";
-                case DAILY: return "Daily";
+                case DAILY: return "Once a day";
                 case SNOOZE: return "Snooze";
+                case THREE_TIMES_A_DAY: return "Three times a day";
                 default: throw new IllegalArgumentException();
             }
         }
@@ -157,6 +157,34 @@ public class CustomRemindersHelper {
         setAlarm(context, reminderId, frequencyType);
     }
 
+    public static void setSpecificAlarm(Context context, String reminderId, int alarmIndex, int hourOfDay,
+                                        int minutes){
+        int specificId = Integer.parseInt(reminderId) + alarmIndex;
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, CustomRemindersReceiver.class);
+        intent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_ALARM, true);
+        intent.putExtra(EXTRA_REMINDER_ID, reminderId);
+        intent.putExtra(EXTRA_SPECIFIC_ID, specificId);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, specificId,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minutes);
+        long currentTime = System.currentTimeMillis();
+        if(calendar.getTimeInMillis() - currentTime < 0){
+            //the reminder was set for tomorrow
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        Log.d("RemindersHelper", new Date(calendar.getTimeInMillis()).toString());
+        alarmMgr.setRepeating(AlarmManager.RTC,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                alarmIntent);
+    }
+
     /**
      * Cancels an alarm
      * @param reminderId the reminder identifier
@@ -195,6 +223,12 @@ public class CustomRemindersHelper {
         mEdit1.putInt("reminder_" + reminder.id + KEY_FREQUENCY, reminder.frequencyIndex);
         mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
         mEdit1.putBoolean("reminder_" + reminder.id + KEY_UPDATE, reminder.needUpdate);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME1);
+        mEdit1.putLong("reminder_" + reminder.id + KEY_TIME1, reminder.time1);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME2);
+        mEdit1.putLong("reminder_" + reminder.id + KEY_TIME2, reminder.time2);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME3);
+        mEdit1.putLong("reminder_" + reminder.id + KEY_TIME3, reminder.time3);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -204,6 +238,47 @@ public class CustomRemindersHelper {
         mEdit1.apply();
     }
 
+    public static void startAlarms(Context context, String reminderId){
+        Reminder reminder = getReminder(context, reminderId);
+        Calendar calendarInterval1 = Calendar.getInstance();
+        calendarInterval1.setTimeInMillis(reminder.time1);
+        Calendar calendarInterval2 = Calendar.getInstance();
+        calendarInterval2.setTimeInMillis(reminder.time2);
+        Calendar calendarInterval3 = Calendar.getInstance();
+        calendarInterval3.setTimeInMillis(reminder.time3);
+        if(reminder.time1 > 0 && reminder.frequencyIndex == FrequencyType.DAILY.ordinal()){
+            setSpecificAlarm(context, reminder.id, 0,
+                    calendarInterval1.get(Calendar.HOUR_OF_DAY), calendarInterval1.get(Calendar.MINUTE));
+        }
+        else if(reminder.time1 > 0 && reminder.time2 > 0 &&
+                reminder.frequencyIndex == FrequencyType.TWICE_A_DAY.ordinal()){
+            setSpecificAlarm(context, reminder.id, 0,
+                    calendarInterval1.get(Calendar.HOUR_OF_DAY), calendarInterval1.get(Calendar.MINUTE));
+            setSpecificAlarm(context, reminder.id, 1,
+                    calendarInterval2.get(Calendar.HOUR_OF_DAY), calendarInterval2.get(Calendar.MINUTE));
+        }
+        else if(reminder.time1 > 0 && reminder.time2 > 0 && reminder.time3 > 0 &&
+                reminder.frequencyIndex == CustomRemindersHelper.FrequencyType.THREE_TIMES_A_DAY.ordinal()){
+            setSpecificAlarm(context, reminder.id, 0,
+                    calendarInterval1.get(Calendar.HOUR_OF_DAY), calendarInterval1.get(Calendar.MINUTE));
+            setSpecificAlarm(context, reminder.id, 1,
+                    calendarInterval2.get(Calendar.HOUR_OF_DAY), calendarInterval2.get(Calendar.MINUTE));
+            setSpecificAlarm(context, reminder.id, 2,
+                    calendarInterval3.get(Calendar.HOUR_OF_DAY), calendarInterval3.get(Calendar.MINUTE));
+        }
+        else if(reminder.frequencyIndex != FrequencyType.NEVER.ordinal()) {
+            setAlarm(context, reminder.id);
+        }
+        else{
+            cancelAlarm(context, reminder.id);
+        }
+    }
+
+    /**
+     * Remove the specified reminder and also cancel any started alarm
+     * @param context the current context
+     * @param reminderId the reminder identifier
+     */
     public static void removeReminder(Context context, String reminderId){
         SharedPreferences preferences = getPreferences(context);
         Reminder reminder = getReminder(context, reminderId);
@@ -218,6 +293,9 @@ public class CustomRemindersHelper {
         mEdit1.remove("reminder_" + reminder.id + KEY_UNIT_NAME);
         mEdit1.remove("reminder_" + reminder.id + KEY_FREQUENCY);
         mEdit1.remove("reminder_" + reminder.id + KEY_UPDATE);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME1);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME2);
+        mEdit1.remove("reminder_" + reminder.id + KEY_TIME3);
 
         Set<String> remindersSet = new HashSet<>(
                 preferences.getStringSet(KEY_REMINDERS_LIST, new HashSet<String>()));
@@ -258,8 +336,11 @@ public class CustomRemindersHelper {
                 preferences.getString("reminder_" + id + KEY_COMBINATION_OPERATION, ""),
                 preferences.getString("reminder_" + id + KEY_VALUE, ""),
                 preferences.getString("reminder_" + id + KEY_UNIT_NAME, ""),
-                preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0),
-                preferences.getBoolean("reminder_" + id + KEY_UPDATE, true)
+                FrequencyType.values()[preferences.getInt("reminder_" + id + KEY_FREQUENCY, 0)],
+                preferences.getBoolean("reminder_" + id + KEY_UPDATE, true),
+                preferences.getLong("reminder_" + id + KEY_TIME1, 0),
+                preferences.getLong("reminder_" + id + KEY_TIME2, 0),
+                preferences.getLong("reminder_" + id + KEY_TIME3, 0)
         );
     }
 
@@ -369,16 +450,28 @@ public class CustomRemindersHelper {
         public final String combinationOperation;
         public final String value;
         public final String unitName;
+        /**
+         * The FrequencyType corresponding ordinal index
+         */
         public final int frequencyIndex;
         public final boolean needUpdate;
+        public final long time1;
+        public final long time2;
+        public final long time3;
 
         public Reminder(String id, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, int frequency){
+                        String value, String unitName, FrequencyType frequency){
             this(id, -1, name, variableCategory, combinationOperation, value, unitName, frequency, true);
         }
 
         public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
-                        String value, String unitName, int frequency, boolean needUpdate){
+                        String value, String unitName, FrequencyType frequency, boolean needUpdate) {
+            this(id, remoteId, name, variableCategory, combinationOperation, value, unitName, frequency,
+                    needUpdate, 0, 0, 0);
+        }
+        public Reminder(String id, int remoteId, String name, String variableCategory, String combinationOperation,
+                String value, String unitName, FrequencyType frequency, boolean needUpdate,
+                        final long time1, final long time2, final long time3){
             this.id = id;
             this.remoteId = remoteId;
             this.name = name;
@@ -386,8 +479,15 @@ public class CustomRemindersHelper {
             this.combinationOperation = combinationOperation;
             this.value = value;
             this.unitName = unitName;
-            this.frequencyIndex = frequency;
+            this.frequencyIndex = frequency.ordinal();
             this.needUpdate = needUpdate;
+            this.time1 = time1;
+            this.time2 = time2;
+            this.time3 = time3;
+        }
+
+        public String getFrequencyString(){
+            return FrequencyType.values()[this.frequencyIndex].toString();
         }
     }
 }
