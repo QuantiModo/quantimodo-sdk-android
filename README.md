@@ -1,6 +1,8 @@
 QuantiModo-SDK-Android
 ======================
 
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/2602cca77a94422284880f649a43f8c4)](https://www.codacy.com/app/m_3/QuantiModo-SDK-Android)
+
 This is the software development kit for implementing enabling Android Applications to store or access user Quantified Self data in the QuantiModo database.
 
 # Getting Started
