@@ -66,7 +66,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
             startWakefulService(context, service);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_REMINDER)){
-            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
+            cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID, 0));
             try {
                 CustomRemindersHelper.postRemoteTrack(reminder.remoteId, authHelper.getAuthTokenWithRefresh());
             } catch (NoNetworkConnection noNetworkConnection) {
@@ -74,7 +74,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
             }
         }
         else if(intent.hasExtra(EXTRA_REQUEST_SNOOZE)){
-            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
+            cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID, 0));
             CustomRemindersHelper.setAlarm(context, reminder.id, CustomRemindersHelper.FrequencyType.SNOOZE);
             try {
                 CustomRemindersHelper.postRemoteSnooze(reminder.remoteId, authHelper.getAuthTokenWithRefresh());
@@ -83,11 +83,11 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
             }
         }
         else if(intent.hasExtra(EXTRA_REQUEST_EDIT)){
-            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
+            cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID, 0));
             openEditActivity(context, reminder.name);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_POPUP)){
-            cancelNotification(context, Integer.parseInt(extras.getString(EXTRA_NOTIFICATION_ID, "0")));
+            cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID, 0));
             CustomReminderDialog.getInstance().show(context, reminder.id);
         }
     }

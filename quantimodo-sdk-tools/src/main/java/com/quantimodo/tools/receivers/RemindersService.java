@@ -15,6 +15,8 @@ import android.widget.RemoteViews;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
 
+import java.util.Random;
+
 /**
  * This {@code IntentService} does the app's actual work.
  * {@code SampleAlarmReceiver} (a {@code WakefulBroadcastReceiver}) holds a
@@ -72,17 +74,18 @@ public class RemindersService extends IntentService {
         popupIntent.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminderId);
         popupIntent.putExtra(CustomRemindersReceiver.EXTRA_REQUEST_POPUP, true);
 
+        Random rnd = new Random();
         PendingIntent trackPendingIntent = PendingIntent.getBroadcast(this,
-                specificId,
+                rnd.nextInt(1000),
                 trackIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this,
-                specificId + 1,
+                rnd.nextInt(10000)-1000,//the subtraction is to avoid repeated numbers
                 snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent editPendingIntent = PendingIntent.getBroadcast(this,
-                specificId + 2,
+                rnd.nextInt(100000)-10000,
                 editIntent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent popupPendingIntent= PendingIntent.getBroadcast(this,
-                specificId + 3,
+                rnd.nextInt(1000000)-100000,
                 popupIntent, PendingIntent.FLAG_ONE_SHOT);
 
         String subtitle = String.format(getString(R.string.reminders_notif_track_subtitle),
