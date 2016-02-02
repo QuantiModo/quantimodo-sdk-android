@@ -56,7 +56,8 @@ public class CustomRemindersHelper {
         TWICE_A_DAY,
         DAILY,
         SNOOZE,
-        THREE_TIMES_A_DAY;
+        THREE_TIMES_A_DAY,
+        EVERY_THIRTY_MINUTES;
 
         @Override
         public String toString() {
@@ -68,6 +69,7 @@ public class CustomRemindersHelper {
                 case DAILY: return "Once a day";
                 case SNOOZE: return "Snooze";
                 case THREE_TIMES_A_DAY: return "Three times a day";
+                case EVERY_THIRTY_MINUTES: return "Every 30 minutes";
                 default: throw new IllegalArgumentException();
             }
         }
@@ -133,6 +135,12 @@ public class CustomRemindersHelper {
             case DAILY:
                 alarmMgr.setRepeating(AlarmManager.RTC,
                         System.currentTimeMillis() + AlarmManager.INTERVAL_DAY,
+                        AlarmManager.INTERVAL_DAY,
+                        alarmIntent);
+                break;
+            case EVERY_THIRTY_MINUTES:
+                alarmMgr.setRepeating(AlarmManager.RTC,
+                        System.currentTimeMillis() + 2 * AlarmManager.INTERVAL_FIFTEEN_MINUTES,
                         AlarmManager.INTERVAL_DAY,
                         alarmIntent);
                 break;

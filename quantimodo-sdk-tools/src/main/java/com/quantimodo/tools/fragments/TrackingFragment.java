@@ -955,6 +955,9 @@ public class TrackingFragment extends QFragment {
         else if(string.equals(getString(R.string.interval_everythreehours))){
             return CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS;
         }
+        else if(string.equals(getString(R.string.interval_every_30_minutes))){
+            return CustomRemindersHelper.FrequencyType.EVERY_THIRTY_MINUTES;
+        }
         return CustomRemindersHelper.FrequencyType.NEVER;
     }
 

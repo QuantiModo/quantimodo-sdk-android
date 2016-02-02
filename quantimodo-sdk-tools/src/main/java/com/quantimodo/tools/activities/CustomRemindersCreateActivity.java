@@ -567,6 +567,9 @@ public class CustomRemindersCreateActivity extends Activity {
         else if(string.equals(getString(R.string.interval_everythreehours))){
             return CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS;
         }
+        else if(string.equals(getString(R.string.interval_every_30_minutes))){
+            return CustomRemindersHelper.FrequencyType.EVERY_THIRTY_MINUTES;
+        }
         return CustomRemindersHelper.FrequencyType.NEVER;
     }
 
@@ -595,6 +598,10 @@ public class CustomRemindersCreateActivity extends Activity {
             }
             else if(type.equals(CustomRemindersHelper.FrequencyType.EVERY_THREE_HOURS) &&
                     string.equals(getString(R.string.interval_everythreehours))){
+                return i;
+            }
+            else if(type.equals(CustomRemindersHelper.FrequencyType.EVERY_THIRTY_MINUTES) &&
+                    string.equals(getString(R.string.interval_every_30_minutes))){
                 return i;
             }
             else if(type.equals(CustomRemindersHelper.FrequencyType.NEVER) &&
