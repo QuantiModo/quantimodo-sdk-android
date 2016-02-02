@@ -2,6 +2,7 @@ package com.quantimodo.tools.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -17,7 +18,7 @@ import javax.inject.Inject;
 
 public class VariablesWebFragment extends QuantimodoWebFragment {
 
-    public static final String API_CONNECT_URL = "embeddable/?plugin=search-variables&accessToken=xyz";
+    public static final String API_CONNECT_URL = "embeddable/?plugin=search-variables&accessToken=";
 
     @Inject
     AuthHelper mAuthHelper;
@@ -56,9 +57,8 @@ public class VariablesWebFragment extends QuantimodoWebFragment {
             @Override
             protected void onPostExecute(String s) {
                 if (s != null){
-                    Map<String,String> headers = new HashMap<>();
-                    headers.put("Authorization","Bearer " + s);
-                    wv.loadUrl(getToolsPrefs().getApiUrl() + API_CONNECT_URL,headers);
+                    String url = getToolsPrefs().getApiUrl() + API_CONNECT_URL + s;
+                    wv.loadUrl(url);
                 } else {
                     Toast.makeText(getActivity(), "Not authenticated", Toast.LENGTH_SHORT).show();
                 }
