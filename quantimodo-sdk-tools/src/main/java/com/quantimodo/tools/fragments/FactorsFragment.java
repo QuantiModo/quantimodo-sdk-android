@@ -1,18 +1,10 @@
 package com.quantimodo.tools.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amazon.device.associates.AssociatesAPI;
 import com.amazon.device.associates.NotInitializedException;
@@ -26,14 +18,16 @@ import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.dialogs.CorrelationConfirmDialog;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
-import com.quantimodo.tools.sdk.request.GetUnitsRequest;
 import com.quantimodo.tools.sdk.request.SearchCustomCorrelationsRequest;
 import com.quantimodo.tools.sdk.request.VoteCorrelationRequest;
 import com.quantimodo.tools.sdk.request.SearchCorrelationsRequest;
-import com.quantimodo.tools.utils.ViewUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 
 import java.util.ArrayList;
+
+import io.swagger.client.ApiException;
+import io.swagger.client.api.CorrelationsApi;
+import io.swagger.client.model.VoteDelete;
 
 /**
  * Used to show positive/negative factors
@@ -41,7 +35,7 @@ import java.util.ArrayList;
  * Fetch both types of factors same time, so same instance can be used to show positive and negative factors,
  * and can be switched between types by {@link #setType(int) setType(int)} method.
  */
-public class FactorsFragment extends QListFragment implements CorrelationAdapter.CorrelationButtonOnClick, CorrelationConfirmDialog.DialogListener {
+public class FactorsFragment extends QListFragment implements CorrelationAdapter.CorrelationEventsListener, CorrelationConfirmDialog.DialogListener {
 
 
     private TextView mHeader;
@@ -200,6 +194,18 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
         });
     }
 
+
+    public void deleteVote(final Correlation correlation){
+        CorrelationsApi correlationsApi = new CorrelationsApi();
+        VoteDelete body = new VoteDelete();
+        body.setCause(correlation.getCause());
+        body.setEffect(correlation.getEffect());
+        try {
+            correlationsApi.v1VotesDeletePost(body);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onConfirm(Correlation correlation, @CorrelationAdapter.CorrelationState int state) {
