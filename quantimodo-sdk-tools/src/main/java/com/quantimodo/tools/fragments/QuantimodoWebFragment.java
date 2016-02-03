@@ -27,6 +27,10 @@ public class QuantimodoWebFragment extends Fragment {
     public static final String URL_TRACK_EXERCISE = "track-exercise";
     public static final String URL_TRACK_SLEEP = "track-sleep";
     public static final String URL_TRACK_VITALS = "track-vital-signs";
+    public static final String URL_VARIABLES = "embeddable/?plugin=search-variables&accessToken=";
+    public static final String URL_COMMON_PREDICTORS = "embeddable/?plugin=search-relationships&commonOrUser=common&accessToken=";
+    public static final String URL_YOUR_PREDICTORS = "embeddable/?plugin=search-relationships&commonOrUser=user&accessToken=";
+
     /**
      * Argument field names.
      */

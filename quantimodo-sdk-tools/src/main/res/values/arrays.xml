@@ -24,6 +24,7 @@
         <item>@string/interval_three_times_day</item>
         <item>@string/interval_hourly</item>
         <item>@string/interval_everythreehours</item>
+        <item>@string/interval_every_30_minutes</item>
         <item>@string/interval_never</item>
     </string-array>
 </resources>
