@@ -55,22 +55,12 @@ public class CorrelationConfirmDialog extends DialogFragment{
         String variable = correlation.getEffect();
 
         int format,positiveId;
-        if (type == CorrelationAdapter.TYPE_NEGATIVE){
-            if (state == CorrelationAdapter.STATE_DOWN){
-                format = R.string.correlation_dialog_negative_down;
-                positiveId = R.string.correlation_dialog_button_positive_disagree;
-            } else {
-                format = R.string.correlation_dialog_negative_up;
-                positiveId = R.string.correlation_dialog_button_positive_agree;
-            }
+        if (state == CorrelationAdapter.STATE_DOWN){
+            format = R.string.correlation_dialog_down;
+            positiveId = R.string.correlation_dialog_button_positive_disagree;
         } else {
-            if (state == CorrelationAdapter.STATE_UP){
-                format = R.string.correlation_dialog_positive_down;
-                positiveId = R.string.correlation_dialog_button_positive_agree;
-            } else {
-                format = R.string.correlation_dialog_positive_up;
-                positiveId = R.string.correlation_dialog_button_positive_disagree;
-            }
+            format = R.string.correlation_dialog_up;
+            positiveId = R.string.correlation_dialog_button_positive_agree;
         }
 
         String msg = String.format(getString(format), factor, variable);
