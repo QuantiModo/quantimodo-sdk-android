@@ -3,8 +3,11 @@ package com.quantimodo.tools.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazon.device.associates.AssociatesAPI;
 import com.amazon.device.associates.NotInitializedException;
@@ -13,17 +16,23 @@ import com.quantimodo.android.sdk.SdkDefs;
 import com.quantimodo.android.sdk.model.Correlation;
 import com.quantimodo.android.sdk.model.CorrelationPost;
 import com.quantimodo.android.sdk.model.Unit;
+import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.dialogs.CorrelationConfirmDialog;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
+import com.quantimodo.tools.sdk.request.NoNetworkConnection;
 import com.quantimodo.tools.sdk.request.SearchCustomCorrelationsRequest;
 import com.quantimodo.tools.sdk.request.VoteCorrelationRequest;
 import com.quantimodo.tools.sdk.request.SearchCorrelationsRequest;
+import com.quantimodo.tools.utils.QtoolsUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import io.swagger.client.ApiException;
 import io.swagger.client.api.CorrelationsApi;
@@ -36,7 +45,8 @@ import io.swagger.client.model.VoteDelete;
  * and can be switched between types by {@link #setType(int) setType(int)} method.
  */
 public class FactorsFragment extends QListFragment implements CorrelationAdapter.CorrelationEventsListener, CorrelationConfirmDialog.DialogListener {
-
+    @Inject
+    AuthHelper mAuthHelper;
 
     private TextView mHeader;
     private int mType;
@@ -69,6 +79,7 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
         args.putBoolean(ARG_PUBLIC, predictorType == CorrelationAdapter.PREDICTOR_COMMON);
         factorsFragment.setArguments(args);
 
+        QTools.getInstance().inject(factorsFragment);
         return factorsFragment;
     }
 
@@ -196,15 +207,27 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
 
 
     public void deleteVote(final Correlation correlation){
-        CorrelationsApi correlationsApi = new CorrelationsApi();
-        VoteDelete body = new VoteDelete();
-        body.setCause(correlation.getCause());
-        body.setEffect(correlation.getEffect());
-        try {
-            correlationsApi.v1VotesDeletePost(body);
-        } catch (ApiException e) {
-            e.printStackTrace();
+        if(!QtoolsUtils.hasInternetConnection(getActivity())){
+            Toast.makeText(getActivity(), R.string.error_no_connection, Toast.LENGTH_LONG).show();
+            return;
         }
+
+//        new Handler().post(new Runnable() {
+//            @Override
+//            public void run() {
+                try {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                    CorrelationsApi correlationsApi = new CorrelationsApi();
+                    VoteDelete body = new VoteDelete();
+                    body.setCause(correlation.getCause());
+                    body.setEffect(correlation.getEffect());
+                    correlationsApi.v1VotesDeletePost(body, mAuthHelper.getAuthTokenWithRefresh());
+                } catch (ApiException | NoNetworkConnection e) {
+                    e.printStackTrace();
+                }
+//            }
+//        });
     }
 
     @Override

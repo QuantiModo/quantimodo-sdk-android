@@ -825,7 +825,7 @@ public class CorrelationsApi {
    * @param body The cause and effect variable names for the predictor vote to be deleted.
    * @return CommonResponse
    */
-  public CommonResponse  v1VotesDeletePost (VoteDelete body) throws ApiException {
+  public CommonResponse  v1VotesDeletePost (VoteDelete body, String accessToken) throws ApiException {
     Object postBody = body;
     
     // verify the required parameter 'body' is set
@@ -839,6 +839,7 @@ public class CorrelationsApi {
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "access_token", accessToken));
     // header params
     Map<String, String> headerParams = new HashMap<String, String>();
     // form params
