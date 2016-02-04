@@ -8,6 +8,7 @@ package com.quantimodo.tools;
 public class QTools {
 
     private static QApplication mInstance;
+    private static int mAppIconResId;
 
     /**
      * @param instance Instance of QApplicaiton
@@ -19,5 +20,21 @@ public class QTools {
 
     public static QApplication getInstance(){
         return mInstance;
+    }
+
+    /**
+     * Sets the action icon to use for notifications
+     * @param iconResId the app action icon resource id
+     */
+    public static void setAppActionIcon(int iconResId){
+        mAppIconResId = iconResId;
+    }
+
+    /**
+     * Gets the action icon to use for custom notifications
+     * @return the app action icon resource id
+     */
+    public static int getAppIconResId(){
+        return mAppIconResId;
     }
 }
