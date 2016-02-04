@@ -212,7 +212,10 @@ Then you need to create AuthHelper component:
 ```
 mAuthHelper = new AuthHelper(applicationContext,prefs);
 ```
-
+Next you have to set an action application icon, used to customize several notifications implemented on Qtools:
+```
+QTools.setAppActionIcon(R.drawable.ic_action_appicon);
+```
 Refer to [test sources](https://github.com/QuantiModo/QuantiModo-SDK-Android/blob/master/quantimodo-sdk-tools/src/androidTest/java/com/quantimodo/tools/testhelpers/) to see how to configure the application.
 
 #### Useful QTools Components
