@@ -12,8 +12,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.utils.CustomRemindersHelper;
+import com.quantimodo.tools.utils.QtoolsUtils;
 
 import java.util.Random;
 
@@ -90,10 +92,11 @@ public class RemindersService extends IntentService {
 
         String subtitle = String.format(getString(R.string.reminders_notif_track_subtitle),
                 CustomRemindersHelper.removeTrailingZeros(reminder.value), reminder.unitName);
+        int icon = QTools.getAppIconResId() == 0 ? R.drawable.ic_alarm_on_white_24dp : QTools.getAppIconResId();
         Notification notification = new NotificationCompat.Builder(this)
                 .setContentTitle(reminder.name)
                 .setContentText(subtitle)
-                .setSmallIcon(R.drawable.ic_alarm_on_white_24dp)
+                .setSmallIcon(icon)
                 .setAutoCancel(true)
                 .setContentIntent(popupPendingIntent)
                 .addAction(new NotificationCompat.Action(0,
