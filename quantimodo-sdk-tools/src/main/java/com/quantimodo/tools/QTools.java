@@ -8,7 +8,7 @@ package com.quantimodo.tools;
 public class QTools {
 
     private static QApplication mInstance;
-    private static int mAppIconResId;
+    private static int mAppIconResId = 0;
 
     /**
      * @param instance Instance of QApplicaiton
