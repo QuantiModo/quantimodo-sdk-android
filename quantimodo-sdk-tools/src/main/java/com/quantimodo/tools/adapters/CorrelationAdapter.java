@@ -10,13 +10,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.quantimodo.android.sdk.model.Correlation;
+import com.quantimodo.android.sdk.model.CorrelationPost;
 import com.quantimodo.tools.R;
+import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
+import com.quantimodo.tools.sdk.request.VoteCorrelationRequest;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Adapter class for positive/negative factor/correlations
@@ -24,7 +25,7 @@ import java.util.Comparator;
  * They would be sorted using weight of each correlation ( which basically is correlationCoefficient * userVote )
  * Can be configured with resources:
  * To hide shopping cart, add bool value <b>show_shopping_card</b>=false
- * Target activity/fragment should implement button listener check {@link com.quantimodo.tools.adapters.CorrelationAdapter.CorrelationButtonOnClick CorrelationButtonOnClick} interface
+ * Target activity/fragment should implement button listener check {@link CorrelationEventsListener CorrelationButtonOnClick} interface
  */
 public class CorrelationAdapter extends BaseAdapter {
 
@@ -56,7 +57,7 @@ public class CorrelationAdapter extends BaseAdapter {
     /**
      * Should be implemented by target activity/fragment
      */
-    public interface CorrelationButtonOnClick {
+    public interface CorrelationEventsListener {
         /**
          * Would be called when user click on one of buttons (thumbs up,thumbs down, shopping cart)
          * @param view view object ofr button
@@ -65,6 +66,12 @@ public class CorrelationAdapter extends BaseAdapter {
          * @param item correlation item, on which button clicked
          */
         void onClick(View view, @CorrelationButton int buttonType, int position, Correlation item);
+
+        /**
+         * Deletes a previous vote
+         * @param item
+         */
+        void deleteVote(Correlation item);
     }
 
     public static final int TYPE_POSITIVE = 0;
@@ -74,8 +81,9 @@ public class CorrelationAdapter extends BaseAdapter {
     public static final int PREDICTOR_COMMON = 3;
     public static final int PREDICTOR_PRIVATE = 4;
 
-    public static final int STATE_UP = 1 << 0;
-    public static final int STATE_DOWN = 1 << 1;
+    public static final int STATE_UP = 0;
+    public static final int STATE_DOWN = 1;
+    public static final int STATE_CANCEL = 2;
 
     private static final int DIFF = Integer.MAX_VALUE / 2;
 
@@ -85,7 +93,7 @@ public class CorrelationAdapter extends BaseAdapter {
     private ArrayList<Correlation> mNegativeItems = new ArrayList<>();
     private ArrayList<Correlation> mCurrentItems;
 
-    private CorrelationButtonOnClick mButtonListener;
+    private CorrelationEventsListener mButtonListener;
     private int mType = TYPE_POSITIVE;
 
     private boolean mShowShoppingCart;
@@ -173,11 +181,11 @@ public class CorrelationAdapter extends BaseAdapter {
     }
 
 
-    public CorrelationButtonOnClick getButtonListener() {
+    public CorrelationEventsListener getButtonListener() {
         return mButtonListener;
     }
 
-    public void setButtonListener(CorrelationButtonOnClick mButtonListener) {
+    public void setButtonListener(CorrelationEventsListener mButtonListener) {
         this.mButtonListener = mButtonListener;
     }
 
@@ -299,6 +307,11 @@ public class CorrelationAdapter extends BaseAdapter {
             if (!checkFlag(correlation.getUserVote(), STATE_UP)) {
                 notifyButtonListener(v, BUTTON_THUMBS_UP, vh.mItemPosition, correlation);
             }
+            else{
+                correlation.setUserVote(null);
+                notifyDataSetChanged();
+                mButtonListener.deleteVote(correlation);
+            }
         }
     };
 
@@ -309,6 +322,11 @@ public class CorrelationAdapter extends BaseAdapter {
             Correlation correlation = mCurrentItems.get(vh.mItemPosition);
             if (!checkFlag(correlation.getUserVote(), STATE_DOWN)) {
                 notifyButtonListener(v, BUTTON_THUMBS_DOWN, vh.mItemPosition, correlation);
+            }
+            else{
+                correlation.setUserVote(null);
+                notifyDataSetChanged();
+                mButtonListener.deleteVote(correlation);
             }
         }
     };

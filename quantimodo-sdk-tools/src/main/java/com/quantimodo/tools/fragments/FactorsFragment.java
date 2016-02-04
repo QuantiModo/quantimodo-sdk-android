@@ -1,16 +1,11 @@
 package com.quantimodo.tools.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
-import android.view.LayoutInflater;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,19 +16,27 @@ import com.quantimodo.android.sdk.SdkDefs;
 import com.quantimodo.android.sdk.model.Correlation;
 import com.quantimodo.android.sdk.model.CorrelationPost;
 import com.quantimodo.android.sdk.model.Unit;
+import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
 import com.quantimodo.tools.adapters.CorrelationAdapter;
 import com.quantimodo.tools.dialogs.CorrelationConfirmDialog;
+import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.sdk.DefaultSdkResponseListener;
-import com.quantimodo.tools.sdk.request.GetUnitsRequest;
+import com.quantimodo.tools.sdk.request.NoNetworkConnection;
 import com.quantimodo.tools.sdk.request.SearchCustomCorrelationsRequest;
 import com.quantimodo.tools.sdk.request.VoteCorrelationRequest;
 import com.quantimodo.tools.sdk.request.SearchCorrelationsRequest;
-import com.quantimodo.tools.utils.ViewUtils;
+import com.quantimodo.tools.utils.QtoolsUtils;
 import com.quantimodo.tools.utils.tracking.MeasurementCardHolder;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import io.swagger.client.ApiException;
+import io.swagger.client.api.CorrelationsApi;
+import io.swagger.client.model.VoteDelete;
 
 /**
  * Used to show positive/negative factors
@@ -41,8 +44,9 @@ import java.util.ArrayList;
  * Fetch both types of factors same time, so same instance can be used to show positive and negative factors,
  * and can be switched between types by {@link #setType(int) setType(int)} method.
  */
-public class FactorsFragment extends QListFragment implements CorrelationAdapter.CorrelationButtonOnClick, CorrelationConfirmDialog.DialogListener {
-
+public class FactorsFragment extends QListFragment implements CorrelationAdapter.CorrelationEventsListener, CorrelationConfirmDialog.DialogListener {
+    @Inject
+    AuthHelper mAuthHelper;
 
     private TextView mHeader;
     private int mType;
@@ -75,6 +79,7 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
         args.putBoolean(ARG_PUBLIC, predictorType == CorrelationAdapter.PREDICTOR_COMMON);
         factorsFragment.setArguments(args);
 
+        QTools.getInstance().inject(factorsFragment);
         return factorsFragment;
     }
 
@@ -200,6 +205,30 @@ public class FactorsFragment extends QListFragment implements CorrelationAdapter
         });
     }
 
+
+    public void deleteVote(final Correlation correlation){
+        if(!QtoolsUtils.hasInternetConnection(getActivity())){
+            Toast.makeText(getActivity(), R.string.error_no_connection, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+//        new Handler().post(new Runnable() {
+//            @Override
+//            public void run() {
+                try {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                    CorrelationsApi correlationsApi = new CorrelationsApi();
+                    VoteDelete body = new VoteDelete();
+                    body.setCause(correlation.getCause());
+                    body.setEffect(correlation.getEffect());
+                    correlationsApi.v1VotesDeletePost(body, mAuthHelper.getAuthTokenWithRefresh());
+                } catch (ApiException | NoNetworkConnection e) {
+                    e.printStackTrace();
+                }
+//            }
+//        });
+    }
 
     @Override
     public void onConfirm(Correlation correlation, @CorrelationAdapter.CorrelationState int state) {

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.quantimodo.android.sdk.QuantimodoApiV2;
 import com.quantimodo.tools.*;
 import com.quantimodo.tools.activities.QuantimodoWebAuthenticatorActivity;
+import com.quantimodo.tools.fragments.FactorsFragment;
 import com.quantimodo.tools.fragments.ImportWebFragment;
 import com.quantimodo.tools.fragments.TrackingFragment;
 import com.quantimodo.tools.models.DaoMaster;
@@ -25,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 
                 ImportWebFragment.class,
                 TrackingFragment.class,
+                FactorsFragment.class,
 
                 //Requests
                 SearchCorrelationsRequest.class,
