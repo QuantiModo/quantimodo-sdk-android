@@ -544,6 +544,7 @@ public class TrackingFragment extends QFragment {
                     }
                     showButtonsCard();
                     measurementCards.get(0).spMeasurementUnit.setEnabled(true);
+                    measurementCards.get(0).hideRemindersButton();
                 }
             }, 400);
         }
