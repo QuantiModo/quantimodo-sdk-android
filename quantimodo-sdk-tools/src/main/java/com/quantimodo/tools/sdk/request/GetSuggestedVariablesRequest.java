@@ -93,7 +93,7 @@ public class GetSuggestedVariablesRequest extends SdkRequest<GetSuggestedVariabl
 
         try {
             checkResponse(variableSdkResponse);
-            return variableSdkResponse.getData();
+            return variableSdkResponse.getData() == null ? new ArrayList<Variable>() : variableSdkResponse.getData();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();

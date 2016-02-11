@@ -544,6 +544,7 @@ public class TrackingFragment extends QFragment {
                     }
                     showButtonsCard();
                     measurementCards.get(0).spMeasurementUnit.setEnabled(true);
+                    measurementCards.get(0).hideRemindersButton();
                 }
             }, 400);
         }
@@ -736,7 +737,7 @@ public class TrackingFragment extends QFragment {
      * Opens the variable that was previously setted, using {@link #mSearchText}
      */
     private void openSearchVariable(){
-        if(mSearchText == null) return;
+        if(mSearchText == null || mSearchText.isEmpty()) return;
         for(int i = 0; i < suggestedVariables.size(); i++){
             Variable variable = suggestedVariables.get(i);
             if(variable.getName().equals(mSearchText)) onVariableClick(null, null, i, 0);

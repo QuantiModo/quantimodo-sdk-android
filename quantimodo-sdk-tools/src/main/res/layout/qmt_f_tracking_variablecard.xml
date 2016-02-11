@@ -55,12 +55,6 @@
         android:layout_width="wrap_content"
         android:layout_height="10dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textSize="17sp"
-        android:text="@string/tracking_fragment_unit_title"/>
     <Spinner
         android:id="@+id/spVariableUnit"
         android:layout_width="match_parent"
@@ -68,6 +62,7 @@
         android:textColorHint="#CCCCCC"
         android:inputType="none"
         android:layout_marginRight="12dp"
+        android:visibility="gone"
         />
     <Space
         android:layout_width="wrap_content"
