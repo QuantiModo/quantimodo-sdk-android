@@ -35,4 +35,6 @@
 
     <color name="notification_background">#181818</color>
     <color name="notification_separator">#383838</color>
+
+    <color name="tour_circle_selected">#888</color>
 </resources>
