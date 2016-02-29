@@ -16,23 +16,23 @@
         android:clipChildren="false">
         <ImageView
             android:id="@+id/img_1_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/fragment1_background_size"
+            android:layout_height="@dimen/fragment1_background_size"
             android:scaleType="centerInside"
             android:src="@drawable/tour_image1_0"
             android:layout_gravity="center"/>
         <ImageView
             android:id="@+id/img_1_1"
-            android:layout_width="320dp"
-            android:layout_height="320dp"
+            android:layout_width="@dimen/fragment1_person"
+            android:layout_height="@dimen/fragment1_person"
             android:scaleType="centerInside"
             android:src="@drawable/tour_image1_1"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/fragment1_person_adjust"
             android:layout_gravity="center"/>
         <ImageView
             android:id="@+id/img_1_2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/fragment1_paralax_image"
+            android:layout_height="@dimen/fragment1_paralax_image"
             android:scaleType="centerInside"
             android:layout_marginTop="25dp"
             android:layout_marginLeft="80dp"
@@ -41,8 +41,8 @@
         
         <ImageView 
             android:id="@+id/img_1_3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/fragment1_paralax_image"
+            android:layout_height="@dimen/fragment1_paralax_image"
             android:scaleType="centerInside"
             android:layout_marginTop="60dp"
             android:layout_marginLeft="35dp"
@@ -50,8 +50,8 @@
             android:layout_gravity="left|top"/>
         <ImageView 
             android:id="@+id/img_1_4"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/fragment1_paralax_image"
+            android:layout_height="@dimen/fragment1_paralax_image"
             android:scaleType="centerInside"
             android:layout_marginTop="112dp"
             android:layout_marginLeft="15dp"
@@ -60,8 +60,8 @@
 
         <ImageView
             android:id="@+id/img_1_5"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/fragment1_paralax_image"
+            android:layout_height="@dimen/fragment1_paralax_image"
             android:scaleType="centerInside"
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
@@ -70,8 +70,8 @@
 
         <ImageView
             android:id="@+id/img_1_6"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/fragment1_paralax_image"
+            android:layout_height="@dimen/fragment1_paralax_image"
             android:scaleType="centerInside"
             android:layout_marginTop="75dp"
             android:layout_marginRight="30dp"
@@ -80,8 +80,8 @@
 
         <ImageView
             android:id="@+id/img_1_7"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/fragment1_paralax_image"
+            android:layout_height="@dimen/fragment1_paralax_image"
             android:scaleType="centerInside"
             android:layout_marginBottom="25dp"
             android:layout_marginRight="80dp"
@@ -95,7 +95,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/images"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="@dimen/fragment1_content_padding"
+        android:layout_marginTop="@dimen/fragment1_heading_top"
         android:gravity="center"
         android:layout_marginLeft="@dimen/welcome_heading"
         android:layout_marginRight="@dimen/welcome_heading"
@@ -106,12 +107,10 @@
         android:text="@string/tour_content_01"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/images"
-        android:layout_below="@+id/heading"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="@dimen/welcome_text_margin"
-        android:layout_marginRight="@dimen/welcome_text_margin"
         android:minHeight="@dimen/welcome_content_min_height"
+        android:layout_below="@+id/heading"
+        android:layout_alignParentBottom="true"
+        android:padding="@dimen/fragment1_content_padding"
         android:gravity="center|top"
         android:textAppearance="@style/TourContentAppearance" />
 
