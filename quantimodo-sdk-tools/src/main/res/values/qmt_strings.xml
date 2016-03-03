@@ -96,12 +96,12 @@
     <string name="btn_skip">SKIP</string>
     <string name="btn_done">DONE</string>
 
-    <string name="tour_head_01">Connect your favorite tools</string>
-    <string name="tour_content_01">Gather information with your daily apps and devices to improve predictions</string>
-    <string name="tour_head_02">Track any information</string>
-    <string name="tour_content_02">Keep updated data about treatments, diet, symptoms, emotions and much more</string>
-    <string name="tour_head_03">Discover new insights</string>
-    <string name="tour_content_03">Verify the predictive analysis to see hidden factors that impact your well-being. Help us improve by voting on accurate or imprecise predictions</string>
+    <string name="tour_head_01">Import Data</string>
+    <string name="tour_content_01">Import data from all your apps and devices and get actionable insights</string>
+    <string name="tour_head_02">Track Anything</string>
+    <string name="tour_content_02">Log treatments, diet, symptoms, emotions and anything else</string>
+    <string name="tour_head_03">Make Discoveries</string>
+    <string name="tour_content_03">Identify hidden dietary, environmental, or behavioral factors that are most strongly linked to your well-being</string>
 
     <string name="help_import">Import</string>
     <string name="help_prediction">Prediction</string>
