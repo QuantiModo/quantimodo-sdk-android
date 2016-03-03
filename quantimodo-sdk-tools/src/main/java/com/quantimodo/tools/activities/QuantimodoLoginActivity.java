@@ -4,7 +4,10 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,18 +48,19 @@ public class QuantimodoLoginActivity extends Activity {
     private static final String TAG = QuantimodoLoginActivity.class.getSimpleName();
     public static final java.lang.String KEY_SHOW_LOGIN_AGAIN = "show_login_again";
     public static final java.lang.String KEY_APP_NAME = "app_name";
-//    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
+    public static final java.lang.String HELP_MESSAGE_PREFERENCE = "import";
+    //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
 //    private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/plus.me " +
 //        "https://www.googleapis.com/auth/plus.login " +
 //        "https://www.googleapis.com/auth/plus.profile.emails.read";
     private static final String SCOPE = "oauth2:" +
-        "https://www.googleapis.com/auth/userinfo.profile " +
-        "https://www.googleapis.com/auth/plus.login " +
-        "https://www.googleapis.com/auth/plus.me " +
+            "https://www.googleapis.com/auth/userinfo.profile " +
+            "https://www.googleapis.com/auth/plus.login " +
+            "https://www.googleapis.com/auth/plus.me " +
 //        "https://www.googleapis.com/auth/plus.profile.emails.read " +
-        "profile " +
-        "email " +
-        "openid";
+            "profile " +
+            "email " +
+            "openid";
     public static final int REQUEST_CODE_WEB_AUTHENTICATE = 2;
     private static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1;
@@ -97,6 +101,29 @@ public class QuantimodoLoginActivity extends Activity {
         if(getIntent().hasExtra(KEY_APP_NAME)){
             String appName = getIntent().getExtras().getString(KEY_APP_NAME);
             buttonMoodi.setText(String.format(getString(R.string.signin_moodimodo_button), appName));
+
+            String preference = getIntent().getExtras().getString(HELP_MESSAGE_PREFERENCE);
+            String helpMessage = "";
+
+            if (preference.equals(getString(R.string.help_import)))
+                helpMessage = getString(R.string.help_content_01);
+            else if (preference.equals(getString(R.string.help_prediction)))
+                helpMessage = getString(R.string.help_content_02);
+
+            final SharedPreferences sharedPref = getSharedPreferences(
+                    QuantimodoLoginActivity.class.getSimpleName(), Context.MODE_PRIVATE);
+            if (helpMessage.length() > 0 && sharedPref.getBoolean(preference, true)) {
+                new AlertDialog.Builder(this)
+                        .setTitle(appName)
+                        .setMessage(helpMessage)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        })
+                        .setCancelable(false)
+                        .create().show();
+                sharedPref.edit().putBoolean(preference, false).apply();
+            }
         }
         else{
             buttonMoodi.setText(getString(R.string.signin_button));

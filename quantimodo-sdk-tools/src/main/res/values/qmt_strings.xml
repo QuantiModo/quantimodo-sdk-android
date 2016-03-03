@@ -93,16 +93,22 @@
     <string name="signing_error_google_play">Please install or update Google Play Services or create a ticket at http://help.quantimo.do</string>
 
     <!--  Walkthrough  -->
-    <string name="walkthrough_content_1">Import your data from other apps and devices with the Import Data page. I\'d recommend starting by adding your zip code in the Weather connector. </string>
-    <string name="walkthrough_content_2">Track treatments, diet, symptoms, emotions and anything else with the various tracking pages.</string>
-    <string name="walkthrough_content_3">Change past measurements or add notes in the History page.</string>
-    <string name="walkthrough_content_4">Once you\'ve accumulated enough data for analysis, you can see the top predictors or your mood and optimal values on the Your Predictors page.</string>
-    <string name="walkthrough_content_5">See the top predictors of everyone\'s mood on the Common Predictors page.</string>
-    <string name="walkthrough_content_6">Help improve our algorithms by down voting the predictors that incorrect or merely coincidental.</string>
-    <string name="walkthrough_content_7">Change notification frequency on the settings page.</string>
-    <string name="walkthrough_skip">Skip Tour</string>
-    <string name="walkthrough_finish">Finish Tour</string>
+    <string name="btn_skip">SKIP</string>
+    <string name="btn_done">DONE</string>
 
+    <string name="tour_head_01">Connect your favorite tools</string>
+    <string name="tour_content_01">Gather information with your daily apps and devices to improve predictions</string>
+    <string name="tour_head_02">Track any information</string>
+    <string name="tour_content_02">Keep updated data about treatments, diet, symptoms, emotions and much more</string>
+    <string name="tour_head_03">Discover new insights</string>
+    <string name="tour_content_03">Verify the predictive analysis to see hidden factors that impact your well-being. Help us improve by voting on accurate or imprecise predictions</string>
+
+    <string name="help_import">Import</string>
+    <string name="help_prediction">Prediction</string>
+
+    <string name="help_content_01">Import your data from apps and devices that you use on a daily basis</string>
+    <string name="help_content_02">Help us improve our algorithm by voting on accurate or incorrect predictions. Make use of the generic predictions while enough data about you is being collectected</string>
+    <string name="help_content_03">You can change past measurements or add notes</string>
 
     <!-- Reminders intervals -->
     <string name="interval_never">Never</string>

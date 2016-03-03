@@ -11,7 +11,7 @@
     <dimen name="scroll_dist_shadow">20dp</dimen>
 
     <!--Tour sliding page  -->
-    <dimen name="welcome_images_size">360.0dip</dimen>
+    <dimen name="welcome_images_size">320.0dip</dimen>
     <dimen name="fragment1_background_size">200.0dip</dimen>
     <dimen name="welcome_images_margin_top">10.0dip</dimen>
     <dimen name="welcome_heading_margin_bottom">12.0dip</dimen>
@@ -22,7 +22,9 @@
     <dimen name="welcome_content_min_height">96.0dip</dimen>
     <dimen name="welcome_content">16.0sp</dimen>
     <dimen name="fragment1_paralax_image">40dp</dimen>
-    <dimen name="fragment1_heading_top">30dp</dimen>
-    <dimen name="fragment1_content_padding">10dp</dimen>
+    <dimen name="fragment1_person_adjust">10dp</dimen>
+    <dimen name="fragment1_person">180dp</dimen>
+    <dimen name="fragment1_heading_top">0dp</dimen>
+    <dimen name="fragment1_content_padding">0dp</dimen>
 
 </resources>

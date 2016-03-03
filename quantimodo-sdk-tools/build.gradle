@@ -104,6 +104,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-basement:8.1.0'
     compile 'com.google.android.gms:play-services-base:8.1.0'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.nineoldandroids:library:2.4.0'
 }
 
 android.libraryVariants.all { variant ->
