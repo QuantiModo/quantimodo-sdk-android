@@ -68,6 +68,9 @@
     <string name="tracking_item_physical_title">Physical Activity</string>
     <string name="tracking_item_physical_question">Enter a physical activity</string>
 
+    <string name="tracking_item_sleep_title">Sleep activity</string>
+    <string name="tracking_item_sleep_question">Enter a sleep activity</string>
+
     <string name="tracking_fragment_no_category_title">Track Anything</string>
     <string name="tracking_fragment_emotions_title">Track emotions</string>
     <string name="tracking_fragment_diet_title">Track diet</string>

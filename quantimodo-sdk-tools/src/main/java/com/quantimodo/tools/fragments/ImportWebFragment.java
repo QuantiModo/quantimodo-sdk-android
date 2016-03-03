@@ -19,14 +19,18 @@ public class ImportWebFragment extends QuantimodoWebFragment {
     @Inject
     AuthHelper mAuthHelper;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        QTools.getInstance().inject(this);
+    }
+
     public static ImportWebFragment newInstance(){
         ImportWebFragment importWebFragment = new ImportWebFragment();
 
         Bundle arguments = new Bundle();
         arguments.putString(ARG_URL, API_CONNECT_URL);
         importWebFragment.setArguments(arguments);
-        QTools.getInstance().inject(importWebFragment);
-
         return importWebFragment;
     }
 
