@@ -103,24 +103,28 @@ public class QuantimodoLoginActivity extends Activity {
             buttonMoodi.setText(String.format(getString(R.string.signin_moodimodo_button), appName));
 
             String preference = getIntent().getExtras().getString(HELP_MESSAGE_PREFERENCE);
+            String helpTitle = "";
             String helpMessage = "";
 
-            if (preference.equals(getString(R.string.help_import)))
+            if (preference.equals(getString(R.string.help_import))) {
+                helpTitle = getString(R.string.help_import);
                 helpMessage = getString(R.string.help_content_01);
-            else if (preference.equals(getString(R.string.help_prediction)))
+            }
+            else if (preference.equals(getString(R.string.help_prediction))) {
+                helpTitle = getString(R.string.help_prediction);
                 helpMessage = getString(R.string.help_content_02);
+            }
 
             final SharedPreferences sharedPref = getSharedPreferences(
                     QuantimodoLoginActivity.class.getSimpleName(), Context.MODE_PRIVATE);
             if (helpMessage.length() > 0 && sharedPref.getBoolean(preference, true)) {
                 new AlertDialog.Builder(this)
-                        .setTitle(appName)
+                        .setTitle(helpTitle)
                         .setMessage(helpMessage)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         })
-                        .setCancelable(false)
                         .create().show();
                 sharedPref.edit().putBoolean(preference, false).apply();
             }

@@ -101,11 +101,12 @@
     <string name="tour_content_03">Verify the predictive analysis to see hidden factors that impact your well-being. Help us improve by voting on accurate or imprecise predictions</string>
 
     <string name="help_import">Import</string>
-    <string name="help_prediction">Prediction</string>
+    <string name="help_prediction">Predictions</string>
+    <string name="help_history">History</string>
 
-    <string name="help_content_01">Import your data from apps and devices that you use on a daily basis</string>
-    <string name="help_content_02">Help us improve our algorithm by voting on accurate or incorrect predictions. Make use of the generic predictions while enough data about you is being collectected</string>
-    <string name="help_content_03">You can change past measurements or add notes</string>
+    <string name="help_content_01">Import your data from other apps and devices with the Import Data page. I\'d recommend starting by adding your zip code in the Weather connector.</string>
+    <string name="help_content_02">Help improve our algorithms by voting the predictors that are accurate or incorrect. See the top predictors of everyone\'s mood on the Common Predictors page. Make use of the generic predictions while enough data about you is being collected.</string>
+    <string name="help_content_03">Change past measurements or add notes in the History page.</string>
 
     <!-- Reminders intervals -->
     <string name="interval_never">Never</string>
