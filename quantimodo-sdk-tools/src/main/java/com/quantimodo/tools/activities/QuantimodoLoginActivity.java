@@ -102,7 +102,7 @@ public class QuantimodoLoginActivity extends Activity {
             String appName = getIntent().getExtras().getString(KEY_APP_NAME);
             buttonMoodi.setText(String.format(getString(R.string.signin_moodimodo_button), appName));
 
-            String preference = getIntent().getExtras().getString(HELP_MESSAGE_PREFERENCE);
+            String preference = getIntent().getExtras().getString(HELP_MESSAGE_PREFERENCE,"");
             String helpMessage = "";
 
             if (preference.equals(getString(R.string.help_import)))
