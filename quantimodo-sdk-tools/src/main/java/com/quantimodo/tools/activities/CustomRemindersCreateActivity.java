@@ -119,6 +119,14 @@ public class CustomRemindersCreateActivity extends Activity {
 
         loadAndInitData();
 
+        mCalendarInterval1.set(Calendar.HOUR_OF_DAY,8);
+        mCalendarInterval2.set(Calendar.HOUR_OF_DAY,16);
+        mCalendarInterval3.set(Calendar.HOUR_OF_DAY,12);
+        mCalendarInterval1.set(Calendar.MINUTE,0);
+        mCalendarInterval2.set(Calendar.MINUTE,0);
+        mCalendarInterval3.set(Calendar.MINUTE,0);
+
+
         if(isEditing){
             containerCategories.setVisibility(View.GONE);
             containerLayout2.setVisibility(View.VISIBLE);

@@ -126,6 +126,10 @@ public class MeasurementCardHolder {
 //        reminderTitle.setVisibility(View.VISIBLE);
     }
 
+    public void hideRemindersButton(){
+        measurementCard.findViewById(R.id.btReminder).setVisibility(View.GONE);
+    }
+
 
     private void initOverflowButton(final boolean removable, final Variable variable) {
         // Remove button

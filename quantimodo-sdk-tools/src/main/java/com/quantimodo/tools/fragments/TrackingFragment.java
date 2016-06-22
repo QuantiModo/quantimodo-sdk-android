@@ -82,7 +82,7 @@ public class TrackingFragment extends QFragment {
     private static final String KEY_CATEGORY = "category";
     private static final String KEY_SEARCH = "search";
 
-    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS, TYPE_EMOTIONS, TYPE_PHYSICAL})
+    @IntDef({TYPE_ALL,TYPE_DIET,TYPE_MOOD,TYPE_SYMPTOMS,TYPE_TREATMENTS, TYPE_EMOTIONS, TYPE_PHYSICAL, TYPE_SLEEP})
     @Retention(RetentionPolicy.SOURCE)
     public @interface TrackingType{}
 
@@ -163,7 +163,8 @@ public class TrackingFragment extends QFragment {
             new CategoryDef("Emotions",1d,"%", R.string.tracking_item_emotions_question,
                     Variable.COMBINE_SUM,R.string.tracking_fragment_emotions_title),
             new CategoryDef("Physical Activity", 1d, "min", R.string.tracking_item_physical_question,
-                    Variable.COMBINE_SUM, R.string.tracking_item_physical_title)
+                    Variable.COMBINE_SUM, R.string.tracking_item_physical_title),
+            new CategoryDef("Sleep",1d,"min",R.string.tracking_item_sleep_question, Variable.COMBINE_SUM,R.string.tracking_item_sleep_title)
     };
 
     public static final int TYPE_ALL = 0;
@@ -173,6 +174,7 @@ public class TrackingFragment extends QFragment {
     public static final int TYPE_MOOD = 4;
     public static final int TYPE_EMOTIONS = 5;
     public static final int TYPE_PHYSICAL = 6;
+    public static final int TYPE_SLEEP = 7;
 
     private CategoryDef mCategoryDef;
     private int mType;
@@ -544,6 +546,7 @@ public class TrackingFragment extends QFragment {
                     }
                     showButtonsCard();
                     measurementCards.get(0).spMeasurementUnit.setEnabled(true);
+                    measurementCards.get(0).hideRemindersButton();
                 }
             }, 400);
         }
@@ -736,7 +739,7 @@ public class TrackingFragment extends QFragment {
      * Opens the variable that was previously setted, using {@link #mSearchText}
      */
     private void openSearchVariable(){
-        if(mSearchText == null) return;
+        if(mSearchText == null || mSearchText.isEmpty()) return;
         for(int i = 0; i < suggestedVariables.size(); i++){
             Variable variable = suggestedVariables.get(i);
             if(variable.getName().equals(mSearchText)) onVariableClick(null, null, i, 0);

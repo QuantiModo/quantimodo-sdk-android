@@ -37,6 +37,7 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
     public static final String EXTRA_REQUEST_EDIT = "extra_request_edit";
     public static final String EXTRA_REQUEST_POPUP = "extra_request_popup";
     public static final String EXTRA_NOTIFICATION_ID = "extra_notification_id";
+    public static final String EXTRA_ACTION = "extra_action";
 
     @Inject
     ToolsPrefs mPrefs;
@@ -58,20 +59,22 @@ public class CustomRemindersReceiver extends WakefulBroadcastReceiver {
         if(intent.hasExtra(EXTRA_REQUEST_ALARM)) {
             Intent service = new Intent(context, RemindersService.class);
             //shows the popup dialog
-            CustomReminderDialog.getInstance().show(context, reminder.id);
+//            CustomReminderDialog.getInstance().show(context, reminder.id);
             service.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminder.id);
             service.putExtra(CustomRemindersHelper.EXTRA_SPECIFIC_ID, specificId);
+            service.putExtra(EXTRA_ACTION,RemindersService.ACTION_NOTIFICATION);
             // Start the service, keeping the device awake while it is launching.
             //this service shows the notification and set the events for buttons
             startWakefulService(context, service);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_REMINDER)){
             cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID, 0));
-            try {
-                CustomRemindersHelper.postRemoteTrack(reminder.remoteId, authHelper.getAuthTokenWithRefresh());
-            } catch (NoNetworkConnection noNetworkConnection) {
-                noNetworkConnection.printStackTrace();
-            }
+
+            Intent service = new Intent(context, RemindersService.class);
+            service.putExtra(CustomRemindersHelper.EXTRA_REMINDER_ID, reminder.id);
+            service.putExtra(CustomRemindersHelper.EXTRA_SPECIFIC_ID, specificId);
+            service.putExtra(EXTRA_ACTION,RemindersService.ACTION_SEND_VALUE);
+            startWakefulService(context,service);
         }
         else if(intent.hasExtra(EXTRA_REQUEST_SNOOZE)){
             cancelNotification(context, extras.getInt(EXTRA_NOTIFICATION_ID, 0));
