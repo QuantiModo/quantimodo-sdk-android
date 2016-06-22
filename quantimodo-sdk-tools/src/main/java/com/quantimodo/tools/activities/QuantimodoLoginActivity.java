@@ -104,11 +104,16 @@ public class QuantimodoLoginActivity extends Activity {
 
             String preference = getIntent().getExtras().getString(HELP_MESSAGE_PREFERENCE,"");
             String helpMessage = "";
+            String helpTitle = appName;
 
-            if (preference.equals(getString(R.string.help_import)))
+            if (preference.equals(getString(R.string.help_import))){
+                helpTitle = getString(R.string.help_import);
                 helpMessage = getString(R.string.help_content_01);
-            else if (preference.equals(getString(R.string.help_prediction)))
+            } else if (preference.equals(getString(R.string.help_prediction))) {
+                helpTitle = getString(R.string.help_prediction);
                 helpMessage = getString(R.string.help_content_02);
+            }
+
 
             final SharedPreferences sharedPref = getSharedPreferences(
                     QuantimodoLoginActivity.class.getSimpleName(), Context.MODE_PRIVATE);

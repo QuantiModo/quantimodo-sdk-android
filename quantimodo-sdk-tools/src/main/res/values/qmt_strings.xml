@@ -103,13 +103,13 @@
     <string name="tour_head_03">Make Discoveries</string>
     <string name="tour_content_03">Identify hidden dietary, environmental, or behavioral factors that are most strongly linked to your well-being</string>
 
-    <string name="help_import">Import</string>
-    <string name="help_prediction">Predictions</string>
+    <string name="help_import">Import Your Data</string>
+    <string name="help_prediction">Top Predictors</string>
     <string name="help_history">History</string>
 
     <string name="help_content_01">Import your data from other apps and devices with the Import Data page. I\'d recommend starting by adding your zip code in the Weather connector.</string>
     <string name="help_content_02">Help improve our algorithms by voting the predictors that are accurate or incorrect. See the top predictors of everyone\'s mood on the Common Predictors page. Make use of the generic predictions while enough data about you is being collected.</string>
-    <string name="help_content_03">Change past measurements or add notes in the History page.</string>
+    <string name="help_content_03">You can change past measurements or add notes by tapping an entry in the History page.</string>
 
     <!-- Reminders intervals -->
     <string name="interval_never">Never</string>
