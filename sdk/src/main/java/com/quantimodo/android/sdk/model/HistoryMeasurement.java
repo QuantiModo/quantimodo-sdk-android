@@ -18,11 +18,21 @@ public class HistoryMeasurement {
 
     final int id;
 
-    public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit){
-        this(id, source, variable, timestamp, value, unit,null);
+    final Date updatedAt;
+
+    public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit, Date updatedAt){
+        this(id, source, variable, timestamp, value, unit, null, updatedAt);
     }
 
-    public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit,String note) {
+    public HistoryMeasurement(
+            int id, String source,
+            String variable,
+            Date timestamp,
+            double value,
+            String unit,
+            String note,
+            Date updatedAt
+    ) {
         this.source = source;
         this.variable = variable;
         this.timestamp = timestamp;
@@ -30,6 +40,7 @@ public class HistoryMeasurement {
         this.unit = unit;
         this.note = note;
         this.id = id;
+        this.updatedAt = updatedAt;
     }
 
     public String getSource() {
@@ -42,6 +53,10 @@ public class HistoryMeasurement {
 
     public Date getTimestamp() {
         return timestamp;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
     public double getValue() {

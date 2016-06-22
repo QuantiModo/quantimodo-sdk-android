@@ -16,6 +16,7 @@ public class Measurement implements java.io.Serializable {
     private Long id;
     /** Not-null value. */
     private java.util.Date timestamp;
+    private java.util.Date updatedAt;
     private Long variableId;
     private Long unitId;
     private double value;
@@ -50,7 +51,17 @@ public class Measurement implements java.io.Serializable {
         this.id = id;
     }
 
-    public Measurement(Long id, java.util.Date timestamp, Long variableId, Long unitId, double value, String source, Boolean needUpdate, String note, String variableName, String unitName) {
+    public Measurement(Long id,
+                       java.util.Date timestamp,
+                       Long variableId,
+                       Long unitId,
+                       double value,
+                       String source,
+                       Boolean needUpdate,
+                       String note,
+                       String variableName,
+                       String unitName,
+                       java.util.Date updatedAt) {
         this.id = id;
         this.timestamp = timestamp;
         this.variableId = variableId;
@@ -61,6 +72,7 @@ public class Measurement implements java.io.Serializable {
         this.note = note;
         this.variableName = variableName;
         this.unitName = unitName;
+        this.updatedAt = updatedAt;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -129,6 +141,10 @@ public class Measurement implements java.io.Serializable {
 
     public String getNote() {
         return note;
+    }
+
+    public java.util.Date getUpdatedAt() {
+        return updatedAt;
     }
 
     public void setNote(String note) {
@@ -250,7 +266,8 @@ public class Measurement implements java.io.Serializable {
                 getTimestamp(),
                 getValue(),
                 getUnit().getName(),
-                getNote()
+                getNote(),
+                getUpdatedAt()
         );
     }
     public static int safeLongToInt(long l) {
