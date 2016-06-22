@@ -114,7 +114,7 @@ public class QuantimodoLoginActivity extends Activity {
                     QuantimodoLoginActivity.class.getSimpleName(), Context.MODE_PRIVATE);
             if (helpMessage.length() > 0 && sharedPref.getBoolean(preference, true)) {
                 new AlertDialog.Builder(this)
-                        .setTitle(appName)
+                        .setTitle(helpTitle)
                         .setMessage(helpMessage)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
