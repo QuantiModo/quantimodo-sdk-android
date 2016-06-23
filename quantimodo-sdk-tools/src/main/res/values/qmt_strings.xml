@@ -122,6 +122,7 @@
     <string name="interval_twice_day">Twice a day</string>
     <string name="interval_three_times_day">Three times a day</string>
     <string name="interval_every_30_minutes">Every 30 minutes</string>
+    <string name="interval_minutely">Minutely</string>
 
     <string name="reminders_notif_button_track">Track it</string>
     <string name="reminders_notif_button_snooze">Snooze</string>

@@ -57,7 +57,8 @@ public class CustomRemindersHelper {
         DAILY,
         SNOOZE,
         THREE_TIMES_A_DAY,
-        EVERY_THIRTY_MINUTES;
+        EVERY_THIRTY_MINUTES,
+        MINUTELY;
 
         @Override
         public String toString() {
