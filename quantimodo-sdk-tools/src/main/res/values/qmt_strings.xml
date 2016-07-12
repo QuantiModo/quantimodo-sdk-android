@@ -87,7 +87,7 @@
     <string name="signin_google_button">Sign in with Google</string>
     <string name="signin_facebook_button">Sign in with Facebook</string>
     <string name="signin_moodimodo_button">Sign in with %s</string>
-    <string name="signin_button">Sign in</string>
+    <string name="signin_button">Sign in with QuantiModo</string>
     <string name="signin_error">An error occurred while signing in</string>
     <string name="signin_success">Welcome!</string>
     <string name="signing_error_google_play">Please install or update Google Play Services or create a ticket at http://help.quantimo.do</string>
