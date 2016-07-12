@@ -38,27 +38,24 @@ android {
             props.load(new FileInputStream(file('quantimodo.properties')))
             resValue "string", "quantimodo_client", props['quantimodoClient']
             resValue "string", "quantimodo_secret", props['quantimodoSecret']
-            buildConfigField 'String', 'API_HOST', '"'+props['quantimodoApiUrl']+'"'
+            buildConfigField 'String', 'API_HOST', '"' + props['quantimodoApiUrl'] + '"'
         } else {
             logger.warn("Couldn't find quantimodo.properties, trying to get from env properties, communication with QuantiModo may not work")
             resValue "string", "quantimodo_client", System.getenv("quantimodoClient") == null ? "NONE" : System.getenv("quantimodoClient")
             resValue "string", "quantimodo_secret", System.getenv("quantimodoSecret") == null ? "NONE" : System.getenv("quantimodoSecret")
-            buildConfigField 'String', 'API_HOST' , System.getenv("quantimodoApiUrl") == null ? 'null' : '"'+System.getenv("quantimodoApiUrl")+'"'
+            buildConfigField 'String', 'API_HOST', System.getenv("quantimodoApiUrl") == null ? 'null' : '"' + System.getenv("quantimodoApiUrl") + '"'
         }
         resValue "bool", "show_shopping_cart", "true"
     }
-
     lintOptions {
         abortOnError false
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     packagingOptions {
         exclude 'LICENSE'
         exclude 'LICENSE.txt'
@@ -72,34 +69,24 @@ android {
 }
 
 dependencies {
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
-
     compile project(':sdk')
     compile project(':swagger')
-
     //RoboSpice  https://github.com/stephanenicolas/robospice
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.google.code.gson:gson:2.3'
-
-
     //EventBus from greenrobot https://github.com/greenrobot/EventBus
     compile 'de.greenrobot:eventbus:2.4.0'
-
     //Dagger DI http://square.github.io/dagger/
     compile 'com.squareup.dagger:dagger:1.2.2'
     apt 'com.squareup.dagger:dagger-compiler:1.2.2'
-
     androidTestApt 'com.squareup.dagger:dagger-compiler:1.2.2'
-
     //Green Dao
     compile 'de.greenrobot:greendao:2.1.0'
-
     compile 'com.android.support:multidex:1.0.0'
-
-    androidTestCompile project(":testing-utils")
-
+    androidTestCompile project(':testing-utils')
     compile 'com.google.android.gms:play-services-identity:8.1.0'
     compile 'com.google.android.gms:play-services-basement:8.1.0'
     compile 'com.google.android.gms:play-services-base:8.1.0'
