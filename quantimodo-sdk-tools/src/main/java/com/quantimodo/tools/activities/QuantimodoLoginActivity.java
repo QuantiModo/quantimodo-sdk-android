@@ -144,6 +144,8 @@ public class QuantimodoLoginActivity extends Activity {
             }
         });
         callbackManager = CallbackManager.Factory.create();
+
+/*
         Button loginButton = (Button) findViewById(R.id.qmt_signin_facebook);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +173,8 @@ public class QuantimodoLoginActivity extends Activity {
                 error.printStackTrace();
             }
         });
+        */
+
         if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()){
             Log.d("QuantimodoLoginActivity", "fb accesstoken: " + AccessToken.getCurrentAccessToken().getToken());
 //            sendFbToken(AccessToken.getCurrentAccessToken().getToken());
