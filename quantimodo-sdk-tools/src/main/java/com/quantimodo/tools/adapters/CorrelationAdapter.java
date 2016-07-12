@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Can show both types of factors, both types should be passed in constructor.
  * They would be sorted using weight of each correlation ( which basically is correlationCoefficient * userVote )
  * Can be configured with resources:
- * To hide shopping cart, add bool value <b>show_shopping_card</b>=false
+ * To hide shopping cart, add bool value <b>show_shopping_cart</b>=false
  * Target activity/fragment should implement button listener check {@link CorrelationEventsListener CorrelationButtonOnClick} interface
  */
 public class CorrelationAdapter extends BaseAdapter {
@@ -135,7 +135,7 @@ public class CorrelationAdapter extends BaseAdapter {
 
     public CorrelationAdapter(Context ctx, ArrayList<Correlation> correlations, @CorrelationType int type) {
         mCtx = ctx;
-        mShowShoppingCart = ctx.getResources().getBoolean(R.bool.show_shopping_card);
+        mShowShoppingCart = ctx.getResources().getBoolean(R.bool.show_shopping_cart);
         //Sort correlations by correlation coefficient
 //        ArrayList<Correlation> allItems = new ArrayList<>(correlations);
 //        Collections.sort(allItems, new Comparator<Correlation>() {

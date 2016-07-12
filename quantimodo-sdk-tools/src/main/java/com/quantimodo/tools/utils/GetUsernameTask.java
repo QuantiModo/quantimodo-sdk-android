@@ -41,10 +41,12 @@ public class GetUsernameTask extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... params) {
         try {
             String token = fetchToken();
-            if (token != null)
+            if (token != null) {
                 return token;
-            else
-                Log.d(TAG, "Google token null :(");
+            }
+            else {
+                Log.e(TAG, "Google token null :(");
+            }
         } catch (IOException e) {
             // The fetchToken() method handles Google-specific exceptions,
             // so this indicates something went wrong at a higher level.

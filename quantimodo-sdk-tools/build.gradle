@@ -45,7 +45,7 @@ android {
             resValue "string", "quantimodo_secret", System.getenv("quantimodoSecret") == null ? "NONE" : System.getenv("quantimodoSecret")
             buildConfigField 'String', 'API_HOST' , System.getenv("quantimodoApiUrl") == null ? 'null' : '"'+System.getenv("quantimodoApiUrl")+'"'
         }
-        resValue "bool", "show_shopping_card", "true"
+        resValue "bool", "show_shopping_cart", "true"
     }
 
     lintOptions {
