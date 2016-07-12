@@ -25,7 +25,6 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -81,6 +80,8 @@ public class QuantimodoLoginActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         QTools.getInstance().inject(this);
         setContentView(R.layout.qmt_login);
+
+/*
         View buttonGoogle = findViewById(R.id.qmt_signin_google);
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +98,8 @@ public class QuantimodoLoginActivity extends Activity {
                 }
             }
         });
+        */
+
         Button buttonMoodi = (Button) findViewById(R.id.qmt_signin_moodimodo);
         if(getIntent().hasExtra(KEY_APP_NAME)){
             String appName = getIntent().getExtras().getString(KEY_APP_NAME);
