@@ -8,8 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,13 +34,18 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.quantimodo.android.sdk.QuantimodoApiV2;
+import com.quantimodo.android.sdk.model.QuantimodoUser;
 import com.quantimodo.tools.QTools;
 import com.quantimodo.tools.R;
 import com.quantimodo.tools.ToolsPrefs;
+import com.quantimodo.tools.UserPreferences;
 import com.quantimodo.tools.sdk.AuthHelper;
 import com.quantimodo.tools.utils.GetUsernameTask;
 import com.quantimodo.tools.utils.QtoolsUtils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -72,11 +81,29 @@ public class QuantimodoLoginActivity extends Activity {
     @Inject
     AuthHelper authHelper;
 
+    @Inject
+    QuantimodoApiV2 quantimodoApiV2;
+
     private CallbackManager callbackManager;
     private String mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.moodimodo",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String keyHash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                Log.d("KeyHash:", keyHash);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         QTools.getInstance().inject(this);
@@ -153,23 +180,25 @@ public class QuantimodoLoginActivity extends Activity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 final String token = loginResult.getAccessToken().getToken();
-                Log.d("QUantimodoLoginActivity", "Token: " + token);
+                Log.d(TAG, "Token: " + token);
                 sendFbToken(token);
             }
 
             @Override
             public void onCancel() {
-                Log.d("QUantimodoLoginActivity", "login fb cancel");
+                Log.d(TAG, "login fb cancel");
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d("QUantimodoLoginActivity", "login fb error");
+                Intent intent = new Intent(QuantimodoLoginActivity.this, QuantimodoWebAuthenticatorActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
+                Log.d(TAG, "login fb error");
                 error.printStackTrace();
             }
         });
         if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()){
-            Log.d("QuantimodoLoginActivity", "fb accesstoken: " + AccessToken.getCurrentAccessToken().getToken());
+            Log.d(TAG, "fb accesstoken: " + AccessToken.getCurrentAccessToken().getToken());
 //            sendFbToken(AccessToken.getCurrentAccessToken().getToken());
         }
 
@@ -274,11 +303,17 @@ public class QuantimodoLoginActivity extends Activity {
     }
 
     private void sendFbToken(final String token){
-        Log.d("QuantimodoLoginActivity", "Sending Fb token to QM server...");
-        sendToken("facebook", token);
+        Log.d(TAG, "Sending Fb token to QM server...");
+        sendNativeSocialToken("facebook", token);
     }
-    public void sendToken(final String provider, final String token){
-        String url = mPrefs.getApiSocialAuth() + "?provider=" + provider + "&accessToken=" + token;
+    public void sendNativeSocialToken(final String provider, final String token){
+        if(token == null){
+            Log.e(TAG, "Token from " + provider + " is null! Falling back to QuantiModo Login");
+            return;
+//            Intent intent = new Intent(QuantimodoLoginActivity.this, QuantimodoWebAuthenticatorActivity.class);
+//            startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
+        }
+        String url = mPrefs.getApiSocialAuth() + "?provider=" + provider + "&accessToken=" + token + "&client_id=" + authHelper.getClientId();
         Ion.with(QuantimodoLoginActivity.this)
                 .load(url)
                 .asJsonObject()
@@ -288,28 +323,44 @@ public class QuantimodoLoginActivity extends Activity {
                         if (response != null)
                             setAuthTokenFromJson(response);
                         else {
-                            Log.d("QuantimodoLoginActivity", "result is null!");
+                            Log.d(TAG, e.getMessage());
                         }
                     }
                 });
     }
     public void setAuthTokenFromJson(final JsonObject result){
         if(result == null){
-            Log.d(TAG, "Error when requesting token from QM Server: result json null!");
+            Log.e(TAG, "Error when requesting token from QM Server: result json null!");
             return;
         }
         else if(!result.get("success").getAsBoolean()){
             Log.d(TAG, "Error when requesting token from QM Server: " + result.get("error").getAsString());
+            Intent intent = new Intent(QuantimodoLoginActivity.this, QuantimodoWebAuthenticatorActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
             return;
         }
         Log.d(TAG, "Result from QM Server as string: " + result.toString());
         try {
-            final String QMToken = result.get("data").getAsJsonObject().get("token").getAsString();
-
-            Intent intent = new Intent(this, QuantimodoWebValidatorActivity.class);
-            intent.putExtra(QuantimodoWebValidatorActivity.KEY_AUTH_TOKEN, QMToken);
-            startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
-
+            if (result.get("data").getAsJsonObject().get("access_token").getAsString() != null){
+                try {
+                    String accessToken = result.get("data").getAsJsonObject().get("access_token").getAsString();
+                    String refreshToken = result.get("data").getAsJsonObject().get("refresh_token").getAsString();
+                    int expiresIn = result.get("data").getAsJsonObject().get("expires_in").getAsInt();
+                    authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis()/1000 + expiresIn));
+                    QuantimodoUser user = quantimodoApiV2.getUser(this, authHelper.getAuthToken()).getData();
+                    UserPreferences.setFullUserdata(this, user);
+                    setResult(RESULT_OK);
+                    finish();
+                } catch (NullPointerException ignored) {
+                    Log.i(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()
+                            + ", " + result.get("error_description").getAsString());
+                }
+            } else {
+                final String QMToken = result.get("data").getAsJsonObject().get("token").getAsString();
+                Intent intent = new Intent(this, QuantimodoWebValidatorActivity.class);
+                intent.putExtra(QuantimodoWebValidatorActivity.KEY_AUTH_TOKEN, QMToken);
+                startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
+            }
 
 //            String refreshToken = result.get("refresh_token").getAsString();
 //            int expiresIn = result.get("expires_in").getAsInt();
