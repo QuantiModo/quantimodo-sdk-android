@@ -57,8 +57,12 @@ public class GetUsernameTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Log.d(TAG, "Sending Google token to QM Server: " + result);
-        mActivity.sendToken("google", result);
+        if (result != null) {
+            Log.d(TAG, "Sending Google token to QM Server: " + result);
+            mActivity.sendNativeSocialToken("google", result);
+        } else {
+            Log.e(TAG, "onPostExecute is null! ");
+        }
     }
 
 
