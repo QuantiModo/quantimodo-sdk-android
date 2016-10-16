@@ -3,9 +3,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.2.1'
 
-        // the latest version of the android-apt plugin, to process anotations
+        // the latest version of the android-apt plugin, to process annotations
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
@@ -18,12 +18,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 24
         versionCode 230
         versionName "2.3.0"
         testInstrumentationRunner "com.quantimodo.sdk.testing.utils.TestRunner"
@@ -71,12 +71,12 @@ android {
 dependencies {
     //    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
     compile project(':sdk')
     compile project(':swagger')
     //RoboSpice  https://github.com/stephanenicolas/robospice
     compile 'com.octo.android.robospice:robospice:1.4.14'
-    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.code.gson:gson:2.4'
     //EventBus from greenrobot https://github.com/greenrobot/EventBus
     compile 'de.greenrobot:eventbus:2.4.0'
     //Dagger DI http://square.github.io/dagger/
@@ -85,11 +85,11 @@ dependencies {
     androidTestApt 'com.squareup.dagger:dagger-compiler:1.2.2'
     //Green Dao
     compile 'de.greenrobot:greendao:2.1.0'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
     androidTestCompile project(':testing-utils')
-    compile 'com.google.android.gms:play-services-identity:8.1.0'
-    compile 'com.google.android.gms:play-services-basement:8.1.0'
-    compile 'com.google.android.gms:play-services-base:8.1.0'
+    compile 'com.google.android.gms:play-services-identity:9.6.1'
+    compile 'com.google.android.gms:play-services-basement:9.6.1'
+    compile 'com.google.android.gms:play-services-base:9.6.1'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.nineoldandroids:library:2.4.0'
 }
