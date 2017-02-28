@@ -229,7 +229,7 @@ public class QuantimodoApi {
 
         try {
             String response = Ion.with(context)
-                    .load(QUANTIMODO_ADDRESS + "api/units")
+                    .load(QUANTIMODO_ADDRESS + "api/units?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                     .setHeader("Authorization", "Bearer " + token)
                     .asString()
                     .get();

@@ -391,7 +391,7 @@ public class QuantimodoApiV2 {
         SdkResponse<ArrayList<Unit>> sdkResponse = new SdkResponse<>();
 
         FutureBuilder futureBuilder =  Ion.with(context)
-                .load(mBaseUrl + "api/units")
+                .load(mBaseUrl + "api/units?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                 .setHeader("Authorization", "Bearer " + token);
 
         executeRequest(context, sdkResponse, new TypeToken<ArrayList<Unit>>() {
@@ -461,7 +461,7 @@ public class QuantimodoApiV2 {
         SdkResponse<ArrayList<VariableCategory>> sdkResponse = new SdkResponse<>();
 
         FutureBuilder futureBuilder = Ion.with(context)
-                .load(mBaseUrl + "api/variableCategories")
+                .load(mBaseUrl + "api/variableCategories?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                 .setHeader("Authorization", "Bearer " + token);
 
         executeRequest(context, sdkResponse,new TypeToken<ArrayList<VariableCategory>>(){}, futureBuilder);
@@ -480,7 +480,7 @@ public class QuantimodoApiV2 {
 
         SdkResponse<ArrayList<Variable>> sdkResponse = new SdkResponse<>();
         FutureBuilder futureBuilder = Ion.with(context)
-                .load(mBaseUrl + "api/variables")
+                .load(mBaseUrl + "api/variables?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                 .setHeader("Authorization", "Bearer " + token);
 
         executeRequest(context, sdkResponse, new TypeToken<ArrayList<Variable>>() {
@@ -494,7 +494,7 @@ public class QuantimodoApiV2 {
 
         SdkResponse<QuantimodoUser> sdkResponse = new SdkResponse<>();
         FutureBuilder futureBuilder = Ion.with(context)
-                .load(mBaseUrl + "api/user")
+                .load(mBaseUrl + "api/user?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                 .setHeader("Authorization", "Bearer " + token);
         executeRequest(context, sdkResponse, new TypeToken<QuantimodoUser>() {
         }, futureBuilder);
@@ -508,7 +508,7 @@ public class QuantimodoApiV2 {
 
         SdkResponse<Void> sdkResponse = new SdkResponse<>();
         FutureBuilder futureBuilder = Ion.with(context)
-                .load(mBaseUrl + "api/v1/correlations")
+                .load(mBaseUrl + "api/v1/correlations?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                 .setHeader("Authorization", "Bearer " + token)
                 .setJsonPojoBody(correlation);
 
@@ -529,7 +529,7 @@ public class QuantimodoApiV2 {
 
         SdkResponse<Void> sdkResponse = new SdkResponse<>();
         FutureBuilder futureBuilder = Ion.with(context)
-                .load(mBaseUrl + "api/v1/votes")
+                .load(mBaseUrl + "api/v1/votes?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                 .setHeader("Authorization", "Bearer " + token)
                 .setJsonPojoBody(correlationPost);
 
@@ -552,7 +552,7 @@ public class QuantimodoApiV2 {
 
         SdkResponse<Integer> sdkResponse = new SdkResponse<>();
         FutureBuilder futureBuilder = Ion.with(context)
-                .load(mBaseUrl + "api/v2/measurements/request_csv")
+                .load(mBaseUrl + "api/v2/measurements/request_csv?appVersion=" + BuildConfig.VERSION_NAME + "&appName=MoodiModoAndroidNative")
                 .setHeader("Authorization", "Bearer " + token)
                 .setBodyParameter("goop", "noop");
 
