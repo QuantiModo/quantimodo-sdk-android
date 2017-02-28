@@ -22,3 +22,7 @@ local.properties
 maven.properties
 quantimodo.properties
 quantimodo-sdk-tools/testing.properties
+quantimodo-sdk-tools/src/main/res/values/com_crashlytics_export_strings.xml
+sdk/src/main/assets/crashlytics-build.properties
+sdk/src/main/res/values/com_crashlytics_export_strings.xml
+quantimodo-sdk-tools/src/main/assets/crashlytics-build.properties
