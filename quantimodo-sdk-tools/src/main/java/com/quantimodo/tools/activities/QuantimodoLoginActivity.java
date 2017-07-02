@@ -124,10 +124,10 @@ public class QuantimodoLoginActivity extends Activity {
                 }
             }
         });
-        Button buttonMoodi = (Button) findViewById(R.id.qmt_signin_moodimodo);
+        //Button buttonMoodi = (Button) findViewById(R.id.qmt_signin_moodimodo);
         if(getIntent().hasExtra(KEY_APP_NAME)){
             String appName = getIntent().getExtras().getString(KEY_APP_NAME);
-            buttonMoodi.setText(String.format(getString(R.string.signin_moodimodo_button), appName));
+            //buttonMoodi.setText(String.format(getString(R.string.signin_moodimodo_button), appName));
 
             String preference = getIntent().getExtras().getString(HELP_MESSAGE_PREFERENCE,"");
             String helpMessage = "";
@@ -158,15 +158,15 @@ public class QuantimodoLoginActivity extends Activity {
             }
         }
         else{
-            buttonMoodi.setText(getString(R.string.signin_button));
+           // buttonMoodi.setText(getString(R.string.signin_button));
         }
-        buttonMoodi.setOnClickListener(new View.OnClickListener() {
+/*        buttonMoodi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(QuantimodoLoginActivity.this, QuantimodoWebAuthenticatorActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
             }
-        });
+        });*/
         callbackManager = CallbackManager.Factory.create();
         Button loginButton = (Button) findViewById(R.id.qmt_signin_facebook);
         loginButton.setOnClickListener(new View.OnClickListener() {
