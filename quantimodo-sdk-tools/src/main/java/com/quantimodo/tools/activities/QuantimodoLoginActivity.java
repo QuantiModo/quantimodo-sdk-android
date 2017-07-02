@@ -227,7 +227,7 @@ public class QuantimodoLoginActivity extends Activity {
                 finish();
             }
             else if(resultCode == RESULT_CANCELED){
-                //The user canceled or an error occurred
+                Log.e(TAG, "The user canceled or an error occurred while trying to sign in");
                 //TODO: Show toast to the user informing about an error
                 Toast.makeText(getApplicationContext(), getString(R.string.signin_error), Toast.LENGTH_LONG).show();
             }
@@ -247,6 +247,7 @@ public class QuantimodoLoginActivity extends Activity {
     }
 
     private void pickUserAccount() {
+        Toast.makeText(this, "Choose your account", Toast.LENGTH_SHORT).show();
         String[] accountTypes = new String[]{"com.google"};
         Intent intent = AccountPicker.newChooseAccountIntent(null, null,
                 accountTypes, false, null, null, null, null);
@@ -263,6 +264,7 @@ public class QuantimodoLoginActivity extends Activity {
             pickUserAccount();
         } else {
             if (QtoolsUtils.hasInternetConnection(this)) {
+                Toast.makeText(this, "Getting username from Google", Toast.LENGTH_SHORT).show();
                 new GetUsernameTask(QuantimodoLoginActivity.this, mEmail, SCOPE, mPrefs).execute();
             } else {
                 Toast.makeText(this, "You must have internet connection to proceed", Toast.LENGTH_LONG).show();
@@ -284,6 +286,7 @@ public class QuantimodoLoginActivity extends Activity {
                     // The Google Play services APK is old, disabled, or not present.
                     // Show a dialog created by Google Play services that allows
                     // the user to update the APK
+                    Log.e(TAG, "GooglePlayServicesAvailabilityException: " + e.getMessage());
                     int statusCode = ((GooglePlayServicesAvailabilityException) e)
                             .getConnectionStatusCode();
                     Dialog dialog = GooglePlayServicesUtil.getErrorDialog(statusCode,
@@ -294,6 +297,8 @@ public class QuantimodoLoginActivity extends Activity {
                     // Unable to authenticate, such as when the user has not yet granted
                     // the app access to the account, but the user can fix this.
                     // Forward the user to an activity in Google Play services.
+
+                    Log.e(TAG, "UserRecoverableAuthException: " + e.getMessage());
                     Intent intent = ((UserRecoverableAuthException) e).getIntent();
                     startActivityForResult(intent,
                             REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR);
@@ -304,41 +309,50 @@ public class QuantimodoLoginActivity extends Activity {
 
     private void sendFbToken(final String token){
         Log.d(TAG, "Sending Fb token to QM server...");
+        Toast.makeText(this, "Communicating with server", Toast.LENGTH_SHORT).show();
         sendNativeSocialToken("facebook", token);
     }
     public void sendNativeSocialToken(final String provider, final String token){
         if(token == null){
             Log.e(TAG, "Token from " + provider + " is null! Falling back to QuantiModo Login");
+            Toast.makeText(this, "Token from " + provider + " is null! Falling back to QuantiModo Login", Toast.LENGTH_SHORT).show();
             return;
 //            Intent intent = new Intent(QuantimodoLoginActivity.this, QuantimodoWebAuthenticatorActivity.class);
 //            startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
         }
         String url = mPrefs.getApiSocialAuth() + "?provider=" + provider + "&accessToken=" + token + "&client_id=" + authHelper.getClientId();
+        Log.d(TAG, "sendNativeSocialToken making request to : " + url);
+        Toast.makeText(this, "Communicating with server", Toast.LENGTH_SHORT).show();
         Ion.with(QuantimodoLoginActivity.this)
                 .load(url)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject response) {
-                        if (response != null)
+                        if (response != null){
+                            Log.d(TAG, "sendNativeSocialToken response");
                             setAuthTokenFromJson(response);
-                        else {
-                            Log.d(TAG, e.getMessage());
+                        } else {
+                            Log.e(TAG, "sendNativeSocialToken response null! exception: " + e.getMessage());
                         }
                     }
                 });
     }
     public void setAuthTokenFromJson(final JsonObject result){
+        Log.d(TAG, "setAuthTokenFromJson result");
         if(result == null){
             Log.e(TAG, "Error when requesting token from QM Server: result json null!");
+            Toast.makeText(this, "Null token response from server!  Please contact mike@quantimo.do", Toast.LENGTH_SHORT).show();
             return;
-        }
-        else if(!result.get("success").getAsBoolean()){
-            Log.d(TAG, "Error when requesting token from QM Server: " + result.get("error").getAsString());
+        } else if(!result.get("success").getAsBoolean()){
+            Log.e(TAG, "Error when requesting token from QM Server: " + result.get("error").getAsString());
+            Toast.makeText(this, result.get("error").getAsString(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(QuantimodoLoginActivity.this, QuantimodoWebAuthenticatorActivity.class);
             startActivityForResult(intent, REQUEST_CODE_WEB_AUTHENTICATE);
             return;
         }
+
+        Toast.makeText(this, "Authenticated with server", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Result from QM Server as string: " + result.toString());
         try {
             if (result.get("data").getAsJsonObject().get("access_token").getAsString() != null){
@@ -352,8 +366,11 @@ public class QuantimodoLoginActivity extends Activity {
                     setResult(RESULT_OK);
                     finish();
                 } catch (NullPointerException ignored) {
-                    Log.i(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()
+                    Log.e(ToolsPrefs.DEBUG_TAG,"Error getting access token: " + result.get("error").getAsString()
                             + ", " + result.get("error_description").getAsString());
+
+                    Toast.makeText(this, result.get("error_description").getAsString(), Toast.LENGTH_SHORT).show();
+
                 }
             } else {
                 final String QMToken = result.get("data").getAsJsonObject().get("token").getAsString();
@@ -368,6 +385,8 @@ public class QuantimodoLoginActivity extends Activity {
 //            authHelper.setAuthToken(new AuthHelper.AuthToken(accessToken, refreshToken, System.currentTimeMillis() / 1000 + expiresIn));
         } catch(NullPointerException e){
             e.printStackTrace();
+            Log.e(TAG, "setAuthTokenFromJson: " + e.getMessage());
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

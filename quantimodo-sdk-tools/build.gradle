@@ -65,6 +65,8 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/INDEX.LIST'
         exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/maven/commons-io/commons-io/pom.xml'
+        exclude 'META-INF/maven/commons-io/commons-io/pom.properties'
     }
 }
 
