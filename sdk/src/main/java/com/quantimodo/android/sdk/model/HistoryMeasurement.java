@@ -21,7 +21,7 @@ public class HistoryMeasurement {
     final int id;
 
     public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit){
-        this(id, source, variable, timestamp, value, unit,null);
+        this(id, source, variable, timestamp, value, unit, null);
     }
 
     public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit,String note) {
@@ -35,16 +35,17 @@ public class HistoryMeasurement {
     }
 
     public String getSource() {
-        Log.d("getSource", "getSource is " + variable);
+        if(source == null){Log.e("getSource", "source is null!");}
         return source;
     }
 
     public String getVariable() {
-        Log.d("getVariable", "getVariable is " + variable);
+        if(variable == null){Log.e("getVariable", "variable is null!");}
         return variable;
     }
 
     public Date getTimestamp() {
+        if(timestamp == null){Log.e("getTimestamp", "timestamp is null!");}
         return timestamp;
     }
 
@@ -52,8 +53,8 @@ public class HistoryMeasurement {
         return value;
     }
 
-    public String getUnit() {
-        Log.d("getUnit", "getUnit is " + unit);
+    public String getUnitAbbreviatedName() {
+        if(variable == null){Log.e("getUnitAbbreviatedName", "unit is null!");}
         return unit;
     }
 
