@@ -6,7 +6,7 @@ package com.quantimodo.android.sdk.model;
     "name": "2C-E",
     "originalName": "2C-E",
     "category": "Medications",
-    "unit": "mg",
+    "unitAbbreviatedName": "mg",
     "sources": "Github,Med Helper",
     "minimumValue": 0,
     "maximumValue": "Infinity",

@@ -180,7 +180,7 @@ public class QuantimodoApiV2 {
             uriBuilder.appendQueryParameter("source", source);
         }
         if (toUnitName != null) {
-            uriBuilder.appendQueryParameter("unit", toUnitName);
+            uriBuilder.appendQueryParameter("unitAbbreviatedName", toUnitName);
         }
         if (limit != null) {
             uriBuilder.appendQueryParameter("limit",limit.toString());
