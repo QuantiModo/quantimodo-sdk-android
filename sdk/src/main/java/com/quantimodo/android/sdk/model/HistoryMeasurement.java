@@ -54,7 +54,7 @@ public class HistoryMeasurement {
     }
 
     public String getUnitAbbreviatedName() {
-        if(variable == null){Log.e("getUnitAbbreviatedName", "unitAbbreviatedName is null!");}
+        if(unitAbbreviatedName == null){Log.e("getUnitAbbreviatedName", "unitAbbreviatedName is null!");}
         return unitAbbreviatedName;
     }
 
