@@ -53,8 +53,8 @@ public class HistoryMeasurement {
         return value;
     }
 
-    public String getUnitAbbreviatedName() {
-        if(variable == null){Log.e("getUnitAbbreviatedName", "unit is null!");}
+    public String getUnit() {
+        if(variable == null){Log.e("getUnit", "unit is null!");}
         return unit;
     }
 
