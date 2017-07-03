@@ -1,5 +1,7 @@
 package com.quantimodo.tools.models;
 
+import android.util.Log;
+
 import com.quantimodo.tools.models.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -137,21 +139,25 @@ public class Measurement implements java.io.Serializable {
 
     /** Not-null value. */
     public String getVariableName() {
+        if (variableName == null) {Log.e("getVariableName", "variableName is null!");}
         return variableName;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setVariableName(String variableName) {
+        if (variableName == null) {Log.e("setVariableName", "variableName is null!");}
         this.variableName = variableName;
     }
 
     /** Not-null value. */
     public String getUnitName() {
+        if (unitName == null) {Log.e("getUnitName", "unitName is null!");}
         return unitName;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setUnitName(String unitName) {
+        if (unitName == null) {Log.e("setUnitName", "unitName is null!");}
         this.unitName = unitName;
     }
 
