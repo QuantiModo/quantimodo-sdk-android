@@ -54,7 +54,7 @@ public class HistoryMeasurement {
     }
 
     public String getUnit() {
-        if(variable == null){Log.e("getUnit", "unit is null!");}
+        if(unit == null){Log.e("getUnit", "unit is null!");}
         return unit;
     }
 
