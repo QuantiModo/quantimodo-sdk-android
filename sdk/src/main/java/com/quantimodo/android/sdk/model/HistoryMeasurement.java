@@ -14,7 +14,7 @@ public class HistoryMeasurement {
     @Deprecated
     final double value;
     @Deprecated
-    final String unitAbbreviatedName;
+    final String unit;
 
     final String note;
 
@@ -24,12 +24,12 @@ public class HistoryMeasurement {
         this(id, source, variable, timestamp, value, unit, null);
     }
 
-    public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unitAbbreviatedName,String note) {
+    public HistoryMeasurement(int id, String source, String variable, Date timestamp, double value, String unit,String note) {
         this.source = source;
         this.variable = variable;
         this.timestamp = timestamp;
         this.value = value;
-        this.unitAbbreviatedName = unitAbbreviatedName;
+        this.unit = unit;
         this.note = note;
         this.id = id;
     }
@@ -53,9 +53,9 @@ public class HistoryMeasurement {
         return value;
     }
 
-    public String getUnitAbbreviatedName() {
-        if(unitAbbreviatedName == null){Log.e("getUnitAbbreviatedName", "unitAbbreviatedName is null!");}
-        return unitAbbreviatedName;
+    public String getUnit() {
+        if(variable == null){Log.e("getUnit", "unit is null!");}
+        return unit;
     }
 
     public String getNote() {
