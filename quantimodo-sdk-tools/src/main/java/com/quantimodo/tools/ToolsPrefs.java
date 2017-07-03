@@ -1,5 +1,7 @@
 package com.quantimodo.tools;
 
+import android.util.Log;
+
 /**
  * Configuration of toolprefs and quantimodo app
  */
@@ -35,6 +37,7 @@ public class ToolsPrefs {
     }
 
     public String getApiUrl() {
+        Log.d("getApiUrl", "API url is " + mApiUrl);
         return mApiUrl;
     }
 

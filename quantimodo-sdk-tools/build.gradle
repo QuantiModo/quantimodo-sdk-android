@@ -39,11 +39,13 @@ android {
             resValue "string", "quantimodo_client", props['quantimodoClient']
             resValue "string", "quantimodo_secret", props['quantimodoSecret']
             buildConfigField 'String', 'API_HOST', '"' + props['quantimodoApiUrl'] + '"'
+            logger.debug("API_HOST from properties file is " + props['quantimodoApiUrl'])
         } else {
             logger.warn("QM-SDK couldn't find quantimodo.properties! Trying to get from env properties, communication with QuantiModo may not work")
             resValue "string", "quantimodo_client", System.getenv("quantimodoClient") == null ? "NONE" : System.getenv("quantimodoClient")
             resValue "string", "quantimodo_secret", System.getenv("quantimodoSecret") == null ? "NONE" : System.getenv("quantimodoSecret")
             buildConfigField 'String', 'API_HOST', System.getenv("quantimodoApiUrl") == null ? 'null' : '"' + System.getenv("quantimodoApiUrl") + '"'
+            logger.debug("API_HOST from env is " + System.getenv("quantimodoApiUrl") == null ? 'null' : '"' + System.getenv("quantimodoApiUrl") + '"')
         }
         resValue "bool", "show_shopping_cart", "true"
     }
