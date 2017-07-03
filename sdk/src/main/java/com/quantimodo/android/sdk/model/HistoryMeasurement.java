@@ -1,5 +1,7 @@
 package com.quantimodo.android.sdk.model;
 
+import android.util.Log;
+
 import java.util.Date;
 
 public class HistoryMeasurement {
@@ -33,10 +35,12 @@ public class HistoryMeasurement {
     }
 
     public String getSource() {
+        Log.d("getSource", "getSource is " + variable);
         return source;
     }
 
     public String getVariable() {
+        Log.d("getVariable", "getVariable is " + variable);
         return variable;
     }
 
@@ -49,6 +53,7 @@ public class HistoryMeasurement {
     }
 
     public String getUnit() {
+        Log.d("getUnit", "getUnit is " + unit);
         return unit;
     }
 
