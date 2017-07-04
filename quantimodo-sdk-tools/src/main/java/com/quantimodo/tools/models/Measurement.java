@@ -252,10 +252,10 @@ public class Measurement implements java.io.Serializable {
         return new HistoryMeasurement(
                 safeLongToInt(getId()),
                 getSource(),
-                getVariable().getName(),
+                getVariableName(),
                 getTimestamp(),
                 getValue(),
-                getUnit().getName(),
+                getUnitName(),
                 getNote()
         );
     }

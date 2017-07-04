@@ -111,8 +111,8 @@ public class MeasurementDao extends AbstractDao<Measurement, Long> {
         if (note != null) {
             stmt.bindString(8, note);
         }
-        stmt.bindString(9, entity.getVariable().getName());
-        stmt.bindString(10, entity.getUnit().getAbbreviatedName());
+        stmt.bindString(9, entity.getVariableName());
+        stmt.bindString(10, entity.getUnitName());
     }
 
     @Override
