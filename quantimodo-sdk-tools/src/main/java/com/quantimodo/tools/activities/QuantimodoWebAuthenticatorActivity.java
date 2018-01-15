@@ -195,10 +195,10 @@ public class QuantimodoWebAuthenticatorActivity extends Activity
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.startsWith(toolsPrefs.getApiUrl())) {
                 String cookies = cookieManager.getCookie(toolsPrefs.getApiUrl());
-                if (cookies != null && cookies.contains("wordpress_logged_in")) {
+                if (cookies != null && cookies.contains("quantimodo_logged_in")) {
                     String[] splits = cookies.split("; ");
                     for (String cookie : splits) {
-                        if (cookie.startsWith("wordpress_logged_in")) {
+                        if (cookie.startsWith("quantimodo_logged_in")) {
                             listener.onSuccess(cookie);
                             return true;
                         }

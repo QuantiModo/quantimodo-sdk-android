@@ -15,6 +15,9 @@ apply plugin: 'com.neenbedankt.android-apt'
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "https://maven.google.com"
+    }
 }
 
 android {

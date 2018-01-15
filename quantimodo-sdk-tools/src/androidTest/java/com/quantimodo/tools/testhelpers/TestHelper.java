@@ -33,7 +33,7 @@ public class TestHelper {
             List<HttpCookie> cookieList = cookieStore.get(URI.create(QUANTIMODO_ADDRESS));
 
             for (HttpCookie cookie : cookieList) {
-                if (cookie.getName().contains("wordpress_logged_in_")) {
+                if (cookie.getName().contains("quantimodo_logged_in_")) {
                     cookieToken = cookie.getValue();
                     break;
                 }

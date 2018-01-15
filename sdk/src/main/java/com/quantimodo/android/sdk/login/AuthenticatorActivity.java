@@ -186,10 +186,10 @@ public class AuthenticatorActivity extends Activity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.startsWith(ToolsPrefs.getInstance().getApiUrl())) {
                 String cookies = cookieManager.getCookie(ToolsPrefs.getInstance().getApiUrl());
-                if (cookies != null && cookies.contains("wordpress_logged_in")) {
+                if (cookies != null && cookies.contains("quantimodo_logged_in")) {
                     String[] splits = cookies.split("; ");
                     for (String cookie : splits) {
-                        if (cookie.startsWith("wordpress_logged_in")) {
+                        if (cookie.startsWith("quantimodo_logged_in")) {
                             listener.onSuccess(cookie);
                             return true;
                         }
