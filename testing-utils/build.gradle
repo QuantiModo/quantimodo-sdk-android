@@ -64,7 +64,7 @@ dependencies  {
         exclude group: 'javax.inject'
     }
 
-    compile('com.android.support.test.espresso:espresso-web:2.2'){
+    compile('com.android.support.test.espresso:espresso-web:2.2.2'){
         exclude group: 'javax.inject'
     }
 }
