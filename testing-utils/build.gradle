@@ -60,7 +60,7 @@ dependencies  {
     }
 
 
-    compile('com.android.support.test.espresso:espresso-core:2.2') {
+    compile('com.android.support.test.espresso:espresso-core:2.2.2') {
         exclude group: 'javax.inject'
     }
 
