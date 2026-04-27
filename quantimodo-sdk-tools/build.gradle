@@ -83,7 +83,7 @@ dependencies {
     compile project(':swagger')
     //RoboSpice  https://github.com/stephanenicolas/robospice
     compile 'com.octo.android.robospice:robospice:1.4.14'
-    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.code.gson:gson:2.8.9'
     //EventBus from greenrobot https://github.com/greenrobot/EventBus
     compile 'de.greenrobot:eventbus:2.4.0'
     //Dagger DI http://square.github.io/dagger/
