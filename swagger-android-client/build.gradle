@@ -59,7 +59,7 @@ android {
 ext {
     swagger_annotations_version = "1.5.0"
     gson_version = "2.3.1"
-    httpclient_version = "4.3.3"
+    httpclient_version = "4.4.16"
     junit_version = "4.8.1"
 }
 
