@@ -78,7 +78,7 @@ android {
 dependencies {
     //    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
     compile project(':sdk')
     compile project(':swagger')
     //RoboSpice  https://github.com/stephanenicolas/robospice
